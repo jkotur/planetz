@@ -11,11 +11,11 @@
 \usepackage{amsmath}
 \usepackage[pdftex]{graphicx}
 \usepackage{tikz}
-\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
 \usepackage{listings}
 
 \usepackage[a4paper, top=2.5cm, bottom=2.5cm]{geometry}
-\linespread{1.5}
+\linespread{1.3}
 \pagestyle{empty}
 
 \title{\huge Mutant Cyborg Wars \\\large Dokumentacja Funkcjonalna\\\small Metody Sztucznej Inteligencji }
@@ -50,10 +50,6 @@
 
 	Praca ma na celu wykonanie symulacji układów planetarnych z uwzględnieniem zależności grawitacyjnych, oraz zaawansowaną wizualizację. Aby osiągnąć możliwie duże układy planetarne obliczenia będą wykonane na procesorach wielordzeniowych GPU z wykorzystaniem technologii CUDA (compute unified device architecture). Wizualizacja ma natomiast uwzględniać takie zjawiska jak gwiazdy (obiekty świecące), komety (warkocze gazów) oraz atmosfery otaczające planety. Aby zbędnie nie spowalniać symulacji, całość obliczeń w miarę możliwości powinna odbywać się na karcie graficznej, bez kopiowania danych do jednostki centralnej.
 
-	%        \paragraph{}
-	%        
-	%        W wyniku ma powstać pogram który będzie możliwie realistycznie przedstawiał układy planetarne, ze szczególnym uwzględnieniem układu słonecznego, oraz okolicznych układów. 
-
 	\paragraph{Przewidywany podział pracy}
 
 	\paragraph{}
@@ -67,14 +63,13 @@
 
 	\fontsize{8}{6}\selectfont
 	\begin{thebibliography}{0}
-	\bibitem {cuda}{ {\bf CUDA ZONE} - http://www.nvidia.pl/object/cuda\_home\_new\_pl.html }
+	\bibitem {cuda}{ {\bf CUDA ZONE} - \url{http://www.nvidia.pl/object/cuda\_home\_new\_pl.html }}
 	\bibitem {opengl}{ {\bf OpenGL - Księga eksperta}, Richard S. Wirdth Jr. Benjamin Lipchak }
 	\bibitem {fiz}{ {\bf Fizyka}, R. Resnick, D. Halliday }
 	\end{thebibliography}
 
-
 	\vfill
 	\hspace{.6\textwidth} \makebox[.3\textwidth][l] {\hrulefill} 
 
-	\hspace{.6\textwidth} \makebox[.3\textwidth][c]{ Data, Podpis }
+	\hspace{.6\textwidth} \makebox[.3\textwidth][c]{ data i podpis }
 \end{document}
