@@ -48,7 +48,7 @@
 
 	\paragraph{}
 
-	Praca ma na celu wykonanie symulacji układów planetarnych z uwzględnieniem zależności grawitacyjnych, oraz zaawansowaną wizualizację. Aby osiągnąć możliwie duże układy planetarne obliczenia będą wykonane na procesorach wielordzeniowych GPU z wykorzystaniem technologii CUDA (compute unified device architecture). Wizualizacja ma natomiast uwzględniać takie zjawiska jak gwiazdy (obiekty świecące), komety (warkocze gazów) oraz atmosfery otaczające planety. Aby zbędnie nie spowalniać symulacji, całość obliczeń w miarę możliwości powinna odbywać się na karcie graficznej, bez kopiowania danych do jednostki centralnej.
+	Praca ma na celu wykonanie symulacji czasu rzeczywistego układów planetarnych wraz z wizualizacją trójwymiarową. Aby osiągnąć możliwie duże układy, rzędu kilkunastu tysięcy planet, obliczenia będą wykonane na procesorach wielordzeniowych GPU z wykorzystaniem technologii CUDA (compute unified device architecture). Wizualizacja ma natomiast uwzględniać takie zjawiska jak gwiazdy (obiekty świecące), komety (warkocze gazów) oraz atmosfery otaczające planety. Aby zbędnie nie spowalniać symulacji, całość obliczeń w miarę możliwości powinna odbywać się na karcie graficznej, bez kopiowania danych do jednostki centralnej.
 
 	\paragraph{Przewidywany podział pracy}
 
@@ -56,16 +56,26 @@
 	\begin{tabular}{|l|p{10cm}|}
 	\hline
 	~ & Zakres pracy \\\hline
-	\hline
+%        \hline
 	Daniel Kłobuszewski & Projektowanie aplikacji. Wykonywanie obliczeń w CUDA: fizyka planet, generowanie wierzchołków do renderowania ogonów komet oraz koron gwiazd. Przygotowanie układów planetarnych.\\\hline
 	Jakub Kotur & Projektowanie aplikacji. Efekty graficzne - cząsteczek, atmosferyczne, oraz oświetlenie. Obsługa GUI aplikacji. Serializacja układów planetarnych.\\\hline
 	\end{tabular}
 
 	\fontsize{8}{6}\selectfont
 	\begin{thebibliography}{0}
-	\bibitem {cuda}{ {\bf CUDA ZONE} - \url{http://www.nvidia.pl/object/cuda\_home\_new\_pl.html }}
-	\bibitem {opengl}{ {\bf OpenGL - Księga eksperta}, Richard S. Wirdth Jr. Benjamin Lipchak }
-	\bibitem {fiz}{ {\bf Fizyka}, R. Resnick, D. Halliday }
+	\bibitem {cuda} CUDA ZONE - \url{http://www.nvidia.pl/object/cuda\_home\_new\_pl.html}
+	\bibitem {opengl}
+		Richard S. Wirdth Jr. Benjamin Lipchak,
+		\emph{OpenGL - Księga eksperta},
+		Helion,
+		Wydanie III,
+		2005
+	\bibitem {fiz}
+		R. Resnick, D. Halliday,
+		\emph{Fizyka},
+		Państwowe Wydawnictwo Naukowe,
+		Wydanie V,
+		1975
 	\end{thebibliography}
 
 	\vfill
