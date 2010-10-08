@@ -1,0 +1,9 @@
+Grafika: 
+* wyświetlanie planety
+* zmniejszanie dokładności planety wraz z odległością od kamery
+* efekt atmosfery
+* efekt warkocza komety
+* oświetlenie
+GUI:
+* interaktywna kamera
+* guziki do sterowania symulacją
