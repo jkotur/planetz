@@ -10,8 +10,9 @@
 \usepackage[pdftex]{graphicx}
 \usepackage{tikz}
 \usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage{anysize}
 
-\usepackage[a4paper, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
 \linespread{1.3}
 
 \title{\huge Symulacja układu planetarnego na GPU\\ przy użyciu CUDA i OpenGL\\\small Dokumentacja biznesowa}
@@ -19,10 +20,19 @@
 
 \begin{document}
 	\maketitle
+	
+	\marginsize{1cm}{1cm}{2.5cm}{2.5cm}
+
+	\input{metric.tex}
+
+	\input{history.tex}
+	\marginsize{2cm}{2cm}{2.5cm}{2.5cm}
 
 	\section{Wstęp}\label{sec:wstep}
 	
 	\paragraph{}
+
+
 
 \begin{figure}[h]
 	\centering
