@@ -7,3 +7,10 @@ Grafika:
 GUI:
 * interaktywna kamera
 * guziki do sterowania symulacją
+Fizyka:
+* obliczanie nowych pozycji planet
+* detekcja i obsługa kolizji
+* klasteryzacja planet
+Inne:
+* serializacja/deserializacja układów
+* tworzenie/usuwanie planet
