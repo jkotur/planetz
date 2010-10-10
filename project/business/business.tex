@@ -12,6 +12,9 @@
 \usepackage[colorlinks=true,linkcolor=blue]{hyperref}
 \usepackage{anysize}
 
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+
 \usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
 \linespread{1.3}
 
@@ -21,17 +24,24 @@
 \begin{document}
 	\maketitle
 	
-	\marginsize{1cm}{1cm}{2.5cm}{2.5cm}
+	\pagestyle{fancyplain}
+%        \fancyhf{}
+	\cfoot{\thepage/\pageref{LastPage}}
+
+%        \marginsize{1cm}{1cm}{2.5cm}{2.5cm}
 
 	\input{metric.tex}
-
+	%\newpage
 	\input{history.tex}
-	\marginsize{2cm}{2cm}{2.5cm}{2.5cm}
+
+%        \marginsize{2cm}{2cm}{2.5cm}{2.5cm}
 	\tableofcontents
 	\newpage
 
 	\input{intro.tex}
 	\input{use-case.tex}
+	\input{schedule.tex}
+	\input{gui.tex}
 
 \end{document}
 
