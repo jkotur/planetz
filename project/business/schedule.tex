@@ -35,18 +35,22 @@ Harmonogram prac przedstawiony jest poniżej wraz z opisami poszczególnych zada
 \subsection{Symulacja fizyczna}
 
 \begin{description}
-	\item[First] \hfill \\
-	The first item
-	\item[Second] \hfill \\
-	The second item
-	\item[Third] \hfill \\
-	The third etc \ldots
+	\item[Obliczanie nowych pozycji planet] \hfill \\
+	Silnik fizyczny musi na bieżąco, na podstawie mas planet i ich położeń względem siebie, obliczać prędkości oraz nowe położenia. 
+	\item[Detekcja i obsługa kolizji] \hfill \\
+	Może się zdarzyć, że dwie planety znajdą się zbyt blisko siebie. Żeby nie dochodziło do "przenikania" planet przez siebie nawzajem, trzeba rozwiązać problem kolizji. Zderzające się planety będą mogły rozpaść się na więcej obiektów lub stworzyć jeden, większy.
+	\item[Klasteryzacja planet] \hfill \\
+	Aby zmniejszyć ilość obliczeń pozycji planet, będą one grupowane w klastry. Planety będą oddziaływać na siebie nawzajem wewnątrz klastra. Oddziaływanie z planetami spoza klastra odbywać się będzie pośrednio, poprzez wyliczenie oddziaływań uśrednionych.
+
 \end{description}
 
 \subsection{Inne}
 
 \begin{description}
-	\item[Serializacja/deserializacja obiektów] \hfill \\
-	Umożliwienie użytkownikowi na wczytywanie/zapisywanie układów planetarnych. Każdy układ będzie zapisywany do oddzielnego pliku z niezbędnymi informacjami o każdej planecie - pozycja, prędkość, masa, wielkość, rodzaj.
-	\item[Tworzenie/usuwanie planet] \hfill \\
+	\item[Serializacja i deserializacja układów] \hfill \\
+	Umożliwienie użytkownikowi na wczytywanie/zapisywanie układów planetarnych. Każdy układ będzie zapisywany do oddzielnego pliku z niezbędnymi informacjami o każdej planecie - pozycja, prędkość, masa, wielkość, rodzaj. Do opisu w pliku nie będzie użyty język XML, gdyż znacznie zwiększa on ilość miejsca potrzebną do zapisu. Dane będą zapisane binarnie.
+	\item[Tworzenie i usuwanie planet] \hfill \\
+	Obiekt planety będzie złożony - czym innym jest planeta dla fizyki, czym innym dla grafiki. Potrzebne będą struktury danych pozwalające na optymalne wykorzystanie pamięci RAM karty graficznej - trzeba bowiem uniknąć przesyłania danych pomiędzy pamięcią karty a RAM'em komputera.
+	\item[Generacja cząsteczek] \hfill \\
+	Chmury cząsteczek składające się na ogon komety także będą obliczane na karcie graficznej, przez aplikację, na podstawie jej kilku ostatnich położeń.
 \end{description}
