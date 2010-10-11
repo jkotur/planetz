@@ -8,17 +8,17 @@ Harmonogram prac przedstawiony jest poniżej wraz z opisami poszczególnych zada
 
 \begin{description}
 	\item[Wyświetlanie planet] \hfill \\
-	Celem tego zadania jest stworzenie podstawowego świata 3D do wizualizacji symulacji. W skład zadania wchodzi dynamiczne generowanie modelu kuli na zadanym poziomie szczegółowości, oraz reprezentacja go w postaci zrozumialej przez jednostkę graficzną.
+	Celem tego zadania jest stworzenie podstawowego świata 3D do wizualizacji symulacji. W skład zadania wchodzi dynamiczne generowanie modelu kuli na zadanym poziomie szczegółowości oraz jego reprezentacja w postaci zrozumialej przez jednostkę graficzną.
 	\item[Teksturowanie planet] \hfill \\
-	Zadanie to polega na wygenerowaniu współrzędnych tekstury zgodnych z modelem 3D planety, oraz przekazanie tekstur oraz ich współrzędnych na jednostkę graficzną.
+	Zadanie to polega na wygenerowaniu współrzędnych tekstury zgodnych z modelem 3D planety i przekazanie tekstur oraz ich współrzędnych na jednostkę graficzną.
 	\item[Dynamiczna zmiana szczegółowości planet] \hfill \\
-	W zależności od odległości kamery od planety, powinna być ona wyświetlana na rożnym poziomie dokładności. W szczególności, blisko kamery powinna być to możliwie dokładna kula, natomiast w dużej odległości, powinna sie stawać punktem, bądź nawet nie powinna być wyświetlana w ogóle.
+	W zależności od odległości kamery od planety, powinna być ona wyświetlana na rożnym poziomie dokładności. W szczególności, blisko kamery powinna być to możliwie dokładna kula, natomiast w dużej odległości, powinna sie stawać punktem, a nawet całkiem zanikać.
 	\item[Efekt atmosfery] \hfill \\
-	Dla bardziej realistycznego wyglądu planet, powinna je otaczać półprzezroczysta poświata wyglądająca jak atmosfera.
+	Aby nadać planetom bardziej realistyczny wygląd, powinno się je otoczyć półprzezroczystą poświatą wyglądającą jak atmosfera.
 	\item[Efekt warkocza komety] \hfill \\
-	Niektóre obiekty będą kometami. Dla realistycznego wyglądu, należy wyświetlić chmurę cząsteczek wygenerowanych przez moduł fizyczny, tak aby wyglądała na ogon komety.
+	Niektóre obiekty będą kometami. Będą wyróżniać się charakterystycznym ogonem, stanowiącym chmurę cząsteczek wygenerowanych przez moduł fizyczny.
 	\item[Oświetlenie] \hfill \\
-	Oprócz oświetlenia rozproszonego, wygodnego w modelu oświetlenia, punktowym źródłem światła są gwiazdy. Inne planety powinny być oświetlane od gwiazd które są dość blisko, natomiast gwiazdy będące daleko powinny być pomijane przy obliczaniu koloru planety. Najlepszy w tym celu będzie model oświetlenie Phonga.
+	Zastosujemy oświetlenie rozproszone. Dodatkowo punktowym źródłem światła będą gwiazdy. Planety powinny być oświetlane przez gwiazdy, które są dość blisko. Gwiazdy będące daleko powinny być pomijane przy obliczaniu koloru planety. Najlepszy w tym celu będzie model oświetlenia Phonga.
 	\item[Efekt gwiazd] \hfill \\
 	Gwiazdy są specyficznymi obiektami z punktu widzenia oświetlenia, ponieważ same emitują światło. Dla takich obiektów nie należy obliczać oświetlenia, natomiast nadać im realistyczny kolor.
 \end{description}
@@ -29,7 +29,7 @@ Harmonogram prac przedstawiony jest poniżej wraz z opisami poszczególnych zada
 	\item[Sterowanie symulacją] \hfill \\
 	Interfejs użytkownika powinien umożliwiać wszystkie operacje uwzględnione w diagramie przypadków użycia. Ponieważ nie ma ich dużo i są niezależne, dla każdej opcji będzie przewidziany oddzielny przycisk widoczny w głównym oknie symulacji.
 	\item[Interaktywna kamera] \hfill \\
-	Kamera będzie wolna. Oznacza to ze użytkownik przy pomocy myszki i klawiszy, może dowolnie poruszać sie po świecie 3D, w tym przypadku po kosmosie.
+	Kamera będzie wolna. Oznacza to, że użytkownik przy pomocy myszki i klawiszy może dowolnie poruszać sie po świecie 3D, w tym przypadku po kosmosie.
 \end{description}
 
 \subsection{Symulacja fizyczna}
@@ -48,9 +48,9 @@ Harmonogram prac przedstawiony jest poniżej wraz z opisami poszczególnych zada
 
 \begin{description}
 	\item[Serializacja i deserializacja układów] \hfill \\
-	Umożliwienie użytkownikowi na wczytywanie/zapisywanie układów planetarnych. Każdy układ będzie zapisywany do oddzielnego pliku z niezbędnymi informacjami o każdej planecie - pozycja, prędkość, masa, wielkość, rodzaj. Do opisu w pliku nie będzie użyty język XML, gdyż znacznie zwiększa on ilość miejsca potrzebną do zapisu. Dane będą zapisane binarnie.
-	\item[Tworzenie i usuwanie planet] \hfill \\
+	Aplikacja będzie umożliwiała użytkownikowi zapisywanie/wczytywanie układów planetarnych. Każdy układ będzie zapisywany do oddzielnego pliku z niezbędnymi informacjami o każdej planecie: pozycji, prędkości, masie, wielkości i rodzaju. Do opisu w pliku nie będzie użyty język XML, gdyż znacznie zwiększa on ilość miejsca potrzebną do zapisu. Dane będą zapisywane binarnie.
+	\item[Reprezentacja planet w pamięci] \hfill \\
 	Obiekt planety będzie złożony - czym innym jest planeta dla fizyki, czym innym dla grafiki. Potrzebne będą struktury danych pozwalające na optymalne wykorzystanie pamięci RAM karty graficznej - trzeba bowiem uniknąć przesyłania danych pomiędzy pamięcią karty a RAM'em komputera.
-	\item[Generacja cząsteczek] \hfill \\
+	\item[Generowanie cząsteczek] \hfill \\
 	Chmury cząsteczek składające się na ogon komety także będą obliczane na karcie graficznej, przez aplikację, na podstawie kilku ostatnich położeń obiektu.
 \end{description}
