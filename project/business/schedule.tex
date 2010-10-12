@@ -54,3 +54,48 @@ Harmonogram prac przedstawiony jest poniżej wraz z opisami poszczególnych zada
 	\item[Generowanie cząsteczek] \hfill \\
 	Chmury cząsteczek składające się na ogon komety także będą obliczane na karcie graficznej, przez aplikację, na podstawie kilku ostatnich położeń obiektu.
 \end{description}
+
+\begin{landscape}
+\begin{figure}[ht]
+	\begin{gantt}{25}{15}
+		\begin{ganttitle}
+			\titleelement{Październik}{4}
+			\titleelement{Listopad}{4}
+			\titleelement{Grudzień}{4}
+			\titleelement{\footnotesize Święta}{1}
+			\titleelement{Styczeń}{2}
+		\end{ganttitle}
+		\begin{ganttitle}
+			\numtitle{40}{1}{52}{1}
+			\numtitle{1}{1}{2}{1}
+		\end{ganttitle}
+		\ganttgroup{\bf{Projekt}}{0}{3}
+		\ganttbar{Dokumentacja biznesowa}{0}{1}
+		\ganttbar{Dokumentacja techniczna}{1}{2}
+		\ganttgroup{\bf{Grafika}}{3}{9}
+		\ganttbar[pattern=]{Wyświetlanie planet}{3}{1}
+		\ganttbar[pattern=]{Teksturowanie planet}{6}{1}
+		\ganttbar[pattern=]{Oświetlenie}{7}{2}
+		\ganttbar[pattern=]{Efekt gwiazd}{8}{1}
+		\ganttbar[pattern=]{Dynamiczna zmiana szczegółowości planet}{9}{2}
+		\ganttbar[pattern=]{Efekt atmosfery}{10}{1}
+		\ganttbar[pattern=]{Efekt warkocza komety}{11}{1}
+		\ganttgroup{\bf{Interfejs użytkownika}}{4}{2}
+		\ganttbar[pattern=]{Sterowanie symulacją}{4}{2}
+		\ganttbar[pattern=]{Interaktywna kamera}{4}{1}
+		\ganttgroup{\bf{Symulacja fizyczna}}{3}{9}
+		\ganttbar[color=white]{Obliczanie nowych pozycji planet}{3}{3}
+		\ganttbar[color=white]{Klasteryzacja planet}{6}{3}
+		\ganttbar[color=white]{Detekcja i obsługa kolizji}{9}{3}
+		\ganttgroup{\bf{Inne}}{0}{0}
+		\ganttbar[color=white]{Serializacja i deserializacja układów}{4}{1}
+		\ganttbar{Reprezentacja planet w pamięci}{2}{1}
+		\ganttbar[color=white]{Generowanie cząsteczek}{10}{1}
+		\ganttbar{Poprawki}{13}{2}
+	\end{gantt}
+	\caption{Wykres Gantta}
+	\label{gantt}
+\end{figure}
+%  \scalebox{0.8}{
+%  \begin{gantt}[xunitlength=0.5cm,fontsize=\small,titlefontsize=\small,drawledgerline=true]{10}{48}
+  \end{landscape}
