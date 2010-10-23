@@ -55,19 +55,25 @@ Harmonogram prac przedstawiony jest poniżej wraz z opisami poszczególnych zada
 	Chmury cząsteczek składające się na ogon komety także będą obliczane na karcie graficznej, przez aplikację, na podstawie kilku ostatnich położeń obiektu.
 \end{description}
 
+\subsection{Wykres Gantta}\label{sub:wykres gantta}
+
+\paragraph{}
+
+Poniższej przedstawiony został wykres gantta dla powyższych zadań. Kolorem czarnym zostały oznaczone zadania do wykonania przez Jakuba Kotura, natomiast białym zadania dla Daniela Klobuszewskiego. Kolorem szarym oznaczone są zadania przewidziane do wspólnego wykonania.
+
 \begin{landscape}
 \begin{figure}[ht]
-	\begin{gantt}{25}{15}
+	\begin{gantt}{25}{14}
 		\begin{ganttitle}
 			\titleelement{Październik}{4}
 			\titleelement{Listopad}{4}
 			\titleelement{Grudzień}{4}
 			\titleelement{\footnotesize Święta}{1}
-			\titleelement{Styczeń}{2}
+			\titleelement{Styczeń}{1}
 		\end{ganttitle}
 		\begin{ganttitle}
 			\numtitle{40}{1}{52}{1}
-			\numtitle{1}{1}{2}{1}
+			\numtitle{1}{1}{1}{1}
 		\end{ganttitle}
 		\ganttgroup{\bf{Projekt}}{0}{3}
 		\ganttbar{Dokumentacja biznesowa}{0}{1}
@@ -87,11 +93,11 @@ Harmonogram prac przedstawiony jest poniżej wraz z opisami poszczególnych zada
 		\ganttbar[color=white]{Obliczanie nowych pozycji planet}{3}{3}
 		\ganttbar[color=white]{Klasteryzacja planet}{6}{3}
 		\ganttbar[color=white]{Detekcja i obsługa kolizji}{9}{3}
-		\ganttgroup{\bf{Inne}}{20}{0}
+		\ganttgroup{\bf{Inne}}{25}{0}
 		\ganttbar[color=white]{Serializacja i deserializacja układów}{4}{1}
 		\ganttbar{Reprezentacja planet w pamięci}{2}{1}
 		\ganttbar[color=white]{Generowanie cząsteczek}{10}{1}
-		\ganttbar{Poprawki}{13}{2}
+		\ganttbar{Poprawki}{13}{1}
 		\ganttcon{11}{23}{11}{12}
 	\end{gantt}
 	\caption{Wykres Gantta}
