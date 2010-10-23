@@ -1,0 +1,12 @@
+5 + Model testow
+3 + Opis aktywnosci
+10 + Uwagi
+4 + Opis slabego powtornego uzycia
+7 + Opis algorytmow graficznych
+
+
+6 + Ramy czasowe
+9 + Wymagania systemowe
+2 + Opis klas
+1 + Uzyte technologie i ich konsekwencje 
+8 + Opis algorytmow fizycznych
