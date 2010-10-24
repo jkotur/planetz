@@ -1,3 +1,44 @@
+\subsubsection{Obliczanie pozycji planet}
+
+\paragraph{}
+
+Obliczanie nowych pozycji planet odbywać się będzie iteracyjnie. Dla każdej pary planet w danym klastrze, zostanie obliczona siła oddziałująca na każdą z nich, co po podzieleniu przez masę da przyspieszenie. Mówi o tym znany z pierwszych lekcji fizyki wzór:
+
+\begin{displaymath}
+	F = ma
+\end{displaymath}
+\begin{displaymath}
+	a = \frac{F}{m}
+\end{displaymath}
+
+Przyspieszenie jest pochodną prędkości po czasie, mamy więc
+
+\begin{displaymath}
+	a = \frac{\delta V}{\delta t}
+\end{displaymath}
+
+co w warunkach komputerowych można uprościć jako przyrost
+
+\begin{displaymath}
+	a = \frac{\Delta V}{\Delta t}
+\end{displaymath}
+\begin{displaymath}
+	\Delta V = a\Delta t
+\end{displaymath}
+
+\paragraph{}
+Analogicznie wyliczamy zmianę prędkości każdej planety przez wpływ pozostałych klastrów (sumaryczne masy oraz środki ciężkości trzymamy obliczone dla każdego klastra). Po obliczeniu nowej prędkości
+
+\begin{displaymath}
+	V_{new} = V_{old} + \Delta V
+\end{displaymath}
+
+możemy uaktualnic pozycje planet, dodając do punktu położenia wektor przesunięcia planety
+
+\begin{displaymath}
+	x_{new} = x_{old} + V \Delta t
+\end{displaymath}
+
 \subsubsection{Klasteryzacja}
 
 \paragraph{}
@@ -12,3 +53,18 @@ Zasada działania algorytmu k-means została zapisana poniżej w pseudokodzie:
 	\item{Wyznacz błąd kwantyzacji: \ensuremath{D = {1\over{n}}\sum_{i = 1}^{n}d(x_i, r)}, gdzie \ensuremath{r} jest środkiem klastra, do którego należy \ensuremath{x_i} }
 	\item{Jeżeli \ensuremath{\frac{\Delta{D}}{D}\geqslant\epsilon}, wyznacz nowe środki klastrów (jako średnie z punktów w tych klastrach) i przejdź do punktu 2.}
 \end{enumerate}
+
+\subsubsection{Kolizje}
+
+\paragraph{}
+
+W przypadku kolizji, dwie kolidujące ze sobą planety mogą zmienić się w jeden lub więcej nowych obiektów. Maksymalna ilość nowych obiektów jest ograniczona w ustawieniach aplikacji. Faktyczna ilość nowych obiektów, ich typy, wielkości, masy oraz prędkości wynikać będą pośrednio (typy, ilość, wielkość) bądź bezpośrednio (masy, prędkości) z praw fizyki. W szczególności przestrzegać należy prawa zachowania pędu. Suma mas także nie może się zmienić. Promienie planet oraz ich ilość będą losowane, z uwzględnieniem wielkości fizycznych. W szczególności obiekt o małej masie nie może rozbić obiektu o dużo większej masie, a z dwóch planet o dużej gęstości nie zrobi się gazowy olbrzym o wielkim promieniu.
+
+\paragraph{}
+
+Samo wykrywanie kolizji jest trywialne w obrębie klastra - gdzie i tak obliczamy wpływ każdy-z-każdym. Teoretycznie może to prowadzić do "przeniknięcia" się planet z różnych klastrów, ale w momencie gdy dwa obiekty będą się mijać, prawdopodobieństwo, że będą znajdować się w różnych klastrach jest niewielkie.
+
+\subsubsection{Dodatki}\label{alg:additions}
+
+\paragraph{}
+Jeżeli harmonogram pozwoli, rozwiązywanie kolizji pomiędzy planetami z różnych klastrów będzie zaimplementowane dokładnie, poprzez wprowadzenie drzewiastego podziału przestrzeni. Każdy poziom drzewa będzie dzielił przestrzeń klastrami. W wyniku takiej klasteryzacji łatwo będzie odcinać grupy planet jako niemożliwe do skolidowania. Jest to jednak skomplikowane implementacyjnie i niezbyt widoczne dla użytkownika. Decyzja o włączeniu tej funkcjonalności zapadnie więc na etapie implementacji.
