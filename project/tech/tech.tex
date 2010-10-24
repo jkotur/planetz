@@ -1,0 +1,57 @@
+\documentclass[a4paper,titlepage,10pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+
+\usepackage{enumerate}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[pdftex]{graphicx}
+\usepackage{tikz}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage{anysize}
+
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+
+\usepackage{pdflscape}
+
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
+\linespread{1.3}
+
+\title{\huge Symulacja układu planetarnego na GPU\\ przy użyciu CUDA i OpenGL\\\small Dokumentacja techniczna}
+\author{Daniel Kłobuszewski\and Jakub Kotur}
+
+\begin{document}
+	\maketitle
+	
+	\pagestyle{fancyplain}
+%        \fancyhf{}
+	\cfoot{\thepage/\pageref{LastPage}}
+
+	\hfill \\
+	\input{metric.tex}
+	\hfill \\
+	%\newpage
+	\input{history.tex}
+
+	\newpage
+
+	\tableofcontents
+	\newpage
+
+	\input{intro.tex}
+	\input{t10s.tex}
+	\input{class.tex}
+	\input{activity.tex}
+	\input{usage.tex}
+	\input{tests.tex}
+	\input{time.tex}
+	\input{algogfx.tex}
+	\input{algophx.tex}
+	\input{sys.tex}
+	\input{notes.tex}
+
+\end{document}
+
