@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<GUILayout>
+	<Window Type="DefaultWindow" Name="root">
+		<Window Type="QuadraticLook/Button" Name="btnReset" >
+			<Property Name="UnifiedPosition" Value="{{0.0,10},{1.0,-55}}" />
+			<Property Name="UnifiedSize" Value="{{0,80},{0,20}}," />
+			<Property Name="Text" Value="Nowy uklad" />
+		</Window>
+
+		<Window Type="QuadraticLook/Button" Name="btnPause" >
+			<Property Name="UnifiedPosition" Value="{{0.0,100},{1.0,-55}}" />
+			<Property Name="UnifiedSize" Value="{{0,80},{0,20}}," />
+			<Property Name="Text" Value="Pauza" />
+		</Window>
+
+		<Window Type="QuadraticLook/Button" Name="btnQSave" >
+			<Property Name="UnifiedPosition" Value="{{0.0,10},{1.0,-30}}" />
+			<Property Name="UnifiedSize" Value="{{0,80},{0,20}}," />
+<!--                        jesli ktos ma pomysl na lepsza nazwe to slucham -->
+			<Property Name="Text" Value="Szybko zapisz" /> 
+		</Window>
+
+		<Window Type="QuadraticLook/Button" Name="btnQLoad" >
+			<Property Name="UnifiedPosition" Value="{{0.0,100},{1.0,-30}}" />
+			<Property Name="UnifiedSize" Value="{{0,80},{0,20}}," />
+<!--                        jesli ktos ma pomysl na lepsza nazwe to slucham -->
+			<Property Name="Text" Value="Szybko wczytaj" />
+		</Window>
+
+		<Window Type="QuadraticLook/Button" Name="btnShowSave" >
+			<Property Name="UnifiedPosition" Value="{{0.0,190},{1.0,-30}}" />
+			<Property Name="UnifiedSize" Value="{{0,80},{0,20}}," />
+			<Property Name="Text" Value="Zapisz" />
+		</Window>
+
+		<Window Type="QuadraticLook/Button" Name="btnShowLoad" >
+			<Property Name="UnifiedPosition" Value="{{0.0,280},{1.0,-30}}" />
+			<Property Name="UnifiedSize" Value="{{0,80},{0,20}}," />
+			<Property Name="Text" Value="Wczytaj" />
+		</Window>
+
+		<Window Type="QuadraticLook/StaticText" Name="stAnimSpeed" >
+			<Property Name="UnifiedPosition" Value="{{1.0,-235},{1.0,-50}}" />
+			<Property Name="UnifiedSize" Value="{{0,110},{0,20}}," />
+			<Property Name="Text" Value="Szybkosc symulacji" />
+		</Window>
+
+		<Window Type="QuadraticLook/HorizontalScrollbar" Name="slAnimSpeed" >
+			<Property Name="UnifiedPosition" Value="{{1.0,-240},{1.0,-30}}" />
+			<Property Name="UnifiedSize" Value="{{0,120},{0,20}}" />
+			<Property Name="DocumentSize" Value="5000.0" />
+			<Property Name="StepSize" Value="500.0" />
+		</Window>
+
+		<Window Type="QuadraticLook/StaticText" Name="stCamSpeed" >
+			<Property Name="UnifiedPosition" Value="{{1.0,-105},{1.0,-50}}" />
+			<Property Name="UnifiedSize" Value="{{0,110},{0,20}}," />
+			<Property Name="Text" Value="Szybkosc kamery" />
+		</Window>
+
+		<Window Type="QuadraticLook/HorizontalScrollbar" Name="slCamSpeed" >
+			<Property Name="UnifiedPosition" Value="{{1.0,-110},{1.0,-30}}" />
+			<Property Name="UnifiedSize" Value="{{0,105},{0,20}}" />
+			<Property Name="DocumentSize" Value="500.0" />
+			<Property Name="StepSize" Value="1.0" />
+		</Window>
+
+<!--                okno dodawania planety-->
+		<Window Type="QuadraticLook/FrameWindow" Name="AddWin">
+			<Property Name="UnifiedPosition" Value="{{0.1,0},{0.1,0}}" />
+			<Property Name="UnifiedSize" Value="{{0,270},{0,180}}" />
+			<Property Name="Text" Value="Nowa planeta" />
+			<Property Name="CloseButtonEnabled" Value="Fasle" />
+			<Property Name="Alpha" Value="1.0" />
+			<Property Name="FrameEnabled" Value="False" />
+
+			<Window Type="QuadraticLook/Button" Name="btnAdd" >
+				<Property Name="UnifiedPosition" Value="{{0.5,-85},{0,150}}" />
+				<Property Name="UnifiedSize" Value="{{0,80},{0,20}}" />
+				<Property Name="Text" Value="Dodaj Planete" />
+			</Window>
+
+			<Window Type="QuadraticLook/Button" Name="btnClear" >
+				<Property Name="UnifiedPosition" Value="{{0.5,5},{0,150}}" />
+				<Property Name="UnifiedSize" Value="{{0,80},{0,20}}" />
+				<Property Name="Text" Value="Wyczysc" />
+			</Window>
+
+			<Window Type="QuadraticLook/StaticText" Name="stPos">
+				<Property Name="UnifiedPosition" Value="{{0.5,-110},{0.0,25}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
+				<Property Name="Text" Value="Pozycja:" />
+			</Window>
+
+			<Window Type="QuadraticLook/Spinner" Name="spPosX" >
+				<Property Name="UnifiedPosition" Value="{{0.5,-50},{0,30}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,50},{0,20}}" />
+				<Property Name="MaximumValue" Value="1000" />
+				<Property Name="MinimumValue" Value="-1000" />
+				<Property Name="StepSize" Value="0.02" />
+				<Property Name="TextInputMode" Value="Integer" />
+<!--                                <Property Name="TextInputMode" Value="FloatingPoint" />-->
+			</Window>
+
+			<Window Type="QuadraticLook/Spinner" Name="spPosY" >
+				<Property Name="UnifiedPosition" Value="{{0.5,10},{0,30}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,50},{0,20}}" />
+				<Property Name="MaximumValue" Value="1000" />
+				<Property Name="MinimumValue" Value="-1000" />
+				<Property Name="StepSize" Value="0.02" />
+				<Property Name="TextInputMode" Value="Integer" />
+<!--                                <Property Name="TextInputMode" Value="FloatingPoint" />-->
+			</Window>
+
+			<Window Type="QuadraticLook/Spinner" Name="spPosZ" >
+				<Property Name="UnifiedPosition" Value="{{0.5,70},{0,30}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,50},{0,20}}" />
+				<Property Name="MaximumValue" Value="1000" />
+				<Property Name="MinimumValue" Value="-1000" />
+				<Property Name="StepSize" Value="0.02" />
+				<Property Name="TextInputMode" Value="Integer" />
+<!--                                <Property Name="TextInputMode" Value="FloatingPoint" />-->
+			</Window>
+
+			<Window Type="QuadraticLook/StaticText" Name="stSpeed">
+				<Property Name="UnifiedPosition" Value="{{0.5,-110},{0,55}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
+				<Property Name="Text" Value="Predkosc:" />
+			</Window>
+
+			<Window Type="QuadraticLook/Spinner" Name="spSpeedX" >
+				<Property Name="UnifiedPosition" Value="{{0.5,-50},{0,60}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,50},{0,20}}" />
+				<Property Name="MaximumValue" Value="1000" />
+				<Property Name="MinimumValue" Value="-1000" />
+				<Property Name="StepSize" Value="0.02" />
+				<Property Name="TextInputMode" Value="Integer" />
+<!--                                <Property Name="TextInputMode" Value="FloatingPoint" />-->
+			</Window>
+
+			<Window Type="QuadraticLook/Spinner" Name="spSpeedY" >
+				<Property Name="UnifiedPosition" Value="{{0.5,10},{0,60}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,50},{0,20}}" />
+				<Property Name="MaximumValue" Value="1000" />
+				<Property Name="MinimumValue" Value="-1000" />
+				<Property Name="StepSize" Value="0.02" />
+				<Property Name="TextInputMode" Value="Integer" />
+<!--                                <Property Name="TextInputMode" Value="FloatingPoint" />-->
+			</Window>
+
+			<Window Type="QuadraticLook/Spinner" Name="spSpeedZ" >
+				<Property Name="UnifiedPosition" Value="{{0.5,70},{0,60}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,50},{0,20}}" />
+				<Property Name="MaximumValue" Value="1000" />
+				<Property Name="MinimumValue" Value="-1000" />
+				<Property Name="StepSize" Value="0.02" />
+				<Property Name="TextInputMode" Value="Integer" />
+<!--                                <Property Name="TextInputMode" Value="FloatingPoint" />-->
+			</Window>
+
+			<Window Type="QuadraticLook/StaticText" Name="stMass">
+				<Property Name="UnifiedPosition" Value="{{0.5,-110},{0,85}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
+				<Property Name="Text" Value="Masa:" />
+			</Window>
+
+			<Window Type="QuadraticLook/StaticText" Name="stMassCount">
+				<Property Name="UnifiedPosition" Value="{{0.5,10},{0,85}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
+				<Property Name="Text" Value="1.00" />
+			</Window>
+
+			<Window Type="QuadraticLook/HorizontalScrollbar" Name="slMass" >
+				<Property Name="UnifiedPosition" Value="{{0.5,-50},{0,90}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,170},{0,20}}" />
+				<Property Name="DocumentSize" Value="16.0" />
+				<Property Name="StepSize" Value="0.1" />
+			</Window>
+
+			<Window Type="QuadraticLook/StaticText" Name="stRadius">
+				<Property Name="UnifiedPosition" Value="{{0.5,-110},{0,115}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
+				<Property Name="Text" Value="Promien:" />
+			</Window>
+
+			<Window Type="QuadraticLook/StaticText" Name="stRadiusCount">
+				<Property Name="UnifiedPosition" Value="{{0.5,10},{0,115}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
+				<Property Name="Text" Value="1.00" />
+			</Window>
+
+			<Window Type="QuadraticLook/HorizontalScrollbar" Name="slRadius" >
+				<Property Name="UnifiedPosition" Value="{{0.5,-50},{0,120}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,170},{0,20}}" />
+				<Property Name="DocumentSize" Value="99.0" />
+				<Property Name="StepSize" Value="10.0" />
+			</Window>
+		</Window>
+
+<!--                okno pokazywania danych planety-->
+		<Window Type="QuadraticLook/FrameWindow" Name="ShowWin">
+			<Property Name="UnifiedPosition" Value="{{0.6,0},{0.1,0}}" />
+			<Property Name="UnifiedSize" Value="{{0,270},{0,205}}" />
+			<Property Name="Text" Value="Aktualna Planeta" />
+			<Property Name="CloseButtonEnabled" Value="False" />
+			<Property Name="FrameEnabled" Value="False" />
+			<Property Name="Alpha" Value="1.0" />
+			<Property Name="Visible" Value="False" />
+
+			<Window Type="QuadraticLook/StaticText" Name="stShowPos">
+				<Property Name="UnifiedPosition" Value="{{0.5,-110},{0.0,25}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
+				<Property Name="Text" Value="Pozycja:" />
+			</Window>
+
+			<Window Type="QuadraticLook/StaticText" Name="lbShowPos">
+				<Property Name="UnifiedPosition" Value="{{0.5,-40},{0.0,25}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,140},{0,30}}" />
+				<Property Name="Text" Value="" />
+			</Window>
+
+			<Window Type="QuadraticLook/StaticText" Name="stShowSpeed">
+				<Property Name="UnifiedPosition" Value="{{0.5,-110},{0,55}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
+				<Property Name="Text" Value="Predkosc:" />
+			</Window>
+
+			<Window Type="QuadraticLook/StaticText" Name="stShowSpeedScalar">
+				<Property Name="UnifiedPosition" Value="{{0.5,-110},{0,70}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
+				<Property Name="Text" Value="Skalar:" />
+			</Window>
+
+			<Window Type="QuadraticLook/StaticText" Name="lbShowSpeedScalar">
+				<Property Name="UnifiedPosition" Value="{{0.5,-40},{0,70}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,140},{0,30}}" />
+				<Property Name="Text" Value="" />
+			</Window>
+
+			<Window Type="QuadraticLook/StaticText" Name="stShowSpeedVector">
+				<Property Name="UnifiedPosition" Value="{{0.5,-110},{0,85}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
+				<Property Name="Text" Value="Wektor:" />
+			</Window>
+
+			<Window Type="QuadraticLook/StaticText" Name="lbShowSpeedVector">
+				<Property Name="UnifiedPosition" Value="{{0.5,-40},{0,85}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,140},{0,30}}" />
+				<Property Name="Text" Value="" />
+			</Window>
+
+			<Window Type="QuadraticLook/StaticText" Name="stShowMass">
+				<Property Name="UnifiedPosition" Value="{{0.5,-110},{0,115}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
+				<Property Name="Text" Value="Masa:" />
+			</Window>
+
+			<Window Type="QuadraticLook/StaticText" Name="lbShowMass">
+				<Property Name="UnifiedPosition" Value="{{0.5,-40},{0,115}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,140},{0,30}}" />
+				<Property Name="Text" Value="" />
+			</Window>
+
+			<Window Type="QuadraticLook/StaticText" Name="stShowRadius">
+				<Property Name="UnifiedPosition" Value="{{0.5,-110},{0,145}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
+				<Property Name="Text" Value="Promien:" />
+			</Window>
+
+			<Window Type="QuadraticLook/StaticText" Name="lbShowRadius">
+				<Property Name="UnifiedPosition" Value="{{0.5,-40},{0,145}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,140},{0,30}}" />
+				<Property Name="Text" Value="Promien:" />
+			</Window>
+
+			<Window Type="QuadraticLook/Button" Name="btnDel" >
+				<Property Name="UnifiedPosition" Value="{{0.5,-40},{0,175}}" />
+				<Property Name="UnifiedSize" Value="{{0,80},{0,20}}" />
+				<Property Name="Text" Value="Usun Planete" />
+			</Window>
+
+		</Window>
+
+<!--                ono z lista dostepnych ukladow-->
+		<Window Type="QuadraticLook/FrameWindow" Name="SavesListWin" >
+			<Property Name="UnifiedPosition" Value="{{0.5,-75},{0.5,-100}}" />
+			<Property Name="UnifiedSize" Value="{{0,150},{0,200}}" />
+			<Property Name="Text" Value="Wczytaj uklad" />
+			<Property Name="CloseButtonEnabled" Value="True" />
+			<Property Name="FrameEnabled" Value="True" />
+			<Property Name="Alpha" Value="1.0" />
+			<Property Name="Visible" Value="False" />
+
+			<Window Type="QuadraticLook/Listbox" Name="lstSaves" >
+				<Property Name="UnifiedPosition" Value="{{0.05,0},{0.05,20}}" />
+				<Property Name="UnifiedSize" Value="{{0.9,0},{0.9,-50}}" />
+			</Window>
+
+			<Window Type="QuadraticLook/Button" Name="btnLoad" >
+				<Property Name="UnifiedPosition" Value="{{0.5,-40},{1.0,-30}}" />
+				<Property Name="UnifiedSize" Value="{{0,80},{0,20}}," />
+				<Property Name="Text" Value="Wczytaj" />
+			</Window>
+		</Window>
+
+<!--                okno zapisu pliku-->
+		<Window Type="QuadraticLook/FrameWindow" Name="winSave" >
+			<Property Name="UnifiedPosition" Value="{{0.5,-75},{0.5,-50}}" />
+			<Property Name="UnifiedSize" Value="{{0,250},{0,70}}" />
+			<Property Name="Text" Value="Zapisz uklad" />
+			<Property Name="CloseButtonEnabled" Value="True" />
+			<Property Name="FrameEnabled" Value="True" />
+			<Property Name="Alpha" Value="1.0" />
+			<Property Name="Visible" Value="False" />
+
+			<Window Type="QuadraticLook/Editbox" Name="ebSave" >
+				<Property Name="UnifiedPosition" Value="{{0,5},{0.5,5}}" />
+				<Property Name="UnifiedSize" Value="{{1.0,-90},{0.0,20}}" />
+			</Window>
+
+			<Window Type="QuadraticLook/Button" Name="btnSave" >
+				<Property Name="UnifiedPosition" Value="{{1.0,-85},{0.5,5}}"/>
+				<Property Name="UnifiedSize" Value="{{0.0,80},{0.0,20}}" />
+				<Property Name="Text" Value="Zapisz" />
+			</Window>
+		</Window>
+
+<!--                okno bledu-->
+		<Window Type="QuadraticLook/FrameWindow" Name="ErrorWin" >
+			<Property Name="UnifiedPosition" Value="{{0.5,-75},{0.5,-50}}" />
+			<Property Name="UnifiedSize" Value="{{0,200},{0,100}}" />
+			<Property Name="Text" Value="Error" />
+			<Property Name="Visible" Value="False" />
+			
+			<Window Type="QuadraticLook/StaticText" Name="stError" >
+				<Property Name="UnifiedPosition" Value="{{0.05,0},{0.5,-10}}" />
+				<Property Name="UnifiedSize" Value="{{0.9},{0.0,20}}" />
+				<Property Name="Text" Value="Unknown error" />
+				<Property Name="Visible" Value="True" />
+			</Window>
+
+		</Window>
+	</Window>
+
+</GUILayout>
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<Imageset Name = "QuadraticLook" Imagefile = "QuadraticLook.tga" NativeHorzRes = "800" NativeVertRes = "600" AutoScaled = "false">
+	<Image Name = "ButtonBG_normal" XPos = "1" YPos = "37" Width = "1" Height = "1" />
+	<Image Name = "ButtonBG_hover" XPos = "5" YPos = "37" Width = "1" Height = "1" />
+	<Image Name = "ButtonBG_filled" XPos = "9" YPos = "37" Width = "1" Height = "1" />
+	<Image Name = "Border" XPos = "1" YPos = "33" Width = "1" Height = "1" />
+	<Image Name = "MouseArrow" XPos = "0" YPos = "0" Width = "16" Height = "16" />
+	<Image Name = "MouseTextBar" XPos = "4" YPos = "64" Width = "9" Height = "21" XOffset = "-4" YOffset = "-11" />
+	<Image Name = "Logo" XPos = "0" YPos = "192" Width = "64" Height = "64" />
+	<Image Name = "ButtonArrowUp" XPos = "135" YPos = "2" Width = "5" Height = "5" />
+	<Image Name = "ButtonArrowDown" XPos = "135" YPos = "8" Width = "5" Height = "5" />
+	<Image Name = "PopupMenuArrowRight" XPos = "146" YPos = "2" Width = "5" Height = "5" />
+	<Image Name = "PopupMenuArrowLeft" XPos = "146" YPos = "8" Width = "5" Height = "5" />
+	<Image Name = "NewCloseButtonNormal" XPos = "163" YPos = "4" Width = "10" Height = "10" />
+	<Image Name = "NewCloseButtonHover" XPos = "163" YPos = "4" Width = "10" Height = "10" />
+	<Image Name = "NewCloseButtonPressed" XPos = "177" YPos = "4" Width = "10" Height = "10" />
+	<Image Name = "SysAreaMiddle" XPos = "231" YPos = "1" Width = "12" Height = "16" />
+	<Image Name = "SysAreaRight" XPos = "246" YPos = "1" Width = "13" Height = "16" />
+	<Image Name = "Titlebar" XPos = "5" YPos = "33" Width = "1" Height = "1" />
+	<Image Name = "White" XPos = "9" YPos = "33" Width = "1" Height = "1" />
+	<Image Name = "MouseNoSoCursor" XPos = "52" YPos = "64" Width = "12" Height = "20" XOffset = "-6" YOffset = "-10" />
+	<Image Name = "MouseMoveCursor" XPos = "16" YPos = "63" Width = "22" Height = "22" XOffset = "-11" YOffset = "-11" />
+	<Image Name = "MouseTarget" XPos = "50" YPos = "86" Width = "17" Height = "17" XOffset = "-8" YOffset = "-8" />
+	<Image Name = "MouseEsWeCursor" XPos = "15" YPos = "86" Width = "18" Height = "14" XOffset = "-9" YOffset = "-3" />
+	<Image Name = "MouseNeSwCursor" XPos = "34" YPos = "86" Width = "14" Height = "14" XOffset = "-7" YOffset = "-7" />
+	<Image Name = "MouseNwSeCursor" XPos = "64" YPos = "65" Width = "14" Height = "14" XOffset = "-7" YOffset = "-7" />
+	<Image Name = "RadioButtonNormal" XPos = "4" YPos = "127" Width = "12" Height = "12" />
+	<Image Name = "RadioButtonMark_hover" XPos = "4" YPos = "155" Width = "12" Height = "12" />
+	<Image Name = "RadioButtonMark" XPos = "4" YPos = "141" Width = "12" Height = "12" />
+</Imageset> 
