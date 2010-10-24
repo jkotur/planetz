@@ -1,0 +1,24 @@
+\subsection{Algorytmy graficzne}\label{sub:grafika}
+
+\paragraph{}
+
+Z natury algorytmy graficzne ciężko poddają się testom. Spowodowane jest to dwoma podstawowymi powodami. Po pierwsze, algorytmy graficzne na wyjściu dają mapę bitową, którą ciężko się analizuje. Drugim powodem jest to, że są one pisane nie dla konkretnych ścisłych wyników, ale dla ładnego wyglądu, a to może stwierdzić jedynie człowiek, poprzez usilne przyglądanie się efektowi, w postaci wyrenderowanego obrazu. Dodatkowo pisanie w technologii shaderów sprawia, że dostanie się do wyjścia programów nie jest rzeczą banalną. 
+
+\paragraph{}
+
+Biorąc pod uwagę powyższe rozważania, testowanie algorytmów graficznych ograniczy się do testowania organoleptycznego.
+
+\subsection{Algorytmy fizyczne}\label{sub:algorytmy fizyczne}
+
+\paragraph{Obliczanie pozycji}
+
+testowanie tego algorytmu polegać będzie na podawaniu gotowych układów na wejście algorytmu i sprawdzanie czy wyjście jest zgodne z oczekiwaniami. Aby więc poprawnie przetestować algorytm, trzeba najpierw przeliczyć kilka układów na kartce i sprawdzać czy wynik symulacji nie odbiega zbytnio od algebraicznych obliczeń. Trzeba założyć pewną tolerancję, ponieważ obliczenia zmiennoprzecinkowe na maszynach z rodziny x86 nie są niestety precyzyjne. Układy też będą dość małe, ponieważ problem symulacji n-ciał już dla względnie niewielkich problemów daje duże ilości obliczeń.
+
+\paragraph{Klasteryzacja}
+
+jest prostszym algorytmem do testowania. Testy mogą mieć dwa rodzaje. Pierwszym jest podawanie na wejście losowej chmury cząstek i sprawdzanie czy każda z tych cząstek należy do najbliższego jej klastra. Drugą, oraz bardziej praktycznąz punktu widzenia projektu metodą, jest testowanie konstelacji. Polega to na podaniu na wejście algorytmu kilku chmur cząstek, oddalonych od siebie znacznie i sprawdzenie czy każda cząstka z danej konstelacji, należy do tego samego klastra.
+
+\paragraph{Kolizje}
+
+kolizje z powodu swojej losowości, są również dość kłopotliwe do testowania. Testowanie można przeprowadzić dla kilku najprostszych przypadków. Po pierwsze, można sprawdzić czy prawo zachowania pędu, na którym oparte będzie zjawisko kolizji, jest spełnione. Można również sprawdzać wyniki symulacji dla prostych przypadków, takich dla których łatwo można przewidzieć efekty. Takim przypadkiem będzie na przykład jedna duża planeta, w towarzystwie małych satelitów. Dla takiego układu, na scenie powinna pozostać jedna duża planeta, z lekko zmodyfikowanym kierunkiem lotu.
+

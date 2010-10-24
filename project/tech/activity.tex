@@ -1,3 +1,6 @@
+\paragraph{}
+
+Podstawowymi aktywnościami projektu są moduły wyświetlania planet, oraz obliczania pozycji planet. Jednak dla działania aplikacji bardzo ważne są również inne aktywności, które mimo że prostsze w implementacji mają duży wpływ na architekturę projektu. Poniższy diagram przedstawia kolejne aktywności aplikacji podczas działania. Dodatkowo przestawiony na diagramie jest przepływ najważniejszej informacji, czyli pozycji planet.
 
 \begin{figure}[h]
 	\centering
@@ -5,4 +8,22 @@
 	\caption{Diagram aktywności}
 	\label{fig:activity}
 \end{figure}
+
+\paragraph{}
+
+\begin{description}
+	\item[Inicjalizacja] \hfill \\
+	jest to pierwsza aktywność jaką wykonuje program. Składa się ona z inicjalizacji wszystkich modułów, w szczególności modułu graficznego i fizycznego. Zajmuje się także początkową alokacją pamięci i załadowaniem wszystkich potrzebnych zasobów, takich jak tekstury, modele oraz inne potrzebne dane.
+	\item[Wczytanie z pliku] \hfill \\
+	jeśli użytkownik zdecyduje zacząć symulację z wcześniej przygotowanego pliku ta akcja jest za to odpowiedzialna. Musi ona załadować potrzebne dane z pliku, oraz zapisać je, poprzez pamięć RAM jednostki głównej, do pamięci RAM jednostki graficznej. Użytkownik może również zdecydować o wczytaniu z pliku podczas już trwającej aplikacji. W takim przypadku konieczne jest również zadbanie o odpowiednie wyczyszczenie poprzedniej symulacji, tak aby żadne artefakty nie zostały w pamięci RAM ani jednostki głównej, ani graficznej.
+	\item[Zapis do pliku] \hfill \\
+	na życzenie użytkownika aktualny stan symulacji może zostać zapisany do pliku. W takim przypadku zbierane z aplikacji są wszystkie potrzebne dane, takie jak pozycje planet, wielkości i ciężary planet, modele planet, pozycja kamery itp., oraz zapisywane są do pliku.
+	\item[Aktywna pauza] \hfill \\
+	symulacja wspiera tak zwaną "aktywną pauzę". Oznacza to że na żądanie użytkownika, symulacja fizyczna jest zatrzymana, natomiast cały czas reszta aplikacji jest w pełni funkcjonalna. Oznacza to że można sterować kamerą, wczytywać/zapisywać układy planetarne, oraz dodawać, albo usuwać planety.
+	\item[Symulacja fizyczna] \hfill \\
+	kluczowy moduł dla działania aplikacji. Podczas każdej takiej aktywności obliczane są kolejne pozycje planet do wyświetlenia. W jednej takiej akcji może być liczone więcej niż jedna klatka fizyczna, jeśli moc obliczeniowa komputera na to pozwala.
+	\item[Symulacja graficzna] \hfill \\
+	ta aktywność odpowiedzialna jest w ogólności za wyświetlanie symulacji na ekran. Głównym jej zadaniem jest wyświetlanie planet na ich pozycjach wraz z towarzyszącymi im efektami graficznymi. Pozycje planet do wyświetlenia pobiera z modułu fizycznego. Jeśli natomiast jest włączona aktywna pauza i nowe pozycje nie zostały wygenerowane, moduł korzysta ze starych pozycji. Po zakończonej jednej iteracji pętli, aplikacja odczekuje chwilę, żeby nie zajmować całego procesora, oraz żeby zapewnić takie samo działanie symulacji na słabszych komputerach (gdzie czekanie może zostać pominięte)
+\end{description}
+
 
