@@ -7,14 +7,14 @@
 
 #include "planetzlayout.h"
 
-#include "../planet.h"
-#include "../phx/model.h"
-#include "../phx/model.h"
+#include "planet.h"
+#include "phx/model.h"
+#include "phx/model.h"
 
-#include "../util/logger.h"
-#include "../util/vector.h"
+#include "util/logger.h"
+#include "util/vector.h"
 
-#include "../constants.h"
+#include "constants.h"
 
 #define BUFSIZE 128
 

@@ -2,8 +2,8 @@
 #include <boost/signals.hpp>
 
 #include "input.h"
-#include "../util/logger.h"
-#include "../gfx/gfx.h"
+#include "util/logger.h"
+#include "gfx/gfx.h"
 
 CInput::CInput()
 {

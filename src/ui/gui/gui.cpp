@@ -1,11 +1,11 @@
 #include <string>
 
-#include "../gfx/gfx.h"
-#include "../input/input.h"
+#include "gfx/gfx.h"
+#include "input/input.h"
 
-#include "../util/timer/timer.h"
-#include "../util/logger.h"
-#include "../constants.h"
+#include "util/timer/timer.h"
+#include "util/logger.h"
+#include "constants.h"
 
 #include "gui.h"
 #include "layout.h"

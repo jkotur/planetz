@@ -8,7 +8,7 @@
 #include <string>
 
 #include "layout.h"
-#include "../planet.h"
+#include "planet.h"
 
 typedef boost::signal<void (Planet*p)> SigSetPlanet;
 typedef boost::signal<void (std::string)> SigSetString;

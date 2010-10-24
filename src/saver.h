@@ -2,8 +2,8 @@
 
 #define __SAVER_H__
 
-#include "camera.h"
-#include "./planetz_manager.h"
+#include "ui/camera.h"
+#include "planetz_manager.h"
 
 class Saver {
 public:

@@ -1,6 +1,7 @@
 cmake_policy(VERSION 2.6)
 
 set( INCLUDE_DIRS
+	.
 	${CUDA_INCLUDE_DIRS}
 	${OPENGL_INCLUDE_DIR}
 	${SDL_INCLUDE_DIR}
@@ -10,17 +11,16 @@ set( INCLUDE_DIRS
 include_directories( ${INCLUDE_DIRS} )
 
 add_subdirectory( gfx )
-add_subdirectory( gui )
-add_subdirectory( input )
+add_subdirectory( ui )
 add_subdirectory( phx )
 add_subdirectory( sphere )
 add_subdirectory( util )
 
-add_executable( inz camera constants planet planetz_manager saver main )
+add_executable( inz constants planet planetz_manager saver main )
 
 
 
-target_link_libraries( inz util gfx gui input phx sphere
+target_link_libraries( inz util gfx ui phx  sphere 
 	${CUDA_LIBRARIES}
 	${OPENGL_LIBRARY}
 	${SDL_LIBRARY}

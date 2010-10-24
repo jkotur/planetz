@@ -3,7 +3,7 @@
 #define __DRIVER_H__
 
 #include "SDL/SDL.h"
-#include "../util/vector.h"
+#include "util/vector.h"
 
 class CLocationDriver
 {

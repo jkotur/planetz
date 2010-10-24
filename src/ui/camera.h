@@ -2,8 +2,8 @@
 
 #define __CAMERA_H__
 
-#include "./util/vector.h"
-#include "./input/driver.h"
+#include "input/driver.h"
+#include "util/vector.h"
 
 class Camera {
 public:

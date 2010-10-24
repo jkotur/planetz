@@ -1,7 +1,7 @@
 #include "driver.h"
-#include "../gfx/gfx.h"
-#include "../util/vector.h"
-#include "../util/logger.h"
+#include "gfx/gfx.h"
+#include "util/vector.h"
+#include "util/logger.h"
 
 bool CNullLD::Init()
 {

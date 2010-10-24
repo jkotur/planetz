@@ -7,7 +7,6 @@
 
 #include "./planet.h"
 #include "phx/model.h"
-#include "camera.h"
 
 typedef boost::signal<void (Planet*)> SigPlanet;
 
@@ -16,7 +15,6 @@ public:
 	typedef std::list<Planet*>::iterator iterator;
 
 	Planetz();
-//        Planetz( Camera* c );
 	virtual ~Planetz();
 
 	iterator begin()
@@ -33,15 +31,10 @@ public:
 	void render();
 	void update();
 
-//        void lookat();
-
 	void select(int);
 
 	SigPlanet on_planet_select;
 private:
-//        const Camera*main_cam;
-//        Camera*curr_cam;
-//        Camera planet_cam;
 	Phx::Model *phx_model;
 	std::list<Planet*> planetz;
 };

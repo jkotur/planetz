@@ -18,20 +18,16 @@
 #include "./gfx/gfx.h"
 #include "./gfx/background.h"
 
-#include "./input/input.h"
-
 #include "./gfx/planet.h"
 #include "./phx/planet.h"
 #include "./planet.h"
 #include "./planetz_manager.h"
 
-#include "./camera.h"
-
 #include "./saver.h"
 
 #include "./constants.h"
 
-#include "./gui/gui.h"
+#include "ui/ui.h"
 
 void do_fps()
 {
