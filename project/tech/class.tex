@@ -1,0 +1,34 @@
+\paragraph{}
+Ze względu na architekturę aplikacji, klasy używane na CPU oddzielone są od klas karty graficznej. Oczywiście te drugie są klasami jedynie logicznie - ze względu na konieczność używania języka C w kodzie dla GPU. Ponieważ jednak obiekty są wygodną abstrakcją, będziemy z niej korzystać w całym programie.
+
+\subsubsection{Klasy GPU}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[angle=270,width=0.8\textwidth]{class_gpu.pdf}
+	\caption{Diagram klas dla GPU}
+	\label{fig:class_gpu}
+\end{figure}
+
+\paragraph{}
+Struktury, z których będziemy korzystać na karcie graficznej, określone są na rysunku \ref{fig:class_gpu}. Ponieważ karta graficzna służy nam zarówno do wyświetlania danych, jak i do ich przetwarzania, wydzielone są na nim dwie przestrzenie nazw. Są to:
+\begin{itemize}
+	\item{Phx - do operacji fizycznych}
+	\item{Gfx - do operacji graficznych}
+\end{itemize}
+
+\paragraph{}
+Ponadto istnieje kilka struktur wspólnych dla obu częsci.
+
+\paragraph{GPU::Planet} zawiera informacje, z których korzystaja zarówno wyświetlanie jak i fizyka. Jest to położenie planety oraz jej promień.
+\paragraph{GPU::Comet} to dodatkowe informacje o danej planecie. Struktura ta istnieje tylko dla obiektów będących kometami. Zawiera 
+
+\subsubsection{Klasy CPU}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[angle=270,width=0.8\textwidth]{class_cpu.pdf}
+	\caption{Diagram klas dla CPU}
+	\label{fig:class_cpu}
+\end{figure}
+

@@ -1,0 +1,14 @@
+\subsubsection{Klasteryzacja}
+
+\paragraph{}
+
+Do pogrupowania planet w klastry użyty zostanie algorytm k-means. W algorytmie tym na zmianę znajdujemy środki klastrów, po czym przyporządkowujemy punkty do najbliższego środka. K-means bardzo dobrze nadaje się do naszych celów, biorąc pod uwagę, iż zwykle planety i tak będą zgrupowane wokół masywniejszych gwiazd. Ułatwi to i przyspieszy pracę algorytmu, gdyż zwykle wybór punktów początkowych ma kluczowy wpływ na czas działania oraz wynik. Jako początkowe środki klastrów będzie można wziąć środki k najmasywniejszych obiektów. Wyznaczenie wartości k, a zatem ilości klastrów, będzie wykonywane na podstawie ilości oraz mas klastrowanych obiektów.
+
+Zasada działania algorytmu k-means została zapisana poniżej w pseudokodzie:
+
+\begin{enumerate}
+	\item{Wybierz k punktów przestrzeni, będą to środki klastrów}
+	\item{Każdy z punktów do klasteryzacji przydziel do klastra, którego środek jest najbliższy}
+	\item{Wyznacz błąd kwantyzacji: \ensuremath{D = {1\over{n}}\sum_{i = 1}^{n}d(x_i, r)}, gdzie \ensuremath{r} jest środkiem klastra, do którego należy \ensuremath{x_i} }
+	\item{Jeżeli \ensuremath{\frac{\Delta{D}}{D}\geqslant\epsilon}, wyznacz nowe środki klastrów (jako średnie z punktów w tych klastrach) i przejdź do punktu 2.}
+\end{enumerate}
