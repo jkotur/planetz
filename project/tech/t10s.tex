@@ -1,0 +1,7 @@
+\paragraph{}
+
+Jednym z podstawowych założeń tego projektu jest użycie technologii CUDA. Daje to nam możliwość oprogramowania karty graficznej, ale stawia też ograniczenia. Przede wszystkim jesteśmy zmuszeni używać języka C (konkretniej, C for CUDA) do części uruchamianej na procesorze graficznym. Najłatwiej używać go wspólnie z C++ na CPU. Oczywiście istnieją bindingi w innych językach (Java, Python), ale C++ jest z nich najszybszy - nie uwzględniając czystego C, które jednak nie wspiera obiektowości. 
+
+\paragraph{}
+
+Kod pisany na kartę graficzną nie będzie napisany w języku obiektowym, więc wszystkie klasy, które zdefiniowaliśmy dla jednostki graficznej są jedynie abstrakcją, która pośrednio się na niego przekłada. Chcemy uzyskać aplikację wydajnie korzystającą z karty graficznej, w związku z czym ułożenie "obiektów" w pamięci będzie pozwalało na szybki i wygodny dostęp do nich. Prawdopodobnie w pewnych miejsacach spowoduje to zmniejszenie czytelności kodu na rzecz prędkości jego wykonania.
