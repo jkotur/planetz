@@ -64,79 +64,7 @@ void reset( Planetz*pl , Camera*c )
 	pl->select(-1); // clear selection
 }
 
-int processHits (GLint hits, GLuint buffer[])
-{
-	int i;
-	unsigned int j;
-	GLuint names, *ptr;
-	int outn = -1;
-	double outz = 100.0;
-
-	ptr = (GLuint *) buffer;                                            
-	for (i = 0; i < hits; i++) {  /* for each hit  */
-		names = *ptr;
-		ptr++; // skip numbers
-		if( outz <= (float)*ptr/0x7fffffff) { ptr+=2+names; continue; }
-		outz = (float)*ptr/0x7fffffff;
-		ptr++; // skip z1
-		ptr++; // skip z2
-		for (j = 0; j < names; j++) {  /* for each name */
-			outn = *ptr;
-			ptr++;
-		}
-	}
-	return outn;
-
-}
-
-int picked_id( int b , int x , int y , Planetz*plz , Camera*cam )
-{
-	if( b != SDL_BUTTON_LEFT ) return -1;
-
-	GLuint selectBuf[BUFSIZE];
-	GLint hits;
-	GLint viewport[4];
-
-	glGetIntegerv (GL_VIEWPORT, viewport);
-
-	glDepthRange(0.0, 1.0);
-
-	glSelectBuffer (BUFSIZE, selectBuf);
-	(void) glRenderMode (GL_SELECT);
-
-	glInitNames();
-	glPushName(0);
-
-	glMatrixMode (GL_PROJECTION);
-	glPushMatrix ();
-	glLoadIdentity ();
-	/*  create 5x5 pixel picking region near cursor location      */
-	gluPickMatrix ((GLdouble) x, (GLdouble) (viewport[3] - y), 
-			5.0, 5.0, viewport);
-	gluPerspective(75.0, (double)gfx.width()/(double)gfx.height(), 1, 10000);
-
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
-	cam->gl_lookat();
-
-	plz->render();
-
-	glMatrixMode (GL_PROJECTION);
-	glPopMatrix ();
-	glFlush ();
-
-	hits = glRenderMode (GL_RENDER);
-	plz->select( processHits (hits, selectBuf) );
-
-	return 0;
-}
-
-#ifndef _WIN32
 int main (int argc, char const* argv[])
-#else 
-int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
-#endif
 {
 	gfx.SDL_init(BASE_W,BASE_H);
 
@@ -154,33 +82,31 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 	gfx.GL_init();
 
+	UI ui;
+
+	ui.init();
+
 	// FIXME: where should be this done?
-	SigVideoResize.connect( 1 , boost::bind(&Gfx::CGfx::reshape_window,&gfx,_1,_2) );
+	ui.sigVideoResize.connect( 1 , boost::bind(&Gfx::CGfx::reshape_window,&gfx,_1,_2) );
 
 	Camera cam( CAM_START_VECS );
-//        SigKeyDown.connect( boost::bind(&Camera::on_key_down,&cam,_1) );
-	SigMouseMotion.connect( boost::bind(&Camera::on_mouse_motion,&cam,_1,_2) );
-	SigMouseButtonUp.connect( boost::bind(&Camera::on_button_up,&cam,_1,_2,_3) );
-	SigMouseButtonDown.connect( 1 , boost::bind(&Camera::on_button_down,&cam,_1,_2,_3) );
+	ui.sigMouseMotion.connect( boost::bind(&Camera::on_mouse_motion,&cam,_1,_2) );
+	ui.sigMouseButtonUp.connect( boost::bind(&Camera::on_button_up,&cam,_1,_2,_3) );
+	ui.sigMouseButtonDown.connect( 1 , boost::bind(&Camera::on_button_down,&cam,_1,_2,_3) );
 
 	Planetz plz;
-//        Planetz plz(&cam );
 	
 	Gfx::Background bkg( DATA("text.tga") , 0.8 );
-	SigKeyDown.connect( boost::bind(&Gfx::Background::on_key_down,&bkg,_1) );
-	SigMouseMotion.connect( boost::bind(&Gfx::Background::on_mouse_motion,&bkg,_1,_2) );
-	SigMouseButtonUp.connect( boost::bind(&Gfx::Background::on_button_up,&bkg,_1,_2,_3) );
-	SigMouseButtonDown.connect( 1 , boost::bind(&Gfx::Background::on_button_down,&bkg,_1,_2,_3) );
-
-
-	SigMouseButtonDown.connect( 1 , boost::bind(picked_id,_1,_2,_3,&plz,&cam) );
+	ui.sigKeyDown.connect( boost::bind(&Gfx::Background::on_key_down,&bkg,_1) );
+	ui.sigMouseMotion.connect( boost::bind(&Gfx::Background::on_mouse_motion,&bkg,_1,_2) );
+	ui.sigMouseButtonUp.connect( boost::bind(&Gfx::Background::on_button_up,&bkg,_1,_2,_3) );
+	ui.sigMouseButtonDown.connect( 1 , boost::bind(&Gfx::Background::on_button_down,&bkg,_1,_2,_3) );
 
 	Saver saver( plz , cam );
 
 #ifndef _NOGUI
-	Gui gui;
 	PlanetzLayout*pl = new PlanetzLayout(); 
-	gui.set_layout(pl);
+	ui.gui.set_layout(pl);
 
 	pl->on_cam_speed_changed.connect( boost::bind(&Camera::set_speed,&cam,_1) );
 	pl->on_pause_click.connect( boost::bind(pause_toggle) );
@@ -201,7 +127,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	{
 		Timer::signal_all();
 #ifndef _NOGUI
-		gui.signal();
+		ui.signal();
 #endif
 		cam.signal();
 
@@ -214,19 +140,18 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		gfx.clear();
 
 		cam.gl_lookat();
-//                plz.lookat();
 
 		if( !anim_pause )
 			plz.update();
 		plz.render();
 
 #ifndef _NOGUI
-		gui.render();
+		ui.render();
 #endif
 
 		SDL_GL_SwapBuffers();
 
-		(running && (running &= event_handle() ));
+		(running && (running &= ui.event_handle() ));
 
 		do_fps();
 	}

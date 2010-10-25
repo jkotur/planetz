@@ -1,7 +1,6 @@
 #include <string>
 
 #include "gfx/gfx.h"
-#include "input/input.h"
 
 #include "util/timer/timer.h"
 #include "util/logger.h"
@@ -44,15 +43,6 @@ void Gui::init_gui()
 	renderer = new CEGUI::OpenGLRenderer(0,gfx.width(),gfx.height());
 	new CEGUI::System(renderer);
 
-	cons[0] = SigKeyUp.connect( boost::bind(&Gui::on_key_up,this,_1) );
-	cons[1] = SigKeyDown.connect( boost::bind(&Gui::on_key_down,this,_1,_2,_3) );
-	cons[2] = SigMouseMotion.connect( boost::bind(&Gui::on_mouse_motion,this,_1,_2) );
-	cons[3] = SigMouseButtonUp.connect( boost::bind(&Gui::on_mouse_button_up,this,_1,_2,_3) );
-	cons[4] = SigMouseButtonDown.connect( 0 , boost::bind(&Gui::on_mouse_button_down,this,_1,_2,_3) );
-
-	cons[5] = SigVideoResize.connect( 0 , boost::bind(&CEGUI::OpenGLRenderer::grabTextures,renderer) );
-	cons[6] = SigVideoResize.connect( 3 , boost::bind(&Gui::resize,this,_1,_2) );
-
 	DefaultResourceProvider* rp = static_cast<DefaultResourceProvider*>(
 			CEGUI::System::getSingleton().getResourceProvider());
 
@@ -77,16 +67,6 @@ void Gui::init_gui()
 	System::getSingleton().setDefaultFont( "Commonwealth-8" );
 	System::getSingleton().setDefaultMouseCursor( "QuadraticLook", "MouseArrow" );
 	System::getSingleton().setDefaultTooltip( "QuadraticLook/Tooltip" );
-}
-
-void Gui::block_singals()
-{
-	for( int i=0 ; i<5 ; i++ ) cons[i].block();
-}
-
-void Gui::unblock_signals()
-{
-	for( int i=0 ; i<5 ; i++ ) cons[i].unblock();
 }
 
 void Gui::resize( int w , int h )

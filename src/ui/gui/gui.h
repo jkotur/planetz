@@ -27,13 +27,11 @@ public:
 	void on_key_up( int );
 
 	void set_layout( Layout*l );
-private:
-	void block_singals();
-	void unblock_signals();
 
-	bool add_item( const CEGUI::EventArgs& e );
-
+	// FIXME: public?
 	CEGUI::OpenGLRenderer*renderer;
+private:
+	bool add_item( const CEGUI::EventArgs& e );
 
 	Layout*layout;
 
