@@ -11,8 +11,10 @@ UI::~UI()
 	if( joy ) delete joy;
 }
 
-void UI::init()
+bool UI::init()
 {
+	log_printf(INFO,"Starting UI\n");
+
 	//
 	// Setup mouse
 	//
@@ -20,12 +22,14 @@ void UI::init()
 
 	if( joy->Init() == false ) {
 		log_printf(CRITICAL,"Joy cannot be loaded\n");
-		exit(0);
+		return false;
 	}
 
 	//
 	// Setup gui
 	// 
+	if( !gui.init() ) return false;
+
 	sigKeyUp.connect( boost::bind(&Gui::on_key_up,gui,_1) );
 	sigKeyDown.connect( boost::bind(&Gui::on_key_down,gui,_1,_2,_3) );
 	sigMouseMotion.connect( boost::bind(&Gui::on_mouse_motion,gui,_1,_2) );
@@ -35,6 +39,7 @@ void UI::init()
 	sigVideoResize.connect( 0 , boost::bind(&CEGUI::OpenGLRenderer::grabTextures,gui.renderer) );
 	sigVideoResize.connect( 3 , boost::bind(&Gui::resize,gui,_1,_2) );
 
+	return true;
 }
 
 void UI::render()

@@ -21,11 +21,13 @@ namespace Gfx {
  */
 class CGfx {
 public:
-	void SDL_init(int w,int h);
+	virtual ~CGfx();
 
-	void GL_init();
+	bool SDL_init(int w,int h);
 
-	void GL_view_init();
+	bool GL_init();
+
+	bool GL_view_init();
 
 	void GL_viewport( int  w , int h);
 
@@ -44,8 +46,6 @@ private:
 };
 
 } // namespace gfx
-
-extern Gfx::CGfx gfx;
 
 #endif /* __GFX_H__ */
 

@@ -1,4 +1,4 @@
-\subsection{Oświetlenie}\label{sub:oswietlenie}
+\subsubsection{Oświetlenie}\label{subsub:oswietlenie}
 
 \paragraph{}
 
@@ -8,7 +8,9 @@ Oświetlenie dla sceny będzie liczone przy pomocy model Phonga. Polega to na po
 
 W zależności od możliwości obliczeniowych, model oświetlenia może mieć kilka ograniczeń. Oświetlenie można obliczać dla każdego wierzchołka, natomiast kolor ściany interpolować liniowo pomiędzy kolorami wierzchołków na który składa się dana ściana. Można też obliczać natężenie światła dla każdego piksela z którego składa się ściana. Oczywistym jest że w drugim przypadku obliczenia są znacząco większe niż w przypadku pierwszym. Ograniczeniom podlega również ilość świateł obecnych na scenie. Dla każdego światła trzeba powtórzyć obliczenia dla wszystkich wierzchołków na scenie. Aby zachować płynność symulacji, ilość świateł, a zatem gwiazd, będzie ograniczona przez pewną stałą liczbę ustaloną na podstawie testów w fazie implementacji.
 
-\subsection{Efekt atmosfery}\label{sub:efekt atmosfery}
+\subsubsection{Efekt atmosfery}\label{subsub:efekt atmosfery}
+
+\paragraph{}
 
 Aby uzyskać efekt atmosfery otaczającej planety, można zastosować dwa odmienne podejścia. Decyzja które z nich zostanie wybrane, pozostawiona została do fazy implementacji, ponieważ zależy to mocno od wydajności całego silnika graficznego.
 
@@ -21,13 +23,13 @@ Efekty atmosferyczne mogą być generowane przy pomocy techniki post-processingu
 Drugim rozwiązaniem jest otoczenie planet półprzezroczystymi sferami, o promieniu trochę większym niż promień planet. Rozwiązanie ma tą zaletę, że całym procesem wyświetlania zajmuje się biblioteka graficzna. Minusem może być wydajność, choć nie jest to konieczne.
 
 
-\subsection{Dynamiczna szczegółowość planet}\label{sub:dynamiczna szczegolowosc planet}
+\subsubsection{Dynamiczna szczegółowość planet}\label{subsub:dynamiczna szczegolowosc planet}
 
 \paragraph{}
 
 W zależności od odległości od obserwatora, planety powinny być wyświetlane z różnym poziomem szczegółowości. Rozwiązaniem będzie wyświetlanie modelu kuli, o mniejszej ilości wierzchołków. Wszystkie modele ładowane będą na początku z pliku, do pamięci ram karty graficznej, skąd będą później wyświetlane, w zależności od tego który model będzie aktualnie potrzebny.
 
-\subsection{Komety}\label{sub:komety}
+\subsubsection{Komety}\label{subsub:komety}
 
 \paragraph{}
 

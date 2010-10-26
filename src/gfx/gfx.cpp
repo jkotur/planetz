@@ -1,5 +1,5 @@
+#include <GL/glew.h>
 #include <SDL/SDL.h>
-#include <SDL/SDL_opengl.h>
 
 #include "./gfx.h"
 #include "../util/logger.h"
@@ -8,24 +8,21 @@
 
 using namespace Gfx;
 
-CGfx gfx;
-
-// FIXME: all exlude SDL_init should be done in module functions
-
-void CGfx::SDL_init(int width,int height)
+CGfx::~CGfx()
 {
-	/*         SDL initialization*/
-	int error;
-	/*         initializing all subsystems (Timer, Audio, Video, CD, Joystick)*/
-	error = SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER);
+	SDL_Quit();
+}
 
-	if( error ) {
-		log_printf(CRITICAL,"some SDL err mon\n");
-		exit(1);
+bool CGfx::SDL_init(int width,int height)
+{
+	log_printf(INFO,"Starting SDL...\n");
+
+	if( SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) ) {
+		log_printf(CRITICAL,"SDL error occurred: %s\n",SDL_GetError());
+		return false;
 	}
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); 
-
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16); 
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
@@ -38,16 +35,31 @@ void CGfx::SDL_init(int width,int height)
 		flags |= SDL_FULLSCREEN;
 
 	reshape_window(width,height);
+
+	return true;
 }
 
-void CGfx::GL_init()
+bool CGfx::GL_init()
 {
 	log_printf(INFO,"Graphics init...\n");
 
-	GL_view_init();
+	GLenum err = glewInit();
+	if( GLEW_OK != err ) {
+		log_printf(CRITICAL,"GLEW error: %s\n", glewGetErrorString(err));
+		return false;
+	}
+
+	if( glewIsSupported("GL_VERSION_3_3") )
+		log_printf(INFO,"Hurray! OpenGL 3.3 is supported.");
+	else {
+		log_printf(CRITICAL,"OpenGL 3.3 is not supported. Program cannot run corectly");
+		return false;
+	}
+
+	return GL_view_init();
 }
 
-void CGfx::GL_view_init()
+bool CGfx::GL_view_init()
 {
 	glViewport(0,0,mwidth,mheight);
 
@@ -92,6 +104,8 @@ void CGfx::GL_view_init()
 		0.0, 0.0, 0.0,                // View point (x,y,z)
 		0.0, 1.0, 0.0                 // Up-vector (x,y,z)
 	);
+
+	return true;
 }
 
 void CGfx::GL_viewport( int w , int h )

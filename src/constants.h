@@ -29,16 +29,16 @@
 
 #define FULLSCREEN_MODE false
 
-#if defined(linux)
 #define PATH_MAX_LEN 256
+#if defined(linux)
 #include <string>
 std::string get_bin_path();
-#define DATA_C_STR (get_bin_path() + std::string("./data/")).c_str()
+#define DATA_PATH (get_bin_path() + std::string("./data/"))
 #else
-#define DATA_C_STR ("./data/")
+#define DATA_PATH ("./data/")
 #endif
-#define DATA(x) (std::string(DATA_C_STR)+std::string(x))
-#define SAVES(x) (std::string(DATA_C_STR)+std::string("saves/")+std::string(x))
+#define DATA(x)  (DATA_PATH+std::string(x))
+#define SAVES(x) (DATA_PATH+std::string("saves/")+std::string(x))
 
 #endif /* __CONSTANTS_H__ */
 

@@ -2,13 +2,6 @@
 
 Podstawowymi aktywnościami projektu są moduły wyświetlania planet, oraz obliczania pozycji planet. Jednak dla działania aplikacji bardzo ważne są również inne aktywności, które mimo że prostsze w implementacji mają duży wpływ na architekturę projektu. Poniższy diagram przedstawia kolejne aktywności aplikacji podczas działania. Dodatkowo przestawiony na diagramie jest przepływ najważniejszej informacji, czyli pozycji planet.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=0.75\textwidth]{activity.pdf}
-	\caption{Diagram aktywności}
-	\label{fig:activity}
-\end{figure}
-
 \paragraph{}
 
 \begin{description}
@@ -25,5 +18,12 @@ Podstawowymi aktywnościami projektu są moduły wyświetlania planet, oraz obli
 	\item[Symulacja graficzna] \hfill \\
 	ta aktywność odpowiedzialna jest w ogólności za wyświetlanie symulacji na ekran. Głównym jej zadaniem jest wyświetlanie planet na ich pozycjach wraz z towarzyszącymi im efektami graficznymi. Pozycje planet do wyświetlenia pobiera z modułu fizycznego. Jeśli natomiast jest włączona aktywna pauza i nowe pozycje nie zostały wygenerowane, moduł korzysta ze starych pozycji. Po zakończonej jednej iteracji pętli, aplikacja odczekuje chwilę, żeby nie zajmować całego procesora, oraz żeby zapewnić takie samo działanie symulacji na słabszych komputerach (gdzie czekanie może zostać pominięte)
 \end{description}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.75\textwidth]{activity.pdf}
+	\caption{Diagram aktywności}
+	\label{fig:activity}
+\end{figure}
 
 

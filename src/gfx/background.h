@@ -10,9 +10,12 @@ namespace Gfx {
 
 class Background {
 public:
-	Background( const std::string& img , double );
+	Background( double , int , int );
 	virtual ~Background();
 	
+	void set_img( const std::string&img );
+
+	void on_reshape_window( int w , int h );
 	void on_mouse_motion( int x , int y );
 	void on_button_up( int , int , int );
 	bool on_button_down( int , int , int );
@@ -25,6 +28,8 @@ private:
 	double ox , oy;
 
 	double size;
+
+	int width , height;
 
 	bool move;
 

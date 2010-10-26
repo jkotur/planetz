@@ -16,7 +16,7 @@ add_subdirectory( phx )
 add_subdirectory( sphere )
 add_subdirectory( util )
 
-add_executable( inz constants planet planetz_manager saver main )
+add_executable( inz application constants planet planetz_manager saver main )
 
 
 

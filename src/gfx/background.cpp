@@ -8,14 +8,25 @@
 
 using namespace Gfx;
 
-Background::Background( const std::string& img , double _s )
-	: tex(NULL) , size(_s) , move(false) , sx(0) , sy(0)
+Background::Background( double _s  , int w , int h )
+	: size(_s) , width(w) , height(h) , move(false) ,
+	  sx(0) , sy(0)
 {
-	tex = Texture::LoadTexture(img);
 }
 
 Background::~Background()
 {
+}
+
+void Background::set_img( const std::string&img )
+{
+	tex = Texture::LoadTexture(img);
+}
+
+void Background::on_reshape_window( int w , int h )
+{
+	width = w;
+	height= h;
 }
 
 void Background::on_key_down( int k )
@@ -24,11 +35,11 @@ void Background::on_key_down( int k )
 	{
 	case LEFT_CAM_KEY_0:
 	case LEFT_CAM_KEY_1:
-		sx -= 0.1/(double)gfx.width();
+		sx -= 0.1/(double)width;
 		break;
 	case RIGHT_CAM_KEY_0:
 	case RIGHT_CAM_KEY_1:
-		sx += 0.1/(double)gfx.width();
+		sx += 0.1/(double)width;
 		break;
 	}
 }

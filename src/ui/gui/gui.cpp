@@ -14,13 +14,6 @@ using namespace CEGUI;
 Gui::Gui()
 	: layout(NULL)
 {
-	 try{ 
-		init_gui();
-	 } catch(CEGUI::InvalidRequestException e) {
-	       log_printf(CRITICAL,"%s\n",e.getMessage().c_str());
-	       exit(0);
-	 }
-
 }
 
 Gui::~Gui()
@@ -34,13 +27,28 @@ void Gui::set_layout( Layout*_l )
 	layout  = _l;
 }
 
-void Gui::init_gui()
+bool Gui::init()
+{
+	 try{ 
+		init_throw();
+	 } catch(CEGUI::InvalidRequestException e) {
+	       log_printf(CRITICAL,"%s\n",e.getMessage().c_str());
+	       return false;
+	 }
+	 return true;
+}
+
+void Gui::init_throw()
 {
 	SDL_ShowCursor(SDL_DISABLE);
 	SDL_EnableUNICODE(1);
 	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+	// FIXME: screen width & height in one place
+	const SDL_VideoInfo* vidinfo = SDL_GetVideoInfo();
+	int width = vidinfo->current_w;
+	int height= vidinfo->current_h;
 
-	renderer = new CEGUI::OpenGLRenderer(0,gfx.width(),gfx.height());
+	renderer = new CEGUI::OpenGLRenderer(0,width,height);
 	new CEGUI::System(renderer);
 
 	DefaultResourceProvider* rp = static_cast<DefaultResourceProvider*>(

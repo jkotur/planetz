@@ -24,7 +24,7 @@ public:
 	UI ();
 	virtual ~UI();
 
-	void init();
+	bool init();
 
 	void render();
 

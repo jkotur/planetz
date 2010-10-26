@@ -60,8 +60,13 @@ bool CMouseLD::Init()
 
 Vector3 CMouseLD::GetPosition()
 {
+	// FIXME: screen width & height in one place
+	const SDL_VideoInfo* vidinfo = SDL_GetVideoInfo();
+	int width = vidinfo->current_w;
+	int height= vidinfo->current_h;
+
 	int x , y ;
 	int z = SDL_GetMouseState(&x, &y)&SDL_BUTTON(SDL_BUTTON_LEFT)?50:0;
-	return Vector3( x - gfx.width()/2 , gfx.height()/2 - y , z );
+	return Vector3( x - width/2 , height/2 - y , z );
 }
 

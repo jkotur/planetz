@@ -15,7 +15,8 @@ public:
 	Gui ();
 	virtual ~Gui();
 
-	void init_gui();
+	bool init();
+	void init_throw();
 	void resize( int x, int y );
 	void render();
 	void signal();
