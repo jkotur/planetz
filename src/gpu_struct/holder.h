@@ -7,12 +7,21 @@ namespace GPU
 {
 	struct Holder
 	{
-		Buffer<float3> Planet_pos;
-		Buffer<float> Planet_radius;
-		Buffer<uint32_t> Planet_count;
+		// Planet
+		//   * GFX
+		BufferGl<uint8_t>  planet_model;
 
-		Buffer<float3> PointsCloud_points;
-		Buffer<uint32_t> PointsCloud_size;
+		//   * COMMON
+		BufferGl<float3>   planet_pos;
+		BufferGl<float>    planet_radius;
+		BufferGl<uint32_t> planet_count;
+
+		//   * PHX
+		BufferCu<float>    planet_mass;
+		BufferCu<float3>   planet_velocity;
+
+		BufferGl<float3>   pointsCloud_points;
+		BufferGl<uint32_t> pointsCloud_size;
 	};
 }
 

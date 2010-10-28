@@ -44,6 +44,11 @@ namespace GPU
 		T*     map( enum BUFFER_STATE state );
 		void unmap();
 		
+		// FIXME: bind or getId ?
+		void bind();
+		void unbind();
+
+		GLuint getId();
 	protected:
 		void gl_resize( const size_t new_size , const T*data );
 
@@ -138,6 +143,28 @@ namespace GPU
 			gl_resize( new_size , data );
 
 		this->size =this-> realsize = new_size;
+	}
+
+	template<typename T>
+	GLuint BufferGl<T>::getId()
+	{
+		assert( state == BUF_GL );
+		return glId;
+	}
+
+	template<typename T>
+	void BufferGl<T>::bind()
+	{
+		assert( state == BUF_GL );
+		glBindBuffer( GL_ARRAY_BUFFER , glId );
+		// FIXME: another state?
+//                state = BUF_BIND;
+	}
+
+	template<typename T>
+	void BufferGl<T>::unbind()
+	{
+		glBindBuffer( GL_ARRAY_BUFFER , 0 );
 	}
 
 	template<typename T>
