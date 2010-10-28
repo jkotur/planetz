@@ -25,7 +25,7 @@ if( UNIX )
 endif( UNIX )
 
 # is this needed?
-#set( CUDA_NVCC_FLAGS "-arch=sm_11" )
+set( CUDA_NVCC_FLAGS "-arch=sm_11" )
 
 add_subdirectory( src )
 

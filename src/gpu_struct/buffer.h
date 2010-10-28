@@ -8,6 +8,8 @@
 #include <cuda_runtime_api.h>
 #include <cuda_gl_interop.h>
 
+#include "cuda/err.h"
+
 namespace GPU
 {
 
@@ -43,6 +45,8 @@ namespace GPU
 		void unmap();
 		
 	protected:
+		void gl_resize( const size_t new_size , const T*data );
+
 		GLuint glId; // opengl buffer id
 		T*     cuPtr;// cuda gpu data pointer
 		T*     hPtr; // host mapped opengl gpu data pointer
@@ -97,7 +101,17 @@ namespace GPU
 	BufferGl<T>::~BufferGl()
 	{
 		cudaGLUnregisterBufferObject( glId );
+		CUT_CHECK_ERROR("Unregistering buffer while deleting BufferGl");
 		glDeleteBuffers( 1 , &glId );
+	}
+
+	template<typename T>
+	void BufferGl<T>::gl_resize( const size_t new_size , const T*data )
+	{
+		glBindBuffer(GL_ARRAY_BUFFER,glId);
+		// FIXME: gl constants are hard-coded, is it good?
+		glBufferData(GL_ARRAY_BUFFER,new_size,(GLvoid*)data,GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER,0);
 	}
 
 	template<typename T>
@@ -115,13 +129,13 @@ namespace GPU
 
 		if( !glId ) {
 			glGenBuffers(1,&glId);
-			cudaGLRegisterBufferObject( glId );
-		}
 
-		glBindBuffer(GL_ARRAY_BUFFER,glId);
-		// FIXME: gl constants are hard-coded, is it good?
-		glBufferData(GL_ARRAY_BUFFER,new_size,(GLvoid*)data,GL_DYNAMIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER,0);
+			gl_resize( new_size , data );
+
+			cudaGLRegisterBufferObject( glId );
+			CUT_CHECK_ERROR("Registering buffer while resizing BufferGl");
+		} else
+			gl_resize( new_size , data );
 
 		this->size =this-> realsize = new_size;
 	}
@@ -136,8 +150,17 @@ namespace GPU
 		state = new_state;
 
 		if( state == BUF_GL ) return NULL;
-		if( state == BUF_CU ) { cudaGLMapBufferObject( (void**)&cuPtr , glId ); return cuPtr; }
-		if( state == BUF_H  ) { hPtr = (T*)glMapBuffer( GL_ARRAY_BUFFER , glId ); return hPtr; }
+		if( state == BUF_CU ) {
+			cudaGLMapBufferObject( (void**)&cuPtr , glId );
+			CUT_CHECK_ERROR("Mapping BufferGl to cuda\n");
+			return cuPtr;
+		}
+		if( state == BUF_H  ) {
+			glBindBuffer( GL_ARRAY_BUFFER , glId );
+			hPtr = (T*)glMapBuffer( GL_ARRAY_BUFFER , GL_READ_WRITE );
+			glBindBuffer( GL_ARRAY_BUFFER , 0 );
+			return hPtr;
+		}
 		assert(false); // should never reach this code
 		return NULL;
 	}
@@ -146,8 +169,17 @@ namespace GPU
 	void BufferGl<T>::unmap()
 	{
 		if( state == BUF_GL ) return;
-		if( state == BUF_CU ) { cudaGLUnmapBufferObject( glId ); return; }
-		if( state == BUF_H  ) { glUnmapBuffer( glId ); return; }
+		if( state == BUF_CU ) {
+			cudaGLUnmapBufferObject( glId );
+			CUT_CHECK_ERROR("Unmapping cuda buffer to BufferGl");
+			return;
+		}
+		if( state == BUF_H  ) {
+			glBindBuffer( GL_ARRAY_BUFFER , glId );
+			glUnmapBuffer( GL_ARRAY_BUFFER );
+			glBindBuffer( GL_ARRAY_BUFFER , 0 );
+			return;
+		}
 		assert( false ); // should never reach this code
 	}
 }

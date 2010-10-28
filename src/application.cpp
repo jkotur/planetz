@@ -8,7 +8,6 @@
 #include "util/timer/timer.h"
 #include "util/logger.h"
 
-
 #include "gpu_struct/buffer.h"
 
 using boost::bind;
@@ -113,10 +112,20 @@ void Application::main_loop()
 {
 	GPU::BufferGl<float> buf( 10 );
 	buf.resize(15);
-	float * cp = buf.map(GPU::BufferGl<float>::BUF_CU);
 	float * hp = buf.map(GPU::BufferGl<float>::BUF_H );
 	
-	if( hp ) *hp = 5.5;
+	if( hp ) {
+		*hp = 5.5;
+		log_printf(DBG,"Written to buffer!\n");
+	}
+
+	float * cp = buf.map(GPU::BufferGl<float>::BUF_CU);
+	float fivedotfive = 666.f;
+
+	cudaError_t err = cudaMemcpy( &fivedotfive , cp , sizeof(float) , cudaMemcpyDeviceToHost );
+	if( err != cudaSuccess ) log_printf(DBG,"Cuda cpy err: %s\n",cudaGetErrorString(err) );
+
+	log_printf(DBG,"fivedotfive: %f\n",fivedotfive);
 
 	buf.unmap();
 
