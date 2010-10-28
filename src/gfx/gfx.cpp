@@ -156,5 +156,7 @@ void Gfx::render() const
 
 	for( std::list<Drawable*>::const_iterator i = to_draw.begin() ; i!=to_draw.end() ; ++i )
 		(*i)->draw();
+
+	SDL_GL_SwapBuffers();
 }
 

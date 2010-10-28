@@ -2,8 +2,6 @@
 
 #include <cstdlib>
 
-#include <SDL/SDL.h>
-
 #include <boost/bind.hpp>
 
 #include "util/vector.h"
@@ -133,14 +131,10 @@ void Application::main_loop()
 #endif
 		camera.signal();
 
-		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-
 		if( !anim_pause )
 			planetz.update();
 
 		gfx.render();
-
-		SDL_GL_SwapBuffers();
 
 		(running && (running &= ui.event_handle() ));
 
