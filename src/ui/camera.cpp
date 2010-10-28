@@ -1,6 +1,6 @@
-#include <SDL/SDL_opengl.h>
-
 #include "camera.h"
+
+#include <GL/glew.h>
 
 #include "./util/logger.h"
 #include "./util/timer/timer.h"
@@ -62,7 +62,6 @@ void Camera::on_mouse_motion( int x , int y )
 	ox = x;
 	oy = y;
 
-	// wtf is 0.05?
 	double angle_x = dx*CAM_ROT_SPEED;
 	double angle_y = dy*CAM_ROT_SPEED;
 

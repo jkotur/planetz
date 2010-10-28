@@ -3,7 +3,6 @@
 #include <cstdlib>
 
 #include <SDL/SDL.h>
-#include <SDL/SDL_opengl.h>
 
 #include <boost/bind.hpp>
 
@@ -11,6 +10,8 @@
 #include "util/timer/timer.h"
 #include "util/logger.h"
 
+
+#include "gpu_struct/buffer.h"
 
 using boost::bind;
 
@@ -105,6 +106,15 @@ bool Application::init()
 
 void Application::main_loop()
 {
+	GPU::BufferGl<float> buf( 10 );
+	buf.resize(15);
+	float * cp = buf.map(GPU::BufferGl<float>::BUF_CU);
+	float * hp = buf.map(GPU::BufferGl<float>::BUF_H );
+	
+	if( hp ) *hp = 5.5;
+
+	buf.unmap();
+
 	bool running = true;
 
 	log_printf(DBG,"Starting main loop\n");

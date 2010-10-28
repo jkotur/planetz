@@ -2,7 +2,7 @@
 
 #define __GFX_PLANET_H__
 
-#include <SDL/SDL_opengl.h>
+#include <GL/glew.h>
 
 #include "../util/vector.h"
 #include "../util/animation.h"

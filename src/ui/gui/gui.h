@@ -2,6 +2,7 @@
 
 #define __GUI_H__
 
+#include <GL/glew.h>
   
 #include <CEGUI.h>
 #include <CEGUIDefaultResourceProvider.h>

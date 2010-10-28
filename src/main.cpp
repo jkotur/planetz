@@ -6,7 +6,6 @@
 
 int main (int argc, char const* argv[])
 {
-
 	Application app;
 
 	if( !app.init() )

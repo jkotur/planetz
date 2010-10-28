@@ -2,6 +2,8 @@
 
 #define __ARROW_H__
 
+#include <GL/glew.h>
+
 #include "../util/vector.h"
 
 namespace Gfx {

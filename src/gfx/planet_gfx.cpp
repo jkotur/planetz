@@ -1,9 +1,7 @@
-#include <SDL/SDL_opengl.h>
+#include "planet.h"
 
 #include <fstream>
 using namespace std;
-
-#include "planet.h"
 
 #include "../sphere/sphere.h"
 #include "../util/logger.h"

@@ -1,7 +1,7 @@
-#include <SDL/SDL_image.h>
-#include <SDL/SDL_opengl.h>
+#include "texture.h"
 
-#include "./texture.h"
+#include <SDL/SDL_image.h>
+
 #include "../util/logger.h"
 
 using namespace Gfx;

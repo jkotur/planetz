@@ -19,14 +19,15 @@
  * @section DESCRIPTION
  *
  * Ladowanie oraz bindowanie tekstur z formatow obslugiwanych przez
- * devila - czyli calkiem sporo.
+ * SDL_image
  */
 
 #ifndef __TEXTURE_H__
 
 #define __TEXTURE_H__
 
-#include <GL/gl.h>
+#include <GL/glew.h>
+
 #include <string>
 #include <map>
 
@@ -48,6 +49,7 @@ public:
 
 	static Texture* LoadTexture( const string& str );
 	static Texture* LoadTexture( const char* str );
+	// TODO: unloading texutres
 private:
 	string path;
 	GLuint tex;

@@ -1,7 +1,7 @@
-#include <SDL/SDL_opengl.h>
+#include "arrow.h"
+
 #include <cmath>
 
-#include "arrow.h"
 #include "../constants.h"
 
 using namespace Gfx;
