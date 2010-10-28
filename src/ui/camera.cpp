@@ -94,7 +94,7 @@ void Camera::on_button_up( int b , int x , int y )
 	}
 }
 
-void Camera::gl_lookat()
+void Camera::draw() const 
 {
 	gluLookAt(
 		pos.x , pos.y , pos.z ,

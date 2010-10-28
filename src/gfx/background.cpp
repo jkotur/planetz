@@ -4,7 +4,7 @@
 
 #include "gfx.h"
 
-using namespace Gfx;
+using namespace GFX;
 
 Background::Background( double _s  , int w , int h )
 	: size(_s) , width(w) , height(h) , move(false) ,
@@ -77,7 +77,7 @@ void Background::on_button_up( int b , int x , int y )
 	}
 }
 
-void Background::render()
+void Background::draw() const
 {
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 
@@ -121,5 +121,8 @@ void Background::render()
 	glPopMatrix();
 
 	glPopAttrib();
+
+	glDrawBuffer(GL_BACK);
+	glClear( GL_DEPTH_BUFFER_BIT );
 }
 

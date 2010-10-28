@@ -38,7 +38,7 @@ void Planetz::erase( Planet*p )
 	delete p;
 }
 
-void Planetz::render()
+void Planetz::draw() const
 {
 	BOOST_FOREACH( Planet*p , planetz )
 		p->render();

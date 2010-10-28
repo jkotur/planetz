@@ -4,7 +4,7 @@
 
 #include "../util/logger.h"
 
-using namespace Gfx;
+using namespace GFX;
 
 std::map<string,Texture*> Texture::loaded_textures;
 

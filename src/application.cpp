@@ -62,9 +62,9 @@ bool Application::init()
 
 	// FIXME: where should be this done?
 	ui.sigVideoResize.
-		connect( 1 , bind(&Gfx::CGfx::reshape_window,&gfx,_1,_2) );
+		connect( 1 , bind(&GFX::Gfx::reshape_window,&gfx,_1,_2) );
 	ui.sigVideoResize.
-		connect( 1 , bind(&Gfx::Background::on_reshape_window,&bkg,_1,_2));
+		connect( 1 , bind(&GFX::Background::on_reshape_window,&bkg,_1,_2));
 
 	ui.sigMouseMotion.
 		connect( bind(&Camera::on_mouse_motion,&camera,_1,_2) );
@@ -74,14 +74,14 @@ bool Application::init()
 		connect( 1 , bind(&Camera::on_button_down,&camera,_1,_2,_3));
 
 	ui.sigKeyDown.
-		connect( bind(&Gfx::Background::on_key_down,&bkg,_1) );
+		connect( bind(&GFX::Background::on_key_down,&bkg,_1) );
 
 	ui.sigMouseMotion.
-		connect( bind(&Gfx::Background::on_mouse_motion,&bkg,_1,_2));
+		connect( bind(&GFX::Background::on_mouse_motion,&bkg,_1,_2));
 	ui.sigMouseButtonUp.
-		connect( bind(&Gfx::Background::on_button_up,&bkg,_1,_2,_3));
+		connect( bind(&GFX::Background::on_button_up,&bkg,_1,_2,_3));
 	ui.sigMouseButtonDown.
-		connect(1,bind(&Gfx::Background::on_button_down,&bkg,_1,_2,_3));
+		connect(1,bind(&GFX::Background::on_button_down,&bkg,_1,_2,_3));
 
 #ifndef _NOGUI
 	//
@@ -99,6 +99,13 @@ bool Application::init()
 	pl->on_planet_add.connect( bind(&Planetz::add,&planetz,_1) );
 	pl->on_planet_delete.connect( bind(&Planetz::erase,&planetz,_1) );
 	planetz.on_planet_select.connect( bind(&PlanetzLayout::add_selected_planet,pl,_1) );
+#endif
+
+	gfx.add( &bkg     );
+	gfx.add( &camera  );
+	gfx.add( &planetz );
+#ifndef _NOGUI
+	gfx.add( &ui      );
 #endif
 
 	return true;
@@ -128,21 +135,10 @@ void Application::main_loop()
 
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
-		bkg.render();
-
-		glDrawBuffer(GL_BACK);
-
-		gfx.clear();
-
-		camera.gl_lookat();
-
 		if( !anim_pause )
 			planetz.update();
-		planetz.render();
 
-#ifndef _NOGUI
-		ui.render();
-#endif
+		gfx.render();
 
 		SDL_GL_SwapBuffers();
 
@@ -168,7 +164,7 @@ void Application::do_fps()
 	if( timer.get() - oldtime > 1 ) {
 		oldtime = timer.get();
 		log_printf(INFO,"fps: %d\n",fps);
-//                Gfx::Hud::fps = fps;
+//                GFX::Hud::fps = fps;
 		fps = 0;
 	}
 	fps++;

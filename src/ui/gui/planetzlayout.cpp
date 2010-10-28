@@ -208,7 +208,7 @@ bool PlanetzLayout::add_planet( const CEGUI::EventArgs& e )
 			,vel.x,vel.y,vel.z
 			,mass,radius );
 
-	Gfx::Planet*gp = new Gfx::Planet( );
+	GFX::Planet*gp = new GFX::Planet( );
 	Phx::Planet*pp = new Phx::Planet( pos , vel , mass , radius );
 	on_planet_add( new Planet(gp,pp) );
 

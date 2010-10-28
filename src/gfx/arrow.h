@@ -6,7 +6,7 @@
 
 #include "../util/vector.h"
 
-namespace Gfx {
+namespace GFX {
 
 class Arrow {
 public:
@@ -20,7 +20,7 @@ private:
 	GLint list;
 };
 
-} // namespace Gfx
+} // namespace GFX
 
 
 #endif /* __ARROW_H__ */

@@ -5,12 +5,13 @@
 #include <list>	
 #include <boost/signal.hpp>
 
+#include "gfx/drawable.h"
 #include "./planet.h"
 #include "phx/model.h"
 
 typedef boost::signal<void (Planet*)> SigPlanet;
 
-class Planetz {
+class Planetz : public GFX::Drawable {
 public:
 	typedef std::list<Planet*>::iterator iterator;
 
@@ -28,7 +29,7 @@ public:
 
 	void clear();
 
-	void render();
+	virtual void draw() const;
 	void update();
 
 	void select(int);

@@ -1,6 +1,6 @@
 #include "planet.h"
 
-Planet::Planet( Gfx::Planet*gp , Phx::Planet*lp )
+Planet::Planet( GFX::Planet*gp , Phx::Planet*lp )
 	: mdel(false) , gfx_obj(gp) , phx_obj(lp)
 {
 }

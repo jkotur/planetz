@@ -8,20 +8,24 @@
 
 #include <SDL/SDL.h>
 
+#include <list>
+
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
+
+#include "drawable.h"
 
 /**
  * Przestrzeń nazw dla obiektów odpowiedzialnych za grafikę
  */
-namespace Gfx {
+namespace GFX {
 
 /**
  * Główna klasa odpowiedzialna za wyświetlanie
  */
-class CGfx {
+class Gfx {
 public:
-	virtual ~CGfx();
+	virtual ~Gfx();
 
 	bool SDL_init(int w,int h);
 
@@ -33,7 +37,12 @@ public:
 
 	void reshape_window(int w, int h);
 
-	void clear();
+	void clear() const;
+
+	void add( Drawable* _d );
+	void remove( Drawable* _d );
+
+	void render() const;
 
 	int width() { return mwidth; }
 	int height(){ return mheight;}
@@ -41,6 +50,8 @@ private:
 	int mwidth , mheight;
 	SDL_Surface* drawContext;
 	Uint32 flags;
+
+	std::list<Drawable*> to_draw;
 
 //        Camera*c;
 };

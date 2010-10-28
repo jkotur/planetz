@@ -12,11 +12,11 @@ namespace GPU
 {
 
 	template<typename T>
-	class Buffer
+	class BufferBase
 	{
 	public:
-		Buffer() : size(0) , realsize(0) {}
-		virtual ~Buffer() {}
+		BufferBase() : size(0) , realsize(0) {}
+		virtual ~BufferBase() {}
 	protected:
 		size_t size; // size of pointed data == number of elements, not bytes
 		size_t realsize;
@@ -24,7 +24,7 @@ namespace GPU
 	};
 
 	template<typename T>
-	class BufferGl : public Buffer<T> {
+	class BufferGl : public BufferBase<T> {
 	public:
 		/** buffer mapped states */
 		enum BUFFER_STATE {
@@ -50,8 +50,11 @@ namespace GPU
 		enum BUFFER_STATE state;
 	};
 	
+	//
+	// Cuda buffer declaration
+	//
 	template<typename T>
-	class BufferCu : public Buffer<T> {
+	class BufferCu : public BufferBase<T> {
 	public:
 		BufferCu ();
 		virtual ~BufferCu();
@@ -60,6 +63,9 @@ namespace GPU
 		T*     cuPtr;
 	};
 
+	//
+	// BUF and host data in one buffer (only concept)
+	//
 	template<typename T,typename BUF>
 	class BufferBoth : public BUF
 	{
@@ -147,3 +153,4 @@ namespace GPU
 }
 
 #endif // BUFFER_H
+

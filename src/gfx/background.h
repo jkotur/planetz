@@ -5,10 +5,11 @@
 #include <string>
 
 #include "texture.h"
+#include "drawable.h"
 
-namespace Gfx {
+namespace GFX {
 
-class Background {
+class Background : public Drawable {
 public:
 	Background( double , int , int );
 	virtual ~Background();
@@ -21,7 +22,7 @@ public:
 	bool on_button_down( int , int , int );
 	void on_key_down( int k );
 
-	void render();
+	virtual void draw() const;
 private:
 	Texture*tex;
 

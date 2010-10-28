@@ -83,7 +83,7 @@ void Gui::resize( int w , int h )
 	renderer->restoreTextures();
 }
 
-void Gui::render()
+void Gui::render() const
 {
 	CEGUI::System::getSingleton().renderGUI();
 }

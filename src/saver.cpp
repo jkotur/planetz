@@ -80,7 +80,7 @@ void Saver::load( const std::string& path )
 			,speed.x,speed.y,speed.z
 			,mass,radius );
 
-		Gfx::Planet*gp = new Gfx::Planet( );
+		GFX::Planet*gp = new GFX::Planet( );
 		Phx::Planet*pp = new Phx::Planet( pos , speed , mass , radius );
 		plz.add( new Planet(gp,pp) );
 	}

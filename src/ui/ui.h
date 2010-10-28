@@ -7,10 +7,12 @@
 
 #include "input/driver.h"
 
+#include "gfx/drawable.h"
+
 #include "./gui/gui.h"
 #include "./camera.h"
 
-class UI {
+class UI : public GFX::Drawable {
 	struct breaker {                                                                       
 		typedef void result_type;                                        
 
@@ -26,7 +28,7 @@ public:
 
 	bool init();
 
-	void render();
+	virtual void draw() const;
 
 	void signal();
 

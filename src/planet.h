@@ -12,7 +12,7 @@
  */
 class Planet {
 public:
-	Planet( Gfx::Planet*gp , Phx::Planet*lp );
+	Planet( GFX::Planet*gp , Phx::Planet*lp );
 	virtual ~Planet();
 
 	void render();
@@ -45,15 +45,15 @@ public:
 	{	return gfx_obj?gfx_obj->get_id():-1; }
 	Phx::Planet*get_phx()
 	{	return phx_obj; }
-	Gfx::Planet*get_gfx()
+	GFX::Planet*get_gfx()
 	{	return gfx_obj; }
 private:
 	bool mdel; /**< flaga skasowania */
 	bool mtrace;
 
-	Gfx::Arrow arr;
+	GFX::Arrow arr;
 
-	Gfx::Planet * gfx_obj; /**< graficzna reprezentacja planety */
+	GFX::Planet * gfx_obj; /**< graficzna reprezentacja planety */
 	Phx::Planet * phx_obj; /**< fizyczna reprezentacja planety */
 };
 

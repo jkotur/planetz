@@ -19,7 +19,7 @@ public:
 	bool init();
 	void init_throw();
 	void resize( int x, int y );
-	void render();
+	void render() const;
 	void signal();
 
 	void on_mouse_motion( int , int );

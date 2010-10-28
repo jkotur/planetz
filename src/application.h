@@ -41,8 +41,8 @@ protected:
 	UI ui;
 	Saver saver;
 
-	Gfx::CGfx gfx;
-	Gfx::Background bkg;
+	GFX::Gfx gfx;
+	GFX::Background bkg;
 
 	std::FILE*f_log;
 };

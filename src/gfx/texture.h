@@ -33,7 +33,7 @@
 
 using std::string;
 
-namespace Gfx {
+namespace GFX {
 	
 /**
  * Klasa odpowiedzialan za ładownie tekstur z plików.

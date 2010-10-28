@@ -8,7 +8,7 @@ using namespace std;
 
 #include "../constants.h"
 
-using namespace Gfx;
+using namespace GFX;
 
 int Planet::count = 0;
 

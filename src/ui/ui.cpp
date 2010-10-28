@@ -42,7 +42,7 @@ bool UI::init()
 	return true;
 }
 
-void UI::render()
+void UI::draw() const 
 {
 	gui.render();
 }

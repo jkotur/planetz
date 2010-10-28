@@ -4,7 +4,7 @@
 
 #include "../constants.h"
 
-using namespace Gfx;
+using namespace GFX;
 using std::sin;
 using std::cos;
 

@@ -4,8 +4,9 @@
 
 #include "input/driver.h"
 #include "util/vector.h"
+#include "gfx/drawable.h"
 
-class Camera {
+class Camera : public GFX::Drawable {
 public:
 	Camera ( const Vector3& pos 
 		,const Vector3& lookat 
@@ -16,7 +17,7 @@ public:
 	void on_mouse_motion( int x , int y );
 	void on_button_up( int , int , int );
 	bool on_button_down( int , int , int );
-	void gl_lookat();
+	virtual void draw() const;
 	void signal();
 
 	void set_perspective(

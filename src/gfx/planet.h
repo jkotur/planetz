@@ -11,7 +11,7 @@
 
 #include "../gfx/texture.h"
 
-namespace Gfx {
+namespace GFX {
 
 class Planet {
 public:

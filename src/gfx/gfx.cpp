@@ -6,14 +6,14 @@
 
 #include "../constants.h"
 
-using namespace Gfx;
+using namespace GFX;
 
-CGfx::~CGfx()
+Gfx::~Gfx()
 {
 	SDL_Quit();
 }
 
-bool CGfx::SDL_init(int width,int height)
+bool Gfx::SDL_init(int width,int height)
 {
 	log_printf(INFO,"Starting SDL...\n");
 
@@ -39,7 +39,7 @@ bool CGfx::SDL_init(int width,int height)
 	return true;
 }
 
-bool CGfx::GL_init()
+bool Gfx::GL_init()
 {
 	log_printf(INFO,"Graphics init...\n");
 
@@ -50,7 +50,7 @@ bool CGfx::GL_init()
 	}
 
 	if( glewIsSupported("GL_VERSION_3_3") )
-		log_printf(INFO,"Hurray! OpenGL 3.3 is supported.");
+		log_printf(INFO,"Hurray! OpenGL 3.3 is supported.\n");
 	else {
 		log_printf(CRITICAL,"OpenGL 3.3 is not supported. Program cannot run corectly");
 		return false;
@@ -59,7 +59,7 @@ bool CGfx::GL_init()
 	return GL_view_init();
 }
 
-bool CGfx::GL_view_init()
+bool Gfx::GL_view_init()
 {
 	glViewport(0,0,mwidth,mheight);
 
@@ -91,6 +91,8 @@ bool CGfx::GL_view_init()
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHTING);
 
+	GL_viewport(mwidth,mheight);
+
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
@@ -99,33 +101,16 @@ bool CGfx::GL_view_init()
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
-	gluLookAt(
-		0.0, 0.0, 10,//((double)width/2.0+200.0),
-		0.0, 0.0, 0.0,                // View point (x,y,z)
-		0.0, 1.0, 0.0                 // Up-vector (x,y,z)
-	);
 
 	return true;
 }
 
-void CGfx::GL_viewport( int w , int h )
+void Gfx::GL_viewport( int w , int h )
 {
 	glViewport(0,0,mwidth,mheight);
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(75.0, (double)w/(double)h, 1, 10000);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-//        gluLookAt(
-//                0.0, 0.0, 10,//((double)width/2.0+200.0),
-//                0.0, 0.0, 0.0,                // View point (x,y,z)
-//                0.0, 1.0, 0.0                 // Up-vector (x,y,z)
-//        );
 }
 
-void CGfx::reshape_window(int width, int height)
+void Gfx::reshape_window(int width, int height)
 {
 	mwidth = width; mheight = height;
 	if( !(drawContext = SDL_SetVideoMode(width,height, 0, flags)) ) {
@@ -144,16 +129,32 @@ void CGfx::reshape_window(int width, int height)
 
 	glPopAttrib();
 
-	GL_view_init();
+	GL_viewport( width , height );
 }
 
-void CGfx::clear()
+void Gfx::clear() const
 {
-	glClear(  GL_DEPTH_BUFFER_BIT );
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
 
-	float position[4] = { 0.0, 0.0, 100000.0, 1.0 };
-	glLightfv(GL_LIGHT0, GL_POSITION, position);
+void Gfx::add( Drawable* d )
+{ // FIXME: add prioritets
+	d->setGfx( this );
+	to_draw.push_back( d );
+}
 
-	GL_viewport(mwidth,mheight);
+void Gfx::remove( Drawable* d )
+{
+	to_draw.remove(d);
+}
+
+void Gfx::render() const 
+{
+	clear();
+
+	for( std::list<Drawable*>::const_iterator i = to_draw.begin() ; i!=to_draw.end() ; ++i )
+		(*i)->draw();
 }
 
