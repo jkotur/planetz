@@ -11,6 +11,10 @@ int main (int argc, char const* argv[])
 	if( !app.init() )
 		return 1;
 
+#ifndef _RELEASE
+	app.test();
+#endif
+
 	app.main_loop();
 
 	return 0;

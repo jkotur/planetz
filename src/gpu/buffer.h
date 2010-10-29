@@ -27,6 +27,9 @@ namespace GPU
 
 	template<typename T>
 	class BufferGl : public BufferBase<T> {
+		// prevent from copying buffer. If so, smart counter is needed 
+		// to unregister from cuda and delete from opengl
+		BufferGl( BufferGl<T>& ) {}
 	public:
 		/** buffer mapped states */
 		enum BUFFER_STATE {
@@ -41,14 +44,15 @@ namespace GPU
 
 		void resize( const size_t num , const T*data = NULL );
 
-		T*     map( enum BUFFER_STATE state );
-		void unmap();
+//                T*     map( enum BUFFER_STATE state );
+		T*     map( enum BUFFER_STATE state ) const;
+		void unmap() const;
 		
 		// FIXME: bind or getId ?
-		void bind();
-		void unbind();
+		void bind() const;
+		void unbind() const;
 
-		GLuint getId();
+		GLuint getId() const;
 	protected:
 		void gl_resize( const size_t new_size , const T*data );
 
@@ -56,7 +60,11 @@ namespace GPU
 		T*     cuPtr;// cuda gpu data pointer
 		T*     hPtr; // host mapped opengl gpu data pointer
 
-		enum BUFFER_STATE state;
+		enum BUFFER_STATE  state;
+
+		// nasty const hacks
+		T**   phPtr;
+		enum BUFFER_STATE*pstate;
 	};
 	
 	//
@@ -65,7 +73,8 @@ namespace GPU
 	template<typename T>
 	class BufferCu : public BufferBase<T> {
 	public:
-		BufferCu ();
+		BufferCu( );
+		BufferCu( const size_t num , const T*data = NULL );
 		virtual ~BufferCu();
 
 	protected:
@@ -91,13 +100,15 @@ namespace GPU
 	//
 	template<typename T>
 	BufferGl<T>::BufferGl( )
-		: glId(0) , cuPtr(NULL) , hPtr(NULL) , state(BUF_GL)
+		: glId(0) , cuPtr(NULL) , hPtr(NULL) , state(BUF_GL) ,
+		  phPtr(&hPtr) , pstate(&state)
 	{
 	}
 
 	template<typename T>
 	BufferGl<T>::BufferGl( const size_t num , const T*data )
-		: glId(0) , cuPtr(NULL) , hPtr(NULL) , state(BUF_GL)
+		: glId(0) , cuPtr(NULL) , hPtr(NULL) , state(BUF_GL) ,
+		  phPtr(&hPtr) , pstate(&state)
 	{
 		resize( num , data );
 	}
@@ -105,9 +116,11 @@ namespace GPU
 	template<typename T>
 	BufferGl<T>::~BufferGl()
 	{
-		cudaGLUnregisterBufferObject( glId );
-		CUT_CHECK_ERROR("Unregistering buffer while deleting BufferGl");
-		glDeleteBuffers( 1 , &glId );
+		if( glId ) {
+			cudaGLUnregisterBufferObject( glId );
+			CUT_CHECK_ERROR("Unregistering buffer while deleting BufferGl");
+			glDeleteBuffers( 1 , &glId );
+		}
 	}
 
 	template<typename T>
@@ -146,14 +159,14 @@ namespace GPU
 	}
 
 	template<typename T>
-	GLuint BufferGl<T>::getId()
+	GLuint BufferGl<T>::getId() const
 	{
 		assert( state == BUF_GL );
 		return glId;
 	}
 
 	template<typename T>
-	void BufferGl<T>::bind()
+	void BufferGl<T>::bind() const
 	{
 		assert( state == BUF_GL );
 		glBindBuffer( GL_ARRAY_BUFFER , glId );
@@ -162,19 +175,23 @@ namespace GPU
 	}
 
 	template<typename T>
-	void BufferGl<T>::unbind()
+	void BufferGl<T>::unbind() const
 	{
 		glBindBuffer( GL_ARRAY_BUFFER , 0 );
 	}
 
-	template<typename T>
-	T* BufferGl<T>::map( enum BUFFER_STATE new_state )
+//        const T* BufferGl<T>::map( enum BUFFER_STATE new_state ) const
+//        {
+//        }
+
+	template<typename T> 
+	T* BufferGl<T>::map( enum BUFFER_STATE new_state ) const
 	{
-		if( state == new_state ) return state==BUF_CU?cuPtr:(state==BUF_H?hPtr:NULL);
+		if( state == new_state ) return *pstate==BUF_CU?cuPtr:(state==BUF_H?hPtr:NULL);
 
 		unmap();
 
-		state = new_state;
+		*pstate = new_state;
 
 		if( state == BUF_GL ) return NULL;
 		if( state == BUF_CU ) {
@@ -184,7 +201,7 @@ namespace GPU
 		}
 		if( state == BUF_H  ) {
 			glBindBuffer( GL_ARRAY_BUFFER , glId );
-			hPtr = (T*)glMapBuffer( GL_ARRAY_BUFFER , GL_READ_WRITE );
+			*phPtr = (T*)glMapBuffer( GL_ARRAY_BUFFER , GL_READ_WRITE );
 			glBindBuffer( GL_ARRAY_BUFFER , 0 );
 			return hPtr;
 		}
@@ -193,7 +210,7 @@ namespace GPU
 	}
 
 	template<typename T>
-	void BufferGl<T>::unmap()
+	void BufferGl<T>::unmap() const
 	{
 		if( state == BUF_GL ) return;
 		if( state == BUF_CU ) {
@@ -209,6 +226,24 @@ namespace GPU
 		}
 		assert( false ); // should never reach this code
 	}
+
+	//
+	// BufferCu definisions
+	template<typename T>
+	BufferCu<T>::BufferCu( )
+	{
+	}
+
+	template<typename T>
+	BufferCu<T>::BufferCu( const size_t num , const T*data )
+	{
+	}
+
+	template<typename T>
+	BufferCu<T>::~BufferCu()
+	{
+	}
+	
 }
 
 #endif // BUFFER_H

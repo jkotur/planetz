@@ -11,16 +11,16 @@ set( INCLUDE_DIRS
 include_directories( ${INCLUDE_DIRS} )
 
 add_subdirectory( gfx )
-add_subdirectory( ui )
+add_subdirectory( gpu )
+add_subdirectory( mem )
 add_subdirectory( phx )
 add_subdirectory( sphere )
+add_subdirectory( ui )
 add_subdirectory( util )
 
-add_executable( inz application constants planet planetz_manager saver main )
+add_executable( inz application constants planet planetz_manager main )
 
-
-
-target_link_libraries( inz util gfx ui phx  sphere 
+target_link_libraries( inz gfx gpu mem phx sphere ui util 
 	${CUDA_LIBRARIES}
 	${OPENGL_LIBRARY}
 	${SDL_LIBRARY}

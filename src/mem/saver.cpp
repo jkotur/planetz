@@ -4,7 +4,7 @@
 #include "constants.h"
 #include "./util/logger.h"
 
-using std::endl;
+using namespace MEM;
 
 Saver::Saver( Planetz& _p , Camera& _c )
 	: plz(_p) , cam(_c) 
@@ -31,11 +31,11 @@ void Saver::save( const std::string& path )
 	std::fstream file( path.c_str() ,  std::ios_base::out | std::ios_base::trunc );
 
 	Vector3 v = cam.get_pos();
-	file << v.x << " " << v.y  << " "<< v.z << endl;
+	file << v.x << " " << v.y  << " "<< v.z << std::endl;
 	v = cam.get_lookat();
-	file << v.x  << " "<< v.y  << " "<< v.z << endl;
+	file << v.x  << " "<< v.y  << " "<< v.z << std::endl;
 	v = cam.get_up();
-	file << v.x  << " "<< v.y  << " "<< v.z << endl;
+	file << v.x  << " "<< v.y  << " "<< v.z << std::endl;
 	for( Planetz::iterator i = plz.begin() ; i != plz.end() ; ++i )
 	{
 		v = (*i)->get_phx()->get_pos();
@@ -43,7 +43,7 @@ void Saver::save( const std::string& path )
 		v = (*i)->get_phx()->get_velocity();
 		file << v.x  << " "<< v.y  << " "<< v.z << " ";
 		file << (*i)->get_phx()->get_mass() << " ";
-		file << (*i)->get_phx()->get_radius() << endl;
+		file << (*i)->get_phx()->get_radius() << std::endl;
 	}
 	file.close();
 }

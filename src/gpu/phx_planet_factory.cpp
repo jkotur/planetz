@@ -1,5 +1,7 @@
 #include "phx_planet_factory.h"
 
+#include "cuda/math.h"
+
 using namespace GPU;
 
 PhxPlanet::PhxPlanet( int id , const Holder* h )
@@ -10,24 +12,23 @@ PhxPlanet::~PhxPlanet()
 {
 }
 
-uint8_t  PhxPlanet::getModel()
-{
-}
-
 float3   PhxPlanet::getPosition()
 {
+	return make_float3(0,0,0);
 }
 
 float    PhxPlanet::getRadius()
 {
+	return .0f;
 }
 
 uint32_t PhxPlanet::getCount()
 {
+	return 0;
 }
 
-PhxPlanetFactory::PhxPlanetFactory( const Holder* holder )
-	: holder(h)
+PhxPlanetFactory::PhxPlanetFactory( Holder* holder )
+	: holder(holder)
 {
 }
 
@@ -35,27 +36,27 @@ PhxPlanetFactory::~PhxPlanetFactory( )
 {
 }
 
-PhxPlanet* PhxPlanetFactory::getPlanet( int id )
+PhxPlanet PhxPlanetFactory::getPlanet( int id )
 {
-	return new PhxPlanet( id , holder );
+	return PhxPlanet( id , holder );
 }
 
-BufferGl<uint8_t> *PhxPlanetFactory::getModels()
+BufferGl<uint8_t> &PhxPlanetFactory::getModels()
 {
 	return holder->planet_model;
 }
 
-BufferGl<float3>  *PhxPlanetFactory::getPositions()
+BufferGl<float3>  &PhxPlanetFactory::getPositions()
 {
 	return holder->planet_pos;
 }
 
-BufferGl<float>   *PhxPlanetFactory::getRadiuses()
+BufferGl<float>   &PhxPlanetFactory::getRadiuses()
 {
 	return holder->planet_radius;
 }
 
-BufferGl<uint32_t>*PhxPlanetFactory::getCounts()
+BufferGl<uint32_t>&PhxPlanetFactory::getCounts()
 {
 	return holder->planet_count;
 }

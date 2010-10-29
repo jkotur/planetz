@@ -3,6 +3,9 @@
 
 #define __GFX_PLANET_FACTORY_H__
 
+#include "buffer.h"
+#include "holder.h"
+
 namespace GPU {
 
 	class GfxPlanet {
@@ -25,17 +28,17 @@ namespace GPU {
 		GfxPlanetFactory( const Holder* );
 		virtual ~GfxPlanetFactory( );
 
-		const GfxPlanet* getPlanet( int id ) const;
+		const GfxPlanet getPlanet( int id ) const;
 
-		BufferGl<uint8_t> *getModels() const;
+		const BufferGl<uint8_t> *getModels() const;
 
-		BufferGl<float3>  *getPositions() const;
-		BufferGl<float>   *getRadiuses() const;
-		BufferGl<uint32_t>*getCounts() const;
+		const BufferGl<float3>  &getPositions() const;
+		const BufferGl<float>   &getRadiuses() const;
+		const BufferGl<uint32_t>&getCounts() const;
 
 	private:
 
-		const Holder* holder;
+		const Holder* const holder;
 	};
 
 }

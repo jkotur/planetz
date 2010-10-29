@@ -9,11 +9,13 @@
 
 #include "planetz_manager.h"
 
-#include "saver.h"
-
 #include "constants.h"
 
 #include "ui/ui.h"
+
+#include "mem/memory_manager.h"
+#include "mem/saver.h"
+
 
 class Application {
 public:
@@ -21,6 +23,11 @@ public:
 	virtual ~Application();
 
 	bool init();
+
+#ifndef _RELEASE
+	void test();
+#endif
+
 	void main_loop();
 
 protected:
@@ -39,10 +46,12 @@ protected:
 	Planetz planetz;
 	Camera camera;
 	UI ui;
-	Saver saver;
+	MEM::Saver saver;
 
 	GFX::Gfx gfx;
 	GFX::Background bkg;
+
+	MEM::MemMgr memmgr;
 
 	std::FILE*f_log;
 };

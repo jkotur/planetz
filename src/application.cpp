@@ -8,8 +8,6 @@
 #include "util/timer/timer.h"
 #include "util/logger.h"
 
-#include "gpu_struct/buffer.h"
-
 using boost::bind;
 
 #define CAM_START_VECS Vector3(0,0,10),Vector3(0,0,0),Vector3(0,1,0)
@@ -90,8 +88,8 @@ bool Application::init()
 	pl->on_cam_speed_changed.connect( bind(&Camera::set_speed,&camera,_1) );
 	pl->on_pause_click.connect( bind(&Application::pause_toggle,this) );
 	pl->on_reset_click.connect( bind(&Application::reset,this) );
-	pl->on_save.connect( bind(&Saver::save,&saver,_1) );
-	pl->on_load.connect( bind(&Saver::load,&saver,_1) );
+	pl->on_save.connect( bind(&MEM::Saver::save,&saver,_1) );
+	pl->on_load.connect( bind(&MEM::Saver::load,&saver,_1) );
 	pl->on_load.connect( bind(&Application::pause_anim,this) );
 	pl->on_planet_add.connect( bind(&Planetz::add,&planetz,_1) );
 	pl->on_planet_delete.connect( bind(&Planetz::erase,&planetz,_1) );
@@ -110,25 +108,6 @@ bool Application::init()
 
 void Application::main_loop()
 {
-	GPU::BufferGl<float> buf( 10 );
-	buf.resize(15);
-	float * hp = buf.map(GPU::BufferGl<float>::BUF_H );
-	
-	if( hp ) {
-		*hp = 5.5;
-		log_printf(DBG,"Written to buffer!\n");
-	}
-
-	float * cp = buf.map(GPU::BufferGl<float>::BUF_CU);
-	float fivedotfive = 666.f;
-
-	cudaError_t err = cudaMemcpy( &fivedotfive , cp , sizeof(float) , cudaMemcpyDeviceToHost );
-	if( err != cudaSuccess ) log_printf(DBG,"Cuda cpy err: %s\n",cudaGetErrorString(err) );
-
-	log_printf(DBG,"fivedotfive: %f\n",fivedotfive);
-
-	buf.unmap();
-
 	bool running = true;
 
 	log_printf(DBG,"Starting main loop\n");
@@ -191,3 +170,28 @@ void Application::reset() // Planetz*pl , Camera*c )
 	planetz.select(-1); // clear selection
 }
 
+#ifndef _RELEASE
+#include "gpu/buffer.h"
+
+void Application::test()
+{
+	GPU::BufferGl<float> buf( 10 );
+	buf.resize(15);
+	float * hp = buf.map(GPU::BufferGl<float>::BUF_H );
+	
+	if( hp ) {
+		*hp = 5.5;
+		log_printf(DBG,"Written to buffer!\n");
+	}
+
+	float * cp = buf.map(GPU::BufferGl<float>::BUF_CU);
+	float fivedotfive = 666.f;
+
+	cudaError_t err = cudaMemcpy( &fivedotfive , cp , sizeof(float) , cudaMemcpyDeviceToHost );
+	if( err != cudaSuccess ) log_printf(DBG,"Cuda cpy err: %s\n",cudaGetErrorString(err) );
+
+	log_printf(DBG,"fivedotfive: %f\n",fivedotfive);
+
+	buf.unmap();
+}
+#endif

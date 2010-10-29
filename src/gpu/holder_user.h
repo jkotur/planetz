@@ -3,11 +3,6 @@
 
 #include "holder.h"
 
-namespace CPU
-{
-	class MemMgr;
-}
-
 namespace GPU
 {
 	class HolderUser
