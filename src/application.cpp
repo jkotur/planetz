@@ -175,23 +175,32 @@ void Application::reset() // Planetz*pl , Camera*c )
 
 void Application::test()
 {
-	GPU::BufferGl<float> buf( 10 );
-	buf.resize(15);
-	float * hp = buf.map(GPU::BufferGl<float>::BUF_H );
-	
-	if( hp ) {
-		*hp = 5.5;
+	GPU::BufferGl<float>& pbuf = memmgr.getPhxMem()->getRadiuses();
+
+	pbuf.resize(15);
+
+	float*php = pbuf.map(GPU::BUF_H);
+	if( php ) {
 		log_printf(DBG,"Written to buffer!\n");
+		*php = 5.5;
 	}
 
-	float * cp = buf.map(GPU::BufferGl<float>::BUF_CU);
+	const GPU::BufferGl<float>& buf = memmgr.getGfxMem()->getRadiuses();
+
+	const float * hp = buf.map(GPU::BUF_H );
+//	*hp = 5.5; <- invalid in gfx buffer
+
+	const float * cp = buf.map(GPU::BUF_CU);
 	float fivedotfive = 666.f;
 
+	// fail, couse cuda void** dont respect consts
 	cudaError_t err = cudaMemcpy( &fivedotfive , cp , sizeof(float) , cudaMemcpyDeviceToHost );
 	if( err != cudaSuccess ) log_printf(DBG,"Cuda cpy err: %s\n",cudaGetErrorString(err) );
 
 	log_printf(DBG,"fivedotfive: %f\n",fivedotfive);
 
 	buf.unmap();
+
+	log_printf(DBG,"bufid: %d\n",buf.getId());
 }
 #endif

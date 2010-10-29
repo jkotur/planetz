@@ -13,12 +13,21 @@
 namespace GPU
 {
 
+	/** buffer mapped states */
+	enum BUFFER_STATE {
+		BUF_GL , // opengl
+		BUF_CU , // cuda 
+		BUF_H    // host 
+	};
+
 	template<typename T>
 	class BufferBase
 	{
 	public:
 		BufferBase() : size(0) , realsize(0) {}
 		virtual ~BufferBase() {}
+
+		virtual void resize( size_t num , const T*data = NULL ) =0;
 	protected:
 		size_t size; // size of pointed data == number of elements, not bytes
 		size_t realsize;
@@ -31,21 +40,14 @@ namespace GPU
 		// to unregister from cuda and delete from opengl
 		BufferGl( BufferGl<T>& ) {}
 	public:
-		/** buffer mapped states */
-		enum BUFFER_STATE {
-			BUF_GL , // opengl
-			BUF_CU , // cuda 
-			BUF_H    // host 
-		};
-
 		BufferGl( );
 		BufferGl( const size_t num , const T*data = NULL );
 		virtual ~BufferGl( );
 
-		void resize( const size_t num , const T*data = NULL );
+		virtual void resize( const size_t num , const T*data = NULL );
 
-//                T*     map( enum BUFFER_STATE state );
-		T*     map( enum BUFFER_STATE state ) const;
+		T*       map( enum BUFFER_STATE state );
+		const T* map( enum BUFFER_STATE state ) const;
 		void unmap() const;
 		
 		// FIXME: bind or getId ?
@@ -54,6 +56,8 @@ namespace GPU
 
 		GLuint getId() const;
 	protected:
+		T* fucking_no_const_cast_workaround( enum BUFFER_STATE state ) const;
+
 		void gl_resize( const size_t new_size , const T*data );
 
 		GLuint glId; // opengl buffer id
@@ -77,6 +81,7 @@ namespace GPU
 		BufferCu( const size_t num , const T*data = NULL );
 		virtual ~BufferCu();
 
+		virtual void resize( size_t num , const T*data = NULL );
 	protected:
 		T*     cuPtr;
 	};
@@ -117,6 +122,7 @@ namespace GPU
 	BufferGl<T>::~BufferGl()
 	{
 		if( glId ) {
+			unmap();
 			cudaGLUnregisterBufferObject( glId );
 			CUT_CHECK_ERROR("Unregistering buffer while deleting BufferGl");
 			glDeleteBuffers( 1 , &glId );
@@ -126,6 +132,7 @@ namespace GPU
 	template<typename T>
 	void BufferGl<T>::gl_resize( const size_t new_size , const T*data )
 	{
+		log_printf(DBG,"Resizing gl buffer from %d bytes to %d bytes\n",this->realsize,new_size);
 		glBindBuffer(GL_ARRAY_BUFFER,glId);
 		// FIXME: gl constants are hard-coded, is it good?
 		glBufferData(GL_ARRAY_BUFFER,new_size,(GLvoid*)data,GL_DYNAMIC_DRAW);
@@ -180,13 +187,13 @@ namespace GPU
 		glBindBuffer( GL_ARRAY_BUFFER , 0 );
 	}
 
-//        const T* BufferGl<T>::map( enum BUFFER_STATE new_state ) const
-//        {
-//        }
-
-	template<typename T> 
-	T* BufferGl<T>::map( enum BUFFER_STATE new_state ) const
+	template<typename T>
+	T* BufferGl<T>::fucking_no_const_cast_workaround( enum BUFFER_STATE new_state ) const
 	{
+		assert( this->size > 0 );
+
+//                log_printf(DBG,"mapping from %d to %d\n",state,new_state);
+
 		if( state == new_state ) return *pstate==BUF_CU?cuPtr:(state==BUF_H?hPtr:NULL);
 
 		unmap();
@@ -210,21 +217,37 @@ namespace GPU
 	}
 
 	template<typename T>
+	const T* BufferGl<T>::map( enum BUFFER_STATE new_state ) const
+	{
+		return fucking_no_const_cast_workaround( new_state );
+	}
+
+	template<typename T> 
+	T* BufferGl<T>::map( enum BUFFER_STATE new_state ) 
+	{
+		/* fucking const_cast seg faults while casting invalid pointers.
+		 * unfortunetely all gpu pointers are invalid for cpu!!
+		 */
+//                return const_cast<T*>(map(new_state)); 
+		return fucking_no_const_cast_workaround( new_state );
+	}
+
+	template<typename T>
 	void BufferGl<T>::unmap() const
 	{
-		if( state == BUF_GL ) return;
+		assert( this->size > 0 );
+
 		if( state == BUF_CU ) {
 			cudaGLUnmapBufferObject( glId );
 			CUT_CHECK_ERROR("Unmapping cuda buffer to BufferGl");
-			return;
 		}
 		if( state == BUF_H  ) {
 			glBindBuffer( GL_ARRAY_BUFFER , glId );
 			glUnmapBuffer( GL_ARRAY_BUFFER );
 			glBindBuffer( GL_ARRAY_BUFFER , 0 );
-			return;
 		}
-		assert( false ); // should never reach this code
+
+		*pstate = BUF_GL;
 	}
 
 	//
@@ -244,6 +267,10 @@ namespace GPU
 	{
 	}
 	
+	template<typename T>
+	void BufferCu<T>::resize( size_t num , const T*data )
+	{
+	}
 }
 
 #endif // BUFFER_H

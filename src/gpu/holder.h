@@ -22,6 +22,20 @@ namespace GPU
 		{
 		}
 
+		void resize( const size_t num )
+		{
+			planet_model      .resize(num);
+			planet_pos        .resize(num);
+			planet_radius     .resize(num);
+			planet_count      .resize(num);
+				    
+				    
+			planet_mass       .resize(num);
+			planet_velocity   .resize(num);
+				    
+			pointsCloud_points.resize(num);
+			pointsCloud_size  .resize(num);
+		}
 
 		// Planet
 		//   * GFX
