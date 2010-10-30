@@ -5,6 +5,8 @@
 
 #include <cassert>
 
+#include <cstdio>
+
 #include <cuda_runtime_api.h>
 #include <cuda_gl_interop.h>
 
@@ -12,6 +14,7 @@
 
 namespace GPU
 {
+	typedef unsigned int uint;
 
 	/** buffer mapped states */
 	enum BUFFER_STATE {
@@ -28,8 +31,19 @@ namespace GPU
 		virtual ~BufferBase() {}
 
 		virtual void resize( size_t num , const T*data = NULL ) =0;
+
+		virtual size_t getSize() const
+		{
+			return size;
+		}
+
+		virtual uint   getLen() const
+		{
+			return length;
+		}
 	protected:
-		size_t size; // size of pointed data == number of elements, not bytes
+		uint   length; // number of Ts in buffer
+		size_t size; // size of pointed data == number of bytes
 		size_t realsize;
 		// TODO: void fireEventContentChanged();
 	};
@@ -50,7 +64,6 @@ namespace GPU
 		const T* map( enum BUFFER_STATE state ) const;
 		void unmap() const;
 		
-		// FIXME: bind or getId ?
 		void bind() const;
 		void unbind() const;
 
@@ -133,6 +146,7 @@ namespace GPU
 		size_t new_size = num*sizeof(T);
 
 		if( new_size <= this->realsize ) {
+			this->length = num;
 			this->size = new_size;
 			return;
 		}
@@ -147,6 +161,7 @@ namespace GPU
 		} else
 			gl_resize( new_size , data );
 
+		this->length = num;
 		this->size =this-> realsize = new_size;
 	}
 
@@ -176,8 +191,6 @@ namespace GPU
 	T* BufferGl<T>::fucking_no_const_cast_workaround( enum BUFFER_STATE new_state ) const
 	{
 		assert( this->size > 0 );
-
-//                log_printf(DBG,"mapping from %d to %d\n",state,new_state);
 
 		if( state == new_state ) return *pstate==BUF_CU?cuPtr:(state==BUF_H?hPtr:NULL);
 
@@ -222,6 +235,7 @@ namespace GPU
 	{
 		assert( this->size > 0 );
 
+		
 		if( state == BUF_CU ) {
 			cudaGLUnmapBufferObject( glId );
 			CUT_CHECK_ERROR("Unmapping cuda buffer to BufferGl");

@@ -6,6 +6,7 @@
 
 #include "gfx/gfx.h"
 #include "gfx/background.h"
+#include "gfx/planetz_renderer.h"
 
 #include "planetz_manager.h"
 
@@ -43,15 +44,19 @@ protected:
 
 	bool anim_pause;
 
+	// gfx quits SDL so should be deleted after all opengl calls
+	// also cuda-gl mapping
+	GFX::Gfx gfx;
+
 	Planetz planetz;
 	Camera camera;
 	UI ui;
-	MEM::Saver saver;
-
-	GFX::Gfx gfx;
-	GFX::Background bkg;
 
 	MEM::MemMgr memmgr;
+	MEM::Saver saver;
+
+	GFX::PlanetzRenderer plz;
+	GFX::Background bkg;
 
 	std::FILE*f_log;
 };

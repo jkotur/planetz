@@ -2,6 +2,8 @@
 
 #include <cstdlib>
 
+#include <string>
+
 #include <boost/bind.hpp>
 
 #include "util/vector.h"
@@ -15,7 +17,8 @@ using boost::bind;
 Application::Application()
 	: fps(0) , anim_pause(true) ,
 	  camera( CAM_START_VECS )  ,
-	  saver( planetz , camera )        ,
+	  saver( planetz , camera ) ,
+	  plz( memmgr.getGfxMem() ) ,
 	  bkg( 0.8 , BASE_W , BASE_H )
 {
 }
@@ -49,6 +52,11 @@ bool Application::init()
 	if( !gfx.GL_init()               ) return false;
 
 	bkg.set_img(DATA("text.tga"));
+
+	//
+	// init memory
+	//
+	memmgr.load( std::string() );
 
 	//
 	// init user interface
@@ -99,6 +107,7 @@ bool Application::init()
 	gfx.add( &bkg     );
 	gfx.add( &camera  );
 	gfx.add( &planetz );
+	gfx.add( &plz     );
 #ifndef _NOGUI
 	gfx.add( &ui      );
 #endif
@@ -175,32 +184,32 @@ void Application::reset() // Planetz*pl , Camera*c )
 
 void Application::test()
 {
-	GPU::BufferGl<float>& pbuf = memmgr.getPhxMem()->getRadiuses();
+//        GPU::BufferGl<float>& pbuf = memmgr.getPhxMem()->getRadiuses();
 
-	pbuf.resize(15);
+////        pbuf.resize(15);
 
-	float*php = pbuf.map(GPU::BUF_H);
-	if( php ) {
-		log_printf(DBG,"Written to buffer!\n");
-		*php = 5.5;
-	}
+//        float*php = pbuf.map(GPU::BUF_H);
+//        if( php ) {
+//                log_printf(DBG,"Written to buffer!\n");
+////                php[0] = 5.5;
+//        }
 
-	const GPU::BufferGl<float>& buf = memmgr.getGfxMem()->getRadiuses();
+//        const GPU::BufferGl<float>& buf = memmgr.getGfxMem()->getRadiuses();
 
-	const float * hp = buf.map(GPU::BUF_H );
-//	*hp = 5.5; <- invalid in gfx buffer
+////        const float * hp = buf.map(GPU::BUF_H );
+////	*hp = 5.5; <- invalid in gfx buffer
 
-	const float * cp = buf.map(GPU::BUF_CU);
-	float fivedotfive = 666.f;
+//        const float * cp = buf.map(GPU::BUF_CU);
+//        float fivedotfive = 666.f;
 
-	// fail, couse cuda void** dont respect consts
-	cudaError_t err = cudaMemcpy( &fivedotfive , cp , sizeof(float) , cudaMemcpyDeviceToHost );
-	if( err != cudaSuccess ) log_printf(DBG,"Cuda cpy err: %s\n",cudaGetErrorString(err) );
+//        // fail, couse cuda void** dont respect consts
+//        cudaError_t err = cudaMemcpy( &fivedotfive , cp , sizeof(float) , cudaMemcpyDeviceToHost );
+//        if( err != cudaSuccess ) log_printf(DBG,"Cuda cpy err: %s\n",cudaGetErrorString(err) );
 
-	log_printf(DBG,"fivedotfive: %f\n",fivedotfive);
+//        log_printf(DBG,"fivedotfive: %f\n",fivedotfive);
 
-	buf.unmap();
+//        buf.unmap();
 
-	log_printf(DBG,"bufid: %d\n",buf.getId());
+//        log_printf(DBG,"bufid: %d\n",buf.getId());
 }
 #endif

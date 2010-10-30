@@ -2,6 +2,8 @@
 
 #define __DRAWABLE_H__
 
+#include <cstdlib>
+
 namespace GFX
 {
 	class Gfx;

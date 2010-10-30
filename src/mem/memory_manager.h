@@ -2,6 +2,8 @@
 
 #define __MEMORY_MANAGER_H__
 
+#include <string>
+
 #include "gpu/gfx_planet_factory.h"
 #include "gpu/phx_planet_factory.h"
 
@@ -15,6 +17,8 @@ namespace MEM {
 		GPU::GfxPlanetFactory* getGfxMem();
 		GPU::PhxPlanetFactory* getPhxMem();
 		
+		void load( const std::string& path );
+		void save( const std::string& path );
 	private:
 		GPU::Holder holder;
 

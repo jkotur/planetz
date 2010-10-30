@@ -20,8 +20,8 @@ find_package( CEGUI )
 find_package( CEGUIOPENGL )
 
 if( UNIX )
-	set( CMAKE_C_FLAGS "-g -Wall -pedantic")
-	set( CMAKE_CXX_FLAGS "-std=gnu++98 -g -Wall -pedantic")
+	set( CMAKE_C_FLAGS "-O3 -g -Wall -pedantic")
+	set( CMAKE_CXX_FLAGS "-O3 -g -Wall -pedantic")
 endif( UNIX )
 
 # is this needed?

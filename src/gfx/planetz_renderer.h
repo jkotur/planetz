@@ -2,6 +2,10 @@
 
 #define __PLANETZ_RENDERER_H__
 
+#include "drawable.h"
+
+#include "gpu/gfx_planet_factory.h"
+
 namespace GFX {
 
 	class PlanetzRenderer : public Drawable {
@@ -11,7 +15,7 @@ namespace GFX {
 		
 		virtual void draw() const;
 	private:
-		const GPU::GfxPlanetFactory * factory;
+		const GPU::GfxPlanetFactory * const factory;
 	};
 
 }
