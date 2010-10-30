@@ -72,21 +72,6 @@ namespace GPU
 	};
 	
 	//
-	// Cuda buffer declaration
-	//
-	template<typename T>
-	class BufferCu : public BufferBase<T> {
-	public:
-		BufferCu( );
-		BufferCu( const size_t num , const T*data = NULL );
-		virtual ~BufferCu();
-
-		virtual void resize( size_t num , const T*data = NULL );
-	protected:
-		T*     cuPtr;
-	};
-
-	//
 	// BUF and host data in one buffer (only concept)
 	//
 	template<typename T,typename BUF>
@@ -250,27 +235,6 @@ namespace GPU
 		*pstate = BUF_GL;
 	}
 
-	//
-	// BufferCu definisions
-	template<typename T>
-	BufferCu<T>::BufferCu( )
-	{
-	}
-
-	template<typename T>
-	BufferCu<T>::BufferCu( const size_t num , const T*data )
-	{
-	}
-
-	template<typename T>
-	BufferCu<T>::~BufferCu()
-	{
-	}
-	
-	template<typename T>
-	void BufferCu<T>::resize( size_t num , const T*data )
-	{
-	}
 }
 
 #endif // BUFFER_H

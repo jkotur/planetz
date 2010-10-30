@@ -2,6 +2,7 @@
 #define HOLDER_H
 
 #include "buffer.h"
+#include "buffer_cu.hpp"
 
 namespace GPU
 {
@@ -49,6 +50,8 @@ namespace GPU
 		//   * PHX
 		BufferCu<float>    planet_mass;
 		BufferCu<float3>   planet_velocity;
+
+		BufferCu<float>    phx_dt;
 
 		BufferGl<float3>   pointsCloud_points;
 		BufferGl<uint32_t> pointsCloud_size;

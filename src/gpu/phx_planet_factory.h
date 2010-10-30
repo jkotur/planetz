@@ -5,19 +5,23 @@
 
 #include "buffer.h"
 #include "holder.h"
+#include <boost/shared_ptr.hpp>
 
 namespace GPU {
 
 	class PhxPlanet {
 	public:
-		PhxPlanet( int id , const Holder* h );
+		PhxPlanet( unsigned id , const Holder* h );
 		virtual ~PhxPlanet();
 		
-		float3   getPosition();
-		float    getRadius();
-		uint32_t getCount();
+		float3  getPosition() const;
+		float   getRadius() const;
+		float	getMass() const;
+		float3	getVelocity() const;
+
 	private:
-		
+		unsigned id;
+		const Holder* holder;
 	};
 
 
@@ -32,7 +36,7 @@ namespace GPU {
 
 		BufferGl<float3>  &getPositions();
 		BufferGl<float>   &getRadiuses();
-		BufferGl<uint32_t>&getCounts();
+		BufferGl<uint32_t>&getCount();
 
 	private:
 

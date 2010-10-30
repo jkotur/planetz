@@ -4,27 +4,39 @@
 
 using namespace GPU;
 
-PhxPlanet::PhxPlanet( int id , const Holder* h )
+PhxPlanet::PhxPlanet( unsigned _id , const Holder* h )
+	: id( _id )
+	, holder( h )
 {
+	assert( h );
 }
 
 PhxPlanet::~PhxPlanet()
 {
 }
 
-float3   PhxPlanet::getPosition()
+float3   PhxPlanet::getPosition() const
 {
-	return make_float3(0,0,0);
+	float3 result = holder->planet_pos.map( BUF_H )[ id ];
+	holder->planet_pos.unmap(); // FIXME: what if it was already mapped?
+	return result;
 }
 
-float    PhxPlanet::getRadius()
+float    PhxPlanet::getRadius() const
 {
-	return .0f;
+	float result = holder->planet_radius.map( BUF_H )[ id ];
+	holder->planet_radius.unmap(); // FIXME as above
+	return result;
 }
 
-uint32_t PhxPlanet::getCount()
+float	PhxPlanet::getMass() const
 {
-	return 0;
+	return .0f;// holder->planet_mass.
+}
+
+float3 PhxPlanet::getVelocity() const
+{
+	return make_float3(.0f, .0f, .0f);
 }
 
 PhxPlanetFactory::PhxPlanetFactory( Holder* holder )
@@ -56,7 +68,7 @@ BufferGl<float>   &PhxPlanetFactory::getRadiuses()
 	return holder->planet_radius;
 }
 
-BufferGl<uint32_t>&PhxPlanetFactory::getCounts()
+BufferGl<uint32_t>&PhxPlanetFactory::getCount()
 {
 	return holder->planet_count;
 }
