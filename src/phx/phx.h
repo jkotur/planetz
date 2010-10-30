@@ -8,7 +8,7 @@ namespace CPU
 	class Phx
 	{
 		public:
-			Phx(Holder *h);
+			Phx(GPU::Holder *h);
 			virtual ~Phx();
 
 			/// @brief Obliczenie n klatek fizyki
@@ -19,7 +19,7 @@ namespace CPU
 		private:
 			class CImpl;
 			CImpl* impl;
-	}
+	};
 }
 
 #endif // _CPU_PHX_H_

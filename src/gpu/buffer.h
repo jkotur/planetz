@@ -27,7 +27,7 @@ namespace GPU
 	class BufferBase
 	{
 	public:
-		BufferBase() : size(0) , realsize(0) {}
+		BufferBase() : length(0), size(0) , realsize(0){}
 		virtual ~BufferBase() {}
 
 		virtual void resize( size_t num , const T*data = NULL ) =0;

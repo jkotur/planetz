@@ -1,4 +1,7 @@
+#ifndef _BUFFER_CU_HPP_
+#define _BUFFER_CU_HPP_
 #include "buffer.h"
+#include "../debug/routines.h"
 
 namespace GPU
 {
@@ -6,7 +9,8 @@ namespace GPU
 	// Cuda buffer declaration
 	//
 	template<typename T>
-	class BufferCu : public BufferBase<T> {
+	class BufferCu : public BufferBase<T>
+	{
 	public:
 		BufferCu( );
 		BufferCu( const size_t num , const T*data = NULL );
@@ -14,13 +18,17 @@ namespace GPU
 
 		virtual void resize( size_t num , const T*data = NULL );
 
-		T* data();
+		T* h_data();
+		T* d_data();
+		T getAt(unsigned i);
+		void setAt(unsigned i, const T&);
+
 		void bind();
 		void unbind();
 
 	protected:
-		bool bound;
-		T* cuPtr;
+		T* d_cuPtr;
+		T* h_cuPtr;
 	};
 
 	//
@@ -28,15 +36,15 @@ namespace GPU
 	// 
 	template<typename T>
 	BufferCu<T>::BufferCu( )
-		: bound( false )
-		, cuPtr( NULL )
+		: d_cuPtr( NULL )
+		, h_cuPtr( NULL )
 	{
 	}
 
 	template<typename T>
 	BufferCu<T>::BufferCu( const size_t num , const T*data )
-		: bound( false )
-		, cuPtr( NULL )
+		: d_cuPtr( NULL )
+		, h_cuPtr( NULL )
 	{
 		resize( num, data );
 	}
@@ -44,36 +52,81 @@ namespace GPU
 	template<typename T>
 	BufferCu<T>::~BufferCu()
 	{
-		//TODO free mem
-		assert( !bound );
+		TODO("freeing mem");
+		ASSERT_MSG(!h_cuPtr, "BufferCu bound on destruction!");
 	}
 	
 	template<typename T>
 	void BufferCu<T>::resize( size_t num , const T*data )
 	{
-		//TODO implement me
+		ASSERT( !h_cuPtr );
+
+		if( d_cuPtr )
+		{
+			
+			cudaFree( d_cuPtr );
+			DBGPUT( CUT_CHECK_ERROR( "free" ) );
+		}
+
+		this->length = num;
+		cudaMalloc((void**)&d_cuPtr, num * sizeof(T) );
+		DBGPUT( CUT_CHECK_ERROR( "malloc" ) );
+		if( data )
+		{
+			cudaMemcpy(&d_cuPtr, data, num * sizeof(T), cudaMemcpyHostToDevice );
+			DBGPUT( CUT_CHECK_ERROR( "memcpy" ) );
+		}
 	}
 
 	template<typename T>
-	T* BufferCu<T>::data()
+	T* BufferCu<T>::h_data()
 	{
-		assert( bound );
-		return cuPtr;
+		ASSERT( h_cuPtr );
+		return h_cuPtr;
+	}
+
+	template<typename T>
+	T* BufferCu<T>::d_data()
+	{
+		ASSERT( d_cuPtr );
+		return d_cuPtr;
+	}
+
+	template<typename T>
+	T BufferCu<T>::getAt(unsigned i)
+	{
+		T retval;
+		T* pRetval = &retval;
+		cudaMemcpy(&pRetval, d_cuPtr + i, sizeof(T), cudaMemcpyDeviceToHost);
+		DBGPUT( CUT_CHECK_ERROR( "memcpy" ) );
+		return retval;
+	}
+
+	template<typename T>
+	void BufferCu<T>::setAt(unsigned i, const T& val)
+	{
+		cudaMemcpy(d_cuPtr + i, &val, sizeof(T), cudaMemcpyHostToDevice);
+		DBGPUT( CUT_CHECK_ERROR( "memcpy" ) );
 	}
 
 	template<typename T>
 	void BufferCu<T>::bind()
 	{
-		assert( !bound );
-		bound = true;
-		// TODO implement me
+		ASSERT( !h_cuPtr );
+		h_cuPtr = new T[this->length];
+		cudaMemcpy(&h_cuPtr, d_cuPtr, this->length * sizeof(T), cudaMemcpyDeviceToHost );
+		DBGPUT( CUT_CHECK_ERROR( "memcpy" ) );
 	}
 
 	template<typename T>
 	void BufferCu<T>::unbind()
 	{
-		assert( bound );
-		bound = false;
-		// TODO implement me
+		ASSERT( h_cuPtr );
+		cudaMemcpy(&d_cuPtr, h_cuPtr, this->length * sizeof(T), cudaMemcpyHostToDevice );
+		DBGPUT( CUT_CHECK_ERROR( "memcpy" ) );
+		delete [] h_cuPtr;
+		h_cuPtr = NULL;
+		TODO("implement me");
 	}
 }
+#endif
