@@ -49,10 +49,10 @@ bool Gfx::GL_init()
 		return false;
 	}
 
-	if( glewIsSupported("GL_VERSION_3_3") )
-		log_printf(INFO,"Hurray! OpenGL 3.3 is supported.\n");
+	if( glewIsSupported("GL_VERSION_3_2") )
+		log_printf(INFO,"Hurray! OpenGL 3.2 is supported.\n");
 	else {
-		log_printf(CRITICAL,"OpenGL 3.3 is not supported. Program cannot run corectly");
+		log_printf(CRITICAL,"OpenGL 3.2 is not supported. Program cannot run corectly");
 		return false;
 	}
 
