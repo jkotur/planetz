@@ -8,7 +8,7 @@ namespace CPU
 	class Phx
 	{
 		public:
-			Phx(GPU::Holder *h);
+			Phx(GPU::PlanetHolder *h);
 			virtual ~Phx();
 
 			/// @brief Obliczenie n klatek fizyki

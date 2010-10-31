@@ -4,7 +4,7 @@
 
 using namespace GPU;
 
-PhxPlanet::PhxPlanet( unsigned _id , const Holder* h )
+PhxPlanet::PhxPlanet( unsigned _id , const PlanetHolder* h )
 	: id( _id )
 	, holder( h )
 {
@@ -17,21 +17,21 @@ PhxPlanet::~PhxPlanet()
 
 float3   PhxPlanet::getPosition() const
 {
-	float3 result = holder->planet_pos.map( BUF_H )[ id ];
-	holder->planet_pos.unmap(); // FIXME: what if it was already mapped?
+	float3 result = holder->pos.map( BUF_H )[ id ];
+	holder->pos.unmap(); // FIXME: what if it was already mapped?
 	return result;
 }
 
 float    PhxPlanet::getRadius() const
 {
-	float result = holder->planet_radius.map( BUF_H )[ id ];
-	holder->planet_radius.unmap(); // FIXME as above
+	float result = holder->radius.map( BUF_H )[ id ];
+	holder->radius.unmap(); // FIXME as above
 	return result;
 }
 
 float	PhxPlanet::getMass() const
 {
-	return .0f;// holder->planet_mass.
+	return .0f;// holder->mass.
 }
 
 float3 PhxPlanet::getVelocity() const
@@ -39,7 +39,7 @@ float3 PhxPlanet::getVelocity() const
 	return make_float3(.0f, .0f, .0f);
 }
 
-PhxPlanetFactory::PhxPlanetFactory( Holder* holder )
+PhxPlanetFactory::PhxPlanetFactory( PlanetHolder* holder )
 	: holder(holder)
 {
 }
@@ -55,21 +55,21 @@ PhxPlanet PhxPlanetFactory::getPlanet( int id )
 
 BufferGl<uint8_t> &PhxPlanetFactory::getModels()
 {
-	return holder->planet_model;
+	return holder->model;
 }
 
 BufferGl<float3>  &PhxPlanetFactory::getPositions()
 {
-	return holder->planet_pos;
+	return holder->pos;
 }
 
 BufferGl<float>   &PhxPlanetFactory::getRadiuses()
 {
-	return holder->planet_radius;
+	return holder->radius;
 }
 
 BufferGl<uint32_t>&PhxPlanetFactory::getCount()
 {
-	return holder->planet_count;
+	return holder->count;
 }
 

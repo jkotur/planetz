@@ -11,7 +11,7 @@ namespace GPU {
 
 	class PhxPlanet {
 	public:
-		PhxPlanet( unsigned id , const Holder* h );
+		PhxPlanet( unsigned id , const PlanetHolder* h );
 		virtual ~PhxPlanet();
 		
 		float3  getPosition() const;
@@ -21,13 +21,13 @@ namespace GPU {
 
 	private:
 		unsigned id;
-		const Holder* holder;
+		const PlanetHolder* holder;
 	};
 
 
 	class PhxPlanetFactory {
 	public:
-		PhxPlanetFactory( Holder* );
+		PhxPlanetFactory( PlanetHolder* );
 		virtual ~PhxPlanetFactory( );
 
 		PhxPlanet getPlanet( int id );
@@ -40,7 +40,7 @@ namespace GPU {
 
 	private:
 
-		Holder* const holder;
+		PlanetHolder* const holder;
 	};
 
 }

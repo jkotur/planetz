@@ -69,11 +69,12 @@ namespace GPU
 		}
 
 		this->length = num;
-		cudaMalloc((void**)&d_cuPtr, num * sizeof(T) );
+		this->size = this->realsize = num * sizeof(T);
+		cudaMalloc((void**)&d_cuPtr, this->size );
 		DBGPUT( CUT_CHECK_ERROR( "malloc" ) );
 		if( data )
 		{
-			cudaMemcpy(&d_cuPtr, data, num * sizeof(T), cudaMemcpyHostToDevice );
+			cudaMemcpy(&d_cuPtr, data, this->size, cudaMemcpyHostToDevice );
 			DBGPUT( CUT_CHECK_ERROR( "memcpy" ) );
 		}
 	}

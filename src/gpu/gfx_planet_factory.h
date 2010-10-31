@@ -10,7 +10,7 @@ namespace GPU {
 
 	class GfxPlanet {
 	public:
-		GfxPlanet( int id , const Holder* h );
+		GfxPlanet( int id , const PlanetHolder* h );
 		virtual ~GfxPlanet();
 		
 		uint8_t  getModel() const;
@@ -25,7 +25,7 @@ namespace GPU {
 
 	class GfxPlanetFactory {
 	public:
-		GfxPlanetFactory( const Holder* );
+		GfxPlanetFactory( const PlanetHolder* );
 		virtual ~GfxPlanetFactory( );
 
 		const GfxPlanet getPlanet( int id ) const;
@@ -38,7 +38,7 @@ namespace GPU {
 
 	private:
 
-		const Holder* const holder;
+		const PlanetHolder* const holder;
 	};
 
 }

@@ -20,7 +20,7 @@ namespace MEM {
 		void load( const std::string& path );
 		void save( const std::string& path );
 	private:
-		GPU::Holder holder;
+		GPU::PlanetHolder holder;
 
 		GPU::GfxPlanetFactory gpf;
 		GPU::PhxPlanetFactory ppf;

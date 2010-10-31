@@ -4,7 +4,7 @@
 
 using namespace GPU;
 
-GfxPlanet::GfxPlanet( int id , const Holder* h )
+GfxPlanet::GfxPlanet( int id , const PlanetHolder* h )
 {
 }
 
@@ -32,7 +32,7 @@ uint32_t GfxPlanet::getCount() const
 	return 0;
 }
 
-GfxPlanetFactory::GfxPlanetFactory( const Holder* holder )
+GfxPlanetFactory::GfxPlanetFactory( const PlanetHolder* holder )
 	: holder(holder)
 {
 }
@@ -48,21 +48,21 @@ const GfxPlanet GfxPlanetFactory::getPlanet( int id ) const
 
 const BufferGl<uint8_t> *GfxPlanetFactory::getModels() const
 {
-	return &holder->planet_model;
+	return &holder->model;
 }
 
 const BufferGl<float3>  &GfxPlanetFactory::getPositions() const
 {
-	return holder->planet_pos;
+	return holder->pos;
 }
 
 const BufferGl<float>   &GfxPlanetFactory::getRadiuses() const
 {
-	return holder->planet_radius;
+	return holder->radius;
 }
 
 const BufferGl<uint32_t>&GfxPlanetFactory::getCounts() const
 {
-	return holder->planet_count;
+	return holder->count;
 }
 

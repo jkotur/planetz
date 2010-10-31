@@ -6,51 +6,28 @@
 
 namespace GPU
 {
-	struct Holder
+	struct PlanetHolder
 	{
-		Holder( unsigned num  = 0 )
-			: planet_model      (num) ,
-			  planet_pos        (num) ,
-			  planet_radius     (num) ,
-                          planet_count      (num) ,
-                                            
-                                            
-                          planet_mass       (num) ,
-                          planet_velocity   (num) ,
-                                            
-                          pointsCloud_points(num) ,
-                          pointsCloud_size  (num)
-		{
-		}
+		PlanetHolder( unsigned num = 0 );
+		virtual ~PlanetHolder();
 
-		void resize( const size_t num )
-		{
-			planet_model      .resize(num);
-			planet_pos        .resize(num);
-			planet_radius     .resize(num);
-			planet_count      .resize(num);
-				    
-				    
-			planet_mass       .resize(num);
-			planet_velocity   .resize(num);
-				    
-			pointsCloud_points.resize(num);
-			pointsCloud_size  .resize(num);
-		}
+		void resize(const size_t num);
 
-		// Planet
 		//   * GFX
-		BufferGl<uint8_t>  planet_model;
+		BufferGl<uint8_t>  model;
 
 		//   * COMMON
-		BufferGl<float3>   planet_pos;
-		BufferGl<float>    planet_radius;
-		BufferGl<uint32_t> planet_count;
+		BufferGl<float3>   pos;
+		BufferGl<float>    radius;
+		BufferGl<uint32_t> count;
 
 		//   * PHX
-		BufferCu<float>    planet_mass;
-		BufferCu<float3>   planet_velocity;
+		BufferCu<float>    mass;
+		BufferCu<float3>   velocity;
+	};
 
+	struct PointsCloudHolder
+	{
 		BufferCu<float>    phx_dt;
 
 		BufferGl<float3>   pointsCloud_points;
