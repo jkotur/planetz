@@ -20,21 +20,29 @@ Struktury, z których będziemy korzystać na karcie graficznej, określone są 
 \paragraph{}
 Ponadto istnieje kilka struktur wspólnych dla obu częsci.
 
-\paragraph{GPU::Planet} zawiera informacje, z których korzystaja zarówno wyświetlanie jak i fizyka. Jest to położenie planety oraz jej promień.
-\paragraph{GPU::PointsCloud} reprezentuje chmurę cząstek - jest ona obliczana dla każdej widocznej komety przez moduł fizyczny.
+\begin{description}
+\item{\bf GPU::Planet} zawiera informacje, z których korzystaja zarówno wyświetlanie jak i fizyka. Jest to położenie planety oraz jej promień.
+\item{\bf GPU::PointsCloud} reprezentuje chmurę cząstek - jest ona obliczana dla każdej widocznej komety przez moduł fizyczny.
+\end{description}
 
 \paragraph{}
+
 Operacje fizyczne odbywać się będą z wykorzystaniem dwóch dodatkowych struktur.
 
-\paragraph{GPU::Phx::Planet} to dodatkowe informacje o każdej planecie, które są potrzebne jedynie silnikowi fizycznemu. Należą do nich prędkość oraz masa.
-\paragraph{GPU::Phx::Comet} stanowi dodatkową informację o planecie. Struktura ta istnieje tylko dla obiektów będących kometami. Zawiera kilka ostatnich pozycji oraz identyfikator planety.
+\begin{description}
+\item{\bf GPU::Phx::Planet} to dodatkowe informacje o każdej planecie, które są potrzebne jedynie silnikowi fizycznemu. Należą do nich prędkość oraz masa.
+\item{\bf GPU::Phx::Comet} stanowi dodatkową informację o planecie. Struktura ta istnieje tylko dla obiektów będących kometami. Zawiera kilka ostatnich pozycji oraz identyfikator planety.
+\end{description}
 
 \paragraph{}
+
 Do wyświetlenia planet konieczne będą informacje o teksturach, oraz o siatkach każdej z planet.
 
-\paragraph{GPU::Gfx::Planet} zawiera indeks modelu, czyli wyglądu planetu. Dwie planety mogą mieć ten sam model.
-\paragraph{GPU::Gfx::Model} definiuje konkretny wygląd. Na tym poziomie będziemy rozróżniać zwykłe planety od gwiazd i komet.
-\paragraph{GPU::Gfx::Shape} agreguje informację o siatce planety w 3D oraz odpowiadającej jej siatce na dwuwymiarowej teksturze.
+\begin{description}
+\item{\bf GPU::Gfx::Planet} zawiera indeks modelu, czyli wyglądu planetu. Dwie planety mogą mieć ten sam model.
+\item{\bf GPU::Gfx::Model} definiuje konkretny wygląd. Na tym poziomie będziemy rozróżniać zwykłe planety od gwiazd i komet.
+\item{\bf GPU::Gfx::Shape} agreguje informację o siatce planety w 3D oraz odpowiadającej jej siatce na dwuwymiarowej teksturze.
+\end{description}
 
 \subsubsection{Klasy CPU}
 
@@ -48,13 +56,20 @@ Do wyświetlenia planet konieczne będą informacje o teksturach, oraz o siatkac
 \paragraph{}
 Ta część klas przełoży się bezpośrednio na klasy znane z c++. Diagram klas znajduje się na rysunku \ref{fig:class_cpu}.
 
-\paragraph{CPU::App} jest główną klasą, zarządzającą obiektami GFX, PHX, DataFlowMgr oraz UI. Tworzy je ona na początku działania programu.
-\paragraph{CPU::GFX} odpowiada za wyświetlanie. Korzysta przy tym z biblioteki OpenGL.
-\paragraph{CPU::PHX} uruchamia kernel'e CUDA, które przeprowadzają wszystkie obliczenia fizyczne.
-\paragraph{CPU::DataFlowMgr} wykonuje wszystkie przepływy danych - pomiędzy RAM karty graficznej, RAM komputera oraz dyskiem twardym.
-\paragraph{CPU::MemMgr} na zlecenie DataFlowMgr'a przenosi dane pomiędzy kartą graficzną a RAM.
-\paragraph{CPU::IOCtl} na zlecenie DataFlowMgr'a przenosi dane pomiędzy RAM a dyskiem twardym.
-\paragraph{CPU::UI} odpowiada za całość interakcji z użytkownikiem.
-\paragraph{CPU::GUI}, czyli graficzny interfejs użytkownika. Obsługa okienek.
-\paragraph{CPU::InputDev} obsługuje klawiaturę i mysz.
-\paragraph{CPU::PlanetPicker} służy do określania, która planeta została zaznaczona.
+\begin{description}
+\item{\bf CPU::App} jest główną klasą, zarządzającą obiektami GFX, PHX, DataFlowMgr oraz UI. Tworzy je ona na początku działania programu.
+\item{\bf CPU::GFX} odpowiada za wyświetlanie. Korzysta przy tym z biblioteki OpenGL.
+\item{\bf CPU::PHX} uruchamia kernel'e CUDA, które przeprowadzają wszystkie obliczenia fizyczne.
+\item{\bf CPU::DataFlowMgr} wykonuje wszystkie przepływy danych - pomiędzy RAM karty graficznej, RAM komputera oraz dyskiem twardym.
+\item{\bf CPU::MemMgr} na zlecenie DataFlowMgr'a przenosi dane pomiędzy kartą graficzną a RAM.
+\item{\bf CPU::IOCtl} na zlecenie DataFlowMgr'a przenosi dane pomiędzy RAM a dyskiem twardym.
+\item{\bf CPU::UI} odpowiada za całość interakcji z użytkownikiem.
+
+\item{\bf CPU::UI::GUI}, czyli graficzny interfejs użytkownika. Składać sie na to będą okna oraz guziki zagnieżdżone w oknie głównym aplikacji.
+\item{\bf CPU::UI::PointerDevice} abstrakcja dla wszystkich wejściowych urządzeń które mogą być wskaźnikami. W danej aplikacji będzie to najprawdopodobniej myszka, jednak takie podejście umożliwia dodanie obsługi takich peryferii jak dżojstiki czy kontrolery gier.
+\item{\bf CPU::CPU2GPU::BufferBase} bazowa, abstrakcyjna klasa dla buforów jednostki graficznej. Dzięki temu na danych dostępnych dla programów jednostki graficznej można wygodnie manipulować z poziomu kodu jednostki centralnej.
+\item{\bf CPU::CPU2GPU::BufferCu} reprezentuje dane przetrzymywane na karcie graficznej przy pomocy wywołań biblioteki CUDA.
+\item{\bf CPU::CPU2GPU::BufferGl} reprezentuje dane przetrzymywane na karcie graficznej przy pomocy wywołań biblioteki OpenGL. Technologia CUDA pozwala na udostępnianie buforów opengla dla programów CUDA, dzięki temu ten bufor jest używany tam gdzie potrzebny jest dostęp do danych zarówno z modułów graficznych jak i fizycznych.
+\item{\bf CPU::CPU2GPU::Holder} Agreguje wszystkie bufory potrzebne do reprezentacji planety. Zarówno te fizyczny, graficzne jak i wspólne.
+\end{description}
+
