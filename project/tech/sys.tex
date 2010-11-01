@@ -1,15 +1,15 @@
 \paragraph{Sprzęt}
-Karta graficzna komputera musi obsługiwać CUDA 2.3 oraz OpenGL 3.2. Potrzebne będą także: monitor, klawiatura oraz myszka.
+Wymagania sprzętowe dotyczą głownie możliwości graficznych komputera. Komputer musi obsługiwać CUDA 2.3 oraz OpenGL 3.2. W praktyce oznacza to potrzebe posiadania komputera z kartą graficzną firmy NVIDIA co najmniej  serii 8000 lub nowszą. Oczywiście potrzebne będą także peryferia take jak: monitor, klawiatura oraz myszka.
 
 \paragraph{Oprogramowanie}
 Do włączenia aplikacji konieczny będzie komputer z systemem operacyjnym Linux. Wymagane biblioteki: 
-\begin{itemize}
-\item{OpenGL}
-\item{CEGUI}
-\item{SDL}
-\item{SDL\_image}
+\begin{description}
+\item{OpenGL} - biblioteka graficzna odpowiedzialna za przekształcenia sceny 3D. W wersji 3.2 do standardu wprowadzone zostały shadery geometryczne, które będą niezbędne do szybkiego wyświetlania planet.
+\item{CEGUI} - biblioteka wyświetlająca interfejs graficzny użytkownika przy pomocy opengla. Dziki temu wszystkie guziki mogą zagnieżdżone w oknie symulacji.
+\item{SDL} - biblioteka odpowiedzialna za stworzenie okna w środowisku graficzny, i stworzenie kontekstu opengla. Zajmuje sie ona tez obsługą zdarzeń związanych z oknem.
+\item{SDL\_image} - biblioteka wczytująca obrazy do bitmap. Wspiera duza ilosc formatow.
 \item{CUDA}
 \item{CUDPP}
-\end{itemize}
+\end{description}
 
 
