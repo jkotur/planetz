@@ -13,6 +13,11 @@ MemMgr::~MemMgr()
 {
 }
 
+void MemMgr::init()
+{
+	holder.init();
+}
+
 void MemMgr::load( const std::string& path )
 {
 	// hardcoded load

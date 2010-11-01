@@ -56,7 +56,7 @@ bool Application::init()
 	//
 	// init memory
 	//
-	memmgr.load( std::string() );
+	memmgr.init();
 
 	//
 	// init user interface
@@ -99,6 +99,7 @@ bool Application::init()
 	pl->on_save.connect( bind(&MEM::Saver::save,&saver,_1) );
 	pl->on_load.connect( bind(&MEM::Saver::load,&saver,_1) );
 	pl->on_load.connect( bind(&Application::pause_anim,this) );
+	pl->on_load.connect( bind(&MEM::MemMgr::load,&memmgr,_1) );
 	pl->on_planet_add.connect( bind(&Planetz::add,&planetz,_1) );
 	pl->on_planet_delete.connect( bind(&Planetz::erase,&planetz,_1) );
 	planetz.on_planet_select.connect( bind(&PlanetzLayout::add_selected_planet,pl,_1) );

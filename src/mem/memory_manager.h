@@ -14,6 +14,8 @@ namespace MEM {
 		MemMgr( );
 		virtual ~MemMgr();
 
+		void init();
+
 		GPU::GfxPlanetFactory* getGfxMem();
 		GPU::PhxPlanetFactory* getPhxMem();
 		

@@ -2,21 +2,25 @@
 
 using namespace GPU;
 
-PlanetHolder::PlanetHolder(unsigned num)
-	: model(num)
-	, pos(num)
-	, radius(num)
-	, count(0) // should be 1
-	, mass(num)
-	, velocity(num)
+PlanetHolder::PlanetHolder()
+	: model(0)
+	, pos(0)
+	, radius(0)
+	, count(0)
+	, mass(0)
+	, velocity(0)
 {
-	TODO("fix BufferGL so count can be of size 1");
-	//count.map( BUF_H )[0] = num;
-	//count.unmap();
 }
 
 PlanetHolder::~PlanetHolder()
 {
+}
+
+void PlanetHolder::init( unsigned num )
+{
+	count.resize(1);
+	count.map( BUF_H )[0] = num;
+	count.unmap();
 }
 
 void PlanetHolder::resize(const size_t num)
@@ -27,6 +31,6 @@ void PlanetHolder::resize(const size_t num)
 	radius.resize(num);
 	mass.resize(num);
 	velocity.resize(num);
-	//count.map( BUF_H )[0] = num;
-	//count.unmap();
+	count.map( BUF_H )[0] = num;
+	count.unmap();
 }

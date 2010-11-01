@@ -12,6 +12,8 @@
 
 #include "cuda/err.h"
 
+#include "debug/routines.h"
+
 namespace GPU
 {
 	typedef unsigned int uint;
@@ -141,7 +143,7 @@ namespace GPU
 	void BufferGl<T>::resize( const size_t num , const T*data )
 	{
 		// FIXME: assert if unmapped or unmap?
-		assert( state == BUF_GL );
+		ASSERT_MSG( state == BUF_GL , "Buffer not in gl mode\n" );
 
 		size_t new_size = num*sizeof(T);
 
@@ -168,14 +170,14 @@ namespace GPU
 	template<typename T>
 	GLuint BufferGl<T>::getId() const
 	{
-		assert( state == BUF_GL );
+		ASSERT( state == BUF_GL );
 		return glId;
 	}
 
 	template<typename T>
 	void BufferGl<T>::bind() const
 	{
-		assert( state == BUF_GL );
+		ASSERT( state == BUF_GL );
 		glBindBuffer( GL_ARRAY_BUFFER , glId );
 		// FIXME: another state?
 //                state = BUF_BIND;
@@ -190,7 +192,7 @@ namespace GPU
 	template<typename T>
 	T* BufferGl<T>::fucking_no_const_cast_workaround( enum BUFFER_STATE new_state ) const
 	{
-		assert( this->size > 0 );
+		ASSERT( this->size > 0 );
 
 		if( state == new_state ) return *pstate==BUF_CU?cuPtr:(state==BUF_H?hPtr:NULL);
 
@@ -210,7 +212,7 @@ namespace GPU
 			glBindBuffer( GL_ARRAY_BUFFER , 0 );
 			return hPtr;
 		}
-		assert(false); // should never reach this code
+		ASSERT(false); // should never reach this code
 		return NULL;
 	}
 
@@ -233,7 +235,7 @@ namespace GPU
 	template<typename T>
 	void BufferGl<T>::unmap() const
 	{
-		assert( this->size > 0 );
+		ASSERT( this->size > 0 );
 
 		
 		if( state == BUF_CU ) {
