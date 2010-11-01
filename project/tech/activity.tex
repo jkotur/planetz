@@ -19,7 +19,7 @@ Podstawowymi aktywnościami projektu są moduły wyświetlania planet, oraz obli
 	ta aktywność odpowiedzialna jest w ogólności za wyświetlanie symulacji na ekran. Głównym jej zadaniem jest wyświetlanie planet na ich pozycjach wraz z towarzyszącymi im efektami graficznymi. Pozycje planet do wyświetlenia pobiera z modułu fizycznego. Jeśli natomiast jest włączona aktywna pauza i nowe pozycje nie zostały wygenerowane, moduł korzysta ze starych pozycji. Po zakończonej jednej iteracji pętli, aplikacja odczekuje chwilę, żeby nie zajmować całego procesora, oraz żeby zapewnić takie samo działanie symulacji na słabszych komputerach (gdzie czekanie może zostać pominięte)
 \end{description}
 
-\begin{figure}[h]
+\begin{figure}[ht!]
 	\centering
 	\includegraphics[width=0.75\textwidth]{activity.pdf}
 	\caption{Diagram aktywności}
