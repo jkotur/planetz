@@ -2,14 +2,14 @@
 Wymagania sprzętowe dotyczą głownie możliwości graficznych komputera. Komputer musi obsługiwać CUDA 2.3 oraz OpenGL 3.2. W praktyce oznacza to potrzebe posiadania komputera z kartą graficzną firmy NVIDIA co najmniej  serii 8000 lub nowszą. Oczywiście potrzebne będą także peryferia take jak: monitor, klawiatura oraz myszka.
 
 \paragraph{Oprogramowanie}
-Do włączenia aplikacji konieczny będzie komputer z systemem operacyjnym Linux. Wymagane biblioteki: 
+Program będzie zależny od szeregu bibliotek, bez których stworzenie tego projektu było by bardzo trudne. Biblioteki zostały dobrane tak, żeby była możliwość skompilowania projektu na wiele różnych platform, jednak wspieraną platformą będzie system Linux. Poniżej wypisane są wymagane biblioteki, wraz z wersjami w kluczowych przypadkach.
 \begin{description}
-\item{OpenGL} - biblioteka graficzna odpowiedzialna za przekształcenia sceny 3D. W wersji 3.2 do standardu wprowadzone zostały shadery geometryczne, które będą niezbędne do szybkiego wyświetlania planet.
+\item{OpenGL>=3.2} - biblioteka graficzna odpowiedzialna za przekształcenia sceny 3D. W wersji 3.2 do standardu wprowadzone zostały shadery geometryczne, które będą niezbędne do szybkiego wyświetlania planet.
 \item{CEGUI} - biblioteka wyświetlająca interfejs graficzny użytkownika przy pomocy opengla. Dziki temu wszystkie guziki mogą zagnieżdżone w oknie symulacji.
 \item{SDL} - biblioteka odpowiedzialna za stworzenie okna w środowisku graficzny, i stworzenie kontekstu opengla. Zajmuje sie ona tez obsługą zdarzeń związanych z oknem.
-\item{SDL\_image} - biblioteka wczytująca obrazy do bitmap. Wspiera duza ilosc formatow.
-\item{CUDA}
-\item{CUDPP}
+\item{SDL\_image} - biblioteka wczytująca obrazy do bitmap. Wspiera dużą ilość formatów.
+\item{CUDA>=2.3} - technologia firmy NVIDIA pozwalająca na bardzo różnorodne obliczenia na kartach graficznych. Przy jej pomocy obliczane będą pozycje planet, chmury komet i wszystkie inne niegraficzne zjawiska w symulacji.
+\item{CUDPP} - biblioteka narzędziowa do technologii CUDA, zawierająca podstawowe algorytmy, zaimplementowane na karty graficzne.
 \end{description}
 
 
