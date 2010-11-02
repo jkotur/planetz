@@ -1,5 +1,5 @@
 \paragraph{Sprzęt}
-Wymagania sprzętowe dotyczą głownie możliwości graficznych komputera. Komputer musi obsługiwać CUDA 2.3 oraz OpenGL 3.2. W praktyce oznacza to potrzebe posiadania komputera z kartą graficzną firmy NVIDIA co najmniej  serii 8000 lub nowszą. Oczywiście potrzebne będą także peryferia take jak: monitor, klawiatura oraz myszka.
+Wymagania sprzętowe dotyczą głownie możliwości graficznych komputera. Komputer musi obsługiwać CUDA 2.3 oraz OpenGL 3.2. W praktyce oznacza to potrzebe posiadania komputera z kartą graficzną firmy NVIDIA co najmniej serii 8000 lub nowszą. Oczywiście potrzebne będą także peryferia take jak: monitor, klawiatura oraz myszka.
 
 \paragraph{Oprogramowanie}
 Program będzie zależny od szeregu bibliotek, bez których stworzenie tego projektu było by bardzo trudne. Biblioteki zostały dobrane tak, żeby była możliwość skompilowania projektu na wiele różnych platform, jednak wspieraną platformą będzie system Linux. Poniżej wypisane są wymagane biblioteki, wraz z wersjami w kluczowych przypadkach.
@@ -10,6 +10,8 @@ Program będzie zależny od szeregu bibliotek, bez których stworzenie tego proj
 \item{SDL\_image} - biblioteka wczytująca obrazy do bitmap. Wspiera dużą ilość formatów.
 \item{CUDA>=2.3} - technologia firmy NVIDIA pozwalająca na bardzo różnorodne obliczenia na kartach graficznych. Przy jej pomocy obliczane będą pozycje planet, chmury komet i wszystkie inne niegraficzne zjawiska w symulacji.
 \item{CUDPP} - biblioteka narzędziowa do technologii CUDA, zawierająca podstawowe algorytmy, zaimplementowane na karty graficzne.
+\item{sqlite3} - biblioteka, pozwalająca traktować pliki jako bazy danych SQL. W ten sposób można łatwo przechowywać struktury danych, bez konieczności implementacji skomplikowanego formatu plików. W takim pliku zapisywana będzie symulacja.
+\item{boost} - biblioteka zawierająca wiele wygodnych konstrukcji językowych dla c++. Wykorzystana jest między innymi do obsługi plików, wyrażeń regularnych oraz sygnałów.
 \end{description}
 
 

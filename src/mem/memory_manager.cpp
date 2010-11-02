@@ -35,7 +35,7 @@ void MemMgr::load( const std::string& path )
 
 	float  * rad = holder.radius.map( GPU::BUF_H );
 	for( int i=0 ; i<10 ; i++ )
-		rad[i] = 1.0f * i;
+		rad[i] = 1.0f;
 
 	holder.radius.unmap();
 }

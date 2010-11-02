@@ -1,0 +1,30 @@
+\paragraph{}
+
+Pliki, z których korzysta aplikacja, będą bazami danych sqlite. Dzięki temu będziemy mogli w łatwy sposób z nich korzystać.
+
+\paragraph{}
+
+W bazie opisującej symulację znajdzie się kilka tabel. Najważniejsza z nich to tabela "planets". Znajdą się w niej te same pola, co w odpowiadających im strukturach na GPU:
+\begin{itemize}
+\item{x/y/z-coord: Real - współrzędne planety}
+\item{radius: Real - jej promień}
+\item{mass: Real - masa}
+\item{x/y/z-velocity: Real - wektor prędkości chwilowej planety}
+\item{model\_id: int - identyfikator modelu}
+\end{itemize}
+
+\paragraph{}
+
+Kolejna tabela zawiera modele planet. Tabela modeli zawiera następujące pola:
+\begin{itemize}
+\item{id: int - identyfikator modelu, pozwala skojarzyć planetę z danym modelem}
+\item{texture: string - nazwa pliku z teksturą lub NULL dla modeli bez tekstury (np. gwiazdy). Nazwa pliku jest względna.}
+\item{type: int - rodzaj modelu. Różne liczby oznaczać będą różne obiekty graficzne: gwiazdę, planetę, kometę.}
+\end{itemize}
+
+\paragraph{}
+Dodatkowo, program korzystać będzie z baz "kształtów" (modeli w sensie graficznym). W takiej bazie znajdzie się jedna tabela zawierająca pola:
+\begin{itemize}
+\item{x/y/z-coord: Real - współrzędne punktu w przestrzeni, na siatce planety}
+\item{x/y-texcoord: Real - współrzędne tego punktu na teksturze}
+\end{itemize}

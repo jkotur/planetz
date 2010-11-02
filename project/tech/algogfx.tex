@@ -2,36 +2,36 @@
 
 \paragraph{}
 
-Oświetlenie dla sceny będzie liczone przy pomocy model Phonga. Polega to na policzeniu oświetlenia dla trzech różnych rodzai światła, oraz dodaniu ich, korzystając z prawa addytywności światła. Pierwszym z nich jest światło rozproszone, obecne na całej w takim samym natężeniu. Drugim światłem jest światło . Ten rodzaj światła uwzględnia położenie oświetlenia względem powierzchni. Pozwala to na uzyskanie realistycznych matowych powierzchni. Trzecim rodzajem jest światło odbite. Uwzględnia ono zarówno położenie wierzchołka względem światła, jak i pozycji obserwatora. Dzięki temu można uzyskać realistyczne efekty powierzchni gładkich i błyszczących.
+Oświetlenie dla sceny będzie liczone przy pomocy modelu Phonga. Polega to na obliczeniu oświetlenia dla trzech różnych rodzajów światła oraz dodaniu ich, korzystając z prawa addytywności światła. Pierwszym z nich jest światło otoczenia, obecne w całej przestrzeni w takim samym natężeniu. Drugim światłem jest światło rozproszone. Ten rodzaj światła uwzględnia położenie oświetlenia względem powierzchni. Pozwala to na uzyskanie realistycznych matowych powierzchni. Trzecim rodzajem jest światło odbite. Uwzględnia ono zarówno położenie wierzchołka względem światła, jak i pozycji obserwatora. Dzięki temu można uzyskać realistyczne efekty powierzchni gładkich i błyszczących.
 
 \paragraph{}
 
-W zależności od możliwości obliczeniowych, model oświetlenia może mieć kilka ograniczeń. Oświetlenie można obliczać dla każdego wierzchołka, natomiast kolor ściany interpolować liniowo pomiędzy kolorami wierzchołków na który składa się dana ściana. Można też obliczać natężenie światła dla każdego piksela z którego składa się ściana. Oczywistym jest że w drugim przypadku obliczenia są znacząco większe niż w przypadku pierwszym. Ograniczeniom podlega również ilość świateł obecnych na scenie. Dla każdego światła trzeba powtórzyć obliczenia dla wszystkich wierzchołków na scenie. Aby zachować płynność symulacji, ilość świateł, a zatem gwiazd, będzie ograniczona przez pewną stałą liczbę ustaloną na podstawie testów w fazie implementacji.
+W zależności od możliwości obliczeniowych, model oświetlenia może mieć kilka ograniczeń. Oświetlenie można obliczać dla każdego wierzchołka, natomiast kolor ściany interpolować liniowo pomiędzy kolorami wierzchołków, na który składa się dana ściana. Można też obliczać natężenie światła dla każdego piksela, z którego składa się ściana. Oczywiście, drugi przypadek wymaga większej ilości obliczeń. Ograniczeniom podlega również ilość świateł obecnych na scenie. Dla każdego światła trzeba powtórzyć obliczenia dla wszystkich widocznych wierzchołków. Aby zachować płynność symulacji, ilość świateł (czyli gwiazd) będzie ograniczona przez pewną stałą liczbę ustaloną na podstawie testów w fazie implementacji.
 
 \subsubsection{Efekt atmosfery}\label{subsub:efekt atmosfery}
 
 \paragraph{}
 
-Aby uzyskać efekt atmosfery otaczającej planety, można zastosować dwa odmienne podejścia. Decyzja które z nich zostanie wybrane, pozostawiona została do fazy implementacji, ponieważ zależy to mocno od wydajności całego silnika graficznego.
+Aby uzyskać efekt atmosfery otaczającej planety można zastosować dwa odmienne podejścia. Decyzja, które z nich zostanie wybrane, została pozostawiona do fazy implementacji, ponieważ jest to silnie uzależnione od wydajności całego silnika graficznego.
 
 \paragraph{}
 
-Efekty atmosferyczne mogą być generowane przy pomocy techniki post-processingu. Polega to na nakładaniu obrazu, na już uzyskany obraz w trakcie normalnego renderowania sceny 3D. W przypadku atmosfer, należy wygenerować lekko rozmyte okręgi w miejscach gdzie wyrenderowane zostały planety z odpowiednim promieniem.
+Efekty atmosferyczne mogą być generowane przy pomocy techniki post-processingu. Polega ona na nakładaniu obrazu na już uzyskany obraz w trakcie normalnego renderowania sceny 3D. W przypadku atmosfer należy wygenerować lekko rozmyte okręgi w miejscach, gdzie wyrenderowane zostały planety z odpowiednim promieniem.
 
 \paragraph{}
 
-Drugim rozwiązaniem jest otoczenie planet półprzezroczystymi sferami, o promieniu trochę większym niż promień planet. Rozwiązanie ma tą zaletę, że całym procesem wyświetlania zajmuje się biblioteka graficzna. Minusem może być wydajność, choć nie jest to konieczne.
+Drugim rozwiązaniem jest otoczenie planet półprzezroczystymi sferami o promieniu trochę większym niż promień planet. Rozwiązanie ma tą zaletę, że całym procesem wyświetlania zajmuje się biblioteka graficzna. Minusem może być ewentualna utrata wydajności.
 
 
 \subsubsection{Dynamiczna szczegółowość planet}\label{subsub:dynamiczna szczegolowosc planet}
 
 \paragraph{}
 
-W zależności od odległości od obserwatora, planety powinny być wyświetlane z różnym poziomem szczegółowości. Rozwiązaniem będzie wyświetlanie modelu kuli, o mniejszej ilości wierzchołków. Wszystkie modele ładowane będą na początku z pliku, do pamięci ram karty graficznej, skąd będą później wyświetlane, w zależności od tego który model będzie aktualnie potrzebny.
+W zależności od odległości od obserwatora, planety powinny być wyświetlane z różnym poziomem szczegółowości. Rozwiązaniem będzie wyświetlanie modelu kuli o mniejszej ilości wierzchołków. Wszystkie modele ładowane będą na początku z pliku do pamięci RAM karty graficznej, skąd będą później wyświetlane w zależności od tego, który model będzie aktualnie potrzebny.
 
 \subsubsection{Komety}\label{subsub:komety}
 
 \paragraph{}
 
-Warkocz komety jest typowym przykładem efektu cząsteczkowego. Dla chmury wygenerowanych cząsteczek, wyświetlana jest niewielka tekstura z kamieniem, bądź ogniem. Dzięki dużej ilości takich tekstur, powstanie realistyczny obraz płomienia ciągnącego się za kometą.
+Warkocz komety jest typowym przykładem efektu cząsteczkowego. Dla chmury wygenerowanych cząsteczek wyświetlana jest niewielka tekstura z kamieniem, bądź ogniem. Dzięki dużej ilości takich tekstur, powstanie realistyczny obraz płomienia ciągnącego się za kometą.
 

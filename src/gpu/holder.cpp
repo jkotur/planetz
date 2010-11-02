@@ -14,6 +14,7 @@ PlanetHolder::PlanetHolder()
 
 PlanetHolder::~PlanetHolder()
 {
+	log_printf(INFO, "deleted planetholder\n");
 }
 
 void PlanetHolder::init( unsigned num )

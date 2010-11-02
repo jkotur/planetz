@@ -29,6 +29,10 @@ namespace GPU
 	protected:
 		T* d_cuPtr;
 		T* h_cuPtr;
+
+		void device_ptr_free();
+		void device_ptr_alloc(unsigned n);
+		void device_ptr_assign(const T* data);
 	};
 
 	//
@@ -52,8 +56,12 @@ namespace GPU
 	template<typename T>
 	BufferCu<T>::~BufferCu()
 	{
-		TODO("freeing mem");
+		log_printf(INFO, ">>> ~BufferCu\n");
+		fflush(stdout);
+		device_ptr_free();
 		ASSERT_MSG(!h_cuPtr, "BufferCu bound on destruction!");
+		log_printf(INFO, "<<< ~BufferCu\n");
+		fflush(stdout);
 	}
 	
 	template<typename T>
@@ -61,22 +69,9 @@ namespace GPU
 	{
 		ASSERT( !h_cuPtr );
 
-		if( d_cuPtr )
-		{
-			
-			cudaFree( d_cuPtr );
-			DBGPUT( CUT_CHECK_ERROR( "free" ) );
-		}
-
-		this->length = num;
-		this->size = this->realsize = num * sizeof(T);
-		cudaMalloc((void**)&d_cuPtr, this->size );
-		DBGPUT( CUT_CHECK_ERROR( "malloc" ) );
-		if( data )
-		{
-			cudaMemcpy(&d_cuPtr, data, this->size, cudaMemcpyHostToDevice );
-			DBGPUT( CUT_CHECK_ERROR( "memcpy" ) );
-		}
+		device_ptr_free();
+		device_ptr_alloc(num);
+		device_ptr_assign(data);
 	}
 
 	template<typename T>
@@ -113,6 +108,7 @@ namespace GPU
 	template<typename T>
 	void BufferCu<T>::bind()
 	{
+		return;
 		ASSERT( !h_cuPtr );
 		h_cuPtr = new T[this->length];
 		cudaMemcpy(&h_cuPtr, d_cuPtr, this->length * sizeof(T), cudaMemcpyDeviceToHost );
@@ -122,12 +118,47 @@ namespace GPU
 	template<typename T>
 	void BufferCu<T>::unbind()
 	{
+		return;
 		ASSERT( h_cuPtr );
 		cudaMemcpy(&d_cuPtr, h_cuPtr, this->length * sizeof(T), cudaMemcpyHostToDevice );
 		DBGPUT( CUT_CHECK_ERROR( "memcpy" ) );
 		delete [] h_cuPtr;
 		h_cuPtr = NULL;
-		TODO("implement me");
+	}
+
+	template<typename T>
+	void BufferCu<T>::device_ptr_free()
+	{
+		if( d_cuPtr )
+		{
+			ASSERT_MSG(false, "  unreachable code reached");
+			cudaFree( d_cuPtr );
+			DBGPUT( CUT_CHECK_ERROR( "free" ) );
+			d_cuPtr = NULL;
+		}
+	}
+
+	template<typename T>
+	void BufferCu<T>::device_ptr_alloc(unsigned num)
+	{
+		ASSERT( !d_cuPtr );
+		return;
+		this->length = num;
+		this->size = this->realsize = num * sizeof(T);
+		cudaMalloc((void**)&d_cuPtr, this->size );
+		DBGPUT( CUT_CHECK_ERROR( "malloc" ) );
+	}
+
+	template<typename T>
+	void BufferCu<T>::device_ptr_assign(const T* data)
+	{
+		return;
+		ASSERT( d_cuPtr );
+		if( data )
+		{
+			cudaMemcpy(&d_cuPtr, data, this->size, cudaMemcpyHostToDevice );
+			DBGPUT( CUT_CHECK_ERROR( "memcpy" ) );
+		}
 	}
 }
 #endif
