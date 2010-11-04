@@ -15,10 +15,10 @@ namespace GFX
 		
 		virtual void draw() const =0;
 
-		void setGfx( const Gfx* _g )
+		void setGfx( Gfx* _g )
 		{	gfx = _g; }
 	protected:
-		const Gfx* gfx;
+		Gfx* gfx;
 	};
 }
 

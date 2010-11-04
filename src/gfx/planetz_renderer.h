@@ -8,15 +8,15 @@
 
 namespace GFX {
 
-	class PlanetzRenderer : public Drawable {
-	public:
-		PlanetzRenderer( const GPU::GfxPlanetFactory * factory );
-		virtual ~PlanetzRenderer();
-		
-		virtual void draw() const;
-	private:
-		const GPU::GfxPlanetFactory * const factory;
-	};
+class PlanetzRenderer : public Drawable {
+public:
+	PlanetzRenderer( const GPU::GfxPlanetFactory * factory );
+	virtual ~PlanetzRenderer();
+	
+	virtual void draw() const;
+private:
+	const GPU::GfxPlanetFactory * const factory;
+};
 
 }
 

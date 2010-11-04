@@ -6,14 +6,32 @@
 
 using namespace GFX;
 
-std::map<string,Texture*> Texture::loaded_textures;
-
-Texture* Texture::LoadTexture( const string& file )
+Texture::~Texture()
 {
-	return LoadTexture(file.c_str());
+	glDeleteTextures(1,&tex);
 }
 
-Texture* Texture::LoadTexture( const char* file )
+void Texture::bind() const
+{
+	glBindTexture(GL_TEXTURE_2D,tex);
+}
+
+TextureManager::TextureManager()
+{
+}
+
+TextureManager::~TextureManager()
+{
+	for( std::map<string,Texture*>::iterator i=loaded_textures.begin() ; i!=loaded_textures.end() ; ++i ) 
+		delete i->second;
+}
+
+Texture* TextureManager::loadTexture( const string& file )
+{
+	return loadTexture(file.c_str());
+}
+
+Texture* TextureManager::loadTexture( const char* file )
 {
 	std::map<std::string,Texture*>::iterator i;
 	if( (i=loaded_textures.find(file)) != loaded_textures.end() ) {
@@ -48,16 +66,5 @@ Texture* Texture::LoadTexture( const char* file )
 	SDL_FreeSurface(surface);
 
 	return t;
-}
-
-Texture::~Texture()
-{
-	loaded_textures.erase(loaded_textures.find(path));
-	glDeleteTextures(1,&tex);
-}
-
-void Texture::bind()
-{
-	glBindTexture(GL_TEXTURE_2D,tex);
 }
 

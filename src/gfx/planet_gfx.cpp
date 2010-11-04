@@ -40,6 +40,7 @@ void draw_sphere( SphereModel*sm )
 Planet::Planet( int _d )
 	: selected_b(false) , a_x(0.0) , details(3) 
 	, rot_x( a_x , 90 , 3.0 , boost::bind(&Planet::set_ax,this,_1) , true )
+	, tex(NULL)
 {
 	id = ++count;
 
@@ -56,19 +57,19 @@ Planet::Planet( int _d )
 	switch( rand()%4 )
 	{
 	case 0:
-		tex = Texture::LoadTexture( DATA("textures/planet1.png") );
+//                tex = Texture::LoadTexture( DATA("textures/planet1.png") );
 		col[0]=0.7; col[1]=0.7; col[2]=0.7;
 		break;
 	case 1:
-		tex = Texture::LoadTexture( DATA("textures/planet2.png") );
+//                tex = Texture::LoadTexture( DATA("textures/planet2.png") );
 		col[0]=0.9; col[1]=0.6; col[2]=0.3;
 		break;
 	case 2:
-		tex = Texture::LoadTexture( DATA("textures/planet3.png") );
+//                tex = Texture::LoadTexture( DATA("textures/planet3.png") );
 		col[0]=0.9; col[1]=0.8; col[2]=0.7;
 		break;
 	case 3:
-		tex = Texture::LoadTexture( DATA("textures/planet2.png") );
+//                tex = Texture::LoadTexture( DATA("textures/planet2.png") );
 		col[0]=0.4; col[1]=0.6; col[2]=0.8;
 		break;
 	}

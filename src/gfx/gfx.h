@@ -14,6 +14,7 @@
 #include <boost/bind.hpp>
 
 #include "drawable.h"
+#include "texture.h"
 
 /**
  * Przestrzeń nazw dla obiektów odpowiedzialnych za grafikę
@@ -46,6 +47,8 @@ public:
 
 	int width() { return mwidth; }
 	int height(){ return mheight;}
+
+	TextureManager texMgr;
 private:
 	int mwidth , mheight;
 	SDL_Surface* drawContext;

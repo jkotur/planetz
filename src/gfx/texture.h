@@ -42,20 +42,29 @@ namespace GFX {
  * tekstur, i zwracaniu ich gdy były już ładowane.
  */
 class Texture {
+	friend class TextureManager;
+
 	Texture( string _path , GLuint _tex ) : path(_path) , tex(_tex) {}
 	virtual ~Texture();
 public:
-	void bind();
-
-	static Texture* LoadTexture( const string& str );
-	static Texture* LoadTexture( const char* str );
-	// TODO: unloading texutres
+	void bind() const;
 private:
 	string path;
 	GLuint tex;
-
-	static std::map<string,Texture*> loaded_textures;
 };
+
+class TextureManager {
+public:
+	TextureManager();
+	virtual ~TextureManager();
+
+	Texture* loadTexture( const string& str );
+	Texture* loadTexture( const char* str );
+	// TODO: unloading texutres
+private:
+	std::map<string,Texture*> loaded_textures;
+};
+
 
 }
 

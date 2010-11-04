@@ -51,8 +51,6 @@ bool Application::init()
 	if( !gfx.SDL_init(BASE_W,BASE_H) ) return false;
 	if( !gfx.GL_init()               ) return false;
 
-	bkg.set_img(DATA("text.tga"));
-
 	//
 	// init memory
 	//
@@ -112,6 +110,8 @@ bool Application::init()
 #ifndef _NOGUI
 	gfx.add( &ui      );
 #endif
+
+	bkg.set_img(DATA("text.tga"));
 
 	return true;
 }

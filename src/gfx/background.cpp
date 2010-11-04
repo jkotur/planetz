@@ -1,5 +1,7 @@
 #include "background.h"
 
+#include "debug/routines.h"
+
 #include "../constants.h"
 
 #include "gfx.h"
@@ -18,7 +20,8 @@ Background::~Background()
 
 void Background::set_img( const std::string&img )
 {
-	tex = Texture::LoadTexture(img);
+	ASSERT_MSG( gfx , "this function must be call after set_gfx\n" )
+	tex = gfx->texMgr.loadTexture(img);
 }
 
 void Background::on_reshape_window( int w , int h )
