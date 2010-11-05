@@ -57,11 +57,9 @@ namespace GPU
 	BufferCu<T>::~BufferCu()
 	{
 		log_printf(INFO, ">>> ~BufferCu\n");
-		fflush(stdout);
 		device_ptr_free();
 		ASSERT_MSG(!h_cuPtr, "BufferCu bound on destruction!");
 		log_printf(INFO, "<<< ~BufferCu\n");
-		fflush(stdout);
 	}
 	
 	template<typename T>

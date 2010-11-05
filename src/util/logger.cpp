@@ -38,6 +38,21 @@ void log_fadd( log_t*log , void*stream , printer_f func )
 	log->printer[log->n-1]= func;
 }
 
+void log_del( void*stream )
+{
+	log_fdel(LOGGER,stream);
+}
+
+void log_fdel( log_t*log , void*stream )
+{
+	int i;
+	for( i=0 ; i<log->n ; i++ )
+		if( log->stream[i] == stream ) {
+			log->stream [i] = NULL;
+			log->printer[i] = NULL;
+		}
+}
+
 int log_printf( enum LOG_LEV lev , const char*format , ... )
 {
 	if( !LOGGER ) return -1;
@@ -66,6 +81,8 @@ int log_vfprintf( log_t*log , enum LOG_LEV lev , const char*format , va_list arg
 	int i;
 	for( i=0 ; i<log->n ; i++ )
 	{
+		if( !log->stream[i] || !log->printer[i] ) continue;
+
 		va_list args_copy;
 #ifndef _WIN32
 		va_copy(args_copy,args);

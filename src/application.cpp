@@ -146,8 +146,8 @@ void Application::main_loop()
 Application::~Application()
 {
 	log_printf(INFO,"Program is shutting down. It was running %lf seconds\n",timer.get());
-
 	log_printf(DBG,"kthxbye\n");
+	log_del(f_log);
 	fclose(f_log);
 }
 

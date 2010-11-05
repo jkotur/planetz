@@ -59,6 +59,8 @@ int log_fprintf( log_t* , enum LOG_LEV , const char* , ... );
 int log_vfprintf( log_t* , enum LOG_LEV , const char* , va_list args );
 void log_add( void*stream , printer_f func );
 void log_fadd( log_t*log , void*stream , printer_f func );
+void log_del( void*stream );
+void log_fdel( log_t*log , void*stream );
 
 #endif /* __LOGGER_H__ */
 
