@@ -61,7 +61,7 @@ bool ShaderManager::checkShaderLog( GLuint id , const std::string& path )
         if( logLength > 1 ) {
                 log = (char *)malloc(logLength);
                 glGetShaderInfoLog(id, logLength, &charsWritten,log);
-		log_printf(_ERROR,"Shader %s compile error: %s\n",path.c_str(),log);
+		log_printf(_ERROR,"Shader %s compile error:\n%s\n",path.c_str(),log);
                 free(log);
 		return false;
         } else	log_printf(INFO,"Shader %s loaded succesfully\n",path.c_str());
@@ -90,6 +90,10 @@ Program::~Program()
 
 void Program::attach( const Shader* const sh )
 {
+	if(!_id ) _id = glCreateProgram();
+
+	glAttachShader(_id,sh->id());
+
 	linked = false;
 	     if( sh->type() == GL_VERTEX_SHADER   )
 		vs = sh;
@@ -102,9 +106,7 @@ void Program::attach( const Shader* const sh )
 void Program::link()
 {
 	if(!_id ) _id = glCreateProgram();
-	if( vs ) glAttachShader(_id,vs->id());
-	if( fs ) glAttachShader(_id,fs->id());
-	if( gs ) glAttachShader(_id,gs->id());
+
 	glLinkProgram( _id );
 	checkProgramLog( _id );
 	linked = true;
@@ -127,8 +129,7 @@ bool Program::checkProgramLog( GLuint obj ) const
         if( infologLength > 1 ) {
                 log = (char *)malloc(infologLength);
                 glGetProgramInfoLog(obj, infologLength, &charsWritten, log);
-		log_printf(_ERROR,"Program %d compiled with errors: %s\n",obj,log);
-		log_printf(DBG,"[%d]\n",infologLength);
+		log_printf(_ERROR,"Program %d compiled with errors:\n%s\n",obj,log);
                 free(log);          
 		return false;
         } else	log_printf(INFO,"Program %d compiled succesfully\n");

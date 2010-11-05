@@ -1,4 +1,4 @@
-#version 120 
+#version 150 
 #extension GL_EXT_geometry_shader4 : enable
 
 //CIRL GPU Geometry Program: Derek Anderson and Robert Luke
@@ -66,13 +66,15 @@ void main(void)
 	for(i=0; i< gl_VerticesIn; i++){
 		gl_Position = gl_PositionIn[i];
 		EmitVertex();
+		gl_Position.xyz += vec3(0,5,0);
+		EmitVertex();
 	}
 	EndPrimitive();
 	
 	//New piece of geometry!  We just swizzle the x and y terms
 	for(i=0; i< gl_VerticesIn; i++){
 		gl_Position = gl_PositionIn[i];
-		gl_Position.xyz += vec3(0,5,0);
+		gl_Position.y = i;
 		EmitVertex();
 	}
 	EndPrimitive();	
