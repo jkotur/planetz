@@ -16,6 +16,11 @@ void Texture::bind() const
 	glBindTexture(GL_TEXTURE_2D,tex);
 }
 
+void Texture::unbind()
+{
+	glBindTexture(GL_TEXTURE_2D,0);
+}
+
 TextureManager::TextureManager()
 {
 }
@@ -34,9 +39,8 @@ Texture* TextureManager::loadTexture( const string& file )
 Texture* TextureManager::loadTexture( const char* file )
 {
 	std::map<std::string,Texture*>::iterator i;
-	if( (i=loaded_textures.find(file)) != loaded_textures.end() ) {
+	if( (i=loaded_textures.find(file)) != loaded_textures.end() )
 		return i->second;
-	}
 
 	SDL_Surface* surface = IMG_Load(file);
 

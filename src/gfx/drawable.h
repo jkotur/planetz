@@ -14,9 +14,10 @@ namespace GFX
 		virtual ~Drawable() {}
 		
 		virtual void draw() const =0;
+		virtual void prepare() {}
 
 		void setGfx( Gfx* _g )
-		{	gfx = _g; }
+		{	gfx = _g; prepare(); }
 	protected:
 		Gfx* gfx;
 	};

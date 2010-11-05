@@ -48,6 +48,7 @@ class Texture {
 	virtual ~Texture();
 public:
 	void bind() const;
+	static void unbind();
 private:
 	string path;
 	GLuint tex;

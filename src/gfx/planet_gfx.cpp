@@ -100,6 +100,7 @@ void Planet::render( const Vector3& pos , double radius)
 	if( l ) glCallList(l);
 	else	draw_sphere(Sphere::get_obj(details));
 	glDisable(GL_COLOR_MATERIAL);
+	Texture::unbind();
 	glPopMatrix();
 	glPopName();
 }

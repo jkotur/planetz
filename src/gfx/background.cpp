@@ -20,7 +20,7 @@ Background::~Background()
 
 void Background::set_img( const std::string&img )
 {
-	ASSERT_MSG( gfx , "this function must be call after set_gfx\n" )
+	ASSERT_MSG( gfx , "this function must be call after set_gfx" )
 	tex = gfx->texMgr.loadTexture(img);
 }
 
