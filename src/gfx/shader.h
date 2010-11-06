@@ -52,6 +52,8 @@ public:
 	void link();
 	void use() const;
 
+	void geomParams( GLenum in , GLenum out );
+
 	static void none();
 private:
 	bool checkProgramLog( GLuint obj ) const;

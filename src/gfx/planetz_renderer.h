@@ -20,6 +20,9 @@ public:
 private:
 	Program pr;
 
+	GLuint tex;
+	GLint modTexId;
+
 	const GPU::GfxPlanetFactory * const factory;
 };
 

@@ -4,5 +4,6 @@
 void main()
 {	
 	//Transform the vertex (ModelViewProj matrix)
-	gl_Position = ftransform();
+//        gl_Position = ftransform();
+	gl_Position = gl_Vertex;
 }

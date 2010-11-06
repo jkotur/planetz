@@ -1,5 +1,6 @@
-#version 150 
+#version 120 
 #extension GL_EXT_geometry_shader4 : enable
+#define GL_RGB32F_ARB 0x8815
 
 //CIRL GPU Geometry Program: Derek Anderson and Robert Luke
 // very simple geometry shader
@@ -43,44 +44,37 @@ Geometry Shader Function
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+uniform sampler1D models;
+
 void main(void)
 {
 	
+	vec4 pos = texture1D(models,1.0);
+	pos.w = 0.0;
+
 	//increment variable
 	int i;
 
-	/////////////////////////////////////////////////////////////
-
-	//METHOD 1:
-	// this example has two parts
-	//	step a) draw the primitive pushed down the pipeline
-	//		 there are gl_Vertices # of vertices
-	//		 put the vertex value into gl_Position
-	//		 use EmitVertex => 'create' a new vertex
-	// 		use EndPrimitive to signal that you are done creating a primitive!
-	//	step b) create a new piece of geometry (I.E. WHY WE ARE USING A GEOMETRY SHADER!)
-	//		I just do the same loop, but swizzle the x and y values
-	//	result => the line we want to draw, and the same line, but along the other axis
-
-	//Pass-thru!
 	for(i=0; i< gl_VerticesIn; i++){
 		gl_Position = gl_PositionIn[i];
+		gl_Position = gl_ModelViewProjectionMatrix * gl_Position;
+		gl_FrontColor = vec4(0,0,1,1);
 		EmitVertex();
-		gl_Position.xyz += vec3(0,5,0);
+		gl_Position = gl_PositionIn[i] + vec4(1,1,1,0);
+		gl_Position = gl_ModelViewProjectionMatrix * gl_Position;
+		gl_FrontColor = vec4(0,1,0,1);
+		EmitVertex();
+		gl_Position = gl_PositionIn[i] + vec4(0,0,2,0);
+		gl_Position = gl_ModelViewProjectionMatrix * gl_Position;
+		gl_FrontColor = vec4(1,0,0,1);
+		EmitVertex();
+		gl_Position = gl_PositionIn[i] + pos;
+		gl_Position = gl_ModelViewProjectionMatrix * gl_Position;
+		gl_FrontColor = pos;
 		EmitVertex();
 	}
 	EndPrimitive();
 	
-	//New piece of geometry!  We just swizzle the x and y terms
-	for(i=0; i< gl_VerticesIn; i++){
-		gl_Position = gl_PositionIn[i];
-		gl_Position.y = i;
-		EmitVertex();
-	}
-	EndPrimitive();	
-	
-	/////////////////////////////////////////////////////////////
-	
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////
+

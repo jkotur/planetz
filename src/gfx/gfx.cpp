@@ -50,13 +50,26 @@ bool Gfx::GL_init()
 	}
 
 	if( glewIsSupported("GL_VERSION_3_2") )
-		log_printf(INFO,"Hurray! OpenGL 3.2 is supported.\n");
+		log_printf(INFO,"[GL] Hurray! OpenGL 3.2 is supported.\n");
 	else {
-		log_printf(CRITICAL,"OpenGL 3.2 is not supported. Program cannot run corectly");
+		log_printf(CRITICAL,"[GL] OpenGL 3.2 is not supported. Program cannot run corectly");
 		return false;
 	}
 
+	GL_query();
+
 	return GL_view_init();
+}
+
+void Gfx::GL_query()
+{
+	int ires;
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE,&ires);
+	log_printf(INFO,"[GL] max texture size:             %d\n",ires);
+	glGetIntegerv(GL_MAX_ARRAY_TEXTURE_LAYERS,&ires);
+	log_printf(INFO,"[GL] max array texture layers:     %d\n",ires);
+	glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES,&ires);
+	log_printf(INFO,"[GL] max geometry output vertices: %d\n",ires);
 }
 
 bool Gfx::GL_view_init()

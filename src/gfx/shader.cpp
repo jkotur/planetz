@@ -99,8 +99,19 @@ void Program::attach( const Shader* const sh )
 		vs = sh;
 	else if( sh->type() == GL_FRAGMENT_SHADER )
 		fs = sh;
-	else if( sh->type() == GL_GEOMETRY_SHADER )
+	else if( sh->type() == GL_GEOMETRY_SHADER ) {
 		gs = sh;
+		int temp;
+		glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT,&temp);
+		glProgramParameteriEXT(_id,GL_GEOMETRY_VERTICES_OUT_EXT,temp);
+	}
+
+}
+
+void Program::geomParams( GLenum in , GLenum out )
+{
+	glProgramParameteriEXT(_id,GL_GEOMETRY_INPUT_TYPE_EXT ,in );
+	glProgramParameteriEXT(_id,GL_GEOMETRY_OUTPUT_TYPE_EXT,out);
 }
 
 void Program::link()

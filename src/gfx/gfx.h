@@ -34,6 +34,8 @@ public:
 
 	bool GL_view_init();
 
+	void GL_query();
+
 	void GL_viewport( int  w , int h);
 
 	void reshape_window(int w, int h);
