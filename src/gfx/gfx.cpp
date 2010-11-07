@@ -70,6 +70,8 @@ void Gfx::GL_query()
 	log_printf(INFO,"[GL] max array texture layers:     %d\n",ires);
 	glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES,&ires);
 	log_printf(INFO,"[GL] max geometry output vertices: %d\n",ires);
+	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS,&ires);
+	log_printf(INFO,"[GL] texture units:                %d\n",ires);
 }
 
 bool Gfx::GL_view_init()

@@ -21,20 +21,20 @@ void MemMgr::init()
 void MemMgr::load( const std::string& path )
 {
 	// hardcoded load
-	holder.resize( 10 );
+	holder.resize( 1024 );
 
 	float3 * pos = holder.pos.map( GPU::BUF_H );
-	for( int i=0 ; i<10 ; i++ )
+	for( int i=0 ; i<1024 ; i++ )
 	{
-		pos[i].x = i-5;
-		pos[i].y = i-5;
-		pos[i].z = i-5;
+		pos[i].x = (i-512)*2.5;
+		pos[i].y = (i-512)*2.5;
+		pos[i].z = (i-512)*2.5;
 	}
 
 	holder.pos.unmap();
 
 	float  * rad = holder.radius.map( GPU::BUF_H );
-	for( int i=0 ; i<10 ; i++ )
+	for( int i=0 ; i<1024 ; i++ )
 		rad[i] = 1.0f;
 
 	holder.radius.unmap();

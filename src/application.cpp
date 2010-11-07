@@ -6,6 +6,10 @@
 
 #include <boost/bind.hpp>
 
+#ifndef _RELEASE
+#include "gfx/arrow.h"
+#endif
+
 #include "util/vector.h"
 #include "util/timer/timer.h"
 #include "util/logger.h"
@@ -109,6 +113,15 @@ bool Application::init()
 	gfx.add( &plz     );
 #ifndef _NOGUI
 	gfx.add( &ui      );
+#endif
+#ifndef _RELEASE
+	// FIXME: memory leakage
+	GFX::Arrow * ox = new GFX::Arrow(Vector3(1,0,0));
+	GFX::Arrow * oy = new GFX::Arrow(Vector3(0,1,0));
+	GFX::Arrow * oz = new GFX::Arrow(Vector3(0,0,1));
+	gfx.add(  ox      );
+	gfx.add(  oy      );
+	gfx.add(  oz      );
 #endif
 
 	bkg.set_img(DATA("text.tga"));

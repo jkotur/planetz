@@ -9,6 +9,7 @@ using std::sin;
 using std::cos;
 
 Arrow::Arrow()
+	: color( 0.7 , 0.5 , 0.2 )
 {
 }
 
@@ -62,16 +63,17 @@ void Arrow::draw_tube( const Vector3& v )
 }
 
 
-void Arrow::render( const Vector3& pos , const Vector3& v )
+void Arrow::render( const Vector3& pos , const Vector3& v ) const
 {
 	glPushMatrix();
 
 	glDisable(GL_LIGHTING);
 	glDisable(GL_TEXTURE_2D);
 
-	glColor3f( 0.7 , 0.5 , 0.2 );
+	glColor3f( color.x , color.y , color.z );
 
-	Vector3 vs = v + Vector3(0,0,1);
+	// FIXME: this is buggy couse arrowhead may be missing
+	Vector3 vs = v + Vector3(0.666,0.1337,0);
 
 	vs.cross( v );
 	vs.normalize();

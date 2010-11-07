@@ -1,7 +1,7 @@
 #ifndef _DEBUG_ROUTINES_H_
 #define _DEBUG_ROUTINES_H_
 
-#define WHERESTR  "[file %s, line %d]: "
+#define WHERESTR  "[file %s, line %d] "
 #define WHEREARG  __FILE__, __LINE__
 
 #ifndef _RELEASE

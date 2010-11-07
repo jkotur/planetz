@@ -26,30 +26,31 @@ void PlanetzRenderer::prepare()
 	pr.attach( vs );
 	pr.attach( fs );
 	pr.attach( gs );
-	pr.geomParams( GL_POINTS , GL_LINE_STRIP );
+	pr.geomParams( GL_POINTS , GL_TRIANGLE_STRIP );
 
 	pr.link();
 
-#define size  1024
+#define size 8
 
-	float model[size*3];
+	float model[size*3] = { 
+		 1 , 1 , 1 ,
+		 1 ,-1 , 1 ,
+		 1 ,-1 ,-1 ,
+		 1 , 1 ,-1 ,
+		-1 , 1 ,-1 ,
+		-1 , 1 , 1 ,
+		-1 ,-1 , 1 ,
+		-1 ,-1 ,-1 };
 
-	for( int i=0 ; i<size*3 ; i+=3 )
-	{
-		model[i  ] = (float)i/(float)(size*1.5);
-		model[i+1] = (float)i/(float)(size*1.5);
-		model[i+2] = (float)i/(float)(size*1.5);
-	}
-
-	//        glActiveTexture(GL_TEXTURE0);
-	glGenTextures(1,&tex);
-	glBindTexture(GL_TEXTURE_1D, tex);
+	glGenTextures(3,tex);
+	glBindTexture(GL_TEXTURE_1D, tex[0]);
 	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP );
 	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage1D(GL_TEXTURE_1D,0,GL_RGB16F,size,0,GL_BGR, GL_FLOAT , model );
+	glTexImage1D(GL_TEXTURE_1D,0,GL_RGB16F,size,0,GL_RGB, GL_FLOAT , model );
 
 	modTexId = glGetUniformLocation( pr.id() , "models" );
+	numId    = glGetUniformLocation( pr.id() , "num");
 }
 
 void PlanetzRenderer::draw() const
@@ -57,11 +58,14 @@ void PlanetzRenderer::draw() const
 	glPointSize( 3 );
 	glEnableClientState( GL_VERTEX_ARRAY );
 
-	//        glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_1D,tex);
+	pr.use();
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_1D,tex[0]);
 	glUniform1i(modTexId,0);
 
-	pr.use();
+	glUniform1i(numId,size);
+
 	factory->getPositions().bind();
 	glVertexPointer( 3 , GL_FLOAT , 0 , NULL );
 	glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );

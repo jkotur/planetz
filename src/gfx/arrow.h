@@ -4,18 +4,28 @@
 
 #include <GL/glew.h>
 
+#include "drawable.h"
 #include "../util/vector.h"
 
 namespace GFX {
 
-class Arrow {
+class Arrow : public Drawable {
 public:
-	Arrow ();
+	Arrow( );
+	Arrow( const Vector3& v ) : v(v) , color(v) {}
 	virtual ~Arrow();
 
-	void render( const Vector3& pos , const Vector3& v );
+	void draw() const
+	{
+		render( Vector3() , v );
+	}
+
+	void render( const Vector3& pos , const Vector3& v ) const;
 private:
 	void draw_tube( const Vector3& v);
+
+	const Vector3 v;
+	const Vector3 color;
 
 	GLint list;
 };

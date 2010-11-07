@@ -24,6 +24,7 @@ ShaderManager::ShaderManager()
 
 ShaderManager::~ShaderManager()
 {
+	TODO("Deleteing shaders here");
 }
 
 Shader* ShaderManager::loadShader( GLenum type , const std::string& path )

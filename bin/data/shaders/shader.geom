@@ -1,4 +1,4 @@
-#version 120 
+#version 130 
 #extension GL_EXT_geometry_shader4 : enable
 #define GL_RGB32F_ARB 0x8815
 
@@ -46,35 +46,18 @@ Geometry Shader Function
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 uniform sampler1D models;
+uniform int num;
 
 void main(void)
 {
-	
-	vec4 pos = texture1D(models,1.0);
-	pos.w = 0.0;
-
-	//increment variable
-	int i;
-
-	for(i=0; i< gl_VerticesIn; i++){
-		gl_Position = gl_PositionIn[i];
+	vec4 pos = vec4(0);
+	for( int i=0; i<num ; i++) {
+		pos.xyz = texelFetch(models,i,0).xyz;
+		gl_Position = gl_PositionIn[0] + pos;
 		gl_Position = gl_ModelViewProjectionMatrix * gl_Position;
-		gl_FrontColor = vec4(0,0,1,1);
-		EmitVertex();
-		gl_Position = gl_PositionIn[i] + vec4(1,1,1,0);
-		gl_Position = gl_ModelViewProjectionMatrix * gl_Position;
-		gl_FrontColor = vec4(0,1,0,1);
-		EmitVertex();
-		gl_Position = gl_PositionIn[i] + vec4(0,0,2,0);
-		gl_Position = gl_ModelViewProjectionMatrix * gl_Position;
-		gl_FrontColor = vec4(1,0,0,1);
-		EmitVertex();
-		gl_Position = gl_PositionIn[i] + pos;
-		gl_Position = gl_ModelViewProjectionMatrix * gl_Position;
-		gl_FrontColor = pos;
+		gl_FrontColor = vec4(1,float(i)/float(num),0,1);
 		EmitVertex();
 	}
 	EndPrimitive();
-	
 }
 
