@@ -33,9 +33,9 @@
 #if defined(linux)
 #include <string>
 std::string get_bin_path();
-#define DATA_PATH (get_bin_path() + std::string("./data/"))
+#define DATA_PATH (get_bin_path() + std::string("data/"))
 #else
-#define DATA_PATH ("./data/")
+#define DATA_PATH ("data/")
 #endif
 #define DATA(x)  (DATA_PATH+std::string(x))
 #define SAVES(x) (DATA_PATH+std::string("saves/")+std::string(x))

@@ -122,6 +122,7 @@ namespace GPU
 	BufferGl<T>::~BufferGl()
 	{
 		if( glId ) {
+			log_printf(DBG,"[DEL] Not empty GL buffer\n");
 			unmap();
 			cudaGLUnregisterBufferObject( glId );
 			CUT_CHECK_ERROR("Unregistering buffer while deleting BufferGl");

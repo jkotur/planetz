@@ -23,12 +23,12 @@ enum LOG_LEV {
  * Opisy poziomów logowania
  */
 static const char LEV_STRING[][32] =
-	{ "[DEBUG]  "
-	, "[INFO]   "
-	, "[WARNING]"
-	, "[ERROR]  "
-	, "[BUG]    "
-	, "[CRITIC] " };
+	{ "[DEBUG  ] "
+	, "[INFO   ] "
+	, "[WARNING] "
+	, "[ERROR  ] "
+	, "[BUG    ] "
+	, "[CRITIC ] " };
 
 /**
  * Definicja funkcji która może być użyta do wyświetlania

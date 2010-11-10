@@ -69,8 +69,6 @@ bool ShaderManager::checkShaderLog( GLuint id , const std::string& path )
 	return true;
 }                        
                          
-
-
 std::string ShaderManager::readFile( const std::string& path )
 {
 	std::ifstream file( path.c_str() );
@@ -80,7 +78,7 @@ std::string ShaderManager::readFile( const std::string& path )
 }
 
 Program::Program( Shader*vs , Shader*fs , Shader*gs )
-	: linked(false)  , _id(0) , vs(vs) , fs(fs) , gs(gs)
+	: linked(false)  , _id(glCreateProgram()) , vs(vs) , fs(fs) , gs(gs)
 {
 }
 
@@ -91,8 +89,6 @@ Program::~Program()
 
 void Program::attach( const Shader* const sh )
 {
-	if(!_id ) _id = glCreateProgram();
-
 	glAttachShader(_id,sh->id());
 
 	linked = false;
@@ -117,8 +113,6 @@ void Program::geomParams( GLenum in , GLenum out )
 
 void Program::link()
 {
-	if(!_id ) _id = glCreateProgram();
-
 	glLinkProgram( _id );
 	checkProgramLog( _id );
 	linked = true;

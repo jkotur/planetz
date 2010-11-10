@@ -19,6 +19,7 @@ Camera::Camera( const Vector3& _p ,
 
 Camera::~Camera()
 {
+	log_printf(DBG,"[DEL] Camera is dying\n");
 }
 
 void Camera::init()

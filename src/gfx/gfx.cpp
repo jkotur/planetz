@@ -10,68 +10,18 @@ using namespace GFX;
 
 Gfx::~Gfx()
 {
-	SDL_Quit();
+	log_printf(DBG,"[DEL] Deleting Gfx\n");
 }
 
-bool Gfx::SDL_init(int width,int height)
+bool Gfx::window_init(int width,int height)
 {
-	log_printf(INFO,"Starting SDL...\n");
+	mwidth = width ; mheight = height;
 
-	if( SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) ) {
-		log_printf(CRITICAL,"SDL error occurred: %s\n",SDL_GetError());
-		return false;
-	}
-
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); 
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16); 
-	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-
-	flags = SDL_OPENGL|SDL_HWSURFACE|SDL_DOUBLEBUF;
-	flags |= SDL_RESIZABLE;
-	if( FULLSCREEN_MODE )
-		flags |= SDL_FULLSCREEN;
+	log_printf(INFO,"Starting window...\n");
 
 	reshape_window(width,height);
 
-	return true;
-}
-
-bool Gfx::GL_init()
-{
-	log_printf(INFO,"Graphics init...\n");
-
-	GLenum err = glewInit();
-	if( GLEW_OK != err ) {
-		log_printf(CRITICAL,"GLEW error: %s\n", glewGetErrorString(err));
-		return false;
-	}
-
-	if( glewIsSupported("GL_VERSION_3_2") )
-		log_printf(INFO,"[GL] Hurray! OpenGL 3.2 is supported.\n");
-	else {
-		log_printf(CRITICAL,"[GL] OpenGL 3.2 is not supported. Program cannot run corectly");
-		return false;
-	}
-
-	GL_query();
-
 	return GL_view_init();
-}
-
-void Gfx::GL_query()
-{
-	int ires;
-	glGetIntegerv(GL_MAX_TEXTURE_SIZE,&ires);
-	log_printf(INFO,"[GL] max texture size:             %d\n",ires);
-	glGetIntegerv(GL_MAX_ARRAY_TEXTURE_LAYERS,&ires);
-	log_printf(INFO,"[GL] max array texture layers:     %d\n",ires);
-	glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES,&ires);
-	log_printf(INFO,"[GL] max geometry output vertices: %d\n",ires);
-	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS,&ires);
-	log_printf(INFO,"[GL] texture units:                %d\n",ires);
 }
 
 bool Gfx::GL_view_init()
@@ -127,12 +77,6 @@ void Gfx::GL_viewport( int w , int h )
 
 void Gfx::reshape_window(int width, int height)
 {
-	mwidth = width; mheight = height;
-	if( !(drawContext = SDL_SetVideoMode(width,height, 0, flags)) ) {
-		log_printf(CRITICAL,"Cannot set video mode: %s\n",SDL_GetError() );
-		exit(-1);
-	}
-
 	height = height < 1 ? 1 : height;
 
 	glViewport(0,0,width,height);

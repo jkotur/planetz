@@ -28,15 +28,11 @@ class Gfx {
 public:
 	virtual ~Gfx();
 
-	bool SDL_init(int w,int h);
-
-	bool GL_init();
-
 	bool GL_view_init();
 
-	void GL_query();
-
 	void GL_viewport( int  w , int h);
+
+	bool window_init(int width,int height);
 
 	void reshape_window(int w, int h);
 

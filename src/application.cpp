@@ -18,8 +18,9 @@ using boost::bind;
 
 #define CAM_START_VECS Vector3(0,0,10),Vector3(0,0,0),Vector3(0,1,0)
 
-Application::Application()
+Application::Application( Window& win )
 	: fps(0) , anim_pause(true) ,
+	  window( win )             ,
 	  camera( CAM_START_VECS )  ,
 	  saver( planetz , camera ) ,
 	  plz( memmgr.getGfxMem() ) ,
@@ -52,9 +53,8 @@ bool Application::init()
 	//
 	// init graphics
 	//
-	if( !gfx.SDL_init(BASE_W,BASE_H) ) return false;
-	if( !gfx.GL_init()               ) return false;
-
+	if( !gfx.window_init(window.getW(),window.getH()) )
+		return false;
 	//
 	// init memory
 	//
@@ -67,9 +67,11 @@ bool Application::init()
 
 	// FIXME: where should be this done?
 	ui.sigVideoResize.
+		connect( 0 , bind(&Window::reshape_window,&window,_1,_2));
+	ui.sigVideoResize.
 		connect( 1 , bind(&GFX::Gfx::reshape_window,&gfx,_1,_2) );
 	ui.sigVideoResize.
-		connect( 1 , bind(&GFX::Background::on_reshape_window,&bkg,_1,_2));
+		connect( 2 , bind(&GFX::Background::on_reshape_window,&bkg,_1,_2));
 
 	ui.sigMouseMotion.
 		connect( bind(&Camera::on_mouse_motion,&camera,_1,_2) );
@@ -194,36 +196,8 @@ void Application::reset() // Planetz*pl , Camera*c )
 }
 
 #ifndef _RELEASE
-#include "gpu/buffer.h"
-
 void Application::test()
 {
-//        GPU::BufferGl<float>& pbuf = memmgr.getPhxMem()->getRadiuses();
-
-////        pbuf.resize(15);
-
-//        float*php = pbuf.map(GPU::BUF_H);
-//        if( php ) {
-//                log_printf(DBG,"Written to buffer!\n");
-////                php[0] = 5.5;
-//        }
-
-//        const GPU::BufferGl<float>& buf = memmgr.getGfxMem()->getRadiuses();
-
-////        const float * hp = buf.map(GPU::BUF_H );
-////	*hp = 5.5; <- invalid in gfx buffer
-
-//        const float * cp = buf.map(GPU::BUF_CU);
-//        float fivedotfive = 666.f;
-
-//        // fail, couse cuda void** dont respect consts
-//        cudaError_t err = cudaMemcpy( &fivedotfive , cp , sizeof(float) , cudaMemcpyDeviceToHost );
-//        if( err != cudaSuccess ) log_printf(DBG,"Cuda cpy err: %s\n",cudaGetErrorString(err) );
-
-//        log_printf(DBG,"fivedotfive: %f\n",fivedotfive);
-
-//        buf.unmap();
-
-//        log_printf(DBG,"bufid: %d\n",buf.getId());
 }
 #endif
+

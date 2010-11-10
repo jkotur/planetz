@@ -2,11 +2,18 @@
 # include <windows.h>
 #endif
 
+#include "constants.h"
+
+#include "window.h"
 #include "application.h"
 
 int main (int argc, char const* argv[])
 {
-	Application app;
+	Window w( BASE_W , BASE_H );
+
+	if( !w ) return w.getErr();
+
+	Application app( w );
 
 	if( !app.init() )
 		return 1;

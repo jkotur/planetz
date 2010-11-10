@@ -16,6 +16,7 @@ Background::Background( double _s  , int w , int h )
 
 Background::~Background()
 {
+	log_printf(DBG,"[DEL] Deleting background\n");
 }
 
 void Background::set_img( const std::string&img )

@@ -8,6 +8,7 @@ using namespace GFX;
 
 Texture::~Texture()
 {
+	log_printf(DBG,"[DEL] Deleting texture %s\n",path.c_str());
 	glDeleteTextures(1,&tex);
 }
 

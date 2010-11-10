@@ -13,6 +13,7 @@ PlanetzRenderer::PlanetzRenderer( const GPU::GfxPlanetFactory * factory )
 
 PlanetzRenderer::~PlanetzRenderer()
 {
+	log_printf(DBG,"[DEL] Deleting PlanetzRenderer\n");
 }
 
 void PlanetzRenderer::prepare()
@@ -30,6 +31,7 @@ void PlanetzRenderer::prepare()
 
 	pr.link();
 
+	TODO("outsource this code");
 #define size 8
 
 	float model[size*3] = { 

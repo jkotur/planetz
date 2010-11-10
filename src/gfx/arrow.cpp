@@ -17,52 +17,6 @@ Arrow::~Arrow()
 {
 }
 
-//void Arrow::draw_tube()
-//{
-//        double r = 1.0;
-//        double y = 1.0;
-//        int faceCount = 20;
-
-//        glBegin(GL_QUAD_STRIP);
-//        for (int i = 0; i <= faceCount; i++)
-//        {
-//                double t = (double)i/faceCount;
-//                double x = r*cos(t*PI2);
-//                double z = r*sin(t*PI2);
-
-//                glVertex3f( x , y , z );
-//                glVertex3f( x , -y , z );
-
-//        }
-//        glEnd();
-
-//}
-
-void Arrow::draw_tube( const Vector3& v )
-{
-	double r = 1.0;
-	int faceCount = 20;
-
-	glBegin(GL_QUAD_STRIP);
-	for (int i = 0; i <= faceCount; i++)
-	{
-		double t = (double)i/faceCount;
-		double x = r*cos(t*PI2);
-		double z = r*sin(t*PI2);
-
-		Vector3 v1 = Vector3( x, 0 , z ).normalize();
-		Vector3 v2 = Vector3( x, 1 , z ).normalize();
-		v2.cross( v );
-		v2 *= v.length();
-		glVertex3v( v1 );
-		glVertex3v( v2 );
-
-	}
-	glEnd();
-
-}
-
-
 void Arrow::render( const Vector3& pos , const Vector3& v ) const
 {
 	glPushMatrix();
@@ -90,8 +44,6 @@ void Arrow::render( const Vector3& pos , const Vector3& v ) const
 	  glVertex3v( v );
 	  glVertex3v( (v - vs)*0.8 );
 	glEnd();
-
-//        draw_tube( v );
 
 	glPopMatrix();
 }

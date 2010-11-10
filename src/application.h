@@ -17,10 +17,11 @@
 #include "mem/memory_manager.h"
 #include "mem/saver.h"
 
+#include "window.h"
 
 class Application {
 public:
-	Application ();
+	Application( Window& win );
 	virtual ~Application();
 
 	bool init();
@@ -44,8 +45,8 @@ protected:
 
 	bool anim_pause;
 
-	// gfx quits SDL so should be deleted after all opengl calls
-	// also cuda-gl mapping
+	Window& window;
+
 	GFX::Gfx gfx;
 
 	Planetz planetz;

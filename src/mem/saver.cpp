@@ -13,6 +13,7 @@ Saver::Saver( Planetz& _p , Camera& _c )
 
 Saver::~Saver()
 {
+	log_printf(DBG,"[DEL] Deleting saver\n");
 }
 
 void Saver::save()

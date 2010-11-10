@@ -13,6 +13,7 @@ PhxPlanet::PhxPlanet( unsigned _id , const PlanetHolder* h )
 
 PhxPlanet::~PhxPlanet()
 {
+	log_printf(DBG,"[DEL] PhxPlanet\n");
 }
 
 float3   PhxPlanet::getPosition() const

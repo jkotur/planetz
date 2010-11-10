@@ -11,7 +11,7 @@
 #define ASSERT_MSG_2(...) log_printf(__VA_ARGS__);
 #define ASSERT_MSG(x, form , ... ) do{if(!(x)){ASSERT_MSG_2(_ERROR,WHERESTR "[ASSERT]" form "\n" , WHEREARG , ##__VA_ARGS__ ); assert(x);}}while(0);
 #define NOENTRY() assert(false)
-#define TODO(x) log_printf(_WARNING, WHERESTR "[TODO] %s\n", WHEREARG , x);
+#define TODO(x) log_printf(_WARNING, "[TODO]" WHERESTR " %s\n", WHEREARG , x);
 #define DBGPUT(x) x
 #define RELPUT(x)
 

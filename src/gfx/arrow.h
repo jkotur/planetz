@@ -22,8 +22,6 @@ public:
 
 	void render( const Vector3& pos , const Vector3& v ) const;
 private:
-	void draw_tube( const Vector3& v);
-
 	const Vector3 v;
 	const Vector3 color;
 

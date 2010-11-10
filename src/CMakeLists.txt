@@ -18,7 +18,7 @@ add_subdirectory( sphere )
 add_subdirectory( ui )
 add_subdirectory( util )
 
-add_executable( inz application constants planet planetz_manager main )
+add_executable( inz application constants planet planetz_manager main window )
 
 target_link_libraries( inz gfx gpu mem phx sphere ui util 
 	${CUDA_LIBRARIES}
