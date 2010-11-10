@@ -51,21 +51,23 @@ void MemMgr::load( const std::string& path )
 {
 	TODO("Loading saved points from file");
 
+	const int size = 4096;
+
 	// hardcoded load
-	holder.resize( 1024 );
+	holder.resize( size );
 
 	float3 * pos = holder.pos.map( GPU::BUF_H );
-	for( int i=0 ; i<1024 ; i++ )
+	for( int i=0 ; i<size ; i++ )
 	{
-		pos[i].x = (i-512)*2.5;
-		pos[i].y = (i-512)*2.5;
-		pos[i].z = (i-512)*2.5;
+		pos[i].x = (i-size/2)*2.5;
+		pos[i].y = (i-size/2)*2.5;
+		pos[i].z = (i-size/2)*2.5;
 	}
 
 	holder.pos.unmap();
 
 	float  * rad = holder.radius.map( GPU::BUF_H );
-	for( int i=0 ; i<1024 ; i++ )
+	for( int i=0 ; i<size ; i++ )
 		rad[i] = 1.0f;
 
 	holder.radius.unmap();
