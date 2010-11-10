@@ -53,17 +53,19 @@ bool Application::init()
 	//
 	// init graphics
 	//
-	if( !gfx.window_init(window.getW(),window.getH()) )
-		return false;
+	if( !gfx.window_init(window.getW(),window.getH()) ) return false;
+
 	//
 	// init memory
 	//
 	memmgr.init();
 
+	plz.setModels( memmgr.loadModels() );
+
 	//
 	// init user interface
 	//
-	if( !ui.init()                   ) return false;
+	if( !ui.init() ) return false;
 
 	// FIXME: where should be this done?
 	ui.sigVideoResize.
@@ -171,7 +173,6 @@ void Application::do_fps()
 	if( timer.get() - oldtime > 1 ) {
 		oldtime = timer.get();
 		log_printf(INFO,"fps: %d\n",fps);
-//                GFX::Hud::fps = fps;
 		fps = 0;
 	}
 	fps++;
@@ -196,8 +197,12 @@ void Application::reset() // Planetz*pl , Camera*c )
 }
 
 #ifndef _RELEASE
+#include "sphere/sphere.h"
+#include "sphere/sphere_converter.h"
+
 void Application::test()
 {
+	SphereConv( *Sphere::get_obj(0) ).toTriangleStrip(NULL,NULL);
 }
 #endif
 

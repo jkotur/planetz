@@ -1,0 +1,11 @@
+>=x11-drivers/nvidia-drivers-190.42
+>=dev-util/nvidia-cuda-toolkit-2.3
+media-libs/libsdl opengl 
+media-libs/sdl-image png
+dev-games/cegui opengl
+dev-libs/boost
+
+i jeszcze może żeby dało się projekt zbudować na tych kompach:
+
+dev-util/cmake
+

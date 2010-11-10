@@ -17,46 +17,46 @@ SphereModel::~SphereModel()
 	delete[] points;
 	delete[] normals;
 	delete[] triangles;
-	delete[]	texture_points;
+	delete[] texture_points;
 	delete[] texture_triangles;
 }
 
-int SphereModel::get_points_count()
+int SphereModel::get_points_count() const
 {
 	return points_count;
 }
 
-const Vector3& SphereModel::get_point(int id)
+const Vector3& SphereModel::get_point(int id) const
 {
 	return points[id];
 }
 
-const Vector3& SphereModel::get_normal(int id)
+const Vector3& SphereModel::get_normal(int id) const
 {
 	return normals[id];
 }
 
-int SphereModel::get_triangles_count()
+int SphereModel::get_triangles_count() const
 {
 	return triangles_count;
 }
 
-const Triple& SphereModel::get_triangle(int id)
+const Triple& SphereModel::get_triangle(int id) const
 {
 	return triangles[id];
 }
 
-int SphereModel::get_texture_points_count()
+int SphereModel::get_texture_points_count() const
 {
 	return texture_points_count;
 }
 
-const Vector3& SphereModel::get_texture_point(int id)
+const Vector3& SphereModel::get_texture_point(int id) const
 {
 	return texture_points[id];
 }
 
-const Triple& SphereModel::get_texture_triangle(int id)
+const Triple& SphereModel::get_texture_triangle(int id) const
 {
 	return texture_triangles[id];
 }

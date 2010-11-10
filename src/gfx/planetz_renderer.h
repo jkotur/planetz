@@ -17,11 +17,13 @@ public:
 	
 	virtual void draw() const;
 	virtual void prepare();
+
+	void setModels( GLuint tex );
 private:
 	Program pr;
 
-	GLuint tex[3];
-	GLint modTexId , numId;
+	GLuint texModel;
+	GLint texModelId;
 
 	const GPU::GfxPlanetFactory * const factory;
 };

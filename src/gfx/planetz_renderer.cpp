@@ -7,13 +7,18 @@
 using namespace GFX;
 
 PlanetzRenderer::PlanetzRenderer( const GPU::GfxPlanetFactory * factory )
-	: factory( factory )
+	: texModelId(0) , factory( factory ) 
 {
 }
 
 PlanetzRenderer::~PlanetzRenderer()
 {
 	log_printf(DBG,"[DEL] Deleting PlanetzRenderer\n");
+}
+
+void PlanetzRenderer::setModels( GLuint tex )
+{
+	texModel = tex;
 }
 
 void PlanetzRenderer::prepare()
@@ -27,46 +32,25 @@ void PlanetzRenderer::prepare()
 	pr.attach( vs );
 	pr.attach( fs );
 	pr.attach( gs );
-	pr.geomParams( GL_POINTS , GL_TRIANGLE_STRIP );
+	pr.geomParams( GL_POINTS , GL_TRIANGLES );
 
 	pr.link();
 
-	TODO("outsource this code");
-#define size 8
-
-	float model[size*3] = { 
-		 1 , 1 , 1 ,
-		 1 ,-1 , 1 ,
-		 1 ,-1 ,-1 ,
-		 1 , 1 ,-1 ,
-		-1 , 1 ,-1 ,
-		-1 , 1 , 1 ,
-		-1 ,-1 , 1 ,
-		-1 ,-1 ,-1 };
-
-	glGenTextures(3,tex);
-	glBindTexture(GL_TEXTURE_1D, tex[0]);
-	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP );
-	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage1D(GL_TEXTURE_1D,0,GL_RGB16F,size,0,GL_RGB, GL_FLOAT , model );
-
-	modTexId = glGetUniformLocation( pr.id() , "models" );
-	numId    = glGetUniformLocation( pr.id() , "num");
+	texModelId = glGetUniformLocation( pr.id() , "models" );
 }
 
 void PlanetzRenderer::draw() const
 {
+	ASSERT_MSG( texModel , "Before drawing, models texture id must be specified by calling setModels" );
+
 	glPointSize( 3 );
 	glEnableClientState( GL_VERTEX_ARRAY );
 
 	pr.use();
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_1D,tex[0]);
-	glUniform1i(modTexId,0);
-
-	glUniform1i(numId,size);
+	glBindTexture(GL_TEXTURE_1D,texModel);
+	glUniform1i(texModelId,0);
 
 	factory->getPositions().bind();
 	glVertexPointer( 3 , GL_FLOAT , 0 , NULL );

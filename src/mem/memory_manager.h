@@ -19,6 +19,8 @@ namespace MEM {
 		GPU::GfxPlanetFactory* getGfxMem();
 		GPU::PhxPlanetFactory* getPhxMem();
 		
+		GLuint loadModels();
+
 		void load( const std::string& path );
 		void save( const std::string& path );
 	private:

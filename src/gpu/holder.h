@@ -8,10 +8,9 @@ namespace GPU
 {
 	struct PlanetHolder
 	{
-		PlanetHolder();
+		PlanetHolder( unsigned num = 0 );
 		virtual ~PlanetHolder();
 
-		void init( unsigned num = 0 );
 		void resize(const size_t num);
 
 		//   * GFX

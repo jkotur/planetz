@@ -25,14 +25,14 @@ private:
 	SphereModel(int, int, int);
 	~SphereModel();
 public:
-	int get_points_count();
-	const Vector3& get_point(int);
-	const Vector3& get_normal(int);
-	int get_triangles_count();
-	const Triple& get_triangle(int);
-	int get_texture_points_count();
-	const Vector3& get_texture_point(int);
-	const Triple& get_texture_triangle(int);
+	int get_points_count() const;
+	const Vector3& get_point(int) const;
+	const Vector3& get_normal(int) const;
+	int get_triangles_count() const;
+	const Triple& get_triangle(int) const;
+	int get_texture_points_count() const;
+	const Vector3& get_texture_point(int) const;
+	const Triple& get_texture_triangle(int) const;
 	
 	friend class Sphere;
 };

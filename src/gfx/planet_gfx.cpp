@@ -38,7 +38,7 @@ void draw_sphere( SphereModel*sm )
 }
 
 Planet::Planet( int _d )
-	: selected_b(false) , a_x(0.0) , details(3) 
+	: selected_b(false) , a_x(0.0) , details(1) 
 	, rot_x( a_x , 90 , 3.0 , boost::bind(&Planet::set_ax,this,_1) , true )
 	, tex(NULL)
 {
@@ -83,6 +83,8 @@ Planet::~Planet()
 
 void Planet::render( const Vector3& pos , double radius)
 {
+	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+
 	glPushName(id);
 	glPushMatrix();
 	glEnable(GL_LIGHTING);
@@ -103,5 +105,7 @@ void Planet::render( const Vector3& pos , double radius)
 	Texture::unbind();
 	glPopMatrix();
 	glPopName();
+
+	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 }
 
