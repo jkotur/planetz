@@ -16,9 +16,9 @@ PlanetzRenderer::~PlanetzRenderer()
 	log_printf(DBG,"[DEL] Deleting PlanetzRenderer\n");
 }
 
-void PlanetzRenderer::setModels( GLuint tex )
+void PlanetzRenderer::setModels( GPU::PlanetzModel mod )
 {
-	texModel = tex;
+	modPlanet = mod;
 }
 
 void PlanetzRenderer::prepare()
@@ -41,20 +41,25 @@ void PlanetzRenderer::prepare()
 
 void PlanetzRenderer::draw() const
 {
-	ASSERT_MSG( texModel , "Before drawing, models texture id must be specified by calling setModels" );
+	ASSERT_MSG( modPlanet.vertices , "Before drawing, models texture id must be specified by calling setModels" );
 
 	glPointSize( 3 );
 	glEnableClientState( GL_VERTEX_ARRAY );
 
-	pr.use();
-
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_1D,texModel);
-	glUniform1i(texModelId,0);
 
+	pr.use();
 	factory->getPositions().bind();
 	glVertexPointer( 3 , GL_FLOAT , 0 , NULL );
-	glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
+
+	for( int i=0 ; i<modPlanet.parts ; i++ )
+	{
+		glBindTexture(GL_TEXTURE_1D,modPlanet.vertices[i]);
+		glUniform1i(texModelId,0);
+
+		glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
+	}
+
 	factory->getPositions().unbind();
 	Program::none();
 

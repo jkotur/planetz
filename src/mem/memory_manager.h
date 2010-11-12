@@ -6,6 +6,7 @@
 
 #include "gpu/gfx_planet_factory.h"
 #include "gpu/phx_planet_factory.h"
+#include "gpu/planet_model.h"
 
 namespace MEM {
 
@@ -19,7 +20,7 @@ namespace MEM {
 		GPU::GfxPlanetFactory* getGfxMem();
 		GPU::PhxPlanetFactory* getPhxMem();
 		
-		GLuint loadModels();
+		GPU::PlanetzModel loadModels();
 
 		void load( const std::string& path );
 		void save( const std::string& path );

@@ -46,15 +46,15 @@ Geometry Shader Function
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 uniform sampler1D models;
-const int num = 20;
+const int num = 120;
 
 void main(void)
 {
 	vec4 pos = vec4(0);
 	int i , ii;
-	for( i=0; i<num ; i++) {
+	for( i=0; i<num ; i+=3 ) {
 		for( ii=0 ; ii<3; ii++ ) {
-			pos.xyz = texelFetch(models,i*3+ii,0).xyz;
+			pos.xyz = texelFetch(models,i+ii,0).xyz;
 			gl_Position = gl_PositionIn[0] + pos;
 			gl_Position = gl_ModelViewProjectionMatrix * gl_Position;
 			gl_FrontColor = vec4(1,float(i)/float(num),0,1);

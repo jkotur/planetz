@@ -5,6 +5,7 @@
 #include "drawable.h"
 
 #include "gpu/gfx_planet_factory.h"
+#include "gpu/planet_model.h"
 
 #include "shader.h"
 
@@ -18,11 +19,12 @@ public:
 	virtual void draw() const;
 	virtual void prepare();
 
-	void setModels( GLuint tex );
+	void setModels( GPU::PlanetzModel modPlanet );
 private:
 	Program pr;
 
-	GLuint texModel;
+	GPU::PlanetzModel modPlanet;
+
 	GLint texModelId;
 
 	const GPU::GfxPlanetFactory * const factory;
