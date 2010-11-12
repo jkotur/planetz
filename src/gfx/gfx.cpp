@@ -15,7 +15,7 @@ Gfx::~Gfx()
 
 bool Gfx::window_init(int width,int height)
 {
-	mwidth = width ; mheight = height;
+	mwidth = width; mheight = height;
 
 	log_printf(INFO,"Starting window...\n");
 
@@ -30,13 +30,6 @@ bool Gfx::GL_view_init()
 
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 
-	int width=this->width() , height = this->height();
-
-	float ambient [4] = { 0.3, 0.3, 0.3, 1.0 };
-	float diffuse [4] = { 0.6, 0.6, 0.6, 1.0 };
-	float specular[4] = { 0.7, 0.7, 0.7, 1.0 };
-	float position[4] = { 0.0, 0.0, 10000.0, 1.0 };
-
 	glShadeModel(GL_SMOOTH);
 
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
@@ -46,47 +39,43 @@ bool Gfx::GL_view_init()
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-	glLightfv(GL_LIGHT0, GL_AMBIENT,  ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE,  diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
-	glLightfv(GL_LIGHT0, GL_POSITION, position);
+//        float ambient [4] = { 0.3, 0.3, 0.3, 1.0 };
+//        float diffuse [4] = { 0.6, 0.6, 0.6, 1.0 };
+//        float specular[4] = { 0.7, 0.7, 0.7, 1.0 };
+//        float position[4] = { 0.0, 0.0, 10000.0, 1.0 };
+
+//        glLightfv(GL_LIGHT0, GL_AMBIENT,  ambient);
+//        glLightfv(GL_LIGHT0, GL_DIFFUSE,  diffuse);
+//        glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
+//        glLightfv(GL_LIGHT0, GL_POSITION, position);
 //        glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION,  0.000000000f);
 //        glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.00000000000000f);
 //        glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION,  0.00000000000f);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHTING);
+//        glEnable(GL_LIGHT0);
+//        glEnable(GL_LIGHTING);
 
 	GL_viewport(mwidth,mheight);
-
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	gluPerspective(75.0, (double)width/(double)height, 1, 10000);
-
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
 
 	return true;
 }
 
 void Gfx::GL_viewport( int w , int h )
 {
-	glViewport(0,0,mwidth,mheight);
+	glViewport(0,0,w,h);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(75.0, (double)w/(double)h, 1, 10000);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 }
 
 void Gfx::reshape_window(int width, int height)
 {
+	mwidth = width; mheight = height;
+
 	height = height < 1 ? 1 : height;
-
-	glViewport(0,0,width,height);
-
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
-
-	glPopAttrib();
 
 	GL_viewport( width , height );
 }
