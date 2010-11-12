@@ -1,6 +1,6 @@
 #version 130 
 #extension GL_EXT_geometry_shader4 : enable
-#define GL_RGB32F_ARB 0x8815
+//#define GL_RGB32F_ARB 0x8815
 
 //CIRL GPU Geometry Program: Derek Anderson and Robert Luke
 // very simple geometry shader
@@ -46,18 +46,21 @@ Geometry Shader Function
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 uniform sampler1D models;
-const int num = 60;
+const int num = 20;
 
 void main(void)
 {
 	vec4 pos = vec4(0);
-	for( int i=0; i<num ; i++) {
-		pos.xyz = texelFetch(models,i,0).xyz;
-		gl_Position = gl_PositionIn[0] + pos;
-		gl_Position = gl_ModelViewProjectionMatrix * gl_Position;
-		gl_FrontColor = vec4(1,float(i)/float(num),0,1);
-		EmitVertex();
+	int i , ii;
+	for( i=0; i<num ; i++) {
+		for( ii=0 ; ii<3; ii++ ) {
+			pos.xyz = texelFetch(models,i*3+ii,0).xyz;
+			gl_Position = gl_PositionIn[0] + pos;
+			gl_Position = gl_ModelViewProjectionMatrix * gl_Position;
+			gl_FrontColor = vec4(1,float(i)/float(num),0,1);
+			EmitVertex();
+		}
+		EndPrimitive();
 	}
-	EndPrimitive();
 }
 
