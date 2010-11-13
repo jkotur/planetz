@@ -1,6 +1,6 @@
 cmake_policy(VERSION 2.6)
 
-find_package( CppUnit )
+find_package( cppunit )
 
 set( INCLUDE_DIRS
 	.
@@ -25,5 +25,5 @@ target_link_libraries( tests phx_test
 	${CEGUI_LIBRARIES}
 	${CEGUIOPENGL_LIBRARIES}
 	${Boost_LIBRARIES} 
-	cppunit )
+	${cppunit_LIBRARIES} )
 

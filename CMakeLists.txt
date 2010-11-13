@@ -19,6 +19,8 @@ find_package( Boost COMPONENTS filesystem regex signals )
 find_package( CEGUI )
 find_package( CEGUIOPENGL )
 
+find_package( Sqlite3 )
+
 if( UNIX )
 	#	set( CMAKE_C_FLAGS "-O3 -g -Wall -pedantic")
 	#	set( CMAKE_CXX_FLAGS "-O3 -g -Wall -pedantic")
@@ -30,5 +32,5 @@ endif( UNIX )
 set( CUDA_NVCC_FLAGS "-arch=sm_11" )
 
 add_subdirectory( src )
-add_subdirectory( unittest )
+#add_subdirectory( unittest ) #temporarily turned off
 

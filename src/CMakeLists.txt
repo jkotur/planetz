@@ -27,5 +27,6 @@ target_link_libraries( inz gfx gpu mem phx sphere ui util
 	${SDLIMAGE_LIBRARY}
 	${CEGUI_LIBRARIES}
 	${CEGUIOPENGL_LIBRARIES}
-	${Boost_LIBRARIES} )
+	${Boost_LIBRARIES} 
+	${SQLITE3_LIBRARIES} )
 

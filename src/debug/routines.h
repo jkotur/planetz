@@ -25,4 +25,20 @@
 
 #endif
 
+#if 0
+// There can go code for disabling boost warnings. Unfortunetely, gcc <4.6 seems not to be able to turn off warnings for just some include files. And since I don't have gcc4.6 at this moment, this is not fully implemented.
+#define DO_PRAGMA(x) _Pragma (#x)
+
+#define WARNING_SWITCH(action) \
+DO_PRAGMA (GCC diagnostic action "-Wstrict-aliasing")\
+DO_PRAGMA (GCC diagnostic action "-Wunused-variable")
+
+#define DISABLE_WARNINGS_BEGIN \
+WARNING_SWITCH( ignored )
+
+#define DISABLE_WARNINGS_END \
+WARNING_SWITCH( warning )
+
+#endif
+
 #endif // _DEBUG_ROUTINES_H_

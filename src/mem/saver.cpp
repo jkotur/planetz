@@ -3,6 +3,9 @@
 #include "saver.h"
 #include "constants.h"
 #include "./util/logger.h"
+#include "db/dbsqlite.h"
+#include "db/table.h"
+#include "db/planet_row.h"
 
 using namespace MEM;
 
@@ -27,56 +30,61 @@ void Saver::load()
 	load( DATA("saves/first.sav") );
 }
 
-void Saver::save( const std::string& path )
+void Saver::save( const std::string &path )
 {
-	std::fstream file( path.c_str() ,  std::ios_base::out | std::ios_base::trunc );
+	log_printf(DBG, "Creating db object\n");
+	DBSqlite db( path );
+	log_printf(DBG, "Creating table object\n");
+	Table<PlanetRow> table;
+	Vector3 v;
 
-	Vector3 v = cam.get_pos();
-	file << v.x << " " << v.y  << " "<< v.z << std::endl;
-	v = cam.get_lookat();
-	file << v.x  << " "<< v.y  << " "<< v.z << std::endl;
-	v = cam.get_up();
-	file << v.x  << " "<< v.y  << " "<< v.z << std::endl;
 	for( Planetz::iterator i = plz.begin() ; i != plz.end() ; ++i )
 	{
+		log_printf(DBG, "Creating PlanetRow object\n");
+		PlanetRow *p = new PlanetRow();
 		v = (*i)->get_phx()->get_pos();
-		file << v.x  << " "<< v.y  << " "<< v.z << " ";
+		p->xcoord = v.x;
+		p->ycoord = v.y;
+		p->zcoord = v.z;
 		v = (*i)->get_phx()->get_velocity();
-		file << v.x  << " "<< v.y  << " "<< v.z << " ";
-		file << (*i)->get_phx()->get_mass() << " ";
-		file << (*i)->get_phx()->get_radius() << std::endl;
+		p->xvel = v.x;
+		p->yvel = v.y;
+		p->zvel = v.z;
+		p->mass = (*i)->get_phx()->get_mass();
+		p->radius = (*i)->get_phx()->get_radius();
+		log_printf(DBG, "Adding to table\n");
+		table.add( p );
 	}
-	file.close();
+
+	log_printf(DBG, "saving to db\n");
+	db.save( table );
+	log_printf(DBG, "done\n");
 }
 
-void Saver::load( const std::string& path )
+void Saver::load( const std::string &path )
 {
-	std::fstream file( path.c_str() ,  std::ios_base::in );
-
-	Vector3 pos;
-	file >> pos.x >> pos.y >> pos.z;
-	Vector3 lookat;
-	file >> lookat.x >> lookat.y >> lookat.z;
-	Vector3 up;
-	file >> up.x >> up.y >> up.z;
-
-	cam.set_perspective(pos,lookat,up);
-
+	DBSqlite db( path );
+	Table<PlanetRow> table;
+	db.load( table );
 	plz.clear();
 
+	Vector3 pos;
 	Vector3 speed;
 	double mass;
 	double radius;
-	while( file.good() )
-	{
-		file >> pos.x >> pos.y >> pos.z;
-		file >> speed.x >> speed.y >> speed.z;
-		file >> mass;
-		file >> radius;
-		
-		if( file.eof() ) break;
 
-	log_printf(DBG,"[LOAD] Adding planet at (%f,%f,%f) with speed (%f,%f,%f), mass %f and radius %f\n"
+	BOOST_FOREACH( PlanetRow *p, table )
+	{
+		pos.x = p->xcoord;
+		pos.y = p->ycoord;
+		pos.z = p->zcoord;
+		speed.x = p->xvel;
+		speed.y = p->yvel;
+		speed.z = p->zvel;
+		mass = p->mass;
+		radius = p->radius;
+
+		log_printf(DBG,"[LOAD] Adding planet at (%f,%f,%f) with speed (%f,%f,%f), mass %f and radius %f\n"
 			,pos.x,pos.y,pos.z
 			,speed.x,speed.y,speed.z
 			,mass,radius );
