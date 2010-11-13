@@ -39,20 +39,19 @@ bool Gfx::GL_view_init()
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-//        float ambient [4] = { 0.3, 0.3, 0.3, 1.0 };
-//        float diffuse [4] = { 0.6, 0.6, 0.6, 1.0 };
-//        float specular[4] = { 0.7, 0.7, 0.7, 1.0 };
-//        float position[4] = { 0.0, 0.0, 10000.0, 1.0 };
+	float ambient [4] = { 0.3, 0.3, 0.3, 1.0 };
+	float diffuse [4] = { 0.6, 0.6, 0.6, 1.0 };
+	float specular[4] = { 0.7, 0.7, 0.7, 1.0 };
+	float position[4] = { 0.0, 0.0, 10000.0, 1.0 };
 
-//        glLightfv(GL_LIGHT0, GL_AMBIENT,  ambient);
-//        glLightfv(GL_LIGHT0, GL_DIFFUSE,  diffuse);
-//        glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
-//        glLightfv(GL_LIGHT0, GL_POSITION, position);
+	glLightfv(GL_LIGHT0, GL_AMBIENT,  ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE,  diffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
+	glLightfv(GL_LIGHT0, GL_POSITION, position);
 //        glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION,  0.000000000f);
 //        glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.00000000000000f);
 //        glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION,  0.00000000000f);
-//        glEnable(GL_LIGHT0);
-//        glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
 
 	GL_viewport(mwidth,mheight);
 

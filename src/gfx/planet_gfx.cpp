@@ -12,11 +12,6 @@ using namespace GFX;
 
 int Planet::count = 0;
 
-void glTexCoord2v( const Vector3& v  )
-{
-	glTexCoord2d( v.x , v.y );
-}
-
 void draw_sphere( SphereModel*sm )
 {
 	glBegin(GL_TRIANGLES);

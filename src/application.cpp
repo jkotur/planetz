@@ -43,7 +43,6 @@ bool Application::init()
 	//
 	// init logger
 	//
-	log_add(LOG_STREAM(stderr),LOG_PRINTER(std::vfprintf));
 	f_log = std::fopen("planetz.log","w");
 	log_add(LOG_STREAM(f_log),LOG_PRINTER(std::vfprintf));
 #ifdef _RELEASE
@@ -119,10 +118,9 @@ bool Application::init()
 	gfx.add( &ui      );
 #endif
 #ifndef _RELEASE
-	// FIXME: memory leakage
-	GFX::Arrow * ox = new GFX::Arrow(Vector3(1,0,0));
-	GFX::Arrow * oy = new GFX::Arrow(Vector3(0,1,0));
-	GFX::Arrow * oz = new GFX::Arrow(Vector3(0,0,1));
+	ox = new GFX::Arrow(Vector3(1,0,0));
+	oy = new GFX::Arrow(Vector3(0,1,0));
+	oz = new GFX::Arrow(Vector3(0,0,1));
 	gfx.add(  ox      );
 	gfx.add(  oy      );
 	gfx.add(  oz      );
@@ -162,6 +160,12 @@ void Application::main_loop()
 
 Application::~Application()
 {
+#ifndef _RELEASE
+	delete ox;
+	delete oy;
+	delete oz;
+#endif
+
 	log_printf(INFO,"Program is shutting down. It was running %lf seconds\n",timer.get());
 	log_printf(DBG,"kthxbye\n");
 	log_del(f_log);

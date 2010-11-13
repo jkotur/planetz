@@ -9,6 +9,8 @@
 
 int main (int argc, char const* argv[])
 {
+	log_add(LOG_STREAM(stderr),LOG_PRINTER(std::vfprintf));
+
 	Window w( BASE_W , BASE_H );
 
 	if( !w ) return w.getErr();

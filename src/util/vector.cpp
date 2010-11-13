@@ -46,3 +46,8 @@ void glNormal3v( const Vector3& v )
 	glNormal3f( v.x , v.y , v.z );
 }
 
+void glTexCoord2v( const Vector3& v  )
+{
+	glTexCoord2d( v.x , v.y );
+}
+

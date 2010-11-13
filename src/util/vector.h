@@ -171,6 +171,7 @@ bool operator!=( const Vector3& a , const Vector3& b );
 bool vcompare(const Vector3& a , const Vector3& b );
 void glVertex3v( const Vector3& v );
 void glNormal3v( const Vector3& v );
+void glTexCoord2v( const Vector3& v  );
 
 //void glTranslatev( const Vector3& v )
 //{

@@ -60,6 +60,12 @@ protected:
 	GFX::Background bkg;
 
 	std::FILE*f_log;
+
+#ifndef _RELEASE
+	GFX::Arrow * ox;
+	GFX::Arrow * oy;
+	GFX::Arrow * oz;
+#endif
 };
 
 

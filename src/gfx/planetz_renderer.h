@@ -17,6 +17,9 @@ public:
 	virtual ~PlanetzRenderer();
 	
 	virtual void draw() const;
+	void draw_calllist() const;
+	void draw_geomshader() const;
+
 	virtual void prepare();
 
 	void setModels( GPU::PlanetzModel modPlanet );
@@ -26,6 +29,8 @@ private:
 	GPU::PlanetzModel modPlanet;
 
 	GLint texModelId;
+
+	GLuint sphereListId;
 
 	const GPU::GfxPlanetFactory * const factory;
 };

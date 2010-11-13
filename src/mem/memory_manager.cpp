@@ -1,6 +1,7 @@
 #include "memory_manager.h"
 
 #include <cmath>
+#include <cstring>
 
 #include "cuda/math.h"
 
@@ -20,10 +21,9 @@ MemMgr::~MemMgr()
 
 GPU::PlanetzModel MemMgr::loadModels()
 {
-	TODO("Loading models from file");
 	TODO("Memory leak: where to delete m.vertiecs and m.texCoord?");
 
-	SphereConv sc( *Sphere::get_obj(5) );
+	SphereConv sc( *Sphere::get_obj(0) );
 
 	const GLsizei size = sc.sizeTriangles();
 
@@ -70,7 +70,7 @@ void MemMgr::load( const std::string& path )
 {
 	TODO("Loading saved points from file");
 
-	const int size = 7;
+	const int size = 10240;
 
 	// hardcoded load
 	holder.resize( size );
@@ -82,18 +82,23 @@ void MemMgr::load( const std::string& path )
 		pos[i].y = (i-size/2)*2.5;
 		pos[i].z = (i-size/2)*2.5;
 	}
-
 	holder.pos.unmap();
 
 	float  * rad = holder.radius.map( GPU::BUF_H );
 	for( int i=0 ; i<size ; i++ )
 		rad[i] = 1.0f;
-
 	holder.radius.unmap();
+
+	uint8_t* type = holder.model.map( GPU::BUF_H );
+	memset(type,0,sizeof(uint8_t)*size);
+	for( int i=0 ; i<3 ; i++ )
+		type[i] = 1u;
+	holder.model.unmap();
 }
 
 void MemMgr::save( const std::string& path )
 {
+	TODO("Implement saving");
 }
 
 GPU::GfxPlanetFactory* MemMgr::getGfxMem()
