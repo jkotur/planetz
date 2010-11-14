@@ -1,6 +1,6 @@
 cmake_policy(VERSION 2.6)
 
-find_package( cppunit )
+find_package( CppUnit )
 
 set( INCLUDE_DIRS
 	.
@@ -14,10 +14,11 @@ set( INCLUDE_DIRS
 include_directories( ${INCLUDE_DIRS} )
 
 add_subdirectory( phx )
+#add_subdirectory( ../src/phx ../src/phx )
 
 add_executable( tests test_main )
 
-target_link_libraries( tests phx_test
+target_link_libraries( tests phx_test 
 	${CUDA_LIBRARIES}
 	${OPENGL_LIBRARY}
 	${SDL_LIBRARY}
@@ -25,5 +26,5 @@ target_link_libraries( tests phx_test
 	${CEGUI_LIBRARIES}
 	${CEGUIOPENGL_LIBRARIES}
 	${Boost_LIBRARIES} 
-	${cppunit_LIBRARIES} )
+	${CPPUNIT_LIBRARIES} )
 

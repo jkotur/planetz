@@ -13,7 +13,9 @@ class PhxTest: public CppUnit::TestFixture
 		void testWhatever();
 
 	private:
-		
+		CPPUNIT_TEST_SUITE( PhxTest );
+			CPPUNIT_TEST( testWhatever );
+		CPPUNIT_TEST_SUITE_END();
 };
 
 #endif // _PHX_TEST_H_

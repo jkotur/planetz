@@ -1,12 +1,15 @@
 #include "phx/phx_test.h"
-#include <cppunit/TestCaller.h>
-#include <cppunit/TestResult.h>
+#include <cppunit/ui/text/TestRunner.h>
+
+void collectTests( CppUnit::TextUi::TestRunner &runner )
+{
+	runner.addTest( PhxTest::suite() );
+}
 
 int main(int argc, char **argv)
 {
-	CppUnit::TestCaller<PhxTest> test( "testWhatever", &PhxTest::testWhatever );
-	CppUnit::TestResult result;
-	test.run( &result );
-
+	CppUnit::TextUi::TestRunner runner;
+	collectTests( runner );
+	runner.run();
 	return 0;
 }
