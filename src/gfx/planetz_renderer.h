@@ -7,7 +7,9 @@
 #include "gpu/gfx_planet_factory.h"
 #include "gpu/planet_model.h"
 
-#include "shader.h"
+#include "geometry_renderer.h"
+#include "copy_renderer.h"
+#include "deffered_renderer.h"
 
 namespace GFX {
 
@@ -17,20 +19,14 @@ public:
 	virtual ~PlanetzRenderer();
 	
 	virtual void draw() const;
-	void draw_calllist() const;
-	void draw_geomshader() const;
 
 	virtual void prepare();
 
 	void setModels( GPU::PlanetzModel modPlanet );
 private:
-	Program pr;
-
-	GPU::PlanetzModel modPlanet;
-
-	GLint texModelId;
-
-	GLuint sphereListId;
+	GeomRender grend;
+	CopyRender crend;
+	DeferRender drend;
 
 	const GPU::GfxPlanetFactory * const factory;
 };
