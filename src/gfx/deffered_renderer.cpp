@@ -20,11 +20,12 @@ DeferRender::DeferRender( const GPU::GfxPlanetFactory * factory )
 	pr.attach( gs );
 	pr.geomParams( GL_POINTS , GL_QUAD_STRIP );
 
-	GLint ratioId = glGetUniformLocation( pr.id() , "ratio" );
+	pr.link();
+
+	radiusId = glGetAttribLocation( pr.id() , "in_radiuses" );
 
 	TODO("Dynamically change screen size ratio in shader");
-
-	pr.link();
+	GLint ratioId = glGetUniformLocation( pr.id() , "ratio" );
 
 	pr.use();
 	glUniform1f( ratioId , (float)BASE_W/(float)BASE_H );
@@ -38,18 +39,21 @@ DeferRender::~DeferRender()
 void DeferRender::draw() const
 {
 	glEnableClientState( GL_VERTEX_ARRAY );
+	glEnableVertexAttribArray( radiusId );
 
-	glActiveTexture(GL_TEXTURE0);
-
-	pr.use();
 	factory->getPositions().bind();
 	glVertexPointer( 3 , GL_FLOAT , 0 , NULL );
-	glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
 	factory->getPositions().unbind();
+
+	factory->getRadiuses().bind();
+	glVertexAttribPointer( radiusId , 1, GL_FLOAT, GL_FALSE, 0, NULL );
+	factory->getRadiuses().unbind();
+
+	pr.use();
+	glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
 	Program::none();
 
-	glBindTexture(GL_TEXTURE_1D,0);
-
 	glDisableClientState( GL_VERTEX_ARRAY );
+	glDisableVertexAttribArray( radiusId );
 }
 

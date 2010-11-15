@@ -16,6 +16,8 @@ public:
 	
 private:
 	Program pr;
+
+	GLint radiusId;
 	
 	const GPU::GfxPlanetFactory * const factory;
 };

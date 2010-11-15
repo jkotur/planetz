@@ -26,8 +26,8 @@ void PlanetzRenderer::prepare()
 
 void PlanetzRenderer::draw() const
 {
-	crend.draw();
+//        crend.draw();
 //        grend.draw();
-//        drend.draw();
+	drend.draw();
 }
 
