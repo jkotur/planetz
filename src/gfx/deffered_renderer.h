@@ -2,14 +2,14 @@
 
 #define __DEFFERED_RENDERER_H__
 
-#include "gpu/gfx_planet_factory.h"
+#include "mem/misc/gfx_planet_factory.h"
 #include "shader.h"
 
 namespace GFX
 {
 class DeferRender {
 public:
-	DeferRender( const GPU::GfxPlanetFactory * factory );
+	DeferRender( const MEM::MISC::GfxPlanetFactory * factory );
 	virtual ~DeferRender();
 
 	void draw() const;
@@ -24,7 +24,7 @@ private:
 
 	GLuint sphereTex;
 	
-	const GPU::GfxPlanetFactory * const factory;
+	const MEM::MISC::GfxPlanetFactory * const factory;
 };
 
 } // GFX

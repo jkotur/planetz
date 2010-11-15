@@ -7,8 +7,7 @@
 #include "gfx/gfx.h"
 #include "gfx/background.h"
 #include "gfx/planetz_renderer.h"
-
-#include "planetz_manager.h"
+#include "gfx/arrow.h"
 
 #include "constants.h"
 
@@ -49,12 +48,10 @@ protected:
 
 	GFX::Gfx gfx;
 
-	Planetz planetz;
 	Camera camera;
 	UI ui;
 
 	MEM::MemMgr memmgr;
-	MEM::Saver saver;
 
 	GFX::PlanetzRenderer plz;
 	GFX::Background bkg;

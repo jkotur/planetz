@@ -4,7 +4,7 @@
 
 using namespace GFX;
 
-GeomRender::GeomRender( const GPU::GfxPlanetFactory * factory )
+GeomRender::GeomRender( const MEM::MISC::GfxPlanetFactory * factory )
 	: texModelId(0) , factory(factory)
 {
 	ShaderManager shm;
@@ -28,7 +28,7 @@ GeomRender::~GeomRender()
 {
 }
 
-void GeomRender::setModels( GPU::PlanetzModel mod )
+void GeomRender::setModels( MEM::MISC::PlanetzModel mod )
 {
 	modPlanet = mod;
 }

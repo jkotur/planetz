@@ -2,8 +2,8 @@
 
 #define __GEOMETRY_RENDERER_H__
 
-#include "gpu/gfx_planet_factory.h"
-#include "gpu/planet_model.h"
+#include "mem/misc/gfx_planet_factory.h"
+#include "mem/misc/planet_model.h"
 #include "shader.h"
 
 namespace GFX
@@ -11,21 +11,21 @@ namespace GFX
 
 class GeomRender {
 public:
-	GeomRender( const GPU::GfxPlanetFactory * factory );
+	GeomRender( const MEM::MISC::GfxPlanetFactory * factory );
 	virtual ~GeomRender();
 
-	void setModels( GPU::PlanetzModel mod );
+	void setModels( MEM::MISC::PlanetzModel mod );
 
 	void draw() const;
 
 private:
 	Program pr;
 
-	GPU::PlanetzModel modPlanet;
+	MEM::MISC::PlanetzModel modPlanet;
 
 	GLint texModelId;
 
-	const GPU::GfxPlanetFactory * const factory;
+	const MEM::MISC::GfxPlanetFactory * const factory;
 };
 
 } // GFX

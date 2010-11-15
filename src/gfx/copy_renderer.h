@@ -2,14 +2,14 @@
 
 #define __COPY_RENDERER_H__
 
-#include "gpu/gfx_planet_factory.h"
+#include "mem/misc/gfx_planet_factory.h"
 
 namespace GFX
 {
 
 class CopyRender {
 public:
-	CopyRender( const GPU::GfxPlanetFactory * factory );
+	CopyRender( const MEM::MISC::GfxPlanetFactory * factory );
 	virtual ~CopyRender();
 
 	void draw() const;
@@ -17,7 +17,7 @@ private:
 		
 	GLuint sphereListId;
 
-	const GPU::GfxPlanetFactory * const factory;
+	const MEM::MISC::GfxPlanetFactory * const factory;
 };
 
 } // GFX

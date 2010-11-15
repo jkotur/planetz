@@ -2,7 +2,7 @@
 
 #include "cuda/math.h"
 
-using namespace GPU;
+using namespace MEM::MISC;
 
 GfxPlanet::GfxPlanet( int id , const PlanetHolder* h )
 {

@@ -7,7 +7,7 @@
 
 using namespace GFX;
 
-DeferRender::DeferRender( const GPU::GfxPlanetFactory * factory )
+DeferRender::DeferRender( const MEM::MISC::GfxPlanetFactory * factory )
 	: factory(factory)
 {
 	ShaderManager shm;

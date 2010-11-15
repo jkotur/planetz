@@ -2,7 +2,7 @@
 
 #include "cuda/math.h"
 
-using namespace GPU;
+using namespace MEM::MISC;
 
 PhxPlanet::PhxPlanet( unsigned _id , const PlanetHolder* h )
 	: id( _id )
@@ -54,11 +54,6 @@ PhxPlanet PhxPlanetFactory::getPlanet( int id )
 	return PhxPlanet( id , holder );
 }
 
-BufferGl<uint8_t> &PhxPlanetFactory::getModels()
-{
-	return holder->model;
-}
-
 BufferGl<float3>  &PhxPlanetFactory::getPositions()
 {
 	return holder->pos;
@@ -74,3 +69,7 @@ BufferGl<uint32_t>&PhxPlanetFactory::getCount()
 	return holder->count;
 }
 
+BufferCu<float> &PhxPlanetFactory::getMasses()
+{
+	return holder->mass;
+}

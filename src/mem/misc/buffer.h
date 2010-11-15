@@ -14,7 +14,9 @@
 
 #include "debug/routines.h"
 
-namespace GPU
+namespace MEM
+{
+namespace MISC
 {
 	typedef unsigned int uint;
 
@@ -253,6 +255,6 @@ namespace GPU
 	}
 
 }
-
+}
 #endif // BUFFER_H
 

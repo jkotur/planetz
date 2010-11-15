@@ -25,7 +25,7 @@ void draw_sphere_2( SphereModel*sm )
 	glEnd();
 }
 
-CopyRender::CopyRender( const GPU::GfxPlanetFactory * factory ) 
+CopyRender::CopyRender( const MEM::MISC::GfxPlanetFactory * factory ) 
 	: factory( factory )
 {
 	sphereListId = glGenLists(1);
@@ -45,7 +45,7 @@ void CopyRender::draw() const
 	GLsizei size = factory->getPositions().getLen();
 
 	float * hmem = new float[ size*3 ];
-	float * dmem = (float*)factory->getPositions().map( GPU::BUF_CU );
+	float * dmem = (float*)factory->getPositions().map( MEM::MISC::BUF_CU );
 	cudaMemcpy(hmem,dmem,sizeof(float)*3*size,cudaMemcpyDeviceToHost);
 	factory->getPositions().unmap();
 

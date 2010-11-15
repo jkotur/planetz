@@ -5,7 +5,7 @@ using namespace CPU;
 class Phx::CImpl
 {
 	public:
-		CImpl(GPU::PlanetHolder *h);
+		CImpl(MEM::MISC::PlanetHolder *h);
 		virtual ~CImpl();
 
 		void compute(unsigned n);
@@ -14,10 +14,10 @@ class Phx::CImpl
 		void map_buffers();
 		void unmap_buffers();
 
-		GPU::PlanetHolder *holder;
+		MEM::MISC::PlanetHolder *holder;
 };
 
-Phx::CImpl::CImpl(GPU::PlanetHolder *h)
+Phx::CImpl::CImpl(MEM::MISC::PlanetHolder *h)
 	: holder(h)
 {
 }
@@ -39,11 +39,11 @@ void Phx::CImpl::compute(unsigned n)
 
 void Phx::CImpl::map_buffers()
 {
-	holder->pos.map( GPU::BUF_CU );
-	holder->radius.map( GPU::BUF_CU );
+	holder->pos.map( MEM::MISC::BUF_CU );
+	holder->radius.map( MEM::MISC::BUF_CU );
 	holder->velocity.bind();
 	holder->mass.bind();
-	holder->count.map( GPU::BUF_CU );
+	holder->count.map( MEM::MISC::BUF_CU );
 }
 
 void Phx::CImpl::unmap_buffers()
@@ -55,7 +55,7 @@ void Phx::CImpl::unmap_buffers()
 	holder->count.unbind();
 }
 
-Phx::Phx(GPU::PlanetHolder *h)
+Phx::Phx(MEM::MISC::PlanetHolder *h)
 	: impl( new CImpl(h) )
 {
 }

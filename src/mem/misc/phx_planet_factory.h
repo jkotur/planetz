@@ -7,8 +7,10 @@
 #include "holder.h"
 #include <boost/shared_ptr.hpp>
 
-namespace GPU {
-
+namespace MEM
+{
+namespace MISC
+{
 	class PhxPlanet {
 	public:
 		PhxPlanet( unsigned id , const PlanetHolder* h );
@@ -32,10 +34,10 @@ namespace GPU {
 
 		PhxPlanet getPlanet( int id );
 
-		BufferGl<uint8_t> &getModels();
-
 		BufferGl<float3>  &getPositions();
 		BufferGl<float>   &getRadiuses();
+		BufferCu<float>   &getMasses();
+
 		BufferGl<uint32_t>&getCount();
 
 	private:
@@ -44,6 +46,6 @@ namespace GPU {
 	};
 
 }
-
+}
 #endif /* __PHX_PLANET_FACTORY_H__ */
 

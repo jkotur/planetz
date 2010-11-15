@@ -2,7 +2,7 @@
 
 using namespace GFX;
 
-PlanetzRenderer::PlanetzRenderer( const GPU::GfxPlanetFactory * factory )
+PlanetzRenderer::PlanetzRenderer( const MEM::MISC::GfxPlanetFactory * factory )
 	: grend  ( factory )
 	, crend  ( factory )
 	, drend  ( factory )
@@ -15,7 +15,7 @@ PlanetzRenderer::~PlanetzRenderer()
 	log_printf(DBG,"[DEL] Deleting PlanetzRenderer\n");
 }
 
-void PlanetzRenderer::setModels( GPU::PlanetzModel mod )
+void PlanetzRenderer::setModels( MEM::MISC::PlanetzModel mod )
 {
 	grend.setModels( mod );
 }

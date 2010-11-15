@@ -1,7 +1,8 @@
 include_directories( . )
 
 add_subdirectory( db )
+add_subdirectory( misc )
 
 add_library( mem memory_manager saver )
-target_link_libraries( mem gpu db ${CUDA_LIBRARIES} )
+target_link_libraries( mem memmisc db ${CUDA_LIBRARIES} )
 

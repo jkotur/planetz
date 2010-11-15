@@ -4,6 +4,7 @@
 #define __UI_H__
 
 #include <boost/signals.hpp>
+#include <boost/bind.hpp>
 
 #include "input/driver.h"
 

@@ -1,9 +1,11 @@
 #ifndef _BUFFER_CU_HPP_
 #define _BUFFER_CU_HPP_
 #include "buffer.h"
-#include "../debug/routines.h"
+#include <debug/routines.h>
 
-namespace GPU
+namespace MEM
+{
+namespace MISC
 {
 	//
 	// Cuda buffer declaration
@@ -158,5 +160,6 @@ namespace GPU
 			DBGPUT( CUT_CHECK_ERROR( "memcpy" ) );
 		}
 	}
+}
 }
 #endif

@@ -19,7 +19,7 @@ MemMgr::~MemMgr()
 {
 }
 
-GPU::PlanetzModel MemMgr::loadModels()
+MISC::PlanetzModel MemMgr::loadModels()
 {
 	TODO("Memory leak: where to delete m.vertiecs and m.texCoord?");
 
@@ -32,7 +32,7 @@ GPU::PlanetzModel MemMgr::loadModels()
 
 	sc.toTriangles( vertiecs , texcoords );
 
-	GPU::PlanetzModel m;
+	MISC::PlanetzModel m;
 
 	m.len      = size;
 	m.part_len = 120;
@@ -75,7 +75,7 @@ void MemMgr::load( const std::string& path )
 	// hardcoded load
 	holder.resize( size );
 
-	float3 * pos = holder.pos.map( GPU::BUF_H );
+	float3 * pos = holder.pos.map( MISC::BUF_H );
 	for( int i=0 ; i<size ; i++ )
 	{
 		pos[i].x = (i-size/2)*2.5;
@@ -84,12 +84,12 @@ void MemMgr::load( const std::string& path )
 	}
 	holder.pos.unmap();
 
-	float  * rad = holder.radius.map( GPU::BUF_H );
+	float  * rad = holder.radius.map( MISC::BUF_H );
 	for( int i=0 ; i<size ; i++ )
 		rad[i] = fabs(cos(3.1415926/10*i))*3+1;
 	holder.radius.unmap();
 
-	uint8_t* type = holder.model.map( GPU::BUF_H );
+	uint8_t* type = holder.model.map( MISC::BUF_H );
 	memset(type,0,sizeof(uint8_t)*size);
 	for( int i=0 ; i<3 ; i++ )
 		type[i] = 1u;
@@ -101,12 +101,12 @@ void MemMgr::save( const std::string& path )
 	TODO("Implement saving");
 }
 
-GPU::GfxPlanetFactory* MemMgr::getGfxMem()
+MISC::GfxPlanetFactory* MemMgr::getGfxMem()
 {
 	return &gpf;
 }
 
-GPU::PhxPlanetFactory* MemMgr::getPhxMem()
+MISC::PhxPlanetFactory* MemMgr::getPhxMem()
 {
 	return &ppf;
 }

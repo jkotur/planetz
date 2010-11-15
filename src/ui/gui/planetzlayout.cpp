@@ -7,12 +7,9 @@
 
 #include "planetzlayout.h"
 
-#include "planet.h"
-#include "phx/model.h"
-#include "phx/model.h"
-
 #include "util/logger.h"
 #include "util/vector.h"
+#include "util/timer/timer.h"
 
 #include "constants.h"
 
@@ -59,7 +56,7 @@ const boost::regex PlanetzLayout::file_cont("[\\w ]+");
 const std::string PlanetzLayout::qsave_name = "qsave.sav";
 
 PlanetzLayout::PlanetzLayout()
-	: Layout("planetz.layout") , sel_planet(NULL)
+	: Layout("planetz.layout") //, sel_planet(NULL)
 {
 	WindowManager::getSingleton().getWindow("btnAdd")
 		->subscribeEvent(PushButton::EventClicked
@@ -125,15 +122,16 @@ PlanetzLayout::~PlanetzLayout()
 {
 }
 
-void PlanetzLayout::add_selected_planet( Planet*p )
+/*void PlanetzLayout::add_selected_planet( Planet*p )
 {
 	sel_planet = p;
 	update_show_window();
-}
+}*/
 
 void PlanetzLayout::update_show_window()
 {
-	if( ! sel_planet ) {
+	return;
+	/*if( ! sel_planet ) {
 		WindowManager::getSingleton().getWindow("ShowWin")->setVisible(false);
 		return;
 	}
@@ -160,15 +158,15 @@ void PlanetzLayout::update_show_window()
 	WindowManager::getSingleton().getWindow("lbShowMass")->setText(buff);
 
 	snprintf(buff,BUFSIZE,"Aktualna planeta (%d)",sel_planet->get_id());
-	GETWIN("ShowWin")->setText(buff);
+	GETWIN("ShowWin")->setText(buff);*/
 }
 
 bool PlanetzLayout::del_planet( const CEGUI::EventArgs& e )
 {
 	log_printf(DBG,"[GUI] Removin planet!\n");
-	on_planet_delete(sel_planet);
+	//on_planet_delete(sel_planet);
 	WindowManager::getSingleton().getWindow("ShowWin")->setVisible(false);
-	sel_planet = NULL;
+	//sel_planet = NULL;
 	return true;
 }
 
@@ -208,9 +206,9 @@ bool PlanetzLayout::add_planet( const CEGUI::EventArgs& e )
 			,vel.x,vel.y,vel.z
 			,mass,radius );
 
-	GFX::Planet*gp = new GFX::Planet( );
-	Phx::Planet*pp = new Phx::Planet( pos , vel , mass , radius );
-	on_planet_add( new Planet(gp,pp) );
+	//GFX::Planet*gp = new GFX::Planet( );
+	//Phx::Planet*pp = new Phx::Planet( pos , vel , mass , radius );
+	//on_planet_add( new Planet(gp,pp) );
 
 	return true;
 }
@@ -327,7 +325,7 @@ bool PlanetzLayout::show_save_win( const CEGUI::EventArgs& e )
 
 bool PlanetzLayout::save( const CEGUI::EventArgs& e )
 {
-	string str = GETWIN("ebSave")->getText().c_str();
+	std::string str = GETWIN("ebSave")->getText().c_str();
 	if( !regex_match(str,save_file) ) {
 		if( regex_match(str,file_cont) )
 			str+=".sav";
@@ -359,9 +357,9 @@ bool PlanetzLayout::reset_anim( const CEGUI::EventArgs& e )
 
 bool PlanetzLayout::set_anim_speed( const CEGUI::EventArgs& e )
 {
-	Phx::Model::set_speed(
-			static_cast<Scrollbar*>(WindowManager::getSingleton().getWindow("slAnimSpeed"))
-			->getScrollPosition() + 100 );
+	//Phx::Model::set_speed(
+	//		static_cast<Scrollbar*>(WindowManager::getSingleton().getWindow("slAnimSpeed"))
+	//		->getScrollPosition() + 100 );
 	return true;
 }
 

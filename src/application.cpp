@@ -22,7 +22,6 @@ Application::Application( Window& win )
 	: fps(0) , anim_pause(true) ,
 	  window( win )             ,
 	  camera( CAM_START_VECS )  ,
-	  saver( planetz , camera ) ,
 	  plz( memmgr.getGfxMem() ) ,
 	  bkg( 0.8 , BASE_W , BASE_H )
 {
@@ -101,18 +100,19 @@ bool Application::init()
 	pl->on_cam_speed_changed.connect( bind(&Camera::set_speed,&camera,_1) );
 	pl->on_pause_click.connect( bind(&Application::pause_toggle,this) );
 	pl->on_reset_click.connect( bind(&Application::reset,this) );
-	pl->on_save.connect( bind(&MEM::Saver::save,&saver,_1) );
-	pl->on_load.connect( bind(&MEM::Saver::load,&saver,_1) );
+	//pl->on_save.connect( bind(&MEM::Saver::save,&saver,_1) );
+	//pl->on_load.connect( bind(&MEM::Saver::load,&saver,_1) );
+	TODO( "handle save/load on DataFlowMgr level" );
 	pl->on_load.connect( bind(&Application::pause_anim,this) );
 	pl->on_load.connect( bind(&MEM::MemMgr::load,&memmgr,_1) );
-	pl->on_planet_add.connect( bind(&Planetz::add,&planetz,_1) );
-	pl->on_planet_delete.connect( bind(&Planetz::erase,&planetz,_1) );
-	planetz.on_planet_select.connect( bind(&PlanetzLayout::add_selected_planet,pl,_1) );
+	//pl->on_planet_add.connect( bind(&Planetz::add,&planetz,_1) );
+	//pl->on_planet_delete.connect( bind(&Planetz::erase,&planetz,_1) );
+	//planetz.on_planet_select.connect( bind(&PlanetzLayout::add_selected_planet,pl,_1) );
 #endif
 
 	gfx.add( &bkg     );
 	gfx.add( &camera  );
-	gfx.add( &planetz );
+	//gfx.add( &planetz );
 	gfx.add( &plz     );
 #ifndef _NOGUI
 	gfx.add( &ui      );
@@ -144,8 +144,8 @@ void Application::main_loop()
 #endif
 		camera.signal();
 
-		if( !anim_pause )
-			planetz.update();
+		//if( !anim_pause )
+		//	planetz.update();
 
 		gfx.render();
 
@@ -194,10 +194,10 @@ void Application::pause_anim()
 
 void Application::reset() // Planetz*pl , Camera*c )
 {
-	planetz.clear();
+	//planetz.clear();
 	camera.set_perspective(CAM_START_VECS);
 	anim_pause = true;
-	planetz.select(-1); // clear selection
+	//planetz.select(-1); // clear selection
 }
 
 #ifndef _RELEASE

@@ -6,7 +6,10 @@
 #include "buffer.h"
 #include "holder.h"
 
-namespace GPU {
+namespace MEM
+{
+namespace MISC
+{
 
 	class GfxPlanet {
 	public:
@@ -42,6 +45,6 @@ namespace GPU {
 	};
 
 }
-
+}
 #endif /* __GFX_PLANET_FACTORY_H__ */
 

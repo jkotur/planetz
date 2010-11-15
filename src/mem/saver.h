@@ -2,24 +2,27 @@
 
 #define __SAVER_H__
 
-#include "ui/camera.h"
-#include "planetz_manager.h"
+#include <string>
 
-namespace MEM {
+namespace MEM
+{
+	namespace MISC
+	{
+		class PhxPlanetFactory;
+		class GfxPlanetFactory;
+	}
 
 	class Saver {
 	public:
-		Saver(  Planetz& _p ,  Camera& _c );
+		Saver();
 		virtual ~Saver();
 
-		void save();
-		void load();
-		
-		void save( const std::string& path );
-		void load( const std::string& path );
+		void save( MEM::MISC::PhxPlanetFactory* planets_phx, MEM::MISC::GfxPlanetFactory* planets_gfx, const std::string& path );
+		void load( MEM::MISC::PhxPlanetFactory* planets_phx, MEM::MISC::GfxPlanetFactory* planets_gfx, const std::string& path );
+
 	private:
-		Planetz&plz;
-		Camera&cam;
+		void map_buffers( MEM::MISC::PhxPlanetFactory *planets_phx, MEM::MISC::GfxPlanetFactory *planets_gfx);
+		void unmap_buffers( MEM::MISC::PhxPlanetFactory *planets_phx, MEM::MISC::GfxPlanetFactory *planets_gfx);
 	};
 }
 

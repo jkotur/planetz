@@ -8,9 +8,8 @@
 #include <string>
 
 #include "layout.h"
-#include "planet.h"
 
-typedef boost::signal<void (Planet*p)> SigSetPlanet;
+//typedef boost::signal<void (Planet*p)> SigSetPlanet;
 typedef boost::signal<void (std::string)> SigSetString;
 typedef boost::signal<void (double)> SigSetDouble;
 typedef boost::signal<void ()> SigVoid;
@@ -20,10 +19,10 @@ public:
 	PlanetzLayout ();
 	virtual ~PlanetzLayout();
 	
-	void add_selected_planet( Planet*p );
+	//void add_selected_planet( Planet*p );
 
-	SigSetPlanet on_planet_delete;
-	SigSetPlanet on_planet_add;
+	//SigSetPlanet on_planet_delete;
+	//SigSetPlanet on_planet_add;
 	SigSetDouble on_cam_speed_changed;
 	SigVoid on_pause_click;
 	SigVoid on_reset_click;
@@ -51,7 +50,7 @@ private:
 
 	void update_show_window();
 
-	Planet*sel_planet;
+	//Planet*sel_planet;
 
 	static const boost::regex save_file;
 	static const boost::regex file_cont;

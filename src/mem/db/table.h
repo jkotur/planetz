@@ -4,7 +4,7 @@
 #include <boost/foreach.hpp>
 #include <string>
 #include <sstream>
-#include <vector>
+#include <list>
 #include "row.h"
 
 namespace MEM

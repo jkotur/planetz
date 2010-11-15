@@ -1,14 +1,14 @@
 #ifndef _CPU_PHX_H_
 #define _CPU_PHX_H_
 
-#include "../gpu/holder.h"
+#include <mem/misc/holder.h>
 
 namespace CPU
 {
 	class Phx
 	{
 		public:
-			Phx(GPU::PlanetHolder *h);
+			Phx(MEM::MISC::PlanetHolder *h);
 			virtual ~Phx();
 
 			/// @brief Obliczenie n klatek fizyki

@@ -5,7 +5,9 @@
 
 #include <GL/glew.h>
 
-namespace GPU
+namespace MEM
+{
+namespace MISC
 {
 	class PlanetzModel {
 	public:
@@ -22,7 +24,8 @@ namespace GPU
 		GLsizei part_len;
 		GLsizei parts   ;
 	};
-} // GPU
+} // MEM::MISC
+} // MEM
 
 #endif /* __PLANET_MODEL_H__ */
 

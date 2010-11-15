@@ -4,9 +4,9 @@
 
 #include <string>
 
-#include "gpu/gfx_planet_factory.h"
-#include "gpu/phx_planet_factory.h"
-#include "gpu/planet_model.h"
+#include "misc/gfx_planet_factory.h"
+#include "misc/phx_planet_factory.h"
+#include "misc/planet_model.h"
 
 namespace MEM {
 
@@ -17,18 +17,18 @@ namespace MEM {
 
 		void init();
 
-		GPU::GfxPlanetFactory* getGfxMem();
-		GPU::PhxPlanetFactory* getPhxMem();
+		MISC::GfxPlanetFactory* getGfxMem();
+		MISC::PhxPlanetFactory* getPhxMem();
 		
-		GPU::PlanetzModel loadModels();
+		MISC::PlanetzModel loadModels();
 
 		void load( const std::string& path );
 		void save( const std::string& path );
 	private:
-		GPU::PlanetHolder holder;
+		MISC::PlanetHolder holder;
 
-		GPU::GfxPlanetFactory gpf;
-		GPU::PhxPlanetFactory ppf;
+		MISC::GfxPlanetFactory gpf;
+		MISC::PhxPlanetFactory ppf;
 	};
 
 }
