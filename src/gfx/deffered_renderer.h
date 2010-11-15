@@ -15,9 +15,14 @@ public:
 	void draw() const;
 	
 private:
+	GLuint generate_sphere_texture( int w , int h );
+
 	Program pr;
 
 	GLint radiusId;
+	GLint sphereTexId;
+
+	GLuint sphereTex;
 	
 	const GPU::GfxPlanetFactory * const factory;
 };
