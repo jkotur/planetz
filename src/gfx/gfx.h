@@ -40,7 +40,7 @@ public:
 
 	void clear() const;
 
-	void add( Drawable* _d );
+	void add( Drawable* _d , int prior = 0 );
 	void remove( Drawable* _d );
 
 	void render() const;
@@ -55,7 +55,7 @@ private:
 	SDL_Surface* drawContext;
 	Uint32 flags;
 
-	std::list<Drawable*> to_draw;
+	std::list<std::pair<int,Drawable*> > to_draw;
 
 //        Camera*c;
 };

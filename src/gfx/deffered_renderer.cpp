@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include <cmath>
+#include <algorithm>
 
 #include "gfx.h"
 
@@ -66,8 +67,11 @@ void DeferRender::prepare()
 
 void DeferRender::create_textures( unsigned int w , unsigned int h )
 {
+	unsigned sphereSize = pow(2,floor(log(std::max(w,h))/log(2.0)));
 	sphereTexId = glGetUniformLocation( prPlanet.id() , "sph_pos" );
-	sphereTex = generate_sphere_texture( 512 , 512 );
+	sphereTex = generate_sphere_texture( sphereSize ,sphereSize );
+
+	log_printf(DBG,"New sphere size: %d\n",sphereSize);
 
 	for( int i=0 ;i<gbuffNum ; i++ )
 		gbuffTex[i] = generate_render_target_texture( w , h );

@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 #include <SDL/SDL.h>
 
+#include <utility>
+
 #include <boost/foreach.hpp>
 
 #include "util/logger.h"
@@ -81,8 +83,9 @@ void Gfx::reshape_window(int width, int height)
 
 	GL_viewport( width , height );
 
-	BOOST_FOREACH( Drawable* i , to_draw )
-		i->resize( width , height );
+	typedef std::pair<int,Drawable*> pair;
+	BOOST_FOREACH( pair i , to_draw )
+		i.second->resize( width , height );
 }
 
 void Gfx::clear() const
@@ -92,24 +95,33 @@ void Gfx::clear() const
 	glLoadIdentity();
 }
 
-void Gfx::add( Drawable* d )
+void Gfx::add( Drawable* d , int prior )
 { 
 	TODO("Add prioritets in drawing");
 	d->setGfx( this );
-	to_draw.push_back( d );
+	for( std::list<std::pair<int,Drawable*> >::iterator i = to_draw.begin() ;
+	     ; ++i )
+		if( i->first > prior || i==to_draw.end() ) {
+			to_draw.insert( i , std::make_pair( prior , d ) );
+			break;
+		}
 }
 
 void Gfx::remove( Drawable* d )
 {
-	to_draw.remove(d);
+	for( std::list<std::pair<int,Drawable*> >::iterator i = to_draw.begin() ;
+	     i != to_draw.end() ; )
+		if( i->second == d )
+			i = to_draw.erase( i );
+		else	++i;
 }
 
 void Gfx::render() const 
 {
 	clear();
 
-	for( std::list<Drawable*>::const_iterator i = to_draw.begin() ; i!=to_draw.end() ; ++i )
-		(*i)->draw();
+	for( std::list<std::pair<int,Drawable*> >::const_iterator i = to_draw.begin() ; i!=to_draw.end() ; ++i )
+		i->second->draw();
 
 	SDL_GL_SwapBuffers();
 }

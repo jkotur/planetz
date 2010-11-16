@@ -70,8 +70,6 @@ bool Application::init()
 		connect( 0 , bind(&Window::reshape_window,&window,_1,_2));
 	ui.sigVideoResize.
 		connect( 1 , bind(&GFX::Gfx::reshape_window,&gfx,_1,_2) );
-	ui.sigVideoResize.
-		connect( 2 , bind(&GFX::Background::on_reshape_window,&bkg,_1,_2));
 
 	ui.sigMouseMotion.
 		connect( bind(&Camera::on_mouse_motion,&camera,_1,_2) );
@@ -110,11 +108,11 @@ bool Application::init()
 	//planetz.on_planet_select.connect( bind(&PlanetzLayout::add_selected_planet,pl,_1) );
 #endif
 
-	gfx.add( &bkg     );
-	gfx.add( &camera  );
-	gfx.add( &plz     );
+	gfx.add( &bkg    , 0 );
+	gfx.add( &camera , 1 );
+	gfx.add( &plz    , 2 );
 #ifndef _NOGUI
-	gfx.add( &ui      );
+	gfx.add( &ui     , 9 );
 #endif
 #ifndef _RELEASE
 	ox = new GFX::Arrow(Vector3(1,0,0));

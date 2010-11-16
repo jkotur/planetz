@@ -25,7 +25,7 @@ void Background::set_img( const std::string&img )
 	tex = gfx->texMgr.loadTexture(img);
 }
 
-void Background::on_reshape_window( int w , int h )
+void Background::resize( unsigned int w , unsigned int h )
 {
 	width = w;
 	height= h;
