@@ -106,7 +106,7 @@ GLuint DeferRender::generate_sphere_texture( int w , int h )
 			float x = ((float)wi/4.0f - w2)/(float)w2;
 			float y = ((float)hi - h2)/(float)h2;
 			float a = 1 <= x*x + y*y ? 0.0 : 1.0 ;
-			float z = !a?0.0f:std::sqrt( 1 - x*x - y*y ); 
+			float z =-(!a?0.0f:std::sqrt( 1 - x*x - y*y ));
 
 			int i = wi + hi*w4;
 
