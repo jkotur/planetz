@@ -5,11 +5,12 @@
 #include "mem/misc/gfx_planet_factory.h"
 #include "mem/misc/planet_model.h"
 #include "shader.h"
+#include "drawable.h"
 
 namespace GFX
 {
 
-class GeomRender {
+class GeomRender : public Drawable {
 public:
 	GeomRender( const MEM::MISC::GfxPlanetFactory * factory );
 	virtual ~GeomRender();
@@ -18,6 +19,7 @@ public:
 
 	void draw() const;
 
+	void prepare();
 private:
 	Program pr;
 

@@ -10,8 +10,8 @@ void main()
 	vec3 cs = vec3(1,.5,0);
 	vec3 cd = vec3(1,.5,0);
 
-	float ps = .1;
-	float sh = .1;
+	float ps = .01;
+	float sh = .01;
 
 	vec3 lpos    = vec3(0);
 	vec3 pos     = gdat1.xyz;

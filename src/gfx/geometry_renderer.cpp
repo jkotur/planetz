@@ -2,16 +2,24 @@
 
 #include "constants.h"
 
+#include "gfx.h"
+
 using namespace GFX;
 
 GeomRender::GeomRender( const MEM::MISC::GfxPlanetFactory * factory )
 	: texModelId(0) , factory(factory)
 {
-	ShaderManager shm;
+}
 
-	Shader*vs = shm.loadShader(GL_VERTEX_SHADER,DATA("shaders/geometry.vert"));
-	Shader*fs = shm.loadShader(GL_FRAGMENT_SHADER,DATA("shaders/geometry.frag"));
-	Shader*gs = shm.loadShader(GL_GEOMETRY_SHADER,DATA("shaders/geometry.geom"));
+GeomRender::~GeomRender()
+{
+}
+
+void GeomRender::prepare()
+{
+	Shader*vs = gfx->shmMgr.loadShader(GL_VERTEX_SHADER,DATA("shaders/geometry.vert"));
+	Shader*fs = gfx->shmMgr.loadShader(GL_FRAGMENT_SHADER,DATA("shaders/geometry.frag"));
+	Shader*gs = gfx->shmMgr.loadShader(GL_GEOMETRY_SHADER,DATA("shaders/geometry.geom"));
 
 	pr.attach( vs );
 	pr.attach( fs );
@@ -22,10 +30,6 @@ GeomRender::GeomRender( const MEM::MISC::GfxPlanetFactory * factory )
 
 	texModelId = glGetUniformLocation( pr.id() , "models" );
 
-}
-
-GeomRender::~GeomRender()
-{
 }
 
 void GeomRender::setModels( MEM::MISC::PlanetzModel mod )

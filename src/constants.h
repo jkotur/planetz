@@ -33,10 +33,13 @@
 #if defined(linux)
 #include <string>
 std::string get_bin_path();
-#define DATA_PATH (get_bin_path() + std::string("data/"))
+static std::string BINARY_PATH = get_bin_path();
+#define DATA_PATH (BINARY_PATH + std::string("data/"))
 #else
 #define DATA_PATH ("data/")
+#define BINARY_PATH ("")
 #endif
+#define BIN(x)   (BINARY_PATH+std::string(x))
 #define DATA(x)  (DATA_PATH+std::string(x))
 #define SAVES(x) (DATA_PATH+std::string("saves/")+std::string(x))
 

@@ -49,7 +49,7 @@ void Gui::init_throw()
 	int height= vidinfo->current_h;
 
 	renderer = new CEGUI::OpenGLRenderer(0,width,height);
-	new CEGUI::System(renderer);
+	new System( renderer , 0 , 0 , 0 , "" , BIN("CEGUI.log") );
 
 	DefaultResourceProvider* rp = static_cast<DefaultResourceProvider*>(
 			CEGUI::System::getSingleton().getResourceProvider());

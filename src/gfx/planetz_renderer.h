@@ -22,6 +22,10 @@ public:
 
 	virtual void prepare();
 
+	virtual void resize(
+			unsigned int width ,
+			unsigned int height );
+
 	void setGfx( Gfx * _g );
 
 	void setModels( MEM::MISC::PlanetzModel modPlanet );

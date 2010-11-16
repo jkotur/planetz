@@ -15,6 +15,7 @@ Shader::Shader()
 
 Shader::~Shader()
 {
+	log_printf(DBG,"[DEL] Deleting shader  %s\n",_path.c_str());
 	glDeleteShader(_id);
 }
 
@@ -24,7 +25,10 @@ ShaderManager::ShaderManager()
 
 ShaderManager::~ShaderManager()
 {
-	TODO("Deleteing shaders here");
+	for( std::map<std::string,Shader*>::iterator i = loaded_shaders.begin() ; i!=loaded_shaders.end() ; ++i )
+		delete i->second;
+	for( std::list<Shader*>::iterator i = loaded_with_errors.begin() ; i!= loaded_with_errors.end() ; ++i )
+		delete *i;
 }
 
 Shader* ShaderManager::loadShader( GLenum type , const std::string& path )
@@ -47,8 +51,11 @@ Shader* ShaderManager::loadShader( GLenum type , const std::string& path )
 	glShaderSource(sh->_id,1,&ps,NULL);
 	glCompileShader(sh->_id);
 
+	// FIXME: or maybe add all shaders to one map? Fail is because
+	//        warnings in shaders are treated same as errors :<
 	if( checkShaderLog( sh->_id , path ) )
 		loaded_shaders[path] = sh;
+	else	loaded_with_errors.push_back( sh );
 
 	return sh;
 }

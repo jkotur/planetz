@@ -12,55 +12,38 @@ using namespace GFX;
 DeferRender::DeferRender( const MEM::MISC::GfxPlanetFactory * factory )
 	: factory(factory)
 {
-	TODO("Connect this class to OnWindowResize event so it can resize its buffers");
-	TODO("Move ShaderManager to gfx class");
+}
 
-	ShaderManager shm;
+DeferRender::~DeferRender()
+{
+	delete_textures();
+}
 
+void DeferRender::prepare()
+{
 	prPlanet.create(
-		shm.loadShader(GL_VERTEX_SHADER  ,DATA("shaders/deffered_01.vert")),
-		shm.loadShader(GL_FRAGMENT_SHADER,DATA("shaders/deffered_01.frag")),
-		shm.loadShader(GL_GEOMETRY_SHADER,DATA("shaders/deffered_01.geom")),
+		gfx->shmMgr.loadShader(GL_VERTEX_SHADER  ,
+				DATA("shaders/deffered_01.vert")),
+		gfx->shmMgr.loadShader(GL_FRAGMENT_SHADER,
+				DATA("shaders/deffered_01.frag")),
+		gfx->shmMgr.loadShader(GL_GEOMETRY_SHADER,
+				DATA("shaders/deffered_01.geom")),
 		GL_POINTS , GL_QUAD_STRIP );
 
 	prLighting.create(
-		shm.loadShader(GL_VERTEX_SHADER  ,DATA("shaders/deffered_02.vert")),
-		shm.loadShader(GL_FRAGMENT_SHADER,DATA("shaders/deffered_02.frag")));
+		gfx->shmMgr.loadShader(GL_VERTEX_SHADER  ,DATA("shaders/deffered_02.vert")),
+		gfx->shmMgr.loadShader(GL_FRAGMENT_SHADER,DATA("shaders/deffered_02.frag")));
 
 	radiusId = glGetAttribLocation( prPlanet.id() , "radius" );
 	modelId  = glGetAttribLocation( prPlanet.id() , "model"  );
 
 	TODO("Dynamically change screen size ratio in shader");
-	GLint ratioId = glGetUniformLocation( prPlanet.id() , "ratio" );
+	ratioId = glGetUniformLocation( prPlanet.id() , "ratio" );
 
 	prPlanet.use();
 	glUniform1i( sphereTexId , 0 );
-	glUniform1f( ratioId , (float)BASE_W/(float)BASE_H );
+	glUniform1f( ratioId , (float)gfx->width()/(float)gfx->height() );
 	Program::none();
-
-	sphereTexId = glGetUniformLocation( prPlanet.id() , "sph_pos" );
-	sphereTex = generate_sphere_texture( 512 , 512 );
-
-	for( int i=0 ;i<gbuffNum ; i++ )
-		gbuffTex[i] = generate_render_target_texture( 800 , 600 );
-
-	glGenTextures( 1, &depthTex );
-	glBindTexture( GL_TEXTURE_2D, depthTex );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-	glTexImage2D( GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 800, 600, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0 );
-
-	glGenFramebuffers( 1, &fboId );
-	glBindFramebuffer( GL_FRAMEBUFFER , fboId );
-
-	bufferlist[0] = GL_COLOR_ATTACHMENT0;
-	bufferlist[1] = GL_COLOR_ATTACHMENT1;
-
-	glFramebufferTexture2D( GL_FRAMEBUFFER , GL_COLOR_ATTACHMENT0 , GL_TEXTURE_2D , gbuffTex[0] , 0 );
-	glFramebufferTexture2D( GL_FRAMEBUFFER , GL_COLOR_ATTACHMENT1 , GL_TEXTURE_2D , gbuffTex[1] , 0 );
-	glFramebufferTexture2D( GL_FRAMEBUFFER , GL_DEPTH_ATTACHMENT  , GL_TEXTURE_2D , depthTex  , 0 );
-
-	glBindFramebuffer( GL_FRAMEBUFFER , 0 );
 
 	rect.resize( 8 );
 	float * hptr = rect.map( MEM::MISC::BUF_H );
@@ -77,9 +60,39 @@ DeferRender::DeferRender( const MEM::MISC::GfxPlanetFactory * factory )
 	glUniform1i( gbuffId[0] , 0 );
 	glUniform1i( gbuffId[1] , 1 );
 	Program::none();
+
+	create_textures( gfx->width() , gfx->height() );
 }
 
-DeferRender::~DeferRender()
+void DeferRender::create_textures( unsigned int w , unsigned int h )
+{
+	sphereTexId = glGetUniformLocation( prPlanet.id() , "sph_pos" );
+	sphereTex = generate_sphere_texture( 512 , 512 );
+
+	for( int i=0 ;i<gbuffNum ; i++ )
+		gbuffTex[i] = generate_render_target_texture( w , h );
+
+	glGenTextures( 1, &depthTex );
+	glBindTexture( GL_TEXTURE_2D, depthTex );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, w, h, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0 );
+
+	glGenFramebuffers( 1, &fboId );
+	glBindFramebuffer( GL_FRAMEBUFFER , fboId );
+
+	bufferlist[0] = GL_COLOR_ATTACHMENT0;
+	bufferlist[1] = GL_COLOR_ATTACHMENT1;
+
+	glFramebufferTexture2D( GL_FRAMEBUFFER , GL_COLOR_ATTACHMENT0 , GL_TEXTURE_2D , gbuffTex[0] , 0 );
+	glFramebufferTexture2D( GL_FRAMEBUFFER , GL_COLOR_ATTACHMENT1 , GL_TEXTURE_2D , gbuffTex[1] , 0 );
+	glFramebufferTexture2D( GL_FRAMEBUFFER , GL_DEPTH_ATTACHMENT  , GL_TEXTURE_2D , depthTex  , 0 );
+
+	glBindFramebuffer( GL_FRAMEBUFFER , 0 );
+
+}
+
+void DeferRender::delete_textures()
 {
 	glDeleteTextures(1,&sphereTex);
 	glDeleteTextures(gbuffNum,gbuffTex);
@@ -88,8 +101,13 @@ DeferRender::~DeferRender()
 	glDeleteFramebuffers( 1 , &fboId );
 }
 
-void DeferRender::prepare()
+void DeferRender::resize( unsigned int width , unsigned int height )
 {
+	delete_textures();
+	create_textures( width , height );
+	prPlanet.use();
+	glUniform1f( ratioId , (float)width/(float)height );
+	Program::none();
 }
 
 GLuint DeferRender::generate_sphere_texture( int w , int h )

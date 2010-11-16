@@ -6,6 +6,7 @@
 
 #include <string>
 #include <map>
+#include <list>
 
 
 namespace GFX
@@ -39,6 +40,7 @@ private:
 	bool checkShaderLog( GLuint id , const std::string& path );
 
 	std::map<std::string,Shader*> loaded_shaders;
+	std::list<Shader*> loaded_with_errors;
 };
 
 class Program {

@@ -16,7 +16,11 @@ namespace GFX
 		virtual void draw() const =0;
 		virtual void prepare() {}
 
-		void setGfx( Gfx* _g )
+		virtual void resize(
+				unsigned int width ,
+				unsigned int height) {}
+
+		virtual void setGfx( Gfx* _g )
 		{	gfx = _g; prepare(); }
 	protected:
 		Gfx* gfx;

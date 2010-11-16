@@ -1,6 +1,6 @@
 include_directories( . )
 
-add_library( gfx arrow background planet planet_gfx gfx texture
+add_library( gfx arrow background gfx texture
 	planetz_renderer shader
 	geometry_renderer copy_renderer
 	deffered_renderer )

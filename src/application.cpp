@@ -42,7 +42,7 @@ bool Application::init()
 	//
 	// init logger
 	//
-	f_log = std::fopen("planetz.log","w");
+	f_log = std::fopen(BIN("planetz.log").c_str(),"w");
 	log_add(LOG_STREAM(f_log),LOG_PRINTER(std::vfprintf));
 #ifdef _RELEASE
 	log_set_lev(INFO);
@@ -58,7 +58,7 @@ bool Application::init()
 	//
 	memmgr.init();
 
-	plz.setModels( memmgr.loadModels() );
+//        plz.setModels( memmgr.loadModels() ); // deprecated render mode
 
 	//
 	// init user interface
@@ -112,7 +112,6 @@ bool Application::init()
 
 	gfx.add( &bkg     );
 	gfx.add( &camera  );
-	//gfx.add( &planetz );
 	gfx.add( &plz     );
 #ifndef _NOGUI
 	gfx.add( &ui      );
@@ -206,7 +205,6 @@ void Application::reset() // Planetz*pl , Camera*c )
 
 void Application::test()
 {
-	SphereConv( *Sphere::get_obj(0) ).toTriangleStrip(NULL,NULL);
 }
 #endif
 

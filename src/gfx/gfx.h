@@ -14,6 +14,8 @@
 #include <boost/bind.hpp>
 
 #include "drawable.h"
+
+#include "shader.h"
 #include "texture.h"
 
 /**
@@ -47,6 +49,7 @@ public:
 	int height(){ return mheight;}
 
 	TextureManager texMgr;
+	ShaderManager  shmMgr;
 private:
 	int mwidth , mheight;
 	SDL_Surface* drawContext;

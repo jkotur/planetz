@@ -17,8 +17,15 @@ public:
 	virtual void draw() const;
 
 	virtual void prepare();
+
+	virtual void resize(
+			unsigned int width ,
+			unsigned int height );
 	
 private:
+	void create_textures( unsigned int w , unsigned int h );
+	void delete_textures();
+
 	GLuint generate_sphere_texture( int w , int h );
 	GLuint generate_render_target_texture( int w , int h );
 
@@ -30,6 +37,8 @@ private:
 	GLint gbuffId[gbuffNum];
 
 	GLenum bufferlist[gbuffNum];
+
+	GLint ratioId;
 
 	GLint radiusId;
 	GLint modelId ;

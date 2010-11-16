@@ -1,10 +1,13 @@
+#include "gfx.h"
+
 #include <GL/glew.h>
 #include <SDL/SDL.h>
 
-#include "./gfx.h"
-#include "../util/logger.h"
+#include <boost/foreach.hpp>
 
-#include "../constants.h"
+#include "util/logger.h"
+#include "constants.h"
+#include "debug/routines.h"
 
 using namespace GFX;
 
@@ -77,6 +80,9 @@ void Gfx::reshape_window(int width, int height)
 	height = height < 1 ? 1 : height;
 
 	GL_viewport( width , height );
+
+	BOOST_FOREACH( Drawable* i , to_draw )
+		i->resize( width , height );
 }
 
 void Gfx::clear() const
@@ -87,7 +93,8 @@ void Gfx::clear() const
 }
 
 void Gfx::add( Drawable* d )
-{ // FIXME: add prioritets
+{ 
+	TODO("Add prioritets in drawing");
 	d->setGfx( this );
 	to_draw.push_back( d );
 }
