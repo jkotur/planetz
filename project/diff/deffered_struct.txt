@@ -1,0 +1,7 @@
+    buffers     |          values 
+----------------+--------+--------+--------+----------
+ gl_FragData[0] | pos.x  | pos.y  | pos.z  | alpha
+ gl_FragData[1] | norm.x | norm.y | norm.z | material
+ gl_FragData[2] |
+
+

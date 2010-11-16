@@ -1,11 +1,15 @@
+#version 130 
 
-varying in  float in_radiuses;
+varying in float radius;
+varying in float model;
 
 varying out float radiuses;
+varying out float models;
 
 void main()
 {	
-	radiuses = in_radiuses;
+	radiuses = radius;
+	models   = model;
 	gl_Position = ftransform();
 //        gl_Position = gl_Vertex;
 }

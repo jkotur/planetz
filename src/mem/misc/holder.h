@@ -42,7 +42,7 @@ namespace MISC
 		}
 
 		//   * GFX
-		GBUF<uint8_t>      model;
+		GBUF<float>    model;
 
 		//   * COMMON
 		GBUF<float3>   pos;

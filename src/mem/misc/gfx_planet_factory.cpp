@@ -46,9 +46,9 @@ const GfxPlanet GfxPlanetFactory::getPlanet( int id ) const
 	return GfxPlanet( id , holder );
 }
 
-const BufferGl<uint8_t> *GfxPlanetFactory::getModels() const
+const BufferGl<float> &GfxPlanetFactory::getModels() const
 {
-	return &holder->model;
+	return holder->model;
 }
 
 const BufferGl<float3>  &GfxPlanetFactory::getPositions() const

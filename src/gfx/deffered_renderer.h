@@ -24,15 +24,20 @@ private:
 
 	Program prPlanet , prLighting;
 
-	GLint screenId;
-	GLint colourId;
+	static const GLsizei gbuffNum = 2;
+	GLuint gbuffTex[gbuffNum];
+
+	GLint gbuffId[gbuffNum];
+
+	GLenum bufferlist[gbuffNum];
+
 	GLint radiusId;
+	GLint modelId ;
 	GLint sphereTexId;
 
 	GLuint fboId;
 
 	GLuint depthTex;
-	GLuint colourTex;
 	GLuint sphereTex;
 
 	MEM::MISC::BufferGl<float> rect;

@@ -89,10 +89,9 @@ void MemMgr::load( const std::string& path )
 		rad[i] = fabs(cos(3.1415926/10*i))*3+1;
 	holder.radius.unmap();
 
-	uint8_t* type = holder.model.map( MISC::BUF_H );
-	memset(type,0,sizeof(uint8_t)*size);
-	for( int i=0 ; i<3 ; i++ )
-		type[i] = 1u;
+	float* type = holder.model.map( MISC::BUF_H );
+	for( int i=0 ; i<size ; i++ )
+		type[i] = i%3?1.f:0.f;
 	holder.model.unmap();
 }
 
