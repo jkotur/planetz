@@ -76,6 +76,8 @@ void Window::GL_query()
 	log_printf(INFO,"[GL] max geometry output vertices: %d\n",ires);
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS,&ires);
 	log_printf(INFO,"[GL] texture units:                %d\n",ires);
+	glGetIntegerv(GL_MAX_DRAW_BUFFERS,&ires);
+	log_printf(INFO,"[GL] max draw buffers:             %d\n",ires);
 }
 
 Window::~Window()

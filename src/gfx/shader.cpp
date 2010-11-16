@@ -87,6 +87,25 @@ Program::~Program()
 	glDeleteProgram(_id);
 }
 
+void Program::create( Shader*vs , Shader*fs )
+{
+	attach( vs );
+	attach( fs );
+	
+	link();
+}
+
+void Program::create( Shader*vs , Shader*fs , Shader*gs , const GLenum in , const GLenum out )
+{
+	attach( vs );
+	attach( fs );
+	attach( gs );
+
+	geomParams( in , out );
+
+	link();
+}
+
 void Program::attach( const Shader* const sh )
 {
 	glAttachShader(_id,sh->id());

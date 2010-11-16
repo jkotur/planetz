@@ -22,6 +22,8 @@ public:
 
 	virtual void prepare();
 
+	void setGfx( Gfx * _g );
+
 	void setModels( MEM::MISC::PlanetzModel modPlanet );
 private:
 	GeomRender grend;

@@ -22,6 +22,14 @@ void PlanetzRenderer::setModels( MEM::MISC::PlanetzModel mod )
 
 void PlanetzRenderer::prepare()
 {
+	drend.prepare();
+}
+
+void PlanetzRenderer::setGfx( Gfx * _g )
+{
+	Drawable::setGfx( _g );
+
+	drend.setGfx( _g );
 }
 
 void PlanetzRenderer::draw() const

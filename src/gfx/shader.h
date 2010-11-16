@@ -46,6 +46,9 @@ public:
 	Program( Shader*vs = NULL , Shader*fs = NULL , Shader*gs = NULL );
 	virtual ~Program();
 
+	void create( Shader*vs , Shader*fs = NULL );
+	void create( Shader*vs , Shader*fs , Shader*gs , const GLenum in , const GLenum out );
+
 	GLuint id() const { return _id; }
 
 	void attach( const Shader* const sh );
