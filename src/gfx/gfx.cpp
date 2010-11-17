@@ -97,7 +97,6 @@ void Gfx::clear() const
 
 void Gfx::add( Drawable* d , int prior )
 { 
-	TODO("Add prioritets in drawing");
 	d->setGfx( this );
 	for( std::list<std::pair<int,Drawable*> >::iterator i = to_draw.begin() ;
 	     ; ++i )

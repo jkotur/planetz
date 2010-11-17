@@ -24,16 +24,21 @@ void DeferRender::prepare()
 {
 	prPlanet.create(
 		gfx->shmMgr.loadShader(GL_VERTEX_SHADER  ,
-				DATA("shaders/deffered_01.vert")),
+			DATA("shaders/deffered_01.vert")),
 		gfx->shmMgr.loadShader(GL_FRAGMENT_SHADER,
-				DATA("shaders/deffered_01.frag")),
+			DATA("shaders/deffered_01.frag")),
 		gfx->shmMgr.loadShader(GL_GEOMETRY_SHADER,
-				DATA("shaders/deffered_01.geom")),
+			DATA("shaders/deffered_01.geom")),
 		GL_POINTS , GL_QUAD_STRIP );
 
 	prLighting.create(
-		gfx->shmMgr.loadShader(GL_VERTEX_SHADER  ,DATA("shaders/deffered_02.vert")),
-		gfx->shmMgr.loadShader(GL_FRAGMENT_SHADER,DATA("shaders/deffered_02.frag")));
+		gfx->shmMgr.loadShader(GL_VERTEX_SHADER  ,
+			DATA("shaders/deffered_02.vert")),
+		gfx->shmMgr.loadShader(GL_FRAGMENT_SHADER,
+			DATA("shaders/deffered_02.frag")),
+		gfx->shmMgr.loadShader(GL_GEOMETRY_SHADER,
+			DATA("shaders/deffered_02.geom")),
+		GL_POINTS , GL_QUAD_STRIP );
 
 	radiusId = glGetAttribLocation( prPlanet.id() , "radius" );
 	modelId  = glGetAttribLocation( prPlanet.id() , "model"  );
@@ -45,14 +50,6 @@ void DeferRender::prepare()
 	glUniform1i( sphereTexId , 0 );
 	glUniform1f( ratioId , (float)gfx->width()/(float)gfx->height() );
 	Program::none();
-
-	rect.resize( 8 );
-	float * hptr = rect.map( MEM::MISC::BUF_H );
-	hptr[0] = 0.0; hptr[1] = 0.0;
-	hptr[2] = 1.0; hptr[3] = 0.0;
-	hptr[4] = 0.0; hptr[5] = 1.0;
-	hptr[6] = 1.0; hptr[7] = 1.0;
-	rect.unmap();
 
 	gbuffId[0] = glGetUniformLocation( prLighting.id() , "gbuff1" );
 	gbuffId[1] = glGetUniformLocation( prLighting.id() , "gbuff2" );
@@ -70,8 +67,6 @@ void DeferRender::create_textures( unsigned int w , unsigned int h )
 	unsigned sphereSize = pow(2,floor(log(std::max(w,h))/log(2.0)));
 	sphereTexId = glGetUniformLocation( prPlanet.id() , "sph_pos" );
 	sphereTex = generate_sphere_texture( sphereSize ,sphereSize );
-
-	log_printf(DBG,"New sphere size: %d\n",sphereSize);
 
 	for( int i=0 ;i<gbuffNum ; i++ )
 		gbuffTex[i] = generate_render_target_texture( w , h );
@@ -200,17 +195,10 @@ void DeferRender::draw() const
 	glDisableVertexAttribArray( radiusId );
 	glDisableVertexAttribArray( modelId  );
 
-	glEnableClientState( GL_TEXTURE_COORD_ARRAY );
+	glEnable( GL_BLEND );
+	glBlendFunc( GL_ONE , GL_ONE );
 
 	glClear( GL_DEPTH_BUFFER_BIT ); 
-
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	glOrtho( 0 , 1 , 0 , 1 , 1 , -1 );
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
 
 	prLighting.use();
 	glActiveTexture( GL_TEXTURE0 );
@@ -219,26 +207,38 @@ void DeferRender::draw() const
 	glActiveTexture( GL_TEXTURE1 );
 	glBindTexture( GL_TEXTURE_2D , gbuffTex[1] );
 
-	rect.bind();
-	glTexCoordPointer( 2 , GL_FLOAT , 0 , NULL );
-	glVertexPointer  ( 2 , GL_FLOAT , 0 , NULL );
-	rect.unbind();
-	glDrawArrays( GL_TRIANGLE_STRIP  , 0 , 4 ); 
+//        log_printf(DBG,"cze\n");
 
-	glPopMatrix();
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
+	glBegin(GL_POINTS);
+	  glVertex3f(0, 4,0);
+	  glVertex3f(0,-4,0);
+	  glVertex3f(-1,-4,0);
+	  glVertex3f(1,-4,0);
+	  glVertex3f(1,-4,10);
+	  glVertex3f(10,10,10);
+	  glVertex3f(-10,10,10);
+	  glVertex3f(-10,15,10);
+	  glVertex3f(100,75,100);
+	  glVertex3f(1000,1000,1000);
+	glEnd();
+//        factory->getPositions().bind();
+//        glVertexPointer  ( 3 , GL_FLOAT , 0 , NULL );
+//        factory->getPositions().unbind();
+
+//        log_printf(DBG,"cze\n");
+
+//        glDrawArrays( GL_POINTS , 0 , 1 ); 
+
+//        log_printf(DBG,"cze\n");
 
 	glBindTexture( GL_TEXTURE_2D , 0 );
 	glActiveTexture( GL_TEXTURE0 );
 	glBindTexture( GL_TEXTURE_2D , 0 );
 	Program::none();
 
-	glDisable( GL_ALPHA_TEST );
 	glDisable( GL_BLEND );
+	glDisable( GL_ALPHA_TEST );
 
-	glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 	glDisableClientState( GL_VERTEX_ARRAY );
 }
 

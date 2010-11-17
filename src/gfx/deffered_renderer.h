@@ -49,9 +49,6 @@ private:
 	GLuint depthTex;
 	GLuint sphereTex;
 
-	MEM::MISC::BufferGl<float> rect;
-	MEM::MISC::BufferGl<float> rect2;
-	
 	const MEM::MISC::GfxPlanetFactory * const factory;
 };
 
