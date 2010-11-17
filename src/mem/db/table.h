@@ -37,21 +37,31 @@ namespace MEM
 			const_iterator end() const;
 
 			void clear();
+			size_type size() const;
 
 		private:
 			RowContainer rows;
 			friend class Database;
+			static const std::string transaction_begin;;
+			static const std::string transaction_end;
 	};
+
+	template<class RowType>
+	const std::string Table<RowType>::transaction_begin = "BEGIN TRANSACTION;\n";
+	template<class RowType>
+	const std::string Table<RowType>::transaction_end = "COMMIT;\n";
 
 	template<class RowType>
 	std::string Table<RowType>::getSaveString() const
 	{
 		log_printf(DBG, "gettin save string\n");
 		std::stringstream ss;
+		ss << transaction_begin;
 		for( const_iterator i = begin(); i != end(); ++i )
 		{
 			ss << (*i)->getSaveString() << std::endl;
 		}
+		ss << transaction_end;
 		log_printf(DBG, "gettin save string done: %s\n", ss.str().c_str());
 		fflush(stdout);
 		fflush(stderr);
@@ -114,6 +124,12 @@ namespace MEM
 	Table<RowType>::~Table<RowType>()
 	{
 		clear();
+	}
+	
+	template<class RowType>
+	typename Table<RowType>::size_type Table<RowType>::size() const
+	{
+		return rows.size();
 	}
 }
 

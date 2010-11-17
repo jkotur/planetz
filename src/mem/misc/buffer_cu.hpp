@@ -19,6 +19,7 @@ namespace MISC
 		virtual ~BufferCu();
 
 		virtual void resize( size_t num , const T*data = NULL );
+		virtual void assign( T val );
 
 		T* h_data();
 		T* d_data();
@@ -72,6 +73,13 @@ namespace MISC
 		device_ptr_free();
 		device_ptr_alloc(num);
 		device_ptr_assign(data);
+	}
+
+	template<typename T>
+	void BufferCu<T>::assign( T val )
+	{
+		ASSERT( 1 == BufferBase<T>::getLen() );
+		setAt(0, val);
 	}
 
 	template<typename T>

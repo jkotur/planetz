@@ -1,11 +1,8 @@
 #ifndef _IOCTL_H_
 #define _IOCTL_H_
 
-namespace GPU
-{
-	class PhxPlanetFactory;
-	class GfxPlanetFactory;
-}
+#include <string>
+#include "misc/holder.h"
 
 namespace MEM
 {
@@ -15,11 +12,8 @@ namespace MEM
 			IOCtl();
 			virtual ~IOCtl();
 
-			void save( PhxPlanetFactory*, GfxPlanetFactory* , const std::string &path );
-			void load( PhxPlanetFactory*, GfxPlanetFactory* , const std::string &path );
-
-			void save( PhxPlanetFactory*, GfxPlanetFactory* );
-			void load( PhxPlanetFactory*, GfxPlanetFactory* );
+			void save( const MISC::CpuPlanetHolder *source, const std::string& path );
+			MISC::CpuPlanetHolder *load( const std::string& path );
 
 		private:
 			class Impl;

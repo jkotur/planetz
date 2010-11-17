@@ -1,13 +1,14 @@
 #include "ioctl.h"
 #include "saver.h"
+#include "constants.h"
 
 using namespace MEM;
 
 class IOCtl::Impl
 {
 	public:
-		void save( PhxPlanetFactory*, GfxPlanetFactory*, const std::string &path );
-		void load( PhxPlanetFactory*, GfxPlanetFactory*, const std::string &path );
+		void save( const MISC::CpuPlanetHolder *source, const std::string& path );
+		MISC::CpuPlanetHolder *load( const std::string& path );
 
 	private:
 		Saver s;
@@ -24,32 +25,22 @@ IOCtl::~IOCtl()
 	delete impl;
 }
 
-void IOCtl::save( PhxPlanetFactory* planets_phx, GfxPlanetFactory *planets_gfx, const std::string &path )
+void IOCtl::save( const MISC::CpuPlanetHolder *source, const std::string &path )
 {
-	impl->save( planets_phx, planets_gfx, path );
+	impl->save( source, path );
 }
 
-void IOCtl::load( PhxPlanetFactory* planets_phx, GfxPlanetFactory *planets_gfx, const std::string &path )
+MISC::CpuPlanetHolder* IOCtl::load( const std::string &path )
 {
-	impl->load( planets_phx, planets_gfx, path );
+	return impl->load( path );
 }
 
-void IOCtl::save( PhxPlanetFactory* planets_phx, GfxPlanetFactory *planets_gfx )
+void IOCtl::Impl::save( const MISC::CpuPlanetHolder *source, const std::string &path )
 {
-	save( planets_phx, planets_gfx, DATA("saves/first.sav") );
+	s.save( source, path );
 }
 
-void IOCtl::load( PhxPlanetFactory* planets_phx, GfxPlanetFactory *planets_gfx )
+MISC::CpuPlanetHolder* IOCtl::Impl::load( const std::string &path )
 {
-	load( planets_phx, planets_gfx, DATA("saves/first.sav") );
-}
-
-void IOCtl::Impl::save( PhxPlanetFactory* planets_phx, GfxPlanetFactory *planets_gfx )
-{
-	s.save( planets_phx, planets_gfx );
-}
-
-void IOCtl::Impl::load( PhxPlanetFactory* planets_phx, GfxPlanetFactory *planets_gfx )
-{
-	s.load( planets_phx, planets_gfx );
+	return s.load( path );
 }

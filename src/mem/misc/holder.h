@@ -20,8 +20,7 @@ namespace MISC
 			, mass(0)
 			, velocity(0)
 		{
-			count.map( BUF_H )[0] = num;
-			count.unmap();
+			count.assign( num );
 		}
 
 		virtual ~PlanetHolderBase()
@@ -37,8 +36,7 @@ namespace MISC
 			radius.resize(num);
 			mass.resize(num);
 			velocity.resize(num);
-			count.map( BUF_H )[0] = num;
-			count.unmap();
+			count.assign( num );
 		}
 
 		//   * GFX

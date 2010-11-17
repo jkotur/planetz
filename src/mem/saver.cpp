@@ -20,86 +20,63 @@ Saver::~Saver()
 	log_printf(DBG,"[DEL] Deleting saver\n");
 }
 
-void Saver::save( PhxPlanetFactory* planets_phx, GfxPlanetFactory* planets_gfx, const std::string &path )
+void Saver::save( const MISC::CpuPlanetHolder *source, const std::string &path )
 {
-	log_printf(DBG, "Creating db object\n");
 	DBSqlite db( path );
-	log_printf(DBG, "Creating table object\n");
 	Table<PlanetRow> table;
 
-	uint32_t num = planets_phx->getCount().map( BUF_H )[0];
-
-	map_buffers( planets_phx, planets_gfx );
+	uint32_t num = source->count[0];
 
 	for( uint32_t i = 0; i < num ; ++i )
 	{
 		PlanetRow *p = new PlanetRow;
-
-		float3 v = planets_phx->getPositions().map( BUF_H )[ i ];
+		float3 v = source->pos[ i ];
 		p->xcoord = v.x;
 		p->ycoord = v.y;
 		p->zcoord = v.z;
+		v = source->velocity[ i ];
 		p->xvel = v.x;
 		p->yvel = v.y;
 		p->zvel = v.z;
-		p->mass = planets_phx->getMasses().h_data()[ i ];
-		p->radius = planets_phx->getRadiuses().map( BUF_H )[ i ];
-		log_printf(DBG, "Adding to table\n");
+		p->mass = source->mass[ i ];
+		p->radius = source->radius[ i ];
+		p->model_id = source->model[ i ];
 		table.add( p );
 	}
-
-	unmap_buffers( planets_phx, planets_gfx );
-
-	log_printf(DBG, "saving to db\n");
 	db.save( table );
-	log_printf(DBG, "done\n");
 }
 
-void Saver::load( PhxPlanetFactory* planets_phx, GfxPlanetFactory* planets_gfx, const std::string &path )
+namespace
 {
+	float3 make_float3( float x, float y, float z )
+	{
+		float3 f;
+		f.x = x;
+		f.y = y;
+		f.z = z;
+		return f;
+	}
+}
+
+MISC::CpuPlanetHolder* Saver::load( const std::string &path )
+{
+	TODO("use some kind of smart ptr instead of returning allocated raw ptr");
+	MISC::CpuPlanetHolder *h = new MISC::CpuPlanetHolder();
 	DBSqlite db( path );
 	Table<PlanetRow> table;
 	db.load( table );
 
-	float3 pos;
-	float3 speed;
-	double mass;
-	double radius;
+	unsigned i = 0;
 
-	map_buffers( planets_phx, planets_gfx );
-
+	h->resize( table.size() );
 
 	BOOST_FOREACH( PlanetRow *p, table )
 	{
-		pos.x = p->xcoord;
-		pos.y = p->ycoord;
-		
-		pos.z = p->zcoord;
-		speed.x = p->xvel;
-		speed.y = p->yvel;
-		speed.z = p->zvel;
-		mass = p->mass;
-		radius = p->radius;
-
-		log_printf(DBG,"[LOAD] Adding planet at (%f,%f,%f) with speed (%f,%f,%f), mass %f and radius %f\n"
-			,pos.x,pos.y,pos.z
-			,speed.x,speed.y,speed.z
-			,mass,radius );
+		h->pos[i] = make_float3( p->xcoord, p->ycoord, p->zcoord );
+		h->mass[i] = p->mass;
+		h->radius[i] = p->radius;
+		h->velocity[i] = make_float3( p->xvel, p->yvel, p->zvel );
+		h->model[i] = p->model_id;
 	}
-
-	unmap_buffers( planets_phx, planets_gfx );
-}
-
-void Saver::map_buffers( PhxPlanetFactory *planets_phx, GfxPlanetFactory *planets_gfx )
-{
-	planets_phx->getRadiuses().map( BUF_H );
-	planets_phx->getPositions().map( BUF_H );
-	planets_phx->getMasses().bind();
-}
-
-void Saver::unmap_buffers( PhxPlanetFactory *planets_phx, GfxPlanetFactory *planets_gfx )
-{
-	planets_phx->getRadiuses().unmap();
-	planets_phx->getPositions().unmap();
-	planets_phx->getMasses().unbind();
+	return h;
 }

@@ -35,6 +35,7 @@ namespace MISC
 		virtual ~BufferBase() {}
 
 		virtual void resize( size_t num , const T*data = NULL ) =0;
+		virtual void assign( T val ) = 0; // for one-element buffers - set its value to val
 
 		virtual size_t getSize() const
 		{
@@ -63,6 +64,7 @@ namespace MISC
 		virtual ~BufferGl( );
 
 		virtual void resize( const size_t num , const T*data = NULL );
+		virtual void assign( T val );
 
 		T*       map( enum BUFFER_STATE state );
 		const T* map( enum BUFFER_STATE state ) const;
@@ -140,6 +142,14 @@ namespace MISC
 		// FIXME: gl constants are hard-coded, is it good?
 		glBufferData(GL_ARRAY_BUFFER,new_size,(GLvoid*)data,GL_DYNAMIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER,0);
+	}
+
+	template<typename T>
+	void BufferGl<T>::assign( T val )
+	{
+		ASSERT( 1 == BufferBase<T>::getLen() );
+		map( BUF_H )[0] = val;
+		unmap();
 	}
 
 	template<typename T>
