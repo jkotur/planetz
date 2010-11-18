@@ -22,8 +22,8 @@ namespace MEM {
 		
 		MISC::PlanetzModel loadModels();
 
-		void load( const std::string& path );
-		void save( const std::string& path );
+		MISC::CpuPlanetHolder *getPlanets();
+		void setPlanets( MISC::CpuPlanetHolder * );
 	private:
 		MISC::PlanetHolder holder;
 

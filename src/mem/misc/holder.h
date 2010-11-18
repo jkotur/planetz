@@ -19,8 +19,9 @@ namespace MISC
 			, count(1)
 			, mass(0)
 			, velocity(0)
+			, m_size(num)
 		{
-			count.assign( num );
+			resize( num );
 		}
 
 		virtual ~PlanetHolderBase()
@@ -36,7 +37,9 @@ namespace MISC
 			radius.resize(num);
 			mass.resize(num);
 			velocity.resize(num);
+
 			count.assign( num );
+			m_size = num;
 		}
 
 		//   * GFX
@@ -50,6 +53,13 @@ namespace MISC
 		//   * PHX
 		CBUF<float>    mass;
 		CBUF<float3>   velocity;
+
+		size_t size()
+		{
+			return m_size;
+		}
+	private:
+		size_t m_size;
 	};
 
 	//template<template<class T>class CBUF, template<class S>class GBUF>

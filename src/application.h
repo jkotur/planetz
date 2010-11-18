@@ -13,8 +13,7 @@
 
 #include "ui/ui.h"
 
-#include "mem/memory_manager.h"
-#include "mem/saver.h"
+#include "mem/data_flow_mgr.h"
 
 #include "window.h"
 
@@ -51,7 +50,7 @@ protected:
 	Camera camera;
 	UI ui;
 
-	MEM::MemMgr memmgr;
+	MEM::DataFlowMgr data_mgr;
 
 	GFX::PlanetzRenderer plz;
 	GFX::Background bkg;

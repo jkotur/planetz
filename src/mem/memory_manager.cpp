@@ -61,43 +61,78 @@ MISC::PlanetzModel MemMgr::loadModels()
 	return m;
 }
 
-void MemMgr::init()
-{
-	TODO("Delete or use?");
-}
-
-void MemMgr::load( const std::string& path )
+void MemMgr::setPlanets( MISC::CpuPlanetHolder *pl )
 {
 	TODO("Loading saved points from file");
+	size_t size = pl->size();
 
-	const int size = 10240;
-
-	// hardcoded load
 	holder.resize( size );
 
 	float3 * pos = holder.pos.map( MISC::BUF_H );
-	for( int i=0 ; i<size ; i++ )
-	{
-		pos[i].x = (i-size/2)*2.5;
-		pos[i].y = (i-size/2)*2.5;
-		pos[i].z = (i-size/2)*2.5;
-	}
+	for( unsigned i=0 ; i<size ; i++ )
+		pos[i] = pl->pos[i];
 	holder.pos.unmap();
 
 	float  * rad = holder.radius.map( MISC::BUF_H );
-	for( int i=0 ; i<size ; i++ )
-		rad[i] = fabs(cos(3.1415926/10*i))*3+1;
+	for( unsigned i=0 ; i<size ; i++ )
+		rad[i] = pl->radius[i];
 	holder.radius.unmap();
 
 	float* type = holder.model.map( MISC::BUF_H );
-	for( int i=0 ; i<size ; i++ )
-		type[i] = i%3?1.f:0.f;
+	for( unsigned i=0 ; i<size ; i++ )
+		type[i] = pl->model[i];
 	holder.model.unmap();
+
+	holder.count.assign( pl->count[0] );
+
+	holder.mass.bind();
+	float* mass = holder.mass.h_data();
+	for( unsigned i=0; i<size; ++i )
+		mass[i] = pl->mass[i];
+	holder.mass.unbind();
+
+	holder.velocity.bind();
+	float3 *vel = holder.velocity.h_data();
+	for( unsigned i=0; i<size; ++i )
+		vel[i] = pl->velocity[i];
+	holder.velocity.unbind();
 }
 
-void MemMgr::save( const std::string& path )
+MISC::CpuPlanetHolder *MemMgr::getPlanets()
 {
-	TODO("Implement saving");
+	size_t size = holder.size();
+	MISC::CpuPlanetHolder *pl = new MISC::CpuPlanetHolder( size );
+
+	float3 * pos = holder.pos.map( MISC::BUF_H );
+	for( unsigned i=0 ; i<size ; i++ )
+		pl->pos[i] = pos[i];
+	holder.pos.unmap();
+
+	float  * rad = holder.radius.map( MISC::BUF_H );
+	for( unsigned i=0 ; i<size ; i++ )
+		pl->radius[i] = rad[i];
+	holder.radius.unmap();
+
+	float* type = holder.model.map( MISC::BUF_H );
+	for( unsigned i=0 ; i<size ; i++ )
+		pl->model[i] = type[i];
+	holder.model.unmap();
+
+	holder.count.assign( pl->count[0] );
+
+	holder.mass.bind();
+	float* mass = holder.mass.h_data();
+	for( unsigned i=0; i<size; ++i )
+		pl->mass[i] = mass[i];
+	holder.mass.unbind();
+
+	holder.velocity.bind();
+	float3 *vel = holder.velocity.h_data();
+	for( unsigned i=0; i<size; ++i )
+		pl->velocity[i] = vel[i];
+	holder.velocity.unbind();
+
+	return pl;
 }
 
 MISC::GfxPlanetFactory* MemMgr::getGfxMem()
