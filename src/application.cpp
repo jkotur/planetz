@@ -16,7 +16,7 @@
 
 using boost::bind;
 
-#define CAM_START_VECS Vector3(0,0,10),Vector3(0,0,0),Vector3(0,1,0)
+#define CAM_START_VECS Vector3(0,0,40),Vector3(0,0,0),Vector3(0,1,0)
 
 Application::Application( Window& win )
 	: fps(0) , anim_pause(true) ,

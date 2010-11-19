@@ -123,7 +123,7 @@ GLuint DeferRender::generate_sphere_texture( int w , int h )
 			float x = ((float)wi/4.0f - w2)/(float)w2;
 			float y = ((float)hi - h2)/(float)h2;
 			float a = 1 <= x*x + y*y ? 0.0 : 1.0 ;
-			float z =-(!a?0.0f:std::sqrt( 1 - x*x - y*y ));
+			float z = (!a?0.0f:std::sqrt( 1 - x*x - y*y ));
 
 			int i = wi + hi*w4;
 
@@ -210,16 +210,16 @@ void DeferRender::draw() const
 //        log_printf(DBG,"cze\n");
 
 	glBegin(GL_POINTS);
-	  glVertex3f(0, 4,0);
-	  glVertex3f(0,-4,0);
-	  glVertex3f(-1,-4,0);
-	  glVertex3f(1,-4,0);
-	  glVertex3f(1,-4,10);
-	  glVertex3f(10,10,10);
-	  glVertex3f(-10,10,10);
-	  glVertex3f(-10,15,10);
-	  glVertex3f(100,75,100);
-	  glVertex3f(1000,1000,1000);
+	  glVertex3f(0*2, 4*2,0*2);
+	  glVertex3f(0*2,-4*2,0*2);
+	  glVertex3f(-1*2,-4*2,0*2);
+	  glVertex3f(1*2,-4*2,0*2);
+	  glVertex3f(1*2,-4*2,10*2);
+	  glVertex3f(10*2,10*2,10*2);
+	  glVertex3f(-10*2,10*2,10*2);
+	  glVertex3f(-10*2,15*2,10*2);
+	  glVertex3f(100*2,75*2,100*2);
+	  glVertex3f(1000*2,1000*2,1000*2);
 	glEnd();
 //        factory->getPositions().bind();
 //        glVertexPointer  ( 3 , GL_FLOAT , 0 , NULL );

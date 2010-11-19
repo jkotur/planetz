@@ -4,7 +4,7 @@ varying out vec3 lightPos;
 
 void main(void)
 {
-	lightPos = gl_PositionIn[0].xyz;// / gl_PositionIn[0].w; 
+	lightPos = gl_PositionIn[0].xyz;
 
 	// upper right
 	gl_Position    = vec4( 1 , 1 , 0 , 1 );
