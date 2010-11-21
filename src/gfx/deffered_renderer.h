@@ -29,7 +29,7 @@ private:
 	GLuint generate_sphere_texture( int w , int h );
 	GLuint generate_render_target_texture( int w , int h );
 
-	Program prPlanet , prLighting;
+	Program prPlanet , prLighting , prLightsBase;
 
 	static const GLsizei gbuffNum = 2;
 	GLuint gbuffTex[gbuffNum];

@@ -31,13 +31,22 @@ void DeferRender::prepare()
 			DATA("shaders/deffered_01.geom")),
 		GL_POINTS , GL_QUAD_STRIP );
 
-	prLighting.create(
+	prLightsBase.create(
 		gfx->shmMgr.loadShader(GL_VERTEX_SHADER  ,
 			DATA("shaders/deffered_02.vert")),
 		gfx->shmMgr.loadShader(GL_FRAGMENT_SHADER,
 			DATA("shaders/deffered_02.frag")),
 		gfx->shmMgr.loadShader(GL_GEOMETRY_SHADER,
 			DATA("shaders/deffered_02.geom")),
+		GL_POINTS , GL_QUAD_STRIP );
+
+	prLighting.create(
+		gfx->shmMgr.loadShader(GL_VERTEX_SHADER  ,
+			DATA("shaders/deffered_03.vert")),
+		gfx->shmMgr.loadShader(GL_FRAGMENT_SHADER,
+			DATA("shaders/deffered_03.frag")),
+		gfx->shmMgr.loadShader(GL_GEOMETRY_SHADER,
+			DATA("shaders/deffered_03.geom")),
 		GL_POINTS , GL_QUAD_STRIP );
 
 	radiusId = glGetAttribLocation( prPlanet.id() , "radius" );
@@ -195,18 +204,24 @@ void DeferRender::draw() const
 	glDisableVertexAttribArray( radiusId );
 	glDisableVertexAttribArray( modelId  );
 
-	glEnable( GL_BLEND );
-	glBlendFunc( GL_ONE , GL_ONE );
-
 	glClear( GL_DEPTH_BUFFER_BIT ); 
 
-	prLighting.use();
 	glActiveTexture( GL_TEXTURE0 );
 	glBindTexture( GL_TEXTURE_2D , gbuffTex[0] );
 
 	glActiveTexture( GL_TEXTURE1 );
 	glBindTexture( GL_TEXTURE_2D , gbuffTex[1] );
 
+	prLightsBase.use();
+	glBegin(GL_POINTS);
+	 glVertex3f(0,0,0);
+	glEnd();
+	Program::none();
+
+	glEnable( GL_BLEND );
+	glBlendFunc( GL_ONE , GL_ONE );
+
+	prLighting.use();
 //        log_printf(DBG,"cze\n");
 
 	glBegin(GL_POINTS);

@@ -205,7 +205,7 @@ namespace MISC
 	template<typename T>
 	T* BufferGl<T>::fucking_no_const_cast_workaround( enum BUFFER_STATE new_state ) const
 	{
-		ASSERT( this->size > 0 );
+		ASSERT_MSG( this->size > 0 , "Cannot map empty buffer:<" );
 
 		if( state == new_state ) return *pstate==BUF_CU?cuPtr:(state==BUF_H?hPtr:NULL);
 
