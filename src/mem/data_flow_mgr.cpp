@@ -34,8 +34,11 @@ DataFlowMgr::Impl::~Impl()
 
 void DataFlowMgr::Impl::save( const std::string &path )
 {
+	log_printf(DBG, "savin:\n");
 	MISC::CpuPlanetHolder *planets = memmgr.getPlanets();
+	log_printf(DBG, "got planets\n");
 	ioctl.save( planets, path );
+	log_printf(DBG, "saved planets\n");
 	delete planets;
 }
 

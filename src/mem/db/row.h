@@ -18,6 +18,7 @@ namespace MEM
 
 			/// @brief Number of cells in a row
 			virtual uint8_t size() const = 0;
+			virtual void setCell( unsigned idx, const std::string& val ) = 0;
 	};
 }
 

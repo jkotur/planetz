@@ -21,6 +21,7 @@ namespace MEM
 			virtual std::string getCreationString() const;
 
 			virtual void add( RowType *row );
+			virtual Row* insert_new();
 
 			typedef std::list<RowType*> RowContainer;
 			typedef typename RowContainer::iterator iterator;
@@ -86,6 +87,14 @@ namespace MEM
 	void Table<RowType>::add( RowType *row )
 	{
 		rows.push_back(row);
+	}
+
+	template<class RowType>
+	Row* Table<RowType>::insert_new()
+	{
+		RowType *r = new RowType();
+		add( r );
+		return r;
 	}
 
 	template<class RowType>

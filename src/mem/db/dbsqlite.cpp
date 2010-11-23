@@ -1,6 +1,7 @@
-#include "dbsqlite.h"
 #include <sqlite3.h>
 #include <debug/routines.h>
+#include "dbsqlite.h"
+#include "row.h"
 
 using namespace MEM;
 
@@ -13,6 +14,8 @@ class DBSqlite::CImpl
 		bool sendSaveString( const std::string& sql );
 		bool sendLoadString( const std::string& sql, ITable &t );
 	private:
+		void fill_table( ITable &t, char **source, int rows, int cols );
+
 		sqlite3 *dbsocket;
 		DBSqlite *owner;
 };
@@ -86,7 +89,19 @@ bool DBSqlite::CImpl::sendLoadString( const std::string& sql, ITable& t )
 	}
 	else
 	{
-		TODO("fill 't' with smth");
+		fill_table( t, table, rows, cols );
 	}
+	sqlite3_free_table( table );
 	return SQLITE_OK == e;
+}
+
+void DBSqlite::CImpl::fill_table( ITable &t, char **source, int rows, int cols )
+{
+	for( int i = 1; i < rows; ++i )
+	{
+		Row *r = t.insert_new();
+		ASSERT( r->size() == cols );
+		for( int j = 0; j < cols; ++j )
+			r->setCell( j, std::string( source[i * cols + j] ) );
+	}
 }

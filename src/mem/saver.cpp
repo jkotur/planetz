@@ -77,6 +77,7 @@ MISC::CpuPlanetHolder* Saver::load( const std::string &path )
 		h->radius[i] = p->radius;
 		h->velocity[i] = make_float3( p->xvel, p->yvel, p->zvel );
 		h->model[i] = p->model_id;
+		++i;
 	}
 	return h;
 }

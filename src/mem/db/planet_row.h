@@ -16,6 +16,7 @@ namespace MEM
 			virtual std::string getCreationString() const;
 
 			virtual uint8_t size() const;
+			virtual void setCell( unsigned idx, const std::string &val );
 
 		public: // You are allowed to modify these freely. Remember, however, to save them in db later.
 			float xcoord;

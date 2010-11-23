@@ -63,7 +63,6 @@ MISC::PlanetzModel MemMgr::loadModels()
 
 void MemMgr::setPlanets( MISC::CpuPlanetHolder *pl )
 {
-	TODO("Loading saved points from file");
 	size_t size = pl->size();
 
 	holder.resize( size );
@@ -102,6 +101,9 @@ MISC::CpuPlanetHolder *MemMgr::getPlanets()
 {
 	size_t size = holder.size();
 	MISC::CpuPlanetHolder *pl = new MISC::CpuPlanetHolder( size );
+
+	if( !size )
+		return pl;
 
 	float3 * pos = holder.pos.map( MISC::BUF_H );
 	for( unsigned i=0 ; i<size ; i++ )

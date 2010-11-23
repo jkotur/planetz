@@ -59,10 +59,8 @@ namespace MISC
 	template<typename T>
 	BufferCu<T>::~BufferCu()
 	{
-		log_printf(INFO, ">>> ~BufferCu\n");
 		device_ptr_free();
 		ASSERT_MSG(!h_cuPtr, "BufferCu bound on destruction!");
-		log_printf(INFO, "<<< ~BufferCu\n");
 	}
 	
 	template<typename T>
@@ -116,19 +114,17 @@ namespace MISC
 	template<typename T>
 	void BufferCu<T>::bind()
 	{
-		return;
 		ASSERT( !h_cuPtr );
 		h_cuPtr = new T[this->length];
-		cudaMemcpy(&h_cuPtr, d_cuPtr, this->length * sizeof(T), cudaMemcpyDeviceToHost );
+		cudaMemcpy(h_cuPtr, d_cuPtr, this->length * sizeof(T), cudaMemcpyDeviceToHost );
 		DBGPUT( CUT_CHECK_ERROR( "memcpy" ) );
 	}
 
 	template<typename T>
 	void BufferCu<T>::unbind()
 	{
-		return;
 		ASSERT( h_cuPtr );
-		cudaMemcpy(&d_cuPtr, h_cuPtr, this->length * sizeof(T), cudaMemcpyHostToDevice );
+		cudaMemcpy(d_cuPtr, h_cuPtr, this->length * sizeof(T), cudaMemcpyHostToDevice );
 		DBGPUT( CUT_CHECK_ERROR( "memcpy" ) );
 		delete [] h_cuPtr;
 		h_cuPtr = NULL;
@@ -139,7 +135,6 @@ namespace MISC
 	{
 		if( d_cuPtr )
 		{
-			ASSERT_MSG(false, "  unreachable code reached");
 			cudaFree( d_cuPtr );
 			DBGPUT( CUT_CHECK_ERROR( "free" ) );
 			d_cuPtr = NULL;
@@ -150,7 +145,6 @@ namespace MISC
 	void BufferCu<T>::device_ptr_alloc(unsigned num)
 	{
 		ASSERT( !d_cuPtr );
-		return;
 		this->length = num;
 		this->size = this->realsize = num * sizeof(T);
 		cudaMalloc((void**)&d_cuPtr, this->size );
@@ -160,11 +154,14 @@ namespace MISC
 	template<typename T>
 	void BufferCu<T>::device_ptr_assign(const T* data)
 	{
-		return;
+		if( !this->size )
+		{
+			return;
+		}
 		ASSERT( d_cuPtr );
 		if( data )
 		{
-			cudaMemcpy(&d_cuPtr, data, this->size, cudaMemcpyHostToDevice );
+			cudaMemcpy(d_cuPtr, data, this->size, cudaMemcpyHostToDevice );
 			DBGPUT( CUT_CHECK_ERROR( "memcpy" ) );
 		}
 	}

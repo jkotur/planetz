@@ -1,5 +1,6 @@
 #include "planet_row.h"
 #include <cstdio>
+#include <sstream>
 #include <debug/routines.h>
 
 using namespace MEM;
@@ -39,4 +40,41 @@ std::string PlanetRow::getCreationString() const
 uint8_t PlanetRow::size() const
 {
 	return 9;
+}
+
+void PlanetRow::setCell( unsigned idx, const std::string& val )
+{
+	std::stringstream ss( val );
+	switch( idx )
+	{
+	case 0:
+		ss >> xcoord;
+		break;
+	case 1:
+		ss >> ycoord;
+		break;
+	case 2:
+		ss >> zcoord;
+		break;
+	case 3:
+		ss >> radius;
+		break;
+	case 4:
+		ss >> mass;
+		break;
+	case 5:
+		ss >> xvel;
+		break;
+	case 6:
+		ss >> yvel;
+		break;
+	case 7:
+		ss >> zvel;
+		break;
+	case 8:
+		ss >> model_id;
+		break;
+	default:
+		NOENTRY();
+	}
 }
