@@ -24,8 +24,8 @@ find_package( Sqlite3 )
 if( UNIX )
 	#	set( CMAKE_C_FLAGS "-O3 -g -Wall -pedantic")
 	#	set( CMAKE_CXX_FLAGS "-O3 -g -Wall -pedantic")
-	set( CMAKE_C_FLAGS "-O3 -g -Wall")
-	set( CMAKE_CXX_FLAGS "-O3 -g -Wall")
+	set( CMAKE_C_FLAGS "-O3 -g -Wall -rdynamic")
+	set( CMAKE_CXX_FLAGS "-O3 -g -Wall -rdynamic")
 endif( UNIX )
 
 # is this needed?

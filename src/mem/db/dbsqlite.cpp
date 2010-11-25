@@ -97,7 +97,7 @@ bool DBSqlite::CImpl::sendLoadString( const std::string& sql, ITable& t )
 
 void DBSqlite::CImpl::fill_table( ITable &t, char **source, int rows, int cols )
 {
-	for( int i = 1; i < rows; ++i )
+	for( int i = 1; i <= rows; ++i )
 	{
 		Row *r = t.insert_new();
 		ASSERT( r->size() == cols );

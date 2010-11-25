@@ -57,7 +57,7 @@ namespace MISC
 	class BufferGl : public BufferBase<T> {
 		// prevent from copying buffer. If so, smart counter is needed 
 		// to unregister from cuda and delete from opengl
-		BufferGl( BufferGl<T>& ) {}
+		BufferGl( const BufferGl<T>& );
 	public:
 		BufferGl( );
 		BufferGl( const size_t num , const T*data = NULL );
@@ -87,7 +87,7 @@ namespace MISC
 
 		// nasty const hacks
 		T**   phPtr;
-		enum BUFFER_STATE*pstate;
+		enum BUFFER_STATE* const pstate;
 	};
 	
 	//

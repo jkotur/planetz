@@ -4,6 +4,7 @@
 
 #include <cstdio>
 
+#include "phx/phx.h"
 #include "gfx/gfx.h"
 #include "gfx/background.h"
 #include "gfx/planetz_renderer.h"
@@ -45,12 +46,13 @@ protected:
 
 	Window& window;
 
+	MEM::DataFlowMgr data_mgr;
+
+	PHX::Phx phx;
 	GFX::Gfx gfx;
 
 	Camera camera;
 	UI ui;
-
-	MEM::DataFlowMgr data_mgr;
 
 	GFX::PlanetzRenderer plz;
 	GFX::Background bkg;

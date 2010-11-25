@@ -43,6 +43,7 @@ float3 PhxPlanet::getVelocity() const
 PhxPlanetFactory::PhxPlanetFactory( PlanetHolder* holder )
 	: holder(holder)
 {
+	log_printf(DBG, "TESTING: pos addr = %x\n", this );
 }
 
 PhxPlanetFactory::~PhxPlanetFactory( )
@@ -72,4 +73,14 @@ BufferGl<uint32_t>&PhxPlanetFactory::getCount()
 BufferCu<float> &PhxPlanetFactory::getMasses()
 {
 	return holder->mass;
+}
+
+BufferCu<float3> &PhxPlanetFactory::getVelocities()
+{
+	return holder->velocity;
+}
+
+unsigned PhxPlanetFactory::size() const
+{
+	return holder->size();
 }

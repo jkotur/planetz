@@ -11,7 +11,8 @@ namespace MEM
 {
 namespace MISC
 {
-	class PhxPlanet {
+	class PhxPlanet
+	{
 	public:
 		PhxPlanet( unsigned id , const PlanetHolder* h );
 		virtual ~PhxPlanet();
@@ -27,7 +28,8 @@ namespace MISC
 	};
 
 
-	class PhxPlanetFactory {
+	class PhxPlanetFactory
+	{
 	public:
 		PhxPlanetFactory( PlanetHolder* );
 		virtual ~PhxPlanetFactory( );
@@ -37,8 +39,11 @@ namespace MISC
 		BufferGl<float3>  &getPositions();
 		BufferGl<float>   &getRadiuses();
 		BufferCu<float>   &getMasses();
+		BufferCu<float3>  &getVelocities();
 
 		BufferGl<uint32_t>&getCount();
+
+		unsigned size() const;
 
 	private:
 

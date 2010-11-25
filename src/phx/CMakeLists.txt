@@ -1,5 +1,5 @@
 include_directories( . )
 
-add_library( phx phx )
+CUDA_ADD_LIBRARY( phx phx.cu phx_kernels.cu )
 
 target_link_libraries( phx )

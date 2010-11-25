@@ -21,6 +21,7 @@ using boost::bind;
 Application::Application( Window& win )
 	: fps(0) , anim_pause(true) ,
 	  window( win )             ,
+	  phx( data_mgr.getPhxMem() ),
 	  camera( CAM_START_VECS )  ,
 	  plz( data_mgr.getGfxMem() ) ,
 	  bkg( 0.8 , BASE_W , BASE_H )
@@ -135,9 +136,8 @@ void Application::main_loop()
 #endif
 		camera.signal();
 
-		//if( !anim_pause )
-		//	planetz.update();
-
+		if( !anim_pause )
+			phx.compute(3);
 		gfx.render();
 
 		(running && (running &= ui.event_handle() ));

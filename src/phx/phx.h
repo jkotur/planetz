@@ -1,14 +1,14 @@
-#ifndef _CPU_PHX_H_
-#define _CPU_PHX_H_
+#ifndef _PHX_PHX_H_
+#define _PHX_PHX_H_
 
-#include <mem/misc/holder.h>
+#include <mem/misc/phx_planet_factory.h>
 
-namespace CPU
+namespace PHX
 {
 	class Phx
 	{
 		public:
-			Phx(MEM::MISC::PlanetHolder *h);
+			Phx(MEM::MISC::PhxPlanetFactory *p);
 			virtual ~Phx();
 
 			/// @brief Obliczenie n klatek fizyki
@@ -22,5 +22,5 @@ namespace CPU
 	};
 }
 
-#endif // _CPU_PHX_H_
+#endif // _PHX_PHX_H_
 
