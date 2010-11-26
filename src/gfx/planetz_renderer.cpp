@@ -20,6 +20,11 @@ void PlanetzRenderer::setModels( MEM::MISC::PlanetzModel mod )
 	grend.setModels( mod );
 }
 
+void PlanetzRenderer::setMaterials( GLuint matTex )
+{
+	drend.setMaterials( matTex );
+}
+
 void PlanetzRenderer::prepare()
 {
 }

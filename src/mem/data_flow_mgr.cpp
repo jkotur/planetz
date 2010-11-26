@@ -16,6 +16,8 @@ class DataFlowMgr::Impl
 		void save( const std::string &path = DATA( DEFAULT_SAVE_FILE ) );
 		void load( const std::string &path = DATA( DEFAULT_SAVE_FILE ) );
 
+		GLuint loadMaterials();
+
 		MISC::GfxPlanetFactory *getGfxMem();
 		MISC::PhxPlanetFactory *getPhxMem();
 
@@ -51,6 +53,11 @@ void DataFlowMgr::Impl::load( const std::string &path )
 	}
 	memmgr.setPlanets( planets );
 	delete planets;
+}
+
+GLuint DataFlowMgr::Impl::loadMaterials()
+{
+	return memmgr.loadMaterials();
 }
 
 MISC::GfxPlanetFactory *DataFlowMgr::Impl::getGfxMem()
@@ -102,3 +109,9 @@ MISC::PhxPlanetFactory *DataFlowMgr::getPhxMem()
 {
 	return impl->getPhxMem();
 }
+
+GLuint DataFlowMgr::loadMaterials()
+{
+	return impl->loadMaterials();
+}
+

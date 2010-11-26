@@ -1,20 +1,21 @@
 #version 130 
 #extension GL_EXT_geometry_shader4 : enable
 
-uniform float ratio;
-
 in float radiuses[];
-in float  models[];
+in vec4  maters1[];
+in vec4  maters2[];
 
 varying out vec3 pos;
 varying out mat3 rot;
 varying out float radius;
-varying out float model;
+varying out vec4 mater1;
+varying out vec4 mater2;
 
 void main(void)
 {
 	radius = radiuses[0];
-	model  = models  [0];
+	mater1 = maters1 [0];
+	mater2 = maters2 [0];
 	pos    = gl_PositionIn[0].xyz;
 
 	float r2 = radius / 2.0;

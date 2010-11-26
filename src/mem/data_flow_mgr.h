@@ -1,6 +1,8 @@
 #ifndef _DATA_FLOW_MGR_H_
 #define _DATA_FLOW_MGR_H_
 
+#include <GL/glew.h>
+
 #include <string>
 
 namespace MEM
@@ -25,6 +27,8 @@ namespace MEM
 
 			void save();
 			void load();
+
+			GLuint loadMaterials();
 
 		private:
 			class Impl;

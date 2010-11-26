@@ -22,6 +22,7 @@ public:
 			unsigned int width ,
 			unsigned int height );
 	
+	void setMaterials( GLuint );
 private:
 	void create_textures( unsigned int w , unsigned int h );
 	void delete_textures();
@@ -31,23 +32,23 @@ private:
 
 	Program prPlanet , prLighting , prLightsBase;
 
-	static const GLsizei gbuffNum = 2;
+	static const GLsizei gbuffNum = 4;
 	GLuint gbuffTex[gbuffNum];
 
-	GLint gbuffId[gbuffNum];
+	GLint gbuffId[gbuffNum*2];
 
 	GLenum bufferlist[gbuffNum];
-
-	GLint ratioId;
 
 	GLint radiusId;
 	GLint modelId ;
 	GLint sphereTexId;
+	GLint materialsTexId;
 
 	GLuint fboId;
 
 	GLuint depthTex;
 	GLuint sphereTex;
+	GLuint materialsTex;
 
 	const MEM::MISC::GfxPlanetFactory * const factory;
 };

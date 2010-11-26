@@ -11,13 +11,18 @@
 using namespace GFX;
 
 DeferRender::DeferRender( const MEM::MISC::GfxPlanetFactory * factory )
-	: factory(factory)
+	: materialsTex(0) , factory(factory)
 {
 }
 
 DeferRender::~DeferRender()
 {
 	delete_textures();
+}
+
+void DeferRender::setMaterials( GLuint mat )
+{
+	materialsTex = mat;
 }
 
 void DeferRender::prepare()
@@ -49,23 +54,44 @@ void DeferRender::prepare()
 			DATA("shaders/deffered_03.geom")),
 		GL_POINTS , GL_QUAD_STRIP );
 
+	sphereTexId    = glGetUniformLocation( prPlanet.id() , "sph_pos"   );
+	materialsTexId = glGetUniformLocation( prPlanet.id() , "materials" );
+
+	log_printf(DBG,"sphere loc: %d\n",sphereTexId);
+	log_printf(DBG,"materials loc: %d\n",materialsTexId);
+
 	radiusId = glGetAttribLocation( prPlanet.id() , "radius" );
 	modelId  = glGetAttribLocation( prPlanet.id() , "model"  );
 
-	TODO("Dynamically change screen size ratio in shader");
-	ratioId = glGetUniformLocation( prPlanet.id() , "ratio" );
-
 	prPlanet.use();
-	glUniform1i( sphereTexId , 0 );
-	glUniform1f( ratioId , (float)gfx->width()/(float)gfx->height() );
+	glUniform1i( sphereTexId    , 0 );
+	glUniform1i( materialsTexId , 1 );
 	Program::none();
 
 	gbuffId[0] = glGetUniformLocation( prLighting.id() , "gbuff1" );
 	gbuffId[1] = glGetUniformLocation( prLighting.id() , "gbuff2" );
+	gbuffId[2] = glGetUniformLocation( prLighting.id() , "gbuff3" );
+	gbuffId[3] = glGetUniformLocation( prLighting.id() , "gbuff4" );
+
+	gbuffId[4] = glGetUniformLocation( prLightsBase.id() , "gbuff1" );
+	gbuffId[5] = glGetUniformLocation( prLightsBase.id() , "gbuff2" );
+	gbuffId[6] = glGetUniformLocation( prLightsBase.id() , "gbuff3" );
+	gbuffId[7] = glGetUniformLocation( prLightsBase.id() , "gbuff4" );
+
+	log_printf(DBG,"gbuff loc: %d %d %d %d\n",gbuffId[0],gbuffId[1],gbuffId[2],gbuffId[3]);
 
 	prLighting.use();
 	glUniform1i( gbuffId[0] , 0 );
 	glUniform1i( gbuffId[1] , 1 );
+	glUniform1i( gbuffId[2] , 2 );
+	glUniform1i( gbuffId[3] , 3 );
+	Program::none();
+
+	prLightsBase.use();
+	glUniform1i( gbuffId[4] , 0 );
+	glUniform1i( gbuffId[5] , 1 );
+	glUniform1i( gbuffId[6] , 2 );
+	glUniform1i( gbuffId[7] , 3 );
 	Program::none();
 
 	create_textures( gfx->width() , gfx->height() );
@@ -74,7 +100,6 @@ void DeferRender::prepare()
 void DeferRender::create_textures( unsigned int w , unsigned int h )
 {
 	unsigned sphereSize = pow(2,floor(log(std::max(w,h))/log(2.0)));
-	sphereTexId = glGetUniformLocation( prPlanet.id() , "sph_pos" );
 	sphereTex = generate_sphere_texture( sphereSize ,sphereSize );
 
 	for( int i=0 ;i<gbuffNum ; i++ )
@@ -91,10 +116,19 @@ void DeferRender::create_textures( unsigned int w , unsigned int h )
 
 	bufferlist[0] = GL_COLOR_ATTACHMENT0;
 	bufferlist[1] = GL_COLOR_ATTACHMENT1;
+	bufferlist[2] = GL_COLOR_ATTACHMENT2;
+	bufferlist[3] = GL_COLOR_ATTACHMENT3;
 
-	glFramebufferTexture2D( GL_FRAMEBUFFER , GL_COLOR_ATTACHMENT0 , GL_TEXTURE_2D , gbuffTex[0] , 0 );
-	glFramebufferTexture2D( GL_FRAMEBUFFER , GL_COLOR_ATTACHMENT1 , GL_TEXTURE_2D , gbuffTex[1] , 0 );
-	glFramebufferTexture2D( GL_FRAMEBUFFER , GL_DEPTH_ATTACHMENT  , GL_TEXTURE_2D , depthTex  , 0 );
+	glFramebufferTexture2D( GL_FRAMEBUFFER , GL_COLOR_ATTACHMENT0 ,
+				GL_TEXTURE_2D , gbuffTex[0] , 0 );
+	glFramebufferTexture2D( GL_FRAMEBUFFER , GL_COLOR_ATTACHMENT1 ,
+				GL_TEXTURE_2D , gbuffTex[1] , 0 );
+	glFramebufferTexture2D( GL_FRAMEBUFFER , GL_COLOR_ATTACHMENT2 ,
+				GL_TEXTURE_2D , gbuffTex[2] , 0 );
+	glFramebufferTexture2D( GL_FRAMEBUFFER , GL_COLOR_ATTACHMENT3 ,
+				GL_TEXTURE_2D , gbuffTex[3] , 0 );
+	glFramebufferTexture2D( GL_FRAMEBUFFER , GL_DEPTH_ATTACHMENT  ,
+				GL_TEXTURE_2D , depthTex  , 0 );
 
 	glBindFramebuffer( GL_FRAMEBUFFER , 0 );
 
@@ -113,9 +147,6 @@ void DeferRender::resize( unsigned int width , unsigned int height )
 {
 	delete_textures();
 	create_textures( width , height );
-	prPlanet.use();
-	glUniform1f( ratioId , (float)width/(float)height );
-	Program::none();
 }
 
 GLuint DeferRender::generate_sphere_texture( int w , int h )
@@ -167,6 +198,12 @@ GLuint DeferRender::generate_render_target_texture( int w , int h )
 
 void DeferRender::draw() const
 {
+//        if( factory->getModels().getLen() > 0 )  {
+//        const int * models = factory->getModels().map( MEM::MISC::BUF_H );
+//        for( int i=0 ; i<factory->getModels().getLen() ; i++ )
+//                log_printf(DBG,"models: %d\n",models[i]);
+//        factory->getModels().unmap();
+//        }
 	glAlphaFunc( GL_GREATER, 0.1 );
 	glEnable( GL_ALPHA_TEST );
 
@@ -183,12 +220,12 @@ void DeferRender::draw() const
 	factory->getRadiuses().unbind();
 
 	factory->getModels().bind();
-	glVertexAttribPointer( modelId  , 1, GL_FLOAT , GL_FALSE, 0, NULL );
+	glVertexAttribIPointer( modelId  , 1, GL_INT , 0, NULL );
 	factory->getModels().unbind();
 
 	prPlanet.use();
-	glActiveTexture( GL_TEXTURE0 );
-	glBindTexture( GL_TEXTURE_2D , sphereTex );
+	glActiveTexture(GL_TEXTURE0); glBindTexture( GL_TEXTURE_2D, sphereTex    );
+	glActiveTexture(GL_TEXTURE1); glBindTexture( GL_TEXTURE_1D, materialsTex );
 
 	glBindFramebuffer( GL_FRAMEBUFFER , fboId );
 
@@ -206,11 +243,10 @@ void DeferRender::draw() const
 
 	glClear( GL_DEPTH_BUFFER_BIT ); 
 
-	glActiveTexture( GL_TEXTURE0 );
-	glBindTexture( GL_TEXTURE_2D , gbuffTex[0] );
-
-	glActiveTexture( GL_TEXTURE1 );
-	glBindTexture( GL_TEXTURE_2D , gbuffTex[1] );
+	glActiveTexture(GL_TEXTURE0); glBindTexture( GL_TEXTURE_2D, gbuffTex[0] );
+	glActiveTexture(GL_TEXTURE1); glBindTexture( GL_TEXTURE_2D, gbuffTex[1] );
+	glActiveTexture(GL_TEXTURE2); glBindTexture( GL_TEXTURE_2D, gbuffTex[2] );
+	glActiveTexture(GL_TEXTURE3); glBindTexture( GL_TEXTURE_2D, gbuffTex[3] );
 
 	prLightsBase.use();
 	glBegin(GL_POINTS);
@@ -246,8 +282,9 @@ void DeferRender::draw() const
 
 //        log_printf(DBG,"cze\n");
 
-	glBindTexture( GL_TEXTURE_2D , 0 );
-	glActiveTexture( GL_TEXTURE0 );
+	glBindTexture( GL_TEXTURE_2D , 0 ); glActiveTexture( GL_TEXTURE2 );
+	glBindTexture( GL_TEXTURE_2D , 0 ); glActiveTexture( GL_TEXTURE1 );
+	glBindTexture( GL_TEXTURE_2D , 0 ); glActiveTexture( GL_TEXTURE0 );
 	glBindTexture( GL_TEXTURE_2D , 0 );
 	Program::none();
 

@@ -8,6 +8,8 @@
 #include "sphere/sphere.h"
 #include "sphere/sphere_converter.h"
 
+#include "misc/materials_manager.h"
+
 using namespace MEM;
 
 MemMgr::MemMgr()
@@ -61,6 +63,19 @@ MISC::PlanetzModel MemMgr::loadModels()
 	return m;
 }
 
+GLuint MemMgr::loadMaterials()
+{
+	TODO("Load materials from file or sth");
+
+	MaterialsMgr mgr;
+
+	mgr.addMaterial( .5 , .1 , .0 , .0 , .1 , 1 , 1 , 1 );
+	mgr.addMaterial( .0 , .3 , 1. , .0 , .1 , 1 , 1 , 1 );
+	mgr.addMaterial( .5 , 1. , .0 , .0 , .1 , 1 , 1 , 1 );
+
+	return mgr.compile();
+}
+
 void MemMgr::setPlanets( MISC::CpuPlanetHolder *pl )
 {
 	size_t size = pl->size();
@@ -77,9 +92,9 @@ void MemMgr::setPlanets( MISC::CpuPlanetHolder *pl )
 		rad[i] = pl->radius[i];
 	holder.radius.unmap();
 
-	float* type = holder.model.map( MISC::BUF_H );
+	int* type = holder.model.map( MISC::BUF_H );
 	for( unsigned i=0 ; i<size ; i++ )
-		type[i] = pl->model[i];
+		type[i] = pl->model[i] * 2; // model must be even
 	holder.model.unmap();
 
 	holder.count.assign( pl->count[0] );
@@ -115,7 +130,7 @@ MISC::CpuPlanetHolder *MemMgr::getPlanets()
 		pl->radius[i] = rad[i];
 	holder.radius.unmap();
 
-	float* type = holder.model.map( MISC::BUF_H );
+	int* type = holder.model.map( MISC::BUF_H );
 	for( unsigned i=0 ; i<size ; i++ )
 		pl->model[i] = type[i];
 	holder.model.unmap();

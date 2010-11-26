@@ -29,6 +29,9 @@ public:
 	void setGfx( Gfx * _g );
 
 	void setModels( MEM::MISC::PlanetzModel modPlanet );
+	void setModels( GLuint );
+
+	void setMaterials( GLuint matTex );
 private:
 	GeomRender grend;
 	CopyRender crend;

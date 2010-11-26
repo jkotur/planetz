@@ -1,0 +1,29 @@
+
+MODELS TEXTURE:
+--------------
+
+ texture halfs |           values
+------------------------------------------------------
+ first         |    r    |   g    |   b    | alpha
+ second        |    ke   |   ka   |   kd   | ks 
+
+Dane następują po sobie jako 8 wartości float. Potrzebne bedą dwa odczyty z
+tekstury kolejnych texeli. Dla dwoch materiałów tekstura będzie następująca:
+
+[ r, g, b, alpha, ke, ka, kd, ks, r, g, b, alpha, ke, ka, kd, ks ]
+
+DEFFERED GEOMETRY BUFFERS:
+-------------------------
+
+    buffers     |          values 
+----------------+--------+--------+--------+----------
+ gl_FragData[0] | pos.x  | pos.y  | pos.z  | alpha
+ gl_FragData[1] | norm.x | norm.y | norm.z | material
+ gl_FragData[2] | col.x  | col.y  | col.b  | alpha
+ gl_FragData[3] | ke     | ka     | kd     | ks
+
+Pierwsza alpha decyduje o przezroczystości kwadratowej tekstury, tak aby koła
+były kolami. Druga natomiast jest wykładnikiem odblasku przy oświetleniu
+odblaskuo odbitym (specular).
+
+

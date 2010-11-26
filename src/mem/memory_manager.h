@@ -2,6 +2,8 @@
 
 #define __MEMORY_MANAGER_H__
 
+#include <GL/glew.h>
+
 #include <string>
 
 #include "misc/gfx_planet_factory.h"
@@ -21,6 +23,7 @@ namespace MEM {
 		MISC::PhxPlanetFactory* getPhxMem();
 		
 		MISC::PlanetzModel loadModels();
+		GLuint loadMaterials();
 
 		MISC::CpuPlanetHolder *getPlanets();
 		void setPlanets( MISC::CpuPlanetHolder * );
