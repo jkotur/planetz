@@ -27,7 +27,7 @@ namespace MEM
 			float xvel;
 			float yvel;
 			float zvel;
-			uint8_t model_id;
+			float model_id;
 
 		private:
 			static const std::string save_string;

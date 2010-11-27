@@ -8,6 +8,8 @@
 #include "db/table.h"
 #include "db/planet_row.h"
 
+#define foreach BOOST_FOREACH
+
 using namespace MEM;
 using namespace MEM::MISC;
 
@@ -70,15 +72,13 @@ MISC::CpuPlanetHolder* Saver::load( const std::string &path )
 
 	h->resize( table.size() );
 
-	BOOST_FOREACH( PlanetRow *p, table )
+	foreach( PlanetRow *p, table )
 	{
 		h->pos[i] = make_float3( p->xcoord, p->ycoord, p->zcoord );
 		h->mass[i] = p->mass;
 		h->radius[i] = p->radius;
 		h->velocity[i] = make_float3( p->xvel, p->yvel, p->zvel );
-		TODO("!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!FIXME!!");
-		TODO("why the fuck, p->model is 48?!");
-		h->model[i] = i%3?0:i%2?1:2;
+		h->model[i] = p->model_id;
 		++i;
 	}
 	return h;
