@@ -17,19 +17,19 @@ __device__ inline float3 operator*( const float3 &v , const float &f )
 	return make_float3( v.x * f, v.y * f, v.z * f );
 }
 
-__device__ inline float3& operator+=( float3& l, const float3& r )
+__device__ inline /*float3&*/void operator+=( float3& l, const float3& r )
 {
 	l.x += r.x;
 	l.y += r.y;
 	l.z += r.z;
-	return l;
+//	return l;
 }
 
 __device__ float3 get_dV( float3 myPos, float3 theirPos, float theirMass )
 {
 	float3 dir = theirPos - myPos;
 	float r2 = dir.x * dir.x + dir.y * dir.y + dir.z * dir.z;
-	return dir * (dt / ( r2 * sqrtf( r2 ) + 1e-3f) );
+	return dir * (dt / ( r2 * sqrtf( r2 ) + 1e-1f) );
 }
 
 __global__ void basic_interaction( float3 *positions, float *masses, float3 *velocities, unsigned *cnt )

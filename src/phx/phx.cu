@@ -15,7 +15,7 @@ class Phx::CImpl
 		void map_buffers();
 		void unmap_buffers();
 
-		void run_nbodies();
+		void run_nbodies( unsigned planet_count );
 
 		MEM::MISC::PhxPlanetFactory *planets;
 };
@@ -31,13 +31,14 @@ Phx::CImpl::~CImpl()
 
 void Phx::CImpl::compute(unsigned n)
 {
-	if( !planets->size() )
+	unsigned planet_count;
+	if( !(planet_count = planets->size()) )
 		return;
 	map_buffers();
 	//run_clusters();
 	for(unsigned i = 0; i < n; ++i)
 	{
-		run_nbodies();
+		run_nbodies( planet_count );
 	}
 	unmap_buffers();
 }
@@ -47,7 +48,6 @@ void Phx::CImpl::map_buffers()
 	planets->getPositions().map( MEM::MISC::BUF_CU );
 	planets->getRadiuses().map( MEM::MISC::BUF_CU );
 	planets->getCount().map( MEM::MISC::BUF_CU );
-
 }
 
 void Phx::CImpl::unmap_buffers()
@@ -57,11 +57,11 @@ void Phx::CImpl::unmap_buffers()
 	planets->getCount().unmap();
 }
 
-void Phx::CImpl::run_nbodies()
-{
-	unsigned threads = planets->size();
+void Phx::CImpl::run_nbodies( unsigned threads )
+{	
+	ASSERT( threads );
 	dim3 block( min( threads, 512 ) );
-	dim3 grid( 1 + threads / block.x );
+	dim3 grid( 1 + (threads - 1) / block.x );
 
 	basic_interaction<<<grid, block>>>( 
 		planets->getPositions().map(MEM::MISC::BUF_CU), 
