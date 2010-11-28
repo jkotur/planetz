@@ -1,5 +1,5 @@
 include_directories( . )
 
-add_library( debug planet_printer )
+add_library( dbg planet_printer )
 
-target_link_libraries( debug )
+target_link_libraries( dbg )
