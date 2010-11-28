@@ -7,8 +7,6 @@
 #include "mem/misc/gfx_planet_factory.h"
 #include "mem/misc/planet_model.h"
 
-#include "geometry_renderer.h"
-#include "copy_renderer.h"
 #include "deffered_renderer.h"
 
 namespace GFX {
@@ -28,13 +26,8 @@ public:
 
 	void setGfx( Gfx * _g );
 
-	void setModels( MEM::MISC::PlanetzModel modPlanet );
-	void setModels( GLuint );
-
 	void setMaterials( GLuint matTex );
 private:
-	GeomRender grend;
-	CopyRender crend;
 	DeferRender drend;
 
 	const MEM::MISC::GfxPlanetFactory * const factory;

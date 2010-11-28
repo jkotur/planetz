@@ -54,7 +54,6 @@ bool Application::init()
 	//
 	if( !gfx.window_init(window.getW(),window.getH()) ) return false;
 
-//        plz.setModels( memmgr.loadModels() ); // deprecated render mode
 	plz.setMaterials( data_mgr.loadMaterials() );
 
 	//
