@@ -28,8 +28,8 @@ void main()
 	vec3 lightDir = lightPos - gdat1.xyz; // lightpos - pos
 
 	float dist = length(lightDir);
-	dist = dist * dist / 10;
-//        dist /= 1;
+//        dist = dist * dist / 10;
+	dist /= 5;
         lightDir = normalize(lightDir);
 
 	float i = clamp(dot(lightDir, gdat2.xyz) , 0.0 , 1.0 ); 

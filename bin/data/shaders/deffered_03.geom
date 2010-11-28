@@ -2,8 +2,12 @@
 varying out vec3 lightColor;
 varying out vec3 lightPos;
 
+varying in bool is_light[];
+
 void main(void)
 {
+	if( !is_light[0] ) return;
+
 	lightPos = gl_PositionIn[0].xyz;
 
 	// upper right

@@ -73,6 +73,8 @@ void DeferRender::prepare()
 	gbuffId[2] = glGetUniformLocation( prLighting.id() , "gbuff3" );
 	gbuffId[3] = glGetUniformLocation( prLighting.id() , "gbuff4" );
 
+	modelLId  = glGetAttribLocation( prLighting.id() , "model"  );
+
 	gbuffId[4] = glGetUniformLocation( prLightsBase.id() , "gbuff1" );
 	gbuffId[5] = glGetUniformLocation( prLightsBase.id() , "gbuff2" );
 	gbuffId[6] = glGetUniformLocation( prLightsBase.id() , "gbuff3" );
@@ -254,33 +256,22 @@ void DeferRender::draw() const
 	glEnd();
 	Program::none();
 
+	glEnableVertexAttribArray( modelLId  );
+
 	glEnable( GL_BLEND );
 	glBlendFunc( GL_ONE , GL_ONE );
 
 	prLighting.use();
-//        log_printf(DBG,"cze\n");
 
-	glBegin(GL_POINTS);
-	  glVertex3f(0*2, 4*2,0*2);
-	  glVertex3f(0*2,-4*2,0*2);
-	  glVertex3f(-1*2,-4*2,0*2);
-	  glVertex3f(1*2,-4*2,0*2);
-	  glVertex3f(1*2,-4*2,10*2);
-	  glVertex3f(10*2,10*2,10*2);
-	  glVertex3f(-10*2,10*2,10*2);
-	  glVertex3f(-10*2,15*2,10*2);
-	  glVertex3f(100*2,75*2,100*2);
-	  glVertex3f(1000*2,1000*2,1000*2);
-	glEnd();
-//        factory->getPositions().bind();
-//        glVertexPointer  ( 3 , GL_FLOAT , 0 , NULL );
-//        factory->getPositions().unbind();
+	factory->getPositions().bind();
+	glVertexPointer( 3 , GL_FLOAT , 0 , NULL );
+	factory->getPositions().unbind();
 
-//        log_printf(DBG,"cze\n");
+	factory->getModels().bind();
+	glVertexAttribIPointer( modelLId  , 1, GL_INT , 0, NULL );
+	factory->getModels().unbind();
 
-//        glDrawArrays( GL_POINTS , 0 , 1 ); 
-
-//        log_printf(DBG,"cze\n");
+	glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
 
 	glBindTexture( GL_TEXTURE_2D , 0 ); glActiveTexture( GL_TEXTURE2 );
 	glBindTexture( GL_TEXTURE_2D , 0 ); glActiveTexture( GL_TEXTURE1 );
@@ -291,6 +282,7 @@ void DeferRender::draw() const
 	glDisable( GL_BLEND );
 	glDisable( GL_ALPHA_TEST );
 
+	glDisableVertexAttribArray( modelLId  );
 	glDisableClientState( GL_VERTEX_ARRAY );
 }
 

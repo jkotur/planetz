@@ -41,6 +41,7 @@ private:
 
 	GLint radiusId;
 	GLint modelId ;
+	GLint modelLId ;
 	GLint sphereTexId;
 	GLint materialsTexId;
 

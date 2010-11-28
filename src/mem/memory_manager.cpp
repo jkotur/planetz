@@ -69,9 +69,11 @@ GLuint MemMgr::loadMaterials()
 
 	MaterialsMgr mgr;
 
-	mgr.addMaterial( .5 , .1 , .0 , .0 , 1.1 , 100 , 1 , 1 );
-	mgr.addMaterial( .0 , .3 , 1. , .0 , 1.1 , 100 , 1 , 1 );
-	mgr.addMaterial( .5 , 1. , .0 , .0 , 1.1 , 100 , 1 , 1 );
+	               // r    g    b   ke   ka   kd    ks  alpha
+	mgr.addMaterial( .5 , .1 , .0 , .0 , .2 , 1.5 , 0 , 1 );
+	mgr.addMaterial( .0 , .3 , 1. , .0 , .2 , 1.5 , 0 , 1 );
+	mgr.addMaterial( .5 , 1. , .0 , .0 , .2 , 1.5 , 0 , 1 );
+	mgr.addMaterial( 1. , 1. , 1. , .8 , .2 , 1.0 , 0 , 1 );
 
 	return mgr.compile();
 }
@@ -94,7 +96,10 @@ void MemMgr::setPlanets( MISC::CpuPlanetHolder *pl )
 
 	int* type = holder.model.map( MISC::BUF_H );
 	for( unsigned i=0 ; i<size ; i++ )
-		type[i] = pl->model[i] * 2; // model must be even
+		if( !(i % 32) && i<32*8 ) 
+			type[i] = 3*2;
+		else
+			type[i] = pl->model[i] * 2; // model must be even
 	holder.model.unmap();
 
 	holder.count.assign( pl->count[0] );
