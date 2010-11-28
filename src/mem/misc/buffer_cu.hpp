@@ -23,7 +23,7 @@ namespace MISC
 
 		T* h_data();
 		T* d_data();
-		T getAt(unsigned i);
+		T getAt(unsigned i) const;
 		void setAt(unsigned i, const T&);
 
 		void bind();
@@ -95,7 +95,7 @@ namespace MISC
 	}
 
 	template<typename T>
-	T BufferCu<T>::getAt(unsigned i)
+	T BufferCu<T>::getAt(unsigned i) const
 	{
 		T retval;
 		T* pRetval = &retval;

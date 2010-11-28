@@ -25,7 +25,7 @@ Application::Application( Window& win )
 	  camera( CAM_START_VECS )  ,
 	  plz( data_mgr.getGfxMem() ) ,
 	  bkg( 0.8 , BASE_W , BASE_H ),
-	  picker( data_mgr.getGfxMem(), BASE_W, BASE_H ),
+	  picker( data_mgr.getGfxMem(), 3, 3 ),
 	  pprnt( data_mgr.getPhxMem(), &picker )
 {
 }

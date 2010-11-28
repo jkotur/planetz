@@ -32,12 +32,12 @@ float    PhxPlanet::getRadius() const
 
 float	PhxPlanet::getMass() const
 {
-	return .0f;// holder->mass.
+	return holder->mass.getAt( id );
 }
 
 float3 PhxPlanet::getVelocity() const
 {
-	return make_float3(.0f, .0f, .0f);
+	return holder->velocity.getAt( id );
 }
 
 PhxPlanetFactory::PhxPlanetFactory( PlanetHolder* holder )
