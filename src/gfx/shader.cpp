@@ -9,14 +9,29 @@
 
 using namespace GFX;
 
-Shader::Shader()
+Shader::Shader( GLenum type , const std::string& path )
 {
+	_path = path;
+	_type = type;
+	_id = glCreateShader( type );
+	std::string progs = readFile( path );
+	const char*ps = progs.c_str();
+	glShaderSource(_id,1,&ps,NULL);
+	glCompileShader(_id);
 }
 
 Shader::~Shader()
 {
 	log_printf(DBG,"[DEL] Deleting shader  %s\n",_path.c_str());
 	glDeleteShader(_id);
+}
+
+std::string Shader::readFile( const std::string& path )
+{
+	std::ifstream file( path.c_str() );
+	std::stringstream sstr;
+	sstr << file.rdbuf();
+	return sstr.str();
 }
 
 ShaderManager::ShaderManager()
@@ -42,18 +57,11 @@ Shader* ShaderManager::loadShader( GLenum type , const std::string& path )
 	if( (i=loaded_shaders.find(path)) != loaded_shaders.end() )
 		return i->second;
 
-	Shader* sh = new Shader();
-	sh->_path = path;
-	sh->_type = type;
-	sh->_id = glCreateShader( type );
-	std::string progs = readFile( path );
-	const char*ps = progs.c_str();
-	glShaderSource(sh->_id,1,&ps,NULL);
-	glCompileShader(sh->_id);
+	Shader* sh = new Shader( type , path );
 
 	// FIXME: or maybe add all shaders to one map? Fail is because
 	//        warnings in shaders are treated same as errors :<
-	if( checkShaderLog( sh->_id , path ) )
+	if( checkShaderLog( sh->id() , path ) )
 		loaded_shaders[path] = sh;
 	else	loaded_with_errors.push_back( sh );
 
@@ -76,14 +84,6 @@ bool ShaderManager::checkShaderLog( GLuint id , const std::string& path )
 	return true;
 }                        
                          
-std::string ShaderManager::readFile( const std::string& path )
-{
-	std::ifstream file( path.c_str() );
-	std::stringstream sstr;
-	sstr << file.rdbuf();
-	return sstr.str();
-}
-
 Program::Program( Shader*vs , Shader*fs , Shader*gs )
 	: linked(false)  , _id(glCreateProgram()) , vs(vs) , fs(fs) , gs(gs)
 {

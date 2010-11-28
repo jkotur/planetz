@@ -13,16 +13,17 @@ namespace GFX
 {
 
 class Shader {
-	friend class ShaderManager;
-
-	Shader();
-	virtual ~Shader();
 public:
+	Shader( GLenum type , const std::string& path );
+	virtual ~Shader();
+
 	     GLuint  id  () const { return _id;   }
 	     GLenum  type() const { return _type; }
 	std::string  path() const { return _path; }
 	
 private:
+	std::string readFile( const std::string& path );
+
 	     GLuint _id  ;
 	     GLenum _type;
 	std::string _path;
@@ -36,7 +37,6 @@ public:
 	Shader*loadShader( GLenum type , const std::string& path );
 private:
 
-	std::string readFile( const std::string& path );
 	bool checkShaderLog( GLuint id , const std::string& path );
 
 	std::map<std::string,Shader*> loaded_shaders;
