@@ -96,10 +96,7 @@ void MemMgr::setPlanets( MISC::CpuPlanetHolder *pl )
 
 	int* type = holder.model.map( MISC::BUF_H );
 	for( unsigned i=0 ; i<size ; i++ )
-		if( !(i % 32) && i<32*8 ) 
-			type[i] = 3*2;
-		else
-			type[i] = pl->model[i] * 2; // model must be even
+		type[i] = pl->model[i] * 2; // model must be even
 	holder.model.unmap();
 
 	holder.count.assign( pl->count[0] );
