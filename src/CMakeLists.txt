@@ -3,6 +3,7 @@ cmake_policy(VERSION 2.6)
 set( INCLUDE_DIRS
 	.
 	${CUDA_INCLUDE_DIRS}
+#	${CUDPP_INCLUDE_DIR}
 	${OPENGL_INCLUDE_DIR}
 	${SDL_INCLUDE_DIR}
 	${CEGUI_INCLUDE_DIR}
@@ -10,6 +11,7 @@ set( INCLUDE_DIRS
 
 include_directories( ${INCLUDE_DIRS} )
 
+add_subdirectory( debug )
 add_subdirectory( gfx )
 add_subdirectory( mem )
 add_subdirectory( phx )
@@ -19,8 +21,9 @@ add_subdirectory( util )
 
 add_executable( inz application constants main window )
 
-target_link_libraries( inz gfx mem phx sphere ui util 
+target_link_libraries( inz debug gfx mem phx sphere ui util
 	${CUDA_LIBRARIES}
+#	${CUDPP_LIBRARY}
 	${OPENGL_LIBRARY}
 	${SDL_LIBRARY}
 	${SDLIMAGE_LIBRARY}

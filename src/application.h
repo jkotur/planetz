@@ -18,6 +18,11 @@
 
 #include "window.h"
 
+#ifndef _RELEASE
+#include "gfx/planetz_picker.h"
+#include "debug/planet_printer.h"
+#endif
+
 class Application {
 public:
 	Application( Window& win );
@@ -63,6 +68,9 @@ protected:
 	GFX::Arrow * ox;
 	GFX::Arrow * oy;
 	GFX::Arrow * oz;
+
+	GFX::PlanetzPicker picker;
+	PlanetPrinter pprnt;
 #endif
 };
 

@@ -24,7 +24,9 @@ Application::Application( Window& win )
 	  phx( data_mgr.getPhxMem() ),
 	  camera( CAM_START_VECS )  ,
 	  plz( data_mgr.getGfxMem() ) ,
-	  bkg( 0.8 , BASE_W , BASE_H )
+	  bkg( 0.8 , BASE_W , BASE_H ),
+	  picker( data_mgr.getGfxMem(), BASE_W, BASE_H ),
+	  pprnt( data_mgr.getPhxMem(), &picker )
 {
 }
 
@@ -84,6 +86,11 @@ bool Application::init()
 	ui.sigMouseButtonDown.
 		connect(1,bind(&GFX::Background::on_button_down,&bkg,_1,_2,_3));
 
+#ifndef _RELEASE
+	ui.sigMouseButtonDown.
+		connect(1,bind(&PlanetPrinter::on_button_down,&pprnt,_1,_2,_3));
+#endif
+
 #ifndef _NOGUI
 	//
 	// init graphical user interface
@@ -137,7 +144,11 @@ void Application::main_loop()
 		camera.signal();
 
 		if( !anim_pause )
-			phx.compute(3);
+		{
+			//Timer t;
+			phx.compute(10);
+			//log_printf(DBG, "Kernel running time: %.2fms\n", timer.get_dt_ms());
+		}
 		gfx.render();
 
 		(running && (running &= ui.event_handle() ));
