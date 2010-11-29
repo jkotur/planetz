@@ -5,6 +5,8 @@
 
 #include <string>
 
+class Camera;
+
 namespace MEM
 {
 	namespace MISC
@@ -29,6 +31,8 @@ namespace MEM
 			void load();
 
 			GLuint loadMaterials();
+
+			void registerCam( Camera *cam ); // after registration, camera can be automatically saved/loaded
 
 		private:
 			class Impl;

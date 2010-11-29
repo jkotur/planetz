@@ -1,7 +1,5 @@
 #include "planet_row.h"
-#include <cstdio>
-#include <sstream>
-#include <debug/routines.h>
+#include "rowutils.h"
 
 using namespace MEM;
 
@@ -44,37 +42,15 @@ uint8_t PlanetRow::size() const
 
 void PlanetRow::setCell( unsigned idx, const std::string& val )
 {
-	std::stringstream ss( val );
-	switch( idx )
-	{
-	case 0:
-		ss >> xcoord;
-		break;
-	case 1:
-		ss >> ycoord;
-		break;
-	case 2:
-		ss >> zcoord;
-		break;
-	case 3:
-		ss >> radius;
-		break;
-	case 4:
-		ss >> mass;
-		break;
-	case 5:
-		ss >> xvel;
-		break;
-	case 6:
-		ss >> yvel;
-		break;
-	case 7:
-		ss >> zvel;
-		break;
-	case 8:
-		ss >> model_id;
-		break;
-	default:
-		NOENTRY();
-	}
+	ROW_SWITCH_BEGIN( idx, val )
+		ROW_CASE( 0, xcoord )
+		ROW_CASE( 1, ycoord )
+		ROW_CASE( 2, zcoord )
+		ROW_CASE( 3, radius )
+		ROW_CASE( 4, mass )
+		ROW_CASE( 5, xvel )
+		ROW_CASE( 6, yvel )
+		ROW_CASE( 7, zvel )
+		ROW_CASE( 8, model_id )
+	ROW_SWITCH_END()
 }

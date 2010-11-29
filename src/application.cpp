@@ -19,14 +19,15 @@ using boost::bind;
 #define CAM_START_VECS Vector3(0,0,40),Vector3(0,0,0),Vector3(0,1,0)
 
 Application::Application( Window& win )
-	: fps(0) , anim_pause(true) ,
-	  window( win )             ,
-	  phx( data_mgr.getPhxMem() ),
-	  camera( CAM_START_VECS )  ,
-	  plz( data_mgr.getGfxMem() ) ,
-	  bkg( 0.8 , BASE_W , BASE_H ),
-	  picker( data_mgr.getGfxMem(), 3, 3 ),
-	  pprnt( data_mgr.getPhxMem(), &picker )
+	: fps(0)
+	, anim_pause(true)
+	, window( win )
+	, phx( data_mgr.getPhxMem() )
+	, camera( CAM_START_VECS )
+	, plz( data_mgr.getGfxMem() )
+	, bkg( 0.8 , BASE_W , BASE_H )
+	, picker( data_mgr.getGfxMem(), 3, 3 )
+	, pprnt( data_mgr.getPhxMem(), &picker )
 {
 }
 
@@ -126,6 +127,8 @@ bool Application::init()
 #endif
 
 	bkg.set_img(DATA("text.tga"));
+
+	data_mgr.registerCam( &camera );
 
 	return true;
 }

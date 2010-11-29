@@ -7,8 +7,8 @@ using namespace MEM;
 class IOCtl::Impl
 {
 	public:
-		void save( const MISC::CpuPlanetHolder *source, const std::string& path );
-		MISC::CpuPlanetHolder *load( const std::string& path );
+		void save( const MISC::SaverParams *source, const std::string& path );
+		void load( MISC::SaverParams *dest, const std::string& path );
 
 	private:
 		Saver s;
@@ -25,22 +25,22 @@ IOCtl::~IOCtl()
 	delete impl;
 }
 
-void IOCtl::save( const MISC::CpuPlanetHolder *source, const std::string &path )
+void IOCtl::save( const MISC::SaverParams *source, const std::string &path )
 {
 	impl->save( source, path );
 }
 
-MISC::CpuPlanetHolder* IOCtl::load( const std::string &path )
+void IOCtl::load( MISC::SaverParams *dest, const std::string &path )
 {
-	return impl->load( path );
+	impl->load( dest, path );
 }
 
-void IOCtl::Impl::save( const MISC::CpuPlanetHolder *source, const std::string &path )
+void IOCtl::Impl::save( const MISC::SaverParams *source, const std::string &path )
 {
 	s.save( source, path );
 }
 
-MISC::CpuPlanetHolder* IOCtl::Impl::load( const std::string &path )
+void IOCtl::Impl::load( MISC::SaverParams *dest, const std::string &path )
 {
-	return s.load( path );
+	s.load( dest, path );
 }

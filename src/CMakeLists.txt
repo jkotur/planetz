@@ -21,7 +21,7 @@ add_subdirectory( util )
 
 add_executable( inz application constants main window )
 
-target_link_libraries( inz gfx mem phx sphere ui util dbg
+target_link_libraries( inz dbg gfx mem phx sphere ui util
 	${CUDA_LIBRARIES}
 #	${CUDPP_LIBRARY}
 	${OPENGL_LIBRARY}

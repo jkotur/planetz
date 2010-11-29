@@ -2,10 +2,11 @@
 #include "constants.h"
 #include "ioctl.h"
 #include "memory_manager.h"
+#include "misc/saver_params.h"
 
 using namespace MEM;
 
-static const char *DEFAULT_SAVE_FILE = "saves/first.sav";
+static const char *DEFAULT_SAVE_FILE = "saves/qsave.sav";
 
 class DataFlowMgr::Impl
 {
@@ -21,12 +22,16 @@ class DataFlowMgr::Impl
 		MISC::GfxPlanetFactory *getGfxMem();
 		MISC::PhxPlanetFactory *getPhxMem();
 
+		void registerCam( Camera *_cam );
+
 	private:
 		IOCtl ioctl;
 		MemMgr memmgr;
+		Camera *cam;
 };
 
 DataFlowMgr::Impl::Impl()
+	: cam( NULL )
 {
 }
 
@@ -37,17 +42,18 @@ DataFlowMgr::Impl::~Impl()
 void DataFlowMgr::Impl::save( const std::string &path )
 {
 	MISC::CpuPlanetHolder *planets = memmgr.getPlanets();
-	ioctl.save( planets, path );
+	MISC::SaverParams p( cam );
+	p.planet_info = planets;
+	ioctl.save( &p, path );
 	log_printf(DBG, "saved planets\n");
-	delete planets;
 }
 
 void DataFlowMgr::Impl::load( const std::string &path )
 {
-	MISC::CpuPlanetHolder *planets = ioctl.load( path );
-	log_printf(DBG, "got %u planets\n", planets->size() );
-	memmgr.setPlanets( planets );
-	delete planets;
+	MISC::SaverParams p( cam );
+	ioctl.load( &p, path );
+	log_printf(DBG, "got %u planets\n", p.planet_info->size() );
+	memmgr.setPlanets( p.planet_info );
 }
 
 GLuint DataFlowMgr::Impl::loadMaterials()
@@ -63,6 +69,11 @@ MISC::GfxPlanetFactory *DataFlowMgr::Impl::getGfxMem()
 MISC::PhxPlanetFactory *DataFlowMgr::Impl::getPhxMem()
 {
 	return memmgr.getPhxMem();
+}
+
+void DataFlowMgr::Impl::registerCam( Camera *_cam )
+{
+	cam = _cam;
 }
 
 DataFlowMgr::DataFlowMgr()
@@ -110,3 +121,7 @@ GLuint DataFlowMgr::loadMaterials()
 	return impl->loadMaterials();
 }
 
+void DataFlowMgr::registerCam( Camera *cam )
+{
+	impl->registerCam( cam );
+}
