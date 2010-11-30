@@ -136,6 +136,7 @@ void PlanetzPicker::render( int x , int y )
 int PlanetzPicker::getId()
 {
 	if( max == -1 ) {
+		max = 0;
 		float d = 1.0f;
 		for( int i=0 ; i<w*h ; i++ )
 			if( buffDepth[i]<d )
