@@ -21,6 +21,7 @@ public:
 	     GLenum  type() const { return _type; }
 	std::string  path() const { return _path; }
 	
+	bool checkShaderLog();
 private:
 	std::string readFile( const std::string& path );
 
@@ -36,8 +37,6 @@ public:
 
 	Shader*loadShader( GLenum type , const std::string& path );
 private:
-
-	bool checkShaderLog( GLuint id , const std::string& path );
 
 	std::map<std::string,Shader*> loaded_shaders;
 	std::list<Shader*> loaded_with_errors;

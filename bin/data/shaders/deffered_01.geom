@@ -11,14 +11,12 @@ varying out float radius;
 varying out vec4 mater1;
 varying out vec4 mater2;
 
-void main(void)
+void main()
 {
 	radius = radiuses[0];
 	mater1 = maters1 [0];
 	mater2 = maters2 [0];
 	pos    = gl_PositionIn[0].xyz;
-
-	float r2 = radius / 2.0;
 
 	float lenx = length( gl_PositionIn[0].xz );
 	float cosx = gl_PositionIn[0].z / lenx;

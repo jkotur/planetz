@@ -3,6 +3,7 @@
 #define __PLANETZ_PICKER_H__
 
 #include "mem/misc/gfx_planet_factory.h"
+#include "mem/misc/buffer.h"
 #include "gfx/shader.h"
 
 namespace GFX
@@ -17,8 +18,28 @@ public:
 	int getId();
 	
 private:
-	GFX::ShaderManager shmMgr;
+	void resizeNames();
+
 	const MEM::MISC::GfxPlanetFactory * const factory;
+
+	int w , h;
+
+	Shader vs , gs , fs;
+	Program pr;
+
+	GLuint fboId;
+
+	GLuint depthTex;
+	GLuint colorTex;
+
+	float* buffNames;
+	float* buffDepth;
+
+	GLint radiusId , namesId;
+
+	MEM::MISC::BufferGl<float> names;
+
+	int max;
 };
 
 }

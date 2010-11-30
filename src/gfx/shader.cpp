@@ -34,6 +34,22 @@ std::string Shader::readFile( const std::string& path )
 	return sstr.str();
 }
 
+bool Shader::checkShaderLog()
+{
+        int logLength = 0;
+        int charsWritten  = 0;
+        char *log;
+        glGetShaderiv(_id, GL_INFO_LOG_LENGTH,&logLength);
+        if( logLength > 1 ) {
+                log = (char *)malloc(logLength);
+                glGetShaderInfoLog(_id, logLength, &charsWritten,log);
+		log_printf(_ERROR,"Shader %s compile error:\n%s\n",_path.c_str(),log);
+                free(log);
+		return false;
+        } else	log_printf(INFO,"Shader %s loaded succesfully\n",_path.c_str());
+	return true;
+}                        
+                         
 ShaderManager::ShaderManager()
 {
 }
@@ -61,29 +77,13 @@ Shader* ShaderManager::loadShader( GLenum type , const std::string& path )
 
 	// FIXME: or maybe add all shaders to one map? Fail is because
 	//        warnings in shaders are treated same as errors :<
-	if( checkShaderLog( sh->id() , path ) )
+	if( sh->checkShaderLog() )
 		loaded_shaders[path] = sh;
 	else	loaded_with_errors.push_back( sh );
 
 	return sh;
 }
 
-bool ShaderManager::checkShaderLog( GLuint id , const std::string& path ) 
-{                        
-        int logLength = 0;
-        int charsWritten  = 0;
-        char *log;
-        glGetShaderiv(id, GL_INFO_LOG_LENGTH,&logLength);
-        if( logLength > 1 ) {
-                log = (char *)malloc(logLength);
-                glGetShaderInfoLog(id, logLength, &charsWritten,log);
-		log_printf(_ERROR,"Shader %s compile error:\n%s\n",path.c_str(),log);
-                free(log);
-		return false;
-        } else	log_printf(INFO,"Shader %s loaded succesfully\n",path.c_str());
-	return true;
-}                        
-                         
 Program::Program( Shader*vs , Shader*fs , Shader*gs )
 	: linked(false)  , _id(glCreateProgram()) , vs(vs) , fs(fs) , gs(gs)
 {

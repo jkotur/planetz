@@ -90,6 +90,8 @@ void Gfx::reshape_window(int width, int height)
 
 void Gfx::clear() const
 {
+	glViewport(0,0,mwidth,mheight);
+
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

@@ -104,12 +104,13 @@ bool Application::init()
 	pl->on_reset_click.connect( bind(&Application::reset,this) );
 	pl->on_save.connect( bind(&MEM::DataFlowMgr::save,&data_mgr,_1) );
 	pl->on_load.connect( bind(&MEM::DataFlowMgr::load,&data_mgr,_1) );
-	TODO( "handle save/load on DataFlowMgr level" );
 	pl->on_load.connect( bind(&Application::pause_anim,this) );
 	//pl->on_planet_add.connect( bind(&Planetz::add,&planetz,_1) );
 	//pl->on_planet_delete.connect( bind(&Planetz::erase,&planetz,_1) );
 	//planetz.on_planet_select.connect( bind(&PlanetzLayout::add_selected_planet,pl,_1) );
 #endif
+
+//        data_mgr.load(DATA("saves/qsave.sav"));
 
 	gfx.add( &bkg    , 0 );
 	gfx.add( &camera , 1 );
