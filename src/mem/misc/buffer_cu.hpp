@@ -98,8 +98,7 @@ namespace MISC
 	T BufferCu<T>::getAt(unsigned i) const
 	{
 		T retval;
-		T* pRetval = &retval;
-		cudaMemcpy(&pRetval, d_cuPtr + i, sizeof(T), cudaMemcpyDeviceToHost);
+		cudaMemcpy(&retval, d_cuPtr + i, sizeof(T), cudaMemcpyDeviceToHost);
 		DBGPUT( CUT_CHECK_ERROR( "memcpy" ) );
 		return retval;
 	}

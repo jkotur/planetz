@@ -5,7 +5,7 @@ using namespace MEM;
 
 const std::string CameraRow::save_string = "INSERT INTO camera(xcoord, ycoord, zcoord, xlook, ylook, zlook, xup, yup, zup) VALUES(%f, %f, %f, %f, %f, %f, %f, %f, %f);";
 const std::string CameraRow::load_string = "SELECT xcoord, ycoord, zcoord, xlook, ylook, zlook, xup, yup, zup FROM camera;";
-const std::string CameraRow::creation_string = "CREATE TABLE camera(xcoord REAL, ycoord REAL, zcoord REAL, xlook REAL, ylook REAL, zlook REAL, xup REAL, yup REAL, zup REAL);";
+const std::string CameraRow::creation_string = "DROP TABLE IF EXISTS camera; CREATE TABLE camera(xcoord REAL, ycoord REAL, zcoord REAL, xlook REAL, ylook REAL, zlook REAL, xup REAL, yup REAL, zup REAL);";
 
 CameraRow::CameraRow()
 {

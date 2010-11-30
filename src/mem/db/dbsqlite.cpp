@@ -44,14 +44,14 @@ bool DBSqlite::sendLoadString( const std::string& sql, ITable &t )
 DBSqlite::CImpl::CImpl(DBSqlite *_owner)
 	: owner( _owner )
 {
-	TODO("error handling");
-	sqlite3_open( owner->connection_string.c_str() , &dbsocket );
+	DBGPUT(int e = )sqlite3_open( owner->connection_string.c_str() , &dbsocket );
+	ASSERT( SQLITE_OK == e );
 }
 
 DBSqlite::CImpl::~CImpl()
 {
-	TODO("error handling");
-	sqlite3_close( dbsocket );
+	DBGPUT(int e = )sqlite3_close( dbsocket );
+	ASSERT( SQLITE_OK == e );
 }
 
 namespace 

@@ -5,7 +5,7 @@ using namespace MEM;
 
 const std::string PlanetRow::save_string = "INSERT INTO planets(xcoord, ycoord, zcoord, radius, mass, xvel, yvel, zvel, model_id) VALUES(%f, %f, %f, %f, %f, %f, %f, %f, %u);";
 const std::string PlanetRow::load_string = "SELECT xcoord, ycoord, zcoord, radius, mass, xvel, yvel, zvel, model_id FROM planets;";
-const std::string PlanetRow::creation_string = "CREATE TABLE planets(xcoord REAL, ycoord REAL, zcoord REAL, radius REAL, mass REAL, xvel REAL, yvel REAL, zvel REAL, model_id INT);";
+const std::string PlanetRow::creation_string = "DROP TABLE IF EXISTS planets; CREATE TABLE planets(xcoord REAL, ycoord REAL, zcoord REAL, radius REAL, mass REAL, xvel REAL, yvel REAL, zvel REAL, model_id INT);";
 
 PlanetRow::PlanetRow()
 {
