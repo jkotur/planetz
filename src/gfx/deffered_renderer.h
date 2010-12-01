@@ -27,29 +27,59 @@ private:
 	void create_textures( unsigned int w , unsigned int h );
 	void delete_textures();
 
-	GLuint generate_sphere_texture( int w , int h );
-	GLuint generate_render_target_texture( int w , int h );
-
+	//
+	// Shaders
+	//
 	Program prPlanet , prLighting , prLightsBase;
 
-	static const GLsizei gbuffNum = 4;
-	GLuint gbuffTex[gbuffNum];
-
-	GLint gbuffId[gbuffNum*2];
-
-	GLenum bufferlist[gbuffNum];
-
+	//
+	// Vertex data
+	//
 	GLint radiusId;
+
 	GLint modelId ;
 	GLint modelLId ;
+
+	//
+	// Sphere normals 
+	//
+	GLuint generate_sphere_texture( int w , int h );
+
 	GLint sphereTexId;
+	GLuint sphereTex;
+	
+	//
+	// Materials
+	//
 	GLint materialsTexId;
+	GLuint materialsTex;
+
+	//
+	// MTR
+	//
+	GLuint generate_render_target_texture( int w , int h );
 
 	GLuint fboId;
-
 	GLuint depthTex;
-	GLuint sphereTex;
-	GLuint materialsTex;
+
+	static const GLsizei gbuffNum = 4;
+
+	GLint  gbuffId   [gbuffNum*2];
+	GLuint gbuffTex  [gbuffNum  ];
+	GLenum bufferlist[gbuffNum  ];
+
+	//
+	// Texturing
+	// 
+	GLuint generate_angles_texture( int w , int h );
+	GLuint generate_normals_texture( int w , int h );
+
+	GLuint anglesTex;
+	GLuint normalsTex;
+
+	GLint anglesTexId;
+	GLint normalsTexId;
+
 
 	const MEM::MISC::GfxPlanetFactory * const factory;
 };

@@ -56,7 +56,7 @@ bool Window::GL_init()
 	if( glewIsSupported("GL_VERSION_3_2") )
 		log_printf(INFO,"[GL] Hurray! OpenGL 3.2 is supported.\n");
 	else {
-		log_printf(CRITICAL,"[GL] OpenGL 3.2 is not supported. Program cannot run corectly");
+		log_printf(CRITICAL,"[GL] OpenGL 3.2 is not supported. Program cannot run corectly\n");
 		return false;
 	}
 
