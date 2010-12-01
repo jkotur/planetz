@@ -15,13 +15,12 @@ add_subdirectory( debug )
 add_subdirectory( gfx )
 add_subdirectory( mem )
 add_subdirectory( phx )
-add_subdirectory( sphere )
 add_subdirectory( ui )
 add_subdirectory( util )
 
 add_executable( inz application constants main window )
 
-target_link_libraries( inz dbg gfx mem phx sphere ui util
+target_link_libraries( inz dbg gfx mem phx ui util
 	${CUDA_LIBRARIES}
 #	${CUDPP_LIBRARY}
 	${OPENGL_LIBRARY}

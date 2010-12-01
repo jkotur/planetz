@@ -54,23 +54,20 @@ void DeferRender::prepare()
 			DATA("shaders/deffered_03.geom")),
 		GL_POINTS , GL_QUAD_STRIP );
 
-	sphereTexId    = glGetUniformLocation( prPlanet.id() , "sph_pos"   );
+//        sphereTexId    = glGetUniformLocation( prPlanet.id() , "sph_pos"   );
 	materialsTexId = glGetUniformLocation( prPlanet.id() , "materials" );
 
 	anglesTexId    = glGetUniformLocation( prPlanet.id() , "angles" );
 	normalsTexId   = glGetUniformLocation( prPlanet.id() , "normals");
 
-	log_printf(DBG,"sphere loc: %d\n",sphereTexId);
-	log_printf(DBG,"materials loc: %d\n",materialsTexId);
-
 	radiusId = glGetAttribLocation( prPlanet.id() , "radius" );
 	modelId  = glGetAttribLocation( prPlanet.id() , "model"  );
 
 	prPlanet.use();
-	glUniform1i( sphereTexId    , 0 );
-	glUniform1i( materialsTexId , 1 );
-	glUniform1i( anglesTexId    , 2 );
-	glUniform1i( normalsTexId   , 3 );
+//        glUniform1i( sphereTexId    , 0 );
+	glUniform1i( materialsTexId , 0 );
+	glUniform1i( anglesTexId    , 1 );
+	glUniform1i( normalsTexId   , 2 );
 	Program::none();
 
 	gbuffId[0] = glGetUniformLocation( prLighting.id() , "gbuff1" );
@@ -107,7 +104,7 @@ void DeferRender::prepare()
 void DeferRender::create_textures( unsigned int w , unsigned int h )
 {
 	unsigned sphereSize = pow(2,floor(log(std::max(w,h))/log(2.0)));
-	sphereTex = generate_sphere_texture( sphereSize ,sphereSize );
+//        sphereTex = generate_sphere_texture( sphereSize ,sphereSize );
 
 	anglesTex = generate_angles_texture( sphereSize , sphereSize );
 	normalsTex= generate_normals_texture(sphereSize , sphereSize*2 );
@@ -146,7 +143,7 @@ void DeferRender::create_textures( unsigned int w , unsigned int h )
 
 void DeferRender::delete_textures()
 {
-	glDeleteTextures(1,&sphereTex);
+//        glDeleteTextures(1,&sphereTex);
 	glDeleteTextures(gbuffNum,gbuffTex);
 	glDeleteTextures(1,&depthTex );
 
@@ -232,8 +229,7 @@ GLuint DeferRender::generate_angles_texture( int w , int h )
 			int i = hi*w3 + wi;
 
                         data[ i     ] =-atan2( z , x ) + PI/2.0f; // longitude
-//			data[ i + 1 ] = (hi - h2) / (float)h * PI;
-                        data[ i + 1 ] = asin( y );      // latitude
+                        data[ i + 1 ] = asin( y );                // latitude
 			data[ i + 2 ] = a;
 
 //                        data[ i     ] = (((float)wi/3.0f/w2-1)*PI)/2.0f;
@@ -325,10 +321,10 @@ void DeferRender::draw() const
 	factory->getModels().unbind();
 
 	prPlanet.use();
-	glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_2D, sphereTex    );
-	glActiveTexture(GL_TEXTURE1); glBindTexture(GL_TEXTURE_1D, materialsTex );
-	glActiveTexture(GL_TEXTURE2); glBindTexture(GL_TEXTURE_2D, anglesTex    );
-	glActiveTexture(GL_TEXTURE3); glBindTexture(GL_TEXTURE_2D, normalsTex   );
+//        glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_2D, sphereTex    );
+	glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_1D, materialsTex );
+	glActiveTexture(GL_TEXTURE1); glBindTexture(GL_TEXTURE_2D, anglesTex    );
+	glActiveTexture(GL_TEXTURE2); glBindTexture(GL_TEXTURE_2D, normalsTex   );
 
 	glBindFramebuffer( GL_FRAMEBUFFER , fboId );
 

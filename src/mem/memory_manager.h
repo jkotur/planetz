@@ -22,7 +22,6 @@ namespace MEM {
 		MISC::GfxPlanetFactory* getGfxMem();
 		MISC::PhxPlanetFactory* getPhxMem();
 		
-		MISC::PlanetzModel loadModels();
 		GLuint loadMaterials();
 
 		MISC::CpuPlanetHolder *getPlanets();

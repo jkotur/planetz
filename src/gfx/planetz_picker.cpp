@@ -4,8 +4,8 @@
 
 using namespace GFX;
 
-PlanetzPicker::PlanetzPicker( const MEM::MISC::GfxPlanetFactory * factory , int w , int h )
-	: factory(factory) , w(w) , h(h)
+PlanetzPicker::PlanetzPicker( const MEM::MISC::GfxPlanetFactory * factory , int w , int h , int winw , int winh )
+	: factory(factory) , w(w) , h(h) , winw(winw) , winh(winh)
 	, vs(GL_VERTEX_SHADER  ,DATA("shaders/picker.vert"))
 	, gs(GL_GEOMETRY_SHADER,DATA("shaders/picker.geom"))
 	, fs(GL_FRAGMENT_SHADER,DATA("shaders/picker.frag"))
@@ -23,18 +23,15 @@ PlanetzPicker::PlanetzPicker( const MEM::MISC::GfxPlanetFactory * factory , int 
 	radiusId = glGetAttribLocation( pr.id() , "radius" );
 	namesId  = glGetAttribLocation( pr.id() , "name"   );
 
-	glGenTextures( 1 , &colorTex );
-	glBindTexture(GL_TEXTURE_2D, colorTex );
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S    , GL_CLAMP  );
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-	glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA16F,BASE_W,BASE_H,0,GL_RGBA,GL_FLOAT,NULL);
+	sphereTex = generate_sphere_texture( 128 , 128 );
+	sphereTexId = glGetUniformLocation( pr.id() , "sphere" );
 
-	glGenTextures( 1, &depthTex );
-	glBindTexture( GL_TEXTURE_2D, depthTex );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-	glTexImage2D( GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, BASE_W,BASE_H, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
+	glUniform1i( sphereTexId , 0 );
+
+	glGenTextures( 1 , &colorTex );
+	glGenTextures( 1 , &depthTex );
+
+	generate_fb_textures();
 
 	glGenFramebuffers( 1, &fboId );
 	glBindFramebuffer( GL_FRAMEBUFFER , fboId );
@@ -50,6 +47,7 @@ PlanetzPicker::PlanetzPicker( const MEM::MISC::GfxPlanetFactory * factory , int 
 
 PlanetzPicker::~PlanetzPicker()
 {
+	glDeleteTextures( 1 , &sphereTex );
 	glDeleteTextures( 1 , &depthTex );
 	glDeleteTextures( 1 , &colorTex );
 	glDeleteFramebuffers( 1 , &fboId );
@@ -57,11 +55,62 @@ PlanetzPicker::~PlanetzPicker()
 	delete[]buffDepth;
 }
 
+void PlanetzPicker::resize( int w , int h )
+{
+	winw = w ;
+	winh = h ;
+}
+
+void PlanetzPicker::generate_fb_textures()
+{
+	glBindTexture(GL_TEXTURE_2D, colorTex );
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S    , GL_CLAMP  );
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+	glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA16F,winw,winh,0,GL_RGBA,GL_FLOAT,NULL);
+
+	glBindTexture( GL_TEXTURE_2D, depthTex );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, winw,winh, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
+}
+
+GLuint PlanetzPicker::generate_sphere_texture( int w , int h )
+{
+	float*sphere = new float[ w * h ];
+
+	float w2 = (float)w/2.0f;
+	float h2 = (float)h/2.0f;
+
+	for( int wi=0 ; wi<w ; wi++ )
+		for( int hi=0 ; hi<h ; hi++ )
+		{
+			float x = ((float)wi - w2)/(float)w2;
+			float y = ((float)hi - h2)/(float)h2;
+			float a = 1 <= x*x + y*y ? 0.0 : 1.0 ;
+
+			sphere[ wi + hi*w ] = a;
+		}
+
+	GLuint texId;
+	glGenTextures( 1 , &texId );
+	glBindTexture(GL_TEXTURE_2D, texId );
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S    , GL_CLAMP  );
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+	glTexImage2D(GL_TEXTURE_2D,0,GL_RGB16F,w,h,0,GL_RED,GL_FLOAT,sphere);
+	delete[]sphere;
+	return texId;
+}
+
 void PlanetzPicker::render( int x , int y )
 {
 	resizeNames();
 
 	max = -1;
+
+	glAlphaFunc( GL_GREATER, 0.1 );
+	glEnable( GL_ALPHA_TEST );
 
 //        glViewport( x-w/2 , y-h/2 , w , h );
 //        glViewport( 0,0 , w , h );
@@ -75,8 +124,8 @@ void PlanetzPicker::render( int x , int y )
 	glMatrixMode (GL_PROJECTION);
 	glPushMatrix ();
 	glLoadIdentity ();
-	gluPickMatrix( x , viewport[3]-y , BASE_W , BASE_H , viewport);
-	gluPerspective(75.0, (float)BASE_W/(float)BASE_H, 1, 10000);
+	gluPickMatrix( x , viewport[3]-y , winw , winh , viewport);
+	gluPerspective(75.0, (float)winw/(float)winh, 1, 10000);
 
 	glMatrixMode(GL_MODELVIEW);
 	
@@ -103,6 +152,9 @@ void PlanetzPicker::render( int x , int y )
 	pr.use();
 	glBindFramebuffer( GL_FRAMEBUFFER , fboId );
 
+	glActiveTexture( GL_TEXTURE0 );
+	glBindTexture( GL_TEXTURE_2D , sphereTex );
+
 	glDrawBuffer( GL_COLOR_ATTACHMENT0 );
 	glClearColor(.0,.0,.0,0);
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -112,8 +164,10 @@ void PlanetzPicker::render( int x , int y )
 
 //        glReadPixels(0,0,w,h,GL_RED            ,GL_FLOAT,buffNames);
 //        glReadPixels(0,0,w,h,GL_DEPTH_COMPONENT,GL_FLOAT,buffDepth);
-	glReadPixels(BASE_W/2-w/2,BASE_H/2-h/2,w,h,GL_RED            ,GL_FLOAT,buffNames);
-	glReadPixels(BASE_W/2-w/2,BASE_H/2-h/2,w,h,GL_DEPTH_COMPONENT,GL_FLOAT,buffDepth);
+	glReadPixels(winw/2-w/2,winh/2-h/2,w,h,GL_RED            ,GL_FLOAT,buffNames);
+	glReadPixels(winw/2-w/2,winh/2-h/2,w,h,GL_DEPTH_COMPONENT,GL_FLOAT,buffDepth);
+
+	glBindTexture( GL_TEXTURE_2D , 0 );
 
 	glBindFramebuffer( GL_FRAMEBUFFER , 0 );
 	Program::none();
@@ -124,6 +178,7 @@ void PlanetzPicker::render( int x , int y )
 	glMatrixMode (GL_PROJECTION);
 	glPopMatrix();
 
+	glDisable( GL_ALPHA_TEST );
 
 //        for( int i=0 ; i<w*h ; i++ )
 //                fprintf(stderr,"%.4f ",buffNames[i]);

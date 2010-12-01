@@ -28,32 +28,31 @@ void main()
 	ang.x += lambda;    // latitude
 	ang.y += phi;       // longitude
 
-	if( ang.y > PI/2.0f ) {
-		ang.y = PI - ang.y;
-		ang.x =-PI - ang.x;
-	}
+//	if( ang.y > PI/2.0f ) {
+//		ang.y = PI - ang.y;
+//		ang.x =-PI - ang.x;
+//	}
 
-	if( ang.y <-PI/2.0f ) {
-		ang.y =-PI - ang.y;
-		ang.x =-PI - ang.x;
-	}
+//	if( ang.y <-PI/2.0f ) {
+//		ang.y =-PI - ang.y;
+//		ang.x =-PI - ang.x;
+//	}
 
-	if( ang.x > PI )
-		ang.x =-2*PI + ang.x;
+//	if( ang.x > PI )
+//		ang.x =-2*PI + ang.x;
 
-	if( ang.x <-PI )
-		ang.x = 2*PI + ang.x;
+//	if( ang.x <-PI )
+//		ang.x = 2*PI + ang.x;
 
-	ang.x *= abs( cos( ang.y ) );
-//	ang.x *= ( cos( ang.y ) );
+//	ang.x *= abs( cos( ang.y ) );
 
-//	float cp = cos( ang.y );
+	float cp = cos( ang.y );
+	ang.x *= cp;
+	vec3 norm = vec3( -sin(ang.x)*cp , -sin(ang.y) , cos(ang.x)*cp );
 
-//	vec3 norm = vec3( -sin(ang.x)*cp , -sin(ang.y) , cos(ang.x)*cp );
+//	ang.xy = ang.xy / vec2(PI*2,PI) + vec2(.5);
 
-	ang.xy = ang.xy / vec2(PI*2,PI) + vec2(.5);
-
-	vec3 norm= texture2D( normals , ang.st ).rgb;
+//	vec3 norm= texture2D( normals , ang.st ).rgb;
 
 	gl_FragData[1].xyz = norm;      // normal vector
 	gl_FragData[1].w   = 0;        // model id (deprecated)

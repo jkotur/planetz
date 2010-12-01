@@ -26,7 +26,7 @@ Application::Application( Window& win )
 	, camera( CAM_START_VECS )
 	, plz( data_mgr.getGfxMem() )
 	, bkg( 0.8 , BASE_W , BASE_H )
-	, picker( data_mgr.getGfxMem(), 3, 3 )
+	, picker( data_mgr.getGfxMem(), 3, 3 , win.getW() , win.getH() )
 	, pprnt( data_mgr.getPhxMem(), &picker )
 {
 }
@@ -69,6 +69,8 @@ bool Application::init()
 		connect( 0 , bind(&Window::reshape_window,&window,_1,_2));
 	ui.sigVideoResize.
 		connect( 1 , bind(&GFX::Gfx::reshape_window,&gfx,_1,_2) );
+	ui.sigVideoResize.
+		connect( 2 , bind(&GFX::PlanetzPicker::resize,&picker,_1,_2) );
 
 	ui.sigMouseMotion.
 		connect( bind(&Camera::on_mouse_motion,&camera,_1,_2) );
@@ -207,9 +209,6 @@ void Application::reset() // Planetz*pl , Camera*c )
 }
 
 #ifndef _RELEASE
-#include "sphere/sphere.h"
-#include "sphere/sphere_converter.h"
-
 void Application::test()
 {
 }

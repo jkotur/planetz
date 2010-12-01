@@ -41,12 +41,12 @@ private:
 	GLint modelLId ;
 
 	//
-	// Sphere normals 
+	// Sphere normals (deprecated)
 	//
 	GLuint generate_sphere_texture( int w , int h );
 
-	GLint sphereTexId;
-	GLuint sphereTex;
+//        GLint sphereTexId;
+//        GLuint sphereTex;
 	
 	//
 	// Materials
