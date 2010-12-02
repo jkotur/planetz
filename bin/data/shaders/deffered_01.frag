@@ -47,8 +47,7 @@ void main()
 //	ang.x *= abs( cos( ang.y ) );
 
 	float cp = cos( ang.y );
-	ang.x *= cp;
-	vec3 norm = vec3( -sin(ang.x)*cp , -sin(ang.y) , cos(ang.x)*cp );
+	vec3 norm = vec3( -sin(ang.x) , -sin(ang.y) , cos(ang.x)*cp );
 
 //	ang.xy = ang.xy / vec2(PI*2,PI) + vec2(.5);
 
