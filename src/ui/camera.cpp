@@ -12,9 +12,8 @@ Camera::Camera( const Vector3& _p ,
 		const Vector3& _u )
 	: pos(_p) , lookat(_l) , up(_u)
 	, ox(0) , oy(0) , speed(0.2) , move_speed(0.2)
-	, rot(false)
+	, rot(false) 
 {
-	init();
 }
 
 Camera::~Camera()
@@ -30,6 +29,8 @@ void Camera::init()
 
 	forward = lookat - pos;
 	forward.normalize();
+
+	emit_angle_changed_signal();
 }
 
 void Camera::on_key_down( int k )
@@ -76,6 +77,26 @@ void Camera::on_mouse_motion( int x , int y )
 	forward.rotate( right , angle_y );
 	lookat+=pos;
 
+	emit_angle_changed_signal();
+}
+
+bool Camera::emit_angle_changed_signal()
+{
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+	Vector3 tmplook = lookat - pos;
+	gluLookAt(
+		0,0,0,
+		tmplook.x , tmplook.y , tmplook.z,
+		up.x , up.y , up.z 
+	);
+
+	float m[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX,m);
+	glPopMatrix();
+
+	sigAngleChanged( m );
 }
 
 bool Camera::on_button_down( int b , int x , int y )

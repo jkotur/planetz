@@ -25,10 +25,10 @@ GLuint MemMgr::loadMaterials()
 	MaterialsMgr mgr;
 
 	               // r    g    b   ke   ka   kd    ks  alpha
-	mgr.addMaterial( .5 , .1 , .0 , .0 , .2 , 1.5 , 0 , 1 );
-	mgr.addMaterial( .0 , .3 , 1. , .0 , .2 , 1.5 , 0 , 1 );
-	mgr.addMaterial( .5 , 1. , .0 , .0 , .2 , 1.5 , 0 , 1 );
-	mgr.addMaterial( 1. , 1. , 1. , .8 , .2 , 1.0 , 0 , 1 );
+	mgr.addMaterial( .5 , .1 , .0 , .0 , .3 , 10 , 0 , 1 );
+	mgr.addMaterial( .0 , .3 , 1. , .0 , .3 , 10 , 0 , 1 );
+	mgr.addMaterial( .5 , 1. , .0 , .0 , .3 , 10 , 0 , 1 );
+	mgr.addMaterial( 1. , 1. , 1. , .8 , .3 , 1.0 , 0 , 1 );
 
 	return mgr.compile();
 }

@@ -2,6 +2,7 @@
 
 #define __DEFFERED_RENDERER_H__
 
+#include "gfx.h"
 #include "shader.h"
 #include "drawable.h"
 #include "mem/misc/buffer.h"
@@ -23,6 +24,8 @@ public:
 			unsigned int height );
 	
 	void setMaterials( GLuint );
+
+	void on_camera_angle_changed( float*m );
 private:
 	void create_textures( unsigned int w , unsigned int h );
 	void delete_textures();
@@ -45,8 +48,8 @@ private:
 	//
 	GLuint generate_sphere_texture( int w , int h );
 
-//        GLint sphereTexId;
-//        GLuint sphereTex;
+	GLint sphereTexId;
+	GLuint sphereTex;
 	
 	//
 	// Materials
@@ -77,9 +80,13 @@ private:
 	GLuint anglesTex;
 	GLuint normalsTex;
 
+	Texture*texture;
+
 	GLint anglesTexId;
 	GLint normalsTexId;
+	GLint textureTexId;
 
+	GLint anglesId;
 
 	const MEM::MISC::GfxPlanetFactory * const factory;
 };

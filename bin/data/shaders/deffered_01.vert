@@ -1,20 +1,20 @@
 #version 130 
 
-uniform sampler1D materials;
+uniform sampler1D materialsTex;
 
-varying in float radius;
-varying in int   model;
+in float radius;
+in int   model;
 
-varying out float radiuses;
-varying out vec4  maters1;
-varying out vec4  maters2;
+out float radiuses;
+out vec4  maters1;
+out vec4  maters2;
 
 void main()
 {	
 	radiuses = radius;
 	gl_Position = gl_ModelViewMatrix * gl_Vertex;
 
-	maters1 = texelFetch( materials , model   , 0 );
-	maters2 = texelFetch( materials , model+1 , 0 );
+	maters1 = texelFetch( materialsTex , model   , 0 );
+	maters2 = texelFetch( materialsTex , model+1 , 0 );
 }
 

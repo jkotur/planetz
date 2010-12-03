@@ -40,14 +40,18 @@ bool Shader::checkShaderLog()
         int charsWritten  = 0;
         char *log;
         glGetShaderiv(_id, GL_INFO_LOG_LENGTH,&logLength);
-        if( logLength > 1 ) {
+	GLint stat;
+	glGetShaderiv(_id, GL_COMPILE_STATUS,&stat);
+//        log_printf(INFO,"Shader status: %s\n",stat?"OK":"FAIL");
+	if( logLength > 1 ) { // verbose mode
+//        if(!stat ) { // quiet mode 
                 log = (char *)malloc(logLength);
                 glGetShaderInfoLog(_id, logLength, &charsWritten,log);
-		log_printf(_ERROR,"Shader %s compile error:\n%s\n",_path.c_str(),log);
+		log_printf(stat?_WARNING:_ERROR,"Shader %s compile %s:\n%s\n",_path.c_str(),stat?"warnings":"errors",log);
                 free(log);
 		return false;
-        } else	log_printf(INFO,"Shader %s loaded succesfully\n",_path.c_str());
-	return true;
+        } else	log_printf(INFO,"Shader %s compiled succesfully\n",_path.c_str());
+	return stat;
 }                        
                          
 ShaderManager::ShaderManager()
@@ -158,14 +162,17 @@ bool Program::checkProgramLog( GLuint obj ) const
         int charsWritten  = 0;
         char *log;
         glGetProgramiv(obj, GL_INFO_LOG_LENGTH,&infologLength);
-        if( infologLength > 1 ) {
+	GLint stat;
+	glGetProgramiv(obj, GL_LINK_STATUS , &stat );
+	if(!stat ) {
+//        if( infologLength > 1 ) {
                 log = (char *)malloc(infologLength);
                 glGetProgramInfoLog(obj, infologLength, &charsWritten, log);
-		log_printf(_ERROR,"Program %d compiled with errors:\n%s\n",obj,log);
+		log_printf(_ERROR,"Program %d linked with errors:\n%s\n",obj,log);
                 free(log);          
 		return false;
-        } else	log_printf(INFO,"Program %d compiled succesfully\n");
-	return true;
+        } else	log_printf(INFO,"Program %d linked succesfully\n");
+	return stat;
 }       
 
 void Program::none()

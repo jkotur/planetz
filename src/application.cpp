@@ -89,6 +89,9 @@ bool Application::init()
 	ui.sigMouseButtonDown.
 		connect(1,bind(&GFX::Background::on_button_down,&bkg,_1,_2,_3));
 
+	camera.sigAngleChanged.
+		connect( bind(&GFX::PlanetzRenderer::on_camera_angle_changed,&plz,_1) );
+
 #ifndef _RELEASE
 	ui.sigMouseButtonDown.
 		connect(1,bind(&PlanetPrinter::on_button_down,&pprnt,_1,_2,_3));
@@ -120,6 +123,9 @@ bool Application::init()
 #ifndef _NOGUI
 	gfx.add( &ui     , 9 );
 #endif
+
+	camera.init();
+
 #ifndef _RELEASE
 	ox = new GFX::Arrow(Vector3(1,0,0));
 	oy = new GFX::Arrow(Vector3(0,1,0));

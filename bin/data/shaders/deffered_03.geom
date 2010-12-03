@@ -1,12 +1,14 @@
+#version 130
+#extension GL_EXT_geometry_shader4 : enable
 
-varying out vec3 lightColor;
-varying out vec3 lightPos;
+out vec3 lightColor;
+out vec3 lightPos;
 
-varying in bool is_light[];
+in int is_light[];
 
 void main(void)
 {
-	if( !is_light[0] ) return;
+	if( !bool(is_light[0]) ) return;
 
 	lightPos = gl_PositionIn[0].xyz;
 

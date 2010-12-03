@@ -115,7 +115,7 @@ PlanetzLayout::PlanetzLayout()
 	SETEVENT("btnQSave",PushButton::EventClicked,&PlanetzLayout::qsave);
 	SETEVENT("btnQLoad",PushButton::EventClicked,&PlanetzLayout::qload);
 
-	timer.call( boost::bind(&PlanetzLayout::update_show_window,this) , 0.1 , true );
+//        timer.call( boost::bind(&PlanetzLayout::update_show_window,this) , 0.1 , true );
 }
 
 PlanetzLayout::~PlanetzLayout()

@@ -2,6 +2,8 @@
 
 #define __CAMERA_H__
 
+#include <boost/signal.hpp>
+
 #include "input/driver.h"
 #include "util/vector.h"
 #include "gfx/drawable.h"
@@ -12,6 +14,8 @@ public:
 		,const Vector3& lookat 
 		,const Vector3& up );
 	virtual ~Camera();
+
+	void init();
 
 	void on_key_down( int k );
 	void on_mouse_motion( int x , int y );
@@ -45,10 +49,12 @@ public:
 	Vector3 get_up() const 
 	{	return up; }
 
+	boost::signal<void (float*)> sigAngleChanged;
+
 //        void set_joy( CLocationDriver * _j )
 //        {	joy = _j; }
 private:
-	void init();
+	bool emit_angle_changed_signal();
 	
 	Vector3 pos , lookat , up;
 	Vector3 right , forward;

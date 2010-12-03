@@ -27,6 +27,11 @@ void PlanetzRenderer::resize( unsigned int width , unsigned int height )
 	drend.resize(width,height);
 }
 
+void PlanetzRenderer::on_camera_angle_changed( float*m )
+{
+	drend.on_camera_angle_changed( m );
+}
+
 void PlanetzRenderer::setGfx( Gfx * _g )
 {
 	Drawable::setGfx( _g );

@@ -24,6 +24,8 @@ public:
 			unsigned int width ,
 			unsigned int height );
 
+	void on_camera_angle_changed( float*m );
+
 	void setGfx( Gfx * _g );
 
 	void setMaterials( GLuint matTex );

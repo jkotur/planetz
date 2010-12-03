@@ -1,6 +1,6 @@
 
 varying in int model;
-varying out bool is_light;
+varying out int is_light;
 
 void main()
 {
