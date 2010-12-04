@@ -28,6 +28,8 @@ public:
 	SigVoid on_reset_click;
 	SigSetString on_save;
 	SigSetString on_load;
+
+	void update_fps( int fps );
 private:
 	bool clear_win( const CEGUI::EventArgs& e );
 	bool add_planet( const CEGUI::EventArgs& e );

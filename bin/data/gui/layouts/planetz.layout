@@ -65,6 +65,13 @@
 			<Property Name="StepSize" Value="1.0" />
 		</Window>
 
+		<Window Type="QuadraticLook/StaticText" Name="stFps">
+			<Property Name="UnifiedPosition" Value="{{1.0,-80},{0.0,10}}" />
+			<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
+			<Property Name="Text" Value="FPS: -" />
+		</Window>
+
+
 <!--                okno dodawania planety-->
 		<Window Type="QuadraticLook/FrameWindow" Name="AddWin">
 			<Property Name="UnifiedPosition" Value="{{0.1,0},{0.1,0}}" />

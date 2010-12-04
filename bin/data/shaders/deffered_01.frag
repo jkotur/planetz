@@ -28,18 +28,6 @@ void main()
 
 	norm.xyz = nrot * norm.xyz;           // rotate normal
 
-//	vec3 ang = texture2D( anglesTex  , gl_TexCoord[0].st ).rgb;
-
-//	ang.x += lambda;    // latitude
-//	ang.y += phi;       // longitude
-
-//	float cp = cos( ang.y );
-//	vec3 norm = vec3( -sin(ang.x) , -sin(ang.y) , cos(ang.x)*cp );
-
-//	vec3 norm= texture2D( normalsTex , ang.st ).rgb;
-
-//	ang.xy += angles;// + vec2(lambda,phi);
-
 	vec3 ntex = rot * norm.xyz;
 	vec2 angles = vec2( -atan(ntex.z,ntex.x)+PI/2.0f , asin(ntex.y) );
 

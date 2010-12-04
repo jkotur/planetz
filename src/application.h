@@ -58,6 +58,7 @@ protected:
 
 	Camera camera;
 	UI ui;
+	PlanetzLayout*pl;
 
 	GFX::PlanetzRenderer plz;
 	GFX::Background bkg;

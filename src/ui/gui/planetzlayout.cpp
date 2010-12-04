@@ -4,6 +4,7 @@
 #include <boost/regex.hpp>
 #include <cmath>
 #include <cstring>
+#include <sstream>
 
 #include "planetzlayout.h"
 
@@ -161,11 +162,18 @@ void PlanetzLayout::update_show_window()
 	GETWIN("ShowWin")->setText(buff);*/
 }
 
+void PlanetzLayout::update_fps( int fps )
+{
+	std::stringstream ss;
+	ss << "FPS: " << fps;
+	WindowManager::getSingleton().getWindow("stFps")->setText(ss.str());
+}
+
 bool PlanetzLayout::del_planet( const CEGUI::EventArgs& e )
 {
 	log_printf(DBG,"[GUI] Removin planet!\n");
 	//on_planet_delete(sel_planet);
-	WindowManager::getSingleton().getWindow("ShowWin")->setVisible(false);
+	WindowManager::getSingleton().getWindow("stFps")->setVisible(false);
 	//sel_planet = NULL;
 	return true;
 }

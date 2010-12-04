@@ -101,7 +101,7 @@ bool Application::init()
 	//
 	// init graphical user interface
 	//
-	PlanetzLayout*pl = new PlanetzLayout(); 
+	pl = new PlanetzLayout(); 
 	ui.gui.set_layout(pl);
 
 	pl->on_cam_speed_changed.connect( bind(&Camera::set_speed,&camera,_1) );
@@ -117,7 +117,7 @@ bool Application::init()
 
 //        data_mgr.load(DATA("saves/qsave.sav"));
 
-	gfx.add( &bkg    , 0 );
+//        gfx.add( &bkg    , 0 );
 	gfx.add( &camera , 1 );
 	gfx.add( &plz    , 2 );
 #ifndef _NOGUI
@@ -135,7 +135,7 @@ bool Application::init()
 	gfx.add(  oz      );
 #endif
 
-	bkg.set_img(DATA("text.tga"));
+//        bkg.set_img(DATA("text.tga"));
 
 	data_mgr.registerCam( &camera );
 
@@ -190,7 +190,8 @@ void Application::do_fps()
 {
 	if( timer.get() - oldtime > 1 ) {
 		oldtime = timer.get();
-		log_printf(INFO,"fps: %d\n",fps);
+		pl->update_fps(fps);
+//                log_printf(INFO,"fps: %d\n",fps);
 		fps = 0;
 	}
 	fps++;
