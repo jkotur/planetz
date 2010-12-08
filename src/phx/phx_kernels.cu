@@ -33,7 +33,7 @@ __device__ float3 get_dV( float3 myPos, float3 theirPos, float theirMass )
 {
 	float3 dir = theirPos - myPos;
 	float r2 = dir.x * dir.x + dir.y * dir.y + dir.z * dir.z;
-	if( r2 < 1 ) return dir / dt; //r2 = 1;
+	if( r2 < 1 ) return dir * dt; //r2 = 1;
 	return dir / r2 * (dt / sqrtf( r2 ) );
 }
 
