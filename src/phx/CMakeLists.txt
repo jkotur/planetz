@@ -1,4 +1,4 @@
-include_directories( . )
+include_directories( . ../3rdparty/cudpp/include/ )
 
 CUDA_ADD_LIBRARY( phx phx.cu phx_kernels.cu kmeans.cu kmeans_kernel.cu )
 
