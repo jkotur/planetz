@@ -2,6 +2,10 @@
 
 __device__ const float dt = 1e-3f;
 
+__device__ inline float3 operator+( const float3 &l , const float3 &r )
+{
+	return make_float3( l.x + r.x, l.y + r.y, l.z + r.z );
+}
 __device__ inline float3 operator-( const float3 &l , const float3 &r )
 {
 	return make_float3( l.x - r.x, l.y - r.y, l.z - r.z );
@@ -29,7 +33,7 @@ __device__ float3 get_dV( float3 myPos, float3 theirPos, float theirMass )
 {
 	float3 dir = theirPos - myPos;
 	float r2 = dir.x * dir.x + dir.y * dir.y + dir.z * dir.z;
-	if( r2 < 1 ) r2 = 1;
+	if( r2 < 1 ) return dir / dt; //r2 = 1;
 	return dir / r2 * (dt / sqrtf( r2 ) );
 }
 
@@ -57,6 +61,6 @@ __global__ void basic_interaction( float3 *positions, float *masses, float3 *vel
 
 	__syncthreads();
 
-	positions[ index ] += pos_diff;
+	positions[ index ] = old_pos + pos_diff;
 	velocities[ index ] = new_vel;
 }
