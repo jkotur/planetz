@@ -1,11 +1,17 @@
 
+/**
+ *  buffers |          values 
+ * ---------+--------+--------+--------+----------
+ *  gdat1   | pos.x  | pos.y  | pos.z  | alpha
+ *  gdat2   | norm.x | norm.y | norm.z | material
+ *  gdat3   | col.x  | col.y  | col.b  | alpha
+ *  gdat4   | ke     | ka     | kd     | ks
+ */
+
 uniform sampler2D gbuff1;
 uniform sampler2D gbuff2;
 uniform sampler2D gbuff3;
 uniform sampler2D gbuff4;
-
-varying in vec3 lightPos;
-varying in vec3 lightColor;
 
 void main()
 {	

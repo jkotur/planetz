@@ -14,6 +14,7 @@ namespace MISC
 	{
 		PlanetHolderBase( unsigned num = 0 )
 			: model(0)
+			, emissive(0)
 			, pos(0)
 			, radius(0)
 			, count(1)
@@ -32,10 +33,11 @@ namespace MISC
 		void resize(const size_t num)
 		{
 			TODO("keep previous data...");
-			model.resize(num);
-			pos.resize(num);
-			radius.resize(num);
-			mass.resize(num);
+			model.resize   (num);
+			emissive.resize(num);
+			pos.resize     (num);
+			radius.resize  (num);
+			mass.resize    (num);
 			velocity.resize(num);
 
 			count.assign( num );
@@ -44,6 +46,7 @@ namespace MISC
 
 		//   * GFX
 		GBUF<int>    model;
+		GBUF<float>  emissive; // redundant to model, but needed for speed
 
 		//   * COMMON
 		GBUF<float3>   pos;

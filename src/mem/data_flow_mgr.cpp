@@ -1,3 +1,4 @@
+#include "util/logger.h"
 #include "data_flow_mgr.h"
 #include "constants.h"
 #include "ioctl.h"
@@ -25,18 +26,22 @@ class DataFlowMgr::Impl
 		void registerCam( Camera *_cam );
 
 	private:
+		void updateEmissive( MISC::CpuPlanetHolder*p, MISC::Materials*m );
+
 		IOCtl ioctl;
 		MemMgr memmgr;
 		Camera *cam;
+		MISC::Materials*materials;
 };
 
 DataFlowMgr::Impl::Impl()
-	: cam( NULL )
+	: cam( NULL ) , materials(NULL)
 {
 }
 
 DataFlowMgr::Impl::~Impl()
 {
+	if( materials ) delete materials;
 }
 
 void DataFlowMgr::Impl::save( const std::string &path )
@@ -53,12 +58,26 @@ void DataFlowMgr::Impl::load( const std::string &path )
 	MISC::SaverParams p( cam );
 	ioctl.load( &p, path );
 	log_printf(DBG, "got %u planets\n", p.planet_info->size() );
+	updateEmissive( p.planet_info , materials );
 	memmgr.setPlanets( p.planet_info );
+}
+
+void DataFlowMgr::Impl::updateEmissive(MISC::CpuPlanetHolder*p , MISC::Materials*m)
+{
+	if( !m ) {
+		log_printf(_WARNING,"There are no materials loaded\n");
+		for( unsigned i=0 ; i<p->size() ; i++ )
+			p->emissive[i] = 0;
+	} else	for( unsigned i=0 ; i<p->size() ; i++ )
+			p->emissive[i] = (*m)[p->model[i]].ke;
 }
 
 GLuint DataFlowMgr::Impl::loadMaterials()
 {
-	return memmgr.loadMaterials();
+	if( materials ) delete materials;
+	materials = new MISC::Materials();
+	ioctl.loadMaterials( materials , "should be here?" );
+	return memmgr.loadMaterials(*materials );
 }
 
 MISC::GfxPlanetFactory *DataFlowMgr::Impl::getGfxMem()

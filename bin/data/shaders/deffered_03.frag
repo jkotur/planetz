@@ -2,10 +2,10 @@
 /**
  *  buffers |          values 
  * ---------+--------+--------+--------+----------
- *  gbuff1  | pos.x  | pos.y  | pos.z  | alpha
- *  gbuff2  | norm.x | norm.y | norm.z | material
- *  gbuff3  | col.x  | col.y  | col.b  | alpha
- *  gbuff4  | ke     | ka     | kd     | ks
+ *  gdat1   | pos.x  | pos.y  | pos.z  | alpha
+ *  gdat2   | norm.x | norm.y | norm.z | material
+ *  gdat3   | col.x  | col.y  | col.b  | alpha
+ *  gdat4   | ke     | ka     | kd     | ks
  */
 
 uniform sampler2D gbuff1;
@@ -13,6 +13,7 @@ uniform sampler2D gbuff2;
 uniform sampler2D gbuff3;
 uniform sampler2D gbuff4;
 
+varying in float ke;
 varying in vec3 lightPos;
 varying in vec3 lightColor;
 
@@ -29,7 +30,8 @@ void main()
 
 	float dist = length(lightDir);
 //        dist = dist * dist / 10;
-	dist /= 5;
+	dist /= 5; // magic constans
+	dist /= ke;
         lightDir = normalize(lightDir);
 
 	float i = clamp(dot(lightDir, gdat2.xyz) , 0.0 , 1.0 ); 
@@ -42,7 +44,10 @@ void main()
 
         vec3 fs = gdat3.rgb * i / dist;
 
-	gl_FragColor.rgb = fd * gdat4.z + fs * gdat4.w;
+	gl_FragColor.rgb = (fd * gdat4.z + fs * gdat4.w) * lightColor;
 	gl_FragColor.a = gdat1.a;
+
+//        if( gdat1.a <= .0 )
+//                gl_FragColor.rgba = vec4(.1,.1,.1,1);
 }
 

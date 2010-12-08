@@ -33,7 +33,8 @@ namespace MISC
 
 		const GfxPlanet getPlanet( int id ) const;
 
-		const BufferGl<int> &getModels() const;
+		const BufferGl<int>     &getModels() const;
+		const BufferGl<float>   &getEmissive() const;
 
 		const BufferGl<float3>  &getPositions() const;
 		const BufferGl<float>   &getRadiuses() const;

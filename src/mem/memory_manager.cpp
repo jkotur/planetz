@@ -10,27 +10,49 @@
 using namespace MEM;
 
 MemMgr::MemMgr()
-	: holder() , gpf(&holder) , ppf(&holder)
+	: texId(0) , holder() , gpf(&holder) , ppf(&holder)
 {
 }
 
 MemMgr::~MemMgr()
 {
+	if( texId ) glDeleteTextures(1,&texId);
 }
 
-GLuint MemMgr::loadMaterials()
+GLuint MemMgr::loadMaterials( const MISC::Materials& materials )
 {
-	TODO("Load materials from file or sth");
+	if( texId ) glDeleteTextures(1,&texId);
 
-	MaterialsMgr mgr;
+	float*data = new float[ materials.size()*8 ];
 
-	               // r    g    b   ke   ka   kd    ks  alpha
-	mgr.addMaterial( .5 , .1 , .0 , .0 , .3 , 10 , 0 , 1 );
-	mgr.addMaterial( .0 , .3 , 1. , .0 , .3 , 10 , 0 , 1 );
-	mgr.addMaterial( .5 , 1. , .0 , .0 , .3 , 10 , 0 , 1 );
-	mgr.addMaterial( 1. , 1. , 1. , .8 , .3 , 1.0 , 0 , 1 );
+	unsigned int i = 0;
 
-	return mgr.compile();
+	for( MISC::Materials::const_iterator it = materials.begin() ; it != materials.end() ; ++it )
+	{
+		// first
+		data[i++] = it->r    ;
+		data[i++] = it->g    ;
+		data[i++] = it->b    ;
+		data[i++] = it->ke   ;
+		// second
+		data[i++] = it->ka   ;
+		data[i++] = it->kd   ;
+		data[i++] = it->ks   ;
+		data[i++] = it->alpha;
+	}
+	
+	TODO("delete this texture somewhere");
+	glGenTextures(1,&texId);
+
+	glBindTexture(GL_TEXTURE_1D, texId );
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S    , GL_CLAMP  );
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage1D(GL_TEXTURE_1D,0,GL_RGBA16F,materials.size()*2,0,GL_RGBA, GL_FLOAT,data);
+	glBindTexture(GL_TEXTURE_1D, 0 );
+
+	delete data;
+	return texId;
 }
 
 void MemMgr::setPlanets( MISC::CpuPlanetHolder *pl )
@@ -53,6 +75,12 @@ void MemMgr::setPlanets( MISC::CpuPlanetHolder *pl )
 	for( unsigned i=0 ; i<size ; i++ )
 		type[i] = pl->model[i] * 2; // model must be even
 	holder.model.unmap();
+
+	holder.emissive.bind();
+	float *em = holder.emissive.map( MISC::BUF_H );
+	for( unsigned i=0; i<size; ++i )
+		em[i] = pl->emissive[i];
+	holder.emissive.unmap();
 
 	holder.count.assign( pl->count[0] );
 

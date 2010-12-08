@@ -13,11 +13,12 @@ namespace MISC
 		: public BufferBase<T>
 		, public std::vector<T>
 	{
-		public:
-			BufferCpu( unsigned num )
-			{
-				resize( num );
-			}
+	public:
+		BufferCpu( unsigned num = 0 )
+		{
+			resize( num );
+		}
+
 		virtual void resize( size_t num, const T*data = NULL )
 		{
 			std::vector<T>::resize( num );

@@ -76,25 +76,26 @@ void DeferRender::prepare()
 	glUniform1i( textureTexId   , 3 );
 	Program::none();
 
-	gbuffId[0] = glGetUniformLocation( prLighting.id() , "gbuff1" );
-	gbuffId[1] = glGetUniformLocation( prLighting.id() , "gbuff2" );
-	gbuffId[2] = glGetUniformLocation( prLighting.id() , "gbuff3" );
-	gbuffId[3] = glGetUniformLocation( prLighting.id() , "gbuff4" );
+	gbuffId[0] = glGetUniformLocation( prLighting.id() , "gbuff1"   );
+	gbuffId[1] = glGetUniformLocation( prLighting.id() , "gbuff2"   );
+	gbuffId[2] = glGetUniformLocation( prLighting.id() , "gbuff3"   );
+	gbuffId[3] = glGetUniformLocation( prLighting.id() , "gbuff4"   );
+	matLId     = glGetUniformLocation( prLighting.id() , "materials");
 
-	modelLId  = glGetAttribLocation( prLighting.id() , "model"  );
+	modelLId   = glGetAttribLocation( prLighting.id()  , "model"    );
+	emissiveLId= glGetAttribLocation( prLighting.id()  , "emissive" );
 
 	gbuffId[4] = glGetUniformLocation( prLightsBase.id() , "gbuff1" );
 	gbuffId[5] = glGetUniformLocation( prLightsBase.id() , "gbuff2" );
 	gbuffId[6] = glGetUniformLocation( prLightsBase.id() , "gbuff3" );
 	gbuffId[7] = glGetUniformLocation( prLightsBase.id() , "gbuff4" );
 
-	log_printf(DBG,"gbuff loc: %d %d %d %d\n",gbuffId[0],gbuffId[1],gbuffId[2],gbuffId[3]);
-
 	prLighting.use();
 	glUniform1i( gbuffId[0] , 0 );
 	glUniform1i( gbuffId[1] , 1 );
 	glUniform1i( gbuffId[2] , 2 );
 	glUniform1i( gbuffId[3] , 3 );
+	glUniform1i( matLId     , 4 );
 	Program::none();
 
 	prLightsBase.use();
@@ -201,6 +202,7 @@ GLuint DeferRender::generate_sphere_texture( int w , int h )
 	glGenTextures( 1 , &texId );
 	glBindTexture(GL_TEXTURE_2D, texId );
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S    , GL_CLAMP  );
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T    , GL_CLAMP  );
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 	glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA16F,w,h,0,GL_RGBA,GL_FLOAT,sphere);
@@ -214,6 +216,7 @@ GLuint DeferRender::generate_render_target_texture( int w , int h )
 	glGenTextures( 1 , &texId );
 	glBindTexture(GL_TEXTURE_2D, texId );
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S    , GL_CLAMP  );
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T    , GL_CLAMP  );
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 	glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA16F,w,h,0,GL_RGBA,GL_FLOAT,NULL);
@@ -350,6 +353,8 @@ void DeferRender::draw() const
 	glDisableVertexAttribArray( radiusId );
 	glDisableVertexAttribArray( modelId  );
 
+//        glDisable(GL_DEPTH_TEST);
+
 	glClear( GL_DEPTH_BUFFER_BIT ); 
 
 	glActiveTexture(GL_TEXTURE0); glBindTexture( GL_TEXTURE_2D, gbuffTex[0] );
@@ -363,12 +368,15 @@ void DeferRender::draw() const
 	glEnd();
 	Program::none();
 
-	glEnableVertexAttribArray( modelLId  );
+	glEnableVertexAttribArray( modelLId );
+	glEnableVertexAttribArray( emissiveLId );
 
 	glEnable( GL_BLEND );
 	glBlendFunc( GL_ONE , GL_ONE );
 
 	prLighting.use();
+
+	glActiveTexture(GL_TEXTURE4); glBindTexture(GL_TEXTURE_1D, materialsTex );
 
 	factory->getPositions().bind();
 	glVertexPointer( 3 , GL_FLOAT , 0 , NULL );
@@ -378,17 +386,24 @@ void DeferRender::draw() const
 	glVertexAttribIPointer( modelLId  , 1, GL_INT , 0, NULL );
 	factory->getModels().unbind();
 
+	factory->getEmissive().bind();
+	glVertexAttribPointer( emissiveLId , 1 , GL_FLOAT , GL_FALSE , 0 , NULL );
+	factory->getEmissive().unbind();
+
 	glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
 
-	glBindTexture( GL_TEXTURE_2D , 0 ); glActiveTexture( GL_TEXTURE2 );
-	glBindTexture( GL_TEXTURE_2D , 0 ); glActiveTexture( GL_TEXTURE1 );
-	glBindTexture( GL_TEXTURE_2D , 0 ); glActiveTexture( GL_TEXTURE0 );
-	glBindTexture( GL_TEXTURE_2D , 0 );
+	                                glBindTexture( GL_TEXTURE_1D , 0 );
+	glActiveTexture( GL_TEXTURE3 ); glBindTexture( GL_TEXTURE_2D , 0 );
+	glActiveTexture( GL_TEXTURE2 ); glBindTexture( GL_TEXTURE_2D , 0 );
+	glActiveTexture( GL_TEXTURE1 ); glBindTexture( GL_TEXTURE_2D , 0 );
+	glActiveTexture( GL_TEXTURE0 ); glBindTexture( GL_TEXTURE_2D , 0 );
 	Program::none();
 
+//        glEnable(GL_DEPTH_TEST);
 	glDisable( GL_BLEND );
 	glDisable( GL_ALPHA_TEST );
 
+	glDisableVertexAttribArray( emissiveLId );
 	glDisableVertexAttribArray( modelLId  );
 	glDisableClientState( GL_VERTEX_ARRAY );
 }

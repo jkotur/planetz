@@ -6,6 +6,7 @@
 
 #include <string>
 
+#include "misc/materials_manager.h"
 #include "misc/gfx_planet_factory.h"
 #include "misc/phx_planet_factory.h"
 #include "misc/planet_model.h"
@@ -22,11 +23,13 @@ namespace MEM {
 		MISC::GfxPlanetFactory* getGfxMem();
 		MISC::PhxPlanetFactory* getPhxMem();
 		
-		GLuint loadMaterials();
+		GLuint loadMaterials( const MISC::Materials& materials );
 
 		MISC::CpuPlanetHolder *getPlanets();
 		void setPlanets( MISC::CpuPlanetHolder * );
 	private:
+		GLuint texId;
+
 		MISC::PlanetHolder holder;
 
 		MISC::GfxPlanetFactory gpf;

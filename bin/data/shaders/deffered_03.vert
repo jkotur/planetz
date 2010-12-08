@@ -1,10 +1,15 @@
+#version 130
 
-varying in int model;
-varying out int is_light;
+in float emissive;
+out float em;
+
+in  int model;
+out int models;
 
 void main()
 {
-	is_light = ( model == 6 );
+	em = emissive;
+	models = model;
 	gl_Position = gl_ModelViewMatrix * gl_Vertex;
 }
 

@@ -1,5 +1,21 @@
 #version 130 
 
+/**
+ *  buffers   |          values 
+ * -----------+--------+--------+--------+----------
+ *  FragData0 | pos.x  | pos.y  | pos.z  | alpha
+ *  FragData1 | norm.x | norm.y | norm.z | material
+ *  FragData2 | col.x  | col.y  | col.b  | alpha
+ *  FragData3 | ke     | ka     | kd     | ks
+ */
+
+/**
+ *          |           values
+ * ---------+---------+--------+--------+---------
+ *  mater1  |    r    |   g    |   b    |  ke 
+ *  mater2  |    ka   |   kd   |   ks   |  alpha
+ */
+
 uniform sampler2D sph_pos;
 
 //uniform sampler2D anglesTex;
@@ -32,6 +48,7 @@ void main()
 	vec2 angles = vec2( -atan(ntex.z,ntex.x)+PI/2.0f , asin(ntex.y) );
 
 	vec4 tex = texture2D( textureTex , texture_st_v2(angles) );
+//	tex = vec4(1); // temporary for testing
 
 	gl_FragData[1].xyz = norm.xyz;      // normal vector
 	gl_FragData[1].w   = 0;        // model id (deprecated)
@@ -41,8 +58,8 @@ void main()
 	gl_FragData[0].xyz = pos + norm.xyz;
 	gl_FragData[0].a   = norm.w;	   // draw or not draw this fragment
 
-	gl_FragData[2]     = mater1 * tex;
-	gl_FragData[3]     = mater2;
+	gl_FragData[2]     = vec4( mater1.rgb * tex.rgb , mater2.a * tex.a );
+	gl_FragData[3]     = vec4( mater1.a , mater2.rgb );
 }
 
 vec2 texture_st_f2( float ax , float ay )

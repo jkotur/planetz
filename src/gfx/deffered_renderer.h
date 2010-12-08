@@ -42,6 +42,7 @@ private:
 
 	GLint modelId ;
 	GLint modelLId ;
+	GLint emissiveLId;
 
 	//
 	// Sphere normals (deprecated)
@@ -56,6 +57,7 @@ private:
 	//
 	GLint materialsTexId;
 	GLuint materialsTex;
+	GLuint matLId;
 
 	//
 	// MTR
