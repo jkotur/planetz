@@ -77,6 +77,10 @@ PlanetzLayout::PlanetzLayout()
 
 	SETEVENT("btnShowSave",PushButton::EventClicked,&PlanetzLayout::show_save_win);
 
+	SETEVENT("btnShowOpt" ,PushButton::EventClicked,&PlanetzLayout::show_opt_win);
+	SETEVENT("btnOptNope" ,PushButton::EventClicked,&PlanetzLayout::hide_opt_win);
+	SETEVENT("btnOptOk" ,PushButton::EventClicked,&PlanetzLayout::apply_options);
+
 	WindowManager::getSingleton().getWindow("btnLoad")
 		->subscribeEvent(PushButton::EventClicked
 				,Event::Subscriber(&PlanetzLayout::load,this));
@@ -280,6 +284,10 @@ bool PlanetzLayout::set_radius_val( const CEGUI::EventArgs& e )
 
 bool PlanetzLayout::pause( const CEGUI::EventArgs& e )
 {
+	CEGUI::Window* btn = GETWIN("btnPause");
+	if( btn->getText() == "Start" )
+		btn->setText("Pauza");
+	else	btn->setText("Start");
 	on_pause_click();
 	return true;
 }
@@ -328,6 +336,24 @@ bool PlanetzLayout::qload( const CEGUI::EventArgs& e )
 bool PlanetzLayout::show_save_win( const CEGUI::EventArgs& e )
 {
 	GETWIN("winSave")->setVisible(true);
+	return true;
+}
+
+bool PlanetzLayout::show_opt_win( const CEGUI::EventArgs& e )
+{
+	GETWIN("winOpt")->setVisible(!GETWIN("winOpt")->isVisible());
+	return true;
+}
+
+bool PlanetzLayout::hide_opt_win( const CEGUI::EventArgs& e )
+{
+	GETWIN("winOpt")->setVisible(false);
+	return true;
+}
+
+bool PlanetzLayout::apply_options( const CEGUI::EventArgs& e )
+{
+	GETWIN("winOpt")->setVisible(false);
 	return true;
 }
 

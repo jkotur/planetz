@@ -29,12 +29,19 @@ void Gui::set_layout( Layout*_l )
 
 bool Gui::init()
 {
-	 try{ 
+	 try {
 		init_throw();
 	 } catch(CEGUI::InvalidRequestException e) {
-	       log_printf(CRITICAL,"%s\n",e.getMessage().c_str());
-	       return false;
+		log_printf(CRITICAL,"CEGUI exception: %s\n",e.getMessage().c_str());
+		return false;
+	 } catch(CEGUI::Exception& e) {
+		log_printf(CRITICAL,"CEGUI exception: %s\n",e.getMessage().c_str());
+		return false;
+	 } catch(...) {
+		log_printf(CRITICAL,"Unknown GUI exception\n");
+		return false;
 	 }
+
 	 return true;
 }
 
@@ -68,11 +75,8 @@ void Gui::init_throw()
 
 	CEGUI::SchemeManager::getSingleton().loadScheme( "QuadraticLook.scheme" );
 
-	// load in a font.  The first font loaded automatically becomes the default font.
-	if(! CEGUI::FontManager::getSingleton().isFontPresent( "Commonwealth-8" ) )
-		CEGUI::FontManager::getSingleton().createFont( "Commonwealth.font" );
-
-	System::getSingleton().setDefaultFont( "Commonwealth-8" );
+	CEGUI::FontManager::getSingleton().createFont( "astroboy.font" );
+	System::getSingleton().setDefaultFont( "Astro Boy" );
 	System::getSingleton().setDefaultMouseCursor( "QuadraticLook", "MouseArrow" );
 	System::getSingleton().setDefaultTooltip( "QuadraticLook/Tooltip" );
 }
@@ -80,6 +84,7 @@ void Gui::init_throw()
 void Gui::resize( int w , int h )
 {
 	renderer->setDisplaySize(CEGUI::Size(w, h));
+	CEGUI::FontManager::getSingleton().notifyScreenResolution(CEGUI::Size(w,h));
 	renderer->restoreTextures();
 }
 

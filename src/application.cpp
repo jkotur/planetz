@@ -101,7 +101,12 @@ bool Application::init()
 	//
 	// init graphical user interface
 	//
-	pl = new PlanetzLayout(); 
+	try {
+		pl = new PlanetzLayout(); 
+	} catch(CEGUI::InvalidRequestException e) {
+		log_printf(CRITICAL,"CEGUI exception: %s\n",e.getMessage().c_str());
+		return false;
+	}
 	ui.gui.set_layout(pl);
 
 	pl->on_cam_speed_changed.connect( bind(&Camera::set_speed,&camera,_1) );

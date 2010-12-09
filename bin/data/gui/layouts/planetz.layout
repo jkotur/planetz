@@ -4,13 +4,13 @@
 		<Window Type="QuadraticLook/Button" Name="btnReset" >
 			<Property Name="UnifiedPosition" Value="{{0.0,10},{1.0,-55}}" />
 			<Property Name="UnifiedSize" Value="{{0,80},{0,20}}," />
-			<Property Name="Text" Value="Nowy uklad" />
+			<Property Name="Text" Value="Nowy układ" />
 		</Window>
 
 		<Window Type="QuadraticLook/Button" Name="btnPause" >
 			<Property Name="UnifiedPosition" Value="{{0.0,100},{1.0,-55}}" />
 			<Property Name="UnifiedSize" Value="{{0,80},{0,20}}," />
-			<Property Name="Text" Value="Pauza" />
+			<Property Name="Text" Value="Start" />
 		</Window>
 
 		<Window Type="QuadraticLook/Button" Name="btnQSave" >
@@ -39,10 +39,17 @@
 			<Property Name="Text" Value="Wczytaj" />
 		</Window>
 
+		<Window Type="QuadraticLook/Button" Name="btnShowOpt" >
+			<Property Name="UnifiedPosition" Value="{{0.0,370},{1.0,-30}}" />
+			<Property Name="UnifiedSize" Value="{{0,80},{0,20}}," />
+			<Property Name="Text" Value="Opcje" />
+		</Window>
+
 		<Window Type="QuadraticLook/StaticText" Name="stAnimSpeed" >
-			<Property Name="UnifiedPosition" Value="{{1.0,-235},{1.0,-50}}" />
-			<Property Name="UnifiedSize" Value="{{0,110},{0,20}}," />
-			<Property Name="Text" Value="Szybkosc symulacji" />
+			<Property Name="UnifiedPosition" Value="{{1.0,-235},{1.0,-70}}" />
+			<Property Name="UnifiedSize" Value="{{0,110},{0,40}}," />
+			<Property Name="Text" Value="Szybkość symulacji" />
+			<Property Name="HorzFormatting" Value="WordWrapCentred" />
 		</Window>
 
 		<Window Type="QuadraticLook/HorizontalScrollbar" Name="slAnimSpeed" >
@@ -53,9 +60,10 @@
 		</Window>
 
 		<Window Type="QuadraticLook/StaticText" Name="stCamSpeed" >
-			<Property Name="UnifiedPosition" Value="{{1.0,-105},{1.0,-50}}" />
-			<Property Name="UnifiedSize" Value="{{0,110},{0,20}}," />
-			<Property Name="Text" Value="Szybkosc kamery" />
+			<Property Name="UnifiedPosition" Value="{{1.0,-105},{1.0,-70}}" />
+			<Property Name="UnifiedSize" Value="{{0,110},{0,40}}," />
+			<Property Name="Text" Value="Szybkość kamery" />
+			<Property Name="HorzFormatting" Value="WordWrapCentred" />
 		</Window>
 
 		<Window Type="QuadraticLook/HorizontalScrollbar" Name="slCamSpeed" >
@@ -82,20 +90,20 @@
 			<Property Name="FrameEnabled" Value="False" />
 
 			<Window Type="QuadraticLook/Button" Name="btnAdd" >
-				<Property Name="UnifiedPosition" Value="{{0.5,-85},{0,150}}" />
-				<Property Name="UnifiedSize" Value="{{0,80},{0,20}}" />
-				<Property Name="Text" Value="Dodaj Planete" />
+				<Property Name="UnifiedPosition" Value="{{0.5,-95},{0,150}}" />
+				<Property Name="UnifiedSize" Value="{{0,90},{0,20}}" />
+				<Property Name="Text" Value="Dodaj Planetę" />
 			</Window>
 
 			<Window Type="QuadraticLook/Button" Name="btnClear" >
 				<Property Name="UnifiedPosition" Value="{{0.5,5},{0,150}}" />
-				<Property Name="UnifiedSize" Value="{{0,80},{0,20}}" />
-				<Property Name="Text" Value="Wyczysc" />
+				<Property Name="UnifiedSize" Value="{{0,90},{0,20}}" />
+				<Property Name="Text" Value="Wyczyść" />
 			</Window>
 
 			<Window Type="QuadraticLook/StaticText" Name="stPos">
-				<Property Name="UnifiedPosition" Value="{{0.5,-110},{0.0,25}}" />
-				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
+				<Property Name="UnifiedPosition" Value="{{0.5,-120},{0.0,25}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,90},{0,30}}" />
 				<Property Name="Text" Value="Pozycja:" />
 			</Window>
 
@@ -130,9 +138,9 @@
 			</Window>
 
 			<Window Type="QuadraticLook/StaticText" Name="stSpeed">
-				<Property Name="UnifiedPosition" Value="{{0.5,-110},{0,55}}" />
-				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
-				<Property Name="Text" Value="Predkosc:" />
+				<Property Name="UnifiedPosition" Value="{{0.5,-120},{0,55}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,90},{0,30}}" />
+				<Property Name="Text" Value="Predkość:" />
 			</Window>
 
 			<Window Type="QuadraticLook/Spinner" Name="spSpeedX" >
@@ -166,8 +174,8 @@
 			</Window>
 
 			<Window Type="QuadraticLook/StaticText" Name="stMass">
-				<Property Name="UnifiedPosition" Value="{{0.5,-110},{0,85}}" />
-				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
+				<Property Name="UnifiedPosition" Value="{{0.5,-120},{0,85}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,90},{0,30}}" />
 				<Property Name="Text" Value="Masa:" />
 			</Window>
 
@@ -185,9 +193,9 @@
 			</Window>
 
 			<Window Type="QuadraticLook/StaticText" Name="stRadius">
-				<Property Name="UnifiedPosition" Value="{{0.5,-110},{0,115}}" />
-				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
-				<Property Name="Text" Value="Promien:" />
+				<Property Name="UnifiedPosition" Value="{{0.5,-120},{0,115}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,90},{0,30}}" />
+				<Property Name="Text" Value="Promień:" />
 			</Window>
 
 			<Window Type="QuadraticLook/StaticText" Name="stRadiusCount">
@@ -227,9 +235,9 @@
 			</Window>
 
 			<Window Type="QuadraticLook/StaticText" Name="stShowSpeed">
-				<Property Name="UnifiedPosition" Value="{{0.5,-110},{0,55}}" />
-				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
-				<Property Name="Text" Value="Predkosc:" />
+				<Property Name="UnifiedPosition" Value="{{0.5,-120},{0,55}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,90},{0,30}}" />
+				<Property Name="Text" Value="Predkość:" />
 			</Window>
 
 			<Window Type="QuadraticLook/StaticText" Name="stShowSpeedScalar">
@@ -271,28 +279,95 @@
 			<Window Type="QuadraticLook/StaticText" Name="stShowRadius">
 				<Property Name="UnifiedPosition" Value="{{0.5,-110},{0,145}}" />
 				<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
-				<Property Name="Text" Value="Promien:" />
+				<Property Name="Text" Value="Promień:" />
 			</Window>
 
 			<Window Type="QuadraticLook/StaticText" Name="lbShowRadius">
 				<Property Name="UnifiedPosition" Value="{{0.5,-40},{0,145}}" />
 				<Property Name="UnifiedSize" Value="{{0.0,140},{0,30}}" />
-				<Property Name="Text" Value="Promien:" />
+				<Property Name="Text" Value="Promień:" />
 			</Window>
 
 			<Window Type="QuadraticLook/Button" Name="btnDel" >
 				<Property Name="UnifiedPosition" Value="{{0.5,-40},{0,175}}" />
 				<Property Name="UnifiedSize" Value="{{0,80},{0,20}}" />
-				<Property Name="Text" Value="Usun Planete" />
+				<Property Name="Text" Value="Usuń Planetę" />
 			</Window>
 
 		</Window>
 
-<!--                ono z lista dostepnych ukladow-->
+<!--                okno opcji -->
+		<Window Type="QuadraticLook/FrameWindow" Name="winOpt">
+			<Property Name="UnifiedPosition" Value="{{0.5,0},{0.1,0}}" />
+			<Property Name="UnifiedSize" Value="{{0,270},{0,180}}" />
+			<Property Name="Text" Value="Opcje" />
+			<Property Name="Alpha" Value="1.0" />
+			<Property Name="FrameEnabled" Value="True" />
+			<Property Name="CloseButtonEnabled" Value="False" />
+			<Property Name="Visible" Value="false" />
+
+			<Window Type="QuadraticLook/Button" Name="btnOptOk" >
+				<Property Name="UnifiedPosition" Value="{{1.0,-200},{1.0,-25}}" />
+				<Property Name="UnifiedSize" Value="{{0,90},{0,20}}," />
+				<Property Name="Text" Value="Zapisz" />
+			</Window>
+
+			<Window Type="QuadraticLook/Button" Name="btnOptNope" >
+				<Property Name="UnifiedPosition" Value="{{1.0,-100},{1.0,-25}}" />
+				<Property Name="UnifiedSize" Value="{{0,90},{0,20}}," />
+				<Property Name="Text" Value="Anuluj" />
+			</Window>
+
+			<Window Type="QuadraticLook/TabControl" Name="Demo/TabCtrl">
+				<Property Name="UnifiedPosition" Value="{{0.0,0},{0.0,30}}" />
+				<Property Name="UnifiedSize" Value="{{1.0,0},{1.0,-60}}" />
+
+				<Window Type="QuadraticLook/TabPane" Name="tabGfx">
+<!--                                        <Property Name="MousePassThroughEnabled" Value="True" />-->
+					<Property Name="UnifiedPosition" Value="{{0.0,0},{0.0,0}}" />
+					<Property Name="UnifiedSize" Value="{{1.0,0},{1.0,0}}" />
+					<Property Name="Text" Value="Graficzne" />
+
+					<Window Type="QuadraticLook/Checkbox" Name="cbTextures" >
+						<Property Name="UnifiedPosition" Value="{{0.0,20},{0.0,10}}" />
+						<Property Name="UnifiedSize" Value="{{1.0,0},{0.0,25}}" />
+						<Property Name="Text" Value="Teksturowanie" />
+					</Window>
+
+					<Window Type="QuadraticLook/StaticText" Name="stDebug" >
+						<Property Name="UnifiedPosition" Value="{{0.0,10},{0.0,35}}" />
+						<Property Name="UnifiedSize" Value="{{1.0,0},{0.0,25}}" />
+						<Property Name="Text" Value="Debug:" />
+					</Window>
+
+					<Window Type="QuadraticLook/Checkbox" Name="cbLights" >
+						<Property Name="UnifiedPosition" Value="{{0.0,20},{0.0,60}}" />
+						<Property Name="UnifiedSize" Value="{{1.0,0},{0.0,25}}" />
+						<Property Name="Text" Value="Zasięg oświetlenia" />
+					</Window>
+					
+				</Window>
+
+				<Window Type="QuadraticLook/TabPane" Name="tabPhx">
+					<Property Name="UnifiedPosition" Value="{{0.0,0},{0.0,0}}" />
+					<Property Name="UnifiedSize" Value="{{1.0,0},{1.0,0}}" />
+					<Property Name="Text" Value="Fizyczne" />
+
+					<Window Type="QuadraticLook/StaticText" Name="stPage2" >
+						<Property Name="UnifiedPosition" Value="{{0.5,0},{0.5,0}}" />
+						<Property Name="UnifiedSize" Value="{{0.0,80},{0.0,25}}" />
+						<Property Name="Text" Value="Nope" />
+						<Property Name="Visible" Value="True" />
+					</Window>
+				</Window>
+			</Window>
+		</Window>
+
+<!--                okno z lista dostepnych ukladow-->
 		<Window Type="QuadraticLook/FrameWindow" Name="SavesListWin" >
 			<Property Name="UnifiedPosition" Value="{{0.5,-75},{0.5,-100}}" />
 			<Property Name="UnifiedSize" Value="{{0,150},{0,200}}" />
-			<Property Name="Text" Value="Wczytaj uklad" />
+			<Property Name="Text" Value="Wczytaj układ" />
 			<Property Name="CloseButtonEnabled" Value="True" />
 			<Property Name="FrameEnabled" Value="True" />
 			<Property Name="Alpha" Value="1.0" />
@@ -314,7 +389,7 @@
 		<Window Type="QuadraticLook/FrameWindow" Name="winSave" >
 			<Property Name="UnifiedPosition" Value="{{0.5,-75},{0.5,-50}}" />
 			<Property Name="UnifiedSize" Value="{{0,250},{0,70}}" />
-			<Property Name="Text" Value="Zapisz uklad" />
+			<Property Name="Text" Value="Zapisz układ" />
 			<Property Name="CloseButtonEnabled" Value="True" />
 			<Property Name="FrameEnabled" Value="True" />
 			<Property Name="Alpha" Value="1.0" />

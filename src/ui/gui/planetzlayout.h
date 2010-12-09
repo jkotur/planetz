@@ -36,6 +36,9 @@ private:
 	bool del_planet( const CEGUI::EventArgs& e );
 	bool show_load_win( const CEGUI::EventArgs& e );
 	bool show_save_win( const CEGUI::EventArgs& e );
+	bool show_opt_win( const CEGUI::EventArgs& e );
+	bool hide_opt_win( const CEGUI::EventArgs& e );
+	bool apply_options( const CEGUI::EventArgs& e );
 	bool set_cam_speed( const CEGUI::EventArgs& e );
 	bool pause( const CEGUI::EventArgs& e );
 	bool save( const CEGUI::EventArgs& e );
