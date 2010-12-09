@@ -65,8 +65,8 @@ void DeferRender::prepare()
 
 	anglesId       = glGetUniformLocation( prPlanet.id() , "angles" );
 
-	radiusId = glGetAttribLocation( prPlanet.id() , "radius" );
-	modelId  = glGetAttribLocation( prPlanet.id() , "model"  );
+	radiusId       = glGetAttribLocation ( prPlanet.id() , "radius" );
+	modelId        = glGetAttribLocation ( prPlanet.id() , "model"  );
 
 	prPlanet.use();
 	glUniform1i( materialsTexId , 0 );
@@ -373,6 +373,8 @@ void DeferRender::draw() const
 
 	glEnable( GL_BLEND );
 	glBlendFunc( GL_ONE , GL_ONE );
+//        glBlendFunc( GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA );
+//        glDisable( GL_DEPTH_TEST );
 
 	prLighting.use();
 

@@ -47,7 +47,8 @@ void main()
 	gl_FragColor.rgb = (fd * gdat4.z + fs * gdat4.w) * lightColor;
 	gl_FragColor.a = gdat1.a;
 
+/** lights range planes */
 //        if( gdat1.a <= .0 )
-//                gl_FragColor.rgba = vec4(.1,.1,.1,1);
+//                gl_FragColor.rgba = vec4(1,1,1,.2);
 }
 

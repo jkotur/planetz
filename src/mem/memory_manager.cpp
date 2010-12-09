@@ -41,7 +41,6 @@ GLuint MemMgr::loadMaterials( const MISC::Materials& materials )
 		data[i++] = it->alpha;
 	}
 	
-	TODO("delete this texture somewhere");
 	glGenTextures(1,&texId);
 
 	glBindTexture(GL_TEXTURE_1D, texId );
