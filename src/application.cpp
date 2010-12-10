@@ -90,7 +90,7 @@ bool Application::init()
 		connect(1,bind(&GFX::Background::on_button_down,&bkg,_1,_2,_3));
 
 	camera.sigAngleChanged.
-		connect( bind(&GFX::PlanetzRenderer::on_camera_angle_changed,&plz,_1) );
+		connect( bind(&GFX::DeferRender::on_camera_angle_changed,&plz,_1) );
 
 #ifndef _RELEASE
 	ui.sigMouseButtonDown.
@@ -115,6 +115,7 @@ bool Application::init()
 	pl->on_save.connect( bind(&MEM::DataFlowMgr::save,&data_mgr,_1) );
 	pl->on_load.connect( bind(&MEM::DataFlowMgr::load,&data_mgr,_1) );
 	pl->on_load.connect( bind(&Application::pause_anim,this) );
+	pl->on_config_changed.connect(bind(&GFX::Gfx::update_configuration,&gfx,_1));
 	//pl->on_planet_add.connect( bind(&Planetz::add,&planetz,_1) );
 	//pl->on_planet_delete.connect( bind(&Planetz::erase,&planetz,_1) );
 	//planetz.on_planet_select.connect( bind(&PlanetzLayout::add_selected_planet,pl,_1) );

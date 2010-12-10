@@ -11,6 +11,11 @@
 namespace GFX
 {
 class DeferRender : public Drawable {
+	enum OPT {
+		LIGHTING    = 1 << 0,
+		LIGHT_PLANES= 1 << 1,
+		TEXTURES    = 1 << 2,
+	};
 public:
 	DeferRender( const MEM::MISC::GfxPlanetFactory * factory );
 	virtual ~DeferRender();
@@ -22,6 +27,8 @@ public:
 	virtual void resize(
 			unsigned int width ,
 			unsigned int height );
+
+	virtual void update_configuration();
 	
 	void setMaterials( GLuint );
 
@@ -91,6 +98,11 @@ private:
 	GLint anglesId;
 
 	const MEM::MISC::GfxPlanetFactory * const factory;
+
+	//
+	// options switches
+	//
+	unsigned flags;
 };
 
 } // GFX

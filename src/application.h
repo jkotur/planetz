@@ -7,7 +7,7 @@
 #include "phx/phx.h"
 #include "gfx/gfx.h"
 #include "gfx/background.h"
-#include "gfx/planetz_renderer.h"
+#include "gfx/deffered_renderer.h"
 #include "gfx/arrow.h"
 
 #include "constants.h"
@@ -60,7 +60,7 @@ protected:
 	UI ui;
 	PlanetzLayout*pl;
 
-	GFX::PlanetzRenderer plz;
+	GFX::DeferRender plz;
 	GFX::Background bkg;
 
 	std::FILE*f_log;

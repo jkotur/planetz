@@ -11,7 +11,7 @@
 using namespace GFX;
 
 DeferRender::DeferRender( const MEM::MISC::GfxPlanetFactory * factory )
-	: materialsTex(0) , factory(factory)
+	: materialsTex(0) , factory(factory) , flags(NULL)
 {
 }
 
@@ -108,6 +108,25 @@ void DeferRender::prepare()
 	create_textures( gfx->width() , gfx->height() );
 }
 
+void DeferRender::resize( unsigned int width , unsigned int height )
+{
+	delete_textures();
+	create_textures( width , height );
+}
+
+void DeferRender::update_configuration()
+{
+	gfx->cfg().get<bool>( "lighting" ) ?
+		flags |= LIGHTING : flags &= ~LIGHTING;
+}
+
+void DeferRender::on_camera_angle_changed( float*m )
+{
+	prPlanet.use();
+	glUniformMatrix4fv( anglesId , 1 , GL_TRUE , m );
+	Program::none();
+}
+
 void DeferRender::create_textures( unsigned int w , unsigned int h )
 {
 	unsigned sphereSize = pow(2,floor(log(std::max(w,h))/log(2.0)));
@@ -158,19 +177,6 @@ void DeferRender::delete_textures()
 	glDeleteTextures(1,&normalsTex);
 
 	glDeleteFramebuffers( 1 , &fboId );
-}
-
-void DeferRender::resize( unsigned int width , unsigned int height )
-{
-	delete_textures();
-	create_textures( width , height );
-}
-
-void DeferRender::on_camera_angle_changed( float*m )
-{
-	prPlanet.use();
-	glUniformMatrix4fv( anglesId , 1 , GL_TRUE , m );
-	Program::none();
 }
 
 GLuint DeferRender::generate_sphere_texture( int w , int h )
@@ -392,7 +398,8 @@ void DeferRender::draw() const
 	glVertexAttribPointer( emissiveLId , 1 , GL_FLOAT , GL_FALSE , 0 , NULL );
 	factory->getEmissive().unbind();
 
-	glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
+	if( flags & LIGHTING )
+		glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
 
 	                                glBindTexture( GL_TEXTURE_1D , 0 );
 	glActiveTexture( GL_TEXTURE3 ); glBindTexture( GL_TEXTURE_2D , 0 );

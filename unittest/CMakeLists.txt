@@ -1,10 +1,9 @@
-cmake_policy(VERSION 2.6)
 
 find_package( CppUnit )
 
 set( INCLUDE_DIRS
 	.
-	../src
+	${PROJECT_SOURCE_DIR}/src
 	${CUDA_INCLUDE_DIRS}
 	${OPENGL_INCLUDE_DIR}
 	${SDL_INCLUDE_DIR}
@@ -14,11 +13,12 @@ set( INCLUDE_DIRS
 include_directories( ${INCLUDE_DIRS} )
 
 add_subdirectory( phx )
+add_subdirectory( util )
 #add_subdirectory( ../src/phx ../src/phx )
 
 add_executable( tests test_main )
 
-target_link_libraries( tests phx_test 
+target_link_libraries( tests phx_test util_test
 	${CUDA_LIBRARIES}
 	${OPENGL_LIBRARY}
 	${SDL_LIBRARY}

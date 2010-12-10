@@ -13,6 +13,8 @@
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 
+#include "util/config.h"
+
 #include "drawable.h"
 
 #include "shader.h"
@@ -38,6 +40,8 @@ public:
 
 	void reshape_window(int w, int h);
 
+	void update_configuration( const Config& cfg );
+
 	void clear() const;
 
 	void add( Drawable* _d , int prior = 0 );
@@ -48,16 +52,16 @@ public:
 	int width() { return mwidth; }
 	int height(){ return mheight;}
 
+	const Config& cfg() { return gfxCfg; }
+
 	TextureManager texMgr;
 	ShaderManager  shmMgr;
 private:
+	Config gfxCfg;
+
 	int mwidth , mheight;
-	SDL_Surface* drawContext;
-	Uint32 flags;
 
 	std::list<std::pair<int,Drawable*> > to_draw;
-
-//        Camera*c;
 };
 
 } // namespace gfx

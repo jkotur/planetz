@@ -34,4 +34,5 @@ endif( UNIX )
 set( CUDA_NVCC_FLAGS "-arch=sm_11" )
 
 add_subdirectory( src )
+add_subdirectory( unittest )
 

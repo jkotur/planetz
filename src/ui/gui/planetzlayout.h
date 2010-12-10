@@ -7,6 +7,8 @@
 
 #include <string>
 
+#include "util/config.h"
+
 #include "layout.h"
 
 //typedef boost::signal<void (Planet*p)> SigSetPlanet;
@@ -24,13 +26,19 @@ public:
 	//SigSetPlanet on_planet_delete;
 	//SigSetPlanet on_planet_add;
 	SigSetDouble on_cam_speed_changed;
-	SigVoid on_pause_click;
-	SigVoid on_reset_click;
+	SigVoid      on_pause_click;
+	SigVoid      on_reset_click;
 	SigSetString on_save;
 	SigSetString on_load;
+	boost::signal<void ( const Config&)> on_config_changed;
 
 	void update_fps( int fps );
 private:
+	Config config;
+
+	Config getOptions();
+	void setOptions( const Config& cfg );
+
 	bool clear_win( const CEGUI::EventArgs& e );
 	bool add_planet( const CEGUI::EventArgs& e );
 	bool del_planet( const CEGUI::EventArgs& e );

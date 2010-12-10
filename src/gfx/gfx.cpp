@@ -88,6 +88,14 @@ void Gfx::reshape_window(int width, int height)
 		i.second->resize( width , height );
 }
 
+void Gfx::update_configuration( const Config& cfg )
+{
+	gfxCfg = cfg;
+	for( std::list<std::pair<int,Drawable*> >::iterator i = to_draw.begin() ;
+	     i != to_draw.end() ; ++i )
+		i->second->update_configuration();
+}
+
 void Gfx::clear() const
 {
 	glViewport(0,0,mwidth,mheight);

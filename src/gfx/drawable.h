@@ -20,6 +20,8 @@ namespace GFX
 				unsigned int width ,
 				unsigned int height) {}
 
+		virtual void update_configuration() {}
+
 		virtual void setGfx( Gfx* _g )
 		{	gfx = _g; prepare(); }
 	protected:

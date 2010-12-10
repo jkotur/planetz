@@ -127,6 +127,22 @@ PlanetzLayout::~PlanetzLayout()
 {
 }
 
+Config PlanetzLayout::getOptions()
+{
+	Config cfg;
+	cfg.set("textures",GETWINCAST(Checkbox*,"cbTextures")->isSelected());
+	cfg.set("lightsplanes",GETWINCAST(Checkbox*,"cbLights")->isSelected());
+	cfg.set("lighting",GETWINCAST(Checkbox*,"cbLighting")->isSelected());
+	return cfg;
+}
+
+void PlanetzLayout::setOptions( const Config& cfg )
+{
+	GETWINCAST(Checkbox*,"cbTextures")->setSelected(cfg.get<bool>("textures"));
+	GETWINCAST(Checkbox*,"cbLights")->setSelected(cfg.get<bool>("lightsplanes"));
+	GETWINCAST(Checkbox*,"cbLighting")->setSelected(cfg.get<bool>("lighting"));
+}
+
 /*void PlanetzLayout::add_selected_planet( Planet*p )
 {
 	sel_planet = p;
@@ -341,6 +357,7 @@ bool PlanetzLayout::show_save_win( const CEGUI::EventArgs& e )
 
 bool PlanetzLayout::show_opt_win( const CEGUI::EventArgs& e )
 {
+	setOptions( config );
 	GETWIN("winOpt")->setVisible(!GETWIN("winOpt")->isVisible());
 	return true;
 }
@@ -354,6 +371,8 @@ bool PlanetzLayout::hide_opt_win( const CEGUI::EventArgs& e )
 bool PlanetzLayout::apply_options( const CEGUI::EventArgs& e )
 {
 	GETWIN("winOpt")->setVisible(false);
+	config = getOptions();
+	on_config_changed( config );
 	return true;
 }
 

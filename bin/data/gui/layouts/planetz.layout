@@ -82,12 +82,13 @@
 
 <!--                okno dodawania planety-->
 		<Window Type="QuadraticLook/FrameWindow" Name="AddWin">
-			<Property Name="UnifiedPosition" Value="{{0.1,0},{0.1,0}}" />
-			<Property Name="UnifiedSize" Value="{{0,270},{0,180}}" />
-			<Property Name="Text" Value="Nowa planeta" />
+			<Property Name="UnifiedPosition"    Value="{{0.1,0},{0.1,0}}" />
+			<Property Name="UnifiedSize"        Value="{{0,270},{0,180}}" />
+			<Property Name="Text"               Value="Nowa planeta" />
 			<Property Name="CloseButtonEnabled" Value="Fasle" />
-			<Property Name="Alpha" Value="1.0" />
-			<Property Name="FrameEnabled" Value="False" />
+			<Property Name="Alpha"              Value="1.0" />
+			<Property Name="FrameEnabled"       Value="False" />
+			<Property Name="Visible"            Value="False" />
 
 			<Window Type="QuadraticLook/Button" Name="btnAdd" >
 				<Property Name="UnifiedPosition" Value="{{0.5,-95},{0,150}}" />
@@ -298,8 +299,8 @@
 
 <!--                okno opcji -->
 		<Window Type="QuadraticLook/FrameWindow" Name="winOpt">
-			<Property Name="UnifiedPosition" Value="{{0.5,0},{0.1,0}}" />
-			<Property Name="UnifiedSize" Value="{{0,270},{0,180}}" />
+			<Property Name="UnifiedPosition" Value="{{0.5,-105},{0.5,-150}}" />
+			<Property Name="UnifiedSize" Value="{{0,210},{0,300}}" />
 			<Property Name="Text" Value="Opcje" />
 			<Property Name="Alpha" Value="1.0" />
 			<Property Name="FrameEnabled" Value="True" />
@@ -334,14 +335,20 @@
 						<Property Name="Text" Value="Teksturowanie" />
 					</Window>
 
+					<Window Type="QuadraticLook/Checkbox" Name="cbLighting" >
+						<Property Name="UnifiedPosition" Value="{{0.0,20},{0.0,35}}" />
+						<Property Name="UnifiedSize" Value="{{1.0,0},{0.0,25}}" />
+						<Property Name="Text" Value="Oświetlenie" />
+					</Window>
+
 					<Window Type="QuadraticLook/StaticText" Name="stDebug" >
-						<Property Name="UnifiedPosition" Value="{{0.0,10},{0.0,35}}" />
+						<Property Name="UnifiedPosition" Value="{{0.0,10},{0.0,60}}" />
 						<Property Name="UnifiedSize" Value="{{1.0,0},{0.0,25}}" />
 						<Property Name="Text" Value="Debug:" />
 					</Window>
 
 					<Window Type="QuadraticLook/Checkbox" Name="cbLights" >
-						<Property Name="UnifiedPosition" Value="{{0.0,20},{0.0,60}}" />
+						<Property Name="UnifiedPosition" Value="{{0.0,20},{0.0,85}}" />
 						<Property Name="UnifiedSize" Value="{{1.0,0},{0.0,25}}" />
 						<Property Name="Text" Value="Zasięg oświetlenia" />
 					</Window>
@@ -354,7 +361,7 @@
 					<Property Name="Text" Value="Fizyczne" />
 
 					<Window Type="QuadraticLook/StaticText" Name="stPage2" >
-						<Property Name="UnifiedPosition" Value="{{0.5,0},{0.5,0}}" />
+						<Property Name="UnifiedPosition" Value="{{0.5,-40},{0.5,-25}}" />
 						<Property Name="UnifiedSize" Value="{{0.0,80},{0.0,25}}" />
 						<Property Name="Text" Value="Nope" />
 						<Property Name="Visible" Value="True" />
