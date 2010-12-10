@@ -47,7 +47,11 @@ void main()
 	vec3 ntex = rot * norm.xyz;
 	vec2 angles = vec2( -atan(ntex.z,ntex.x)+PI/2.0f , asin(ntex.y) );
 
-	vec4 tex = texture2D( textureTex , texture_st_v2(angles) );
+//	angles /= PI;
+//	angles += .5;
+//	angles.t = 1-angles.t;
+
+	vec4 tex = texture2D( textureTex ,  texture_st_v2(angles) );
 //	tex = vec4(1); // temporary for testing
 
 	gl_FragData[1].xyz = norm.xyz;      // normal vector

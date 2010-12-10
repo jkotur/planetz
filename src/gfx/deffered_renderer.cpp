@@ -54,7 +54,7 @@ void DeferRender::prepare()
 			DATA("shaders/deffered_03.geom")),
 		GL_POINTS , GL_QUAD_STRIP );
 
-	texture = gfx->texMgr.loadTexture(DATA("textures/earth.jpg"));
+	texture = gfx->texMgr.loadTexture(DATA("textures/mars.jpg"));
 
 	sphereTexId    = glGetUniformLocation( prPlanet.id() , "sph_pos"   );
 	materialsTexId = glGetUniformLocation( prPlanet.id() , "materialsTex" );
