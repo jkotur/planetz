@@ -103,6 +103,9 @@ private:
 	// options switches
 	//
 	unsigned flags;
+
+	GLint ifplanesId;
+	GLint iftexturesId;
 };
 
 } // GFX

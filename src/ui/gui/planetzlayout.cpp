@@ -337,8 +337,10 @@ bool PlanetzLayout::load( const CEGUI::EventArgs& e )
 
 	ListboxItem*lbi = GETWINCAST(Listbox*,"lstSaves")->getFirstSelectedItem();
 	
-	if( lbi ) on_load(SAVES(lbi->getText().c_str()));
-//        on_load(DATA("saves/first.sav") );
+	if( lbi ) {
+		GETWIN("btnPause")->setText("Start");
+		on_load(SAVES(lbi->getText().c_str()));
+	}
 
 	return true;
 }
@@ -370,7 +372,7 @@ bool PlanetzLayout::hide_opt_win( const CEGUI::EventArgs& e )
 
 bool PlanetzLayout::apply_options( const CEGUI::EventArgs& e )
 {
-	GETWIN("winOpt")->setVisible(false);
+//        GETWIN("winOpt")->setVisible(false);
 	config = getOptions();
 	on_config_changed( config );
 	return true;

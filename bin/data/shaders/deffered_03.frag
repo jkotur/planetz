@@ -13,6 +13,8 @@ uniform sampler2D gbuff2;
 uniform sampler2D gbuff3;
 uniform sampler2D gbuff4;
 
+uniform int planes = 0;
+
 varying in float ke;
 varying in vec3 lightPos;
 varying in vec3 lightColor;
@@ -48,7 +50,7 @@ void main()
 	gl_FragColor.a = gdat1.a;
 
 /** lights range planes */
-//        if( gdat1.a <= .0 )
-//                gl_FragColor.rgba = vec4(1,1,1,.2);
+        if( planes && gdat1.a <= .0 )
+                gl_FragColor.rgba = vec4(.1,.1,.1,.2);
 }
 

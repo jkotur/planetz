@@ -22,6 +22,8 @@ uniform sampler2D sph_pos;
 uniform sampler2D normalsTex;
 uniform sampler2D textureTex;
 
+uniform int textures = 0;
+
 //in float phi;
 //in float lambda;
 
@@ -51,8 +53,10 @@ void main()
 //	angles += .5;
 //	angles.t = 1-angles.t;
 
-	vec4 tex = texture2D( textureTex ,  texture_st_v2(angles) );
-//	tex = vec4(1); // temporary for testing
+	vec4 tex;
+	if( textures == 1 )
+		tex = texture2D( textureTex ,  texture_st_v2(angles) );
+	else	tex = vec4(1);
 
 	gl_FragData[1].xyz = norm.xyz;      // normal vector
 	gl_FragData[1].w   = 0;        // model id (deprecated)

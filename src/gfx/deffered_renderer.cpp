@@ -63,10 +63,12 @@ void DeferRender::prepare()
 	normalsTexId   = glGetUniformLocation( prPlanet.id() , "normalsTex");
 	textureTexId   = glGetUniformLocation( prPlanet.id() , "textureTex");
 
-	anglesId       = glGetUniformLocation( prPlanet.id() , "angles" );
+	anglesId       = glGetUniformLocation( prPlanet.id() , "angles"    );
+                                                                          
+	radiusId       = glGetAttribLocation ( prPlanet.id() , "radius"    );
+	modelId        = glGetAttribLocation ( prPlanet.id() , "model"     );
 
-	radiusId       = glGetAttribLocation ( prPlanet.id() , "radius" );
-	modelId        = glGetAttribLocation ( prPlanet.id() , "model"  );
+	iftexturesId   = glGetUniformLocation( prPlanet.id() , "textures"  );
 
 	prPlanet.use();
 	glUniform1i( materialsTexId , 0 );
@@ -81,6 +83,8 @@ void DeferRender::prepare()
 	gbuffId[2] = glGetUniformLocation( prLighting.id() , "gbuff3"   );
 	gbuffId[3] = glGetUniformLocation( prLighting.id() , "gbuff4"   );
 	matLId     = glGetUniformLocation( prLighting.id() , "materials");
+
+	ifplanesId = glGetUniformLocation( prLighting.id() , "planes"   );
 
 	modelLId   = glGetAttribLocation( prLighting.id()  , "model"    );
 	emissiveLId= glGetAttribLocation( prLighting.id()  , "emissive" );
@@ -118,6 +122,14 @@ void DeferRender::update_configuration()
 {
 	gfx->cfg().get<bool>( "lighting" ) ?
 		flags |= LIGHTING : flags &= ~LIGHTING;
+
+	prPlanet.use();
+	glUniform1i( iftexturesId , gfx->cfg().get<bool>( "textures" ) );
+	Program::none();
+
+	prLighting.use();
+	glUniform1i( ifplanesId   , gfx->cfg().get<bool>( "lightsplanes" ) );
+	Program::none();
 }
 
 void DeferRender::on_camera_angle_changed( float*m )
