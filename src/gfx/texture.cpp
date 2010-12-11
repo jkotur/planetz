@@ -47,7 +47,6 @@ Texture* TextureManager::loadTexture( const char* file )
 
 	if( !surface ) {
 		log_printf(DBG,"SDL could not load image: %s\n", SDL_GetError());
-		SDL_Quit();
 		return NULL;
 	}
 	GLuint texture;

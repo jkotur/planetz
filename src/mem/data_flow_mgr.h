@@ -31,6 +31,7 @@ namespace MEM
 			void load();
 
 			GLuint loadMaterials();
+			GLuint loadTextures();
 
 			void registerCam( Camera *cam ); // after registration, camera can be automatically saved/loaded
 

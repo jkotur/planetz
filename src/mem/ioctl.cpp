@@ -1,4 +1,7 @@
 #include "ioctl.h"
+
+#include <SDL/SDL_image.h>
+
 #include "saver.h"
 #include "constants.h"
 
@@ -13,6 +16,7 @@ class IOCtl::Impl
 		void load( MISC::SaverParams *dest, const std::string& path );
 
 		void loadMaterials( MISC::Materials* dest , const std::string & path );
+		void loadTextures( MISC::Textures* dest , const std::list<std::string>& names );
 
 	private:
 		Saver s;
@@ -44,6 +48,11 @@ void IOCtl::loadMaterials( MISC::Materials* dest , const std::string & path )
 	impl->loadMaterials( dest , path );
 }
 
+void IOCtl::loadTextures( MISC::Textures* dest , const std::list<std::string>& names )
+{
+	impl->loadTextures( dest , names );
+}
+
 void IOCtl::Impl::save( const MISC::SaverParams *source, const std::string &path )
 {
 	s.save( source, path );
@@ -61,9 +70,26 @@ void IOCtl::Impl::loadMaterials( MISC::Materials* dest , const std::string & pat
 	MISC::MaterialsMgr mgr( dest );
 
 	               // r    g    b   ke   ka   kd    ks  alpha
-	mgr.addMaterial( .7 , .5 , .3 , .0 , .1 , 10 , 0 , 1 );
-	mgr.addMaterial( .4 , .6 , .8 , .0 , .1 , 10 , 0 , 1 );
-	mgr.addMaterial( .8 , .8 , .4 , .0 , .1 , 10 , 0 , 1 );
-	mgr.addMaterial( 1. , 1. , 1. , .5 , .5 , 1.0 , 0 , 1 );
+//        mgr.addMaterial( .7 , .5 , .3 , .0 , .1 , 10 , 0 , 1 );
+//        mgr.addMaterial( .4 , .6 , .8 , .0 , .1 , 10 , 0 , 1 );
+//        mgr.addMaterial( .8 , .8 , .4 , .0 , .1 , 10 , 0 , 1 );
+	mgr.addMaterial( 1. , 1. , 1. , .0 , .1 , 10 , 0 , 1 );
+	mgr.addMaterial( 1. , 1. , 1. , .0 , .1 , 10 , 0 , 1 );
+	mgr.addMaterial( 1. , 1. , 1. , .0 , .1 , 10 , 0 , 1 );
+	mgr.addMaterial( 1. , 1. , 1. , .5 , 1.2 , 1.0 , 0 , 1 );
+}
+
+void IOCtl::Impl::loadTextures( MISC::Textures* dest , const std::list<std::string>& names )
+{
+	for( std::list<std::string>::const_iterator i = names.begin() ; i != names.end() ; ++i )
+	{
+		SDL_Surface* surface = IMG_Load( i->c_str() );
+		if( !surface ) {
+			log_printf(_ERROR,"SDL could not load image '%s': %s\n",i->c_str() , SDL_GetError() );
+			continue;
+		}
+
+		dest->push_back(surface);
+	}
 }
 

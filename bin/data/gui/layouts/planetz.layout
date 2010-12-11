@@ -74,8 +74,8 @@
 		</Window>
 
 		<Window Type="QuadraticLook/StaticText" Name="stFps">
-			<Property Name="UnifiedPosition" Value="{{1.0,-80},{0.0,10}}" />
-			<Property Name="UnifiedSize" Value="{{0.0,80},{0,30}}" />
+			<Property Name="UnifiedPosition" Value="{{1.0,-90},{0.0,10}}" />
+			<Property Name="UnifiedSize" Value="{{0.0,90},{0,30}}" />
 			<Property Name="Text" Value="FPS: -" />
 		</Window>
 

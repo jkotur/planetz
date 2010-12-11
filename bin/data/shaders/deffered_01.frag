@@ -1,4 +1,5 @@
 #version 130 
+#extension GL_EXT_gpu_shader4 : enable
 
 /**
  *  buffers   |          values 
@@ -20,7 +21,7 @@ uniform sampler2D sph_pos;
 
 //uniform sampler2D anglesTex;
 uniform sampler2D normalsTex;
-uniform sampler2D textureTex;
+uniform sampler2DArray texturesTex;
 
 uniform int textures = 0;
 
@@ -31,6 +32,8 @@ in vec3 pos;
 in mat3 rot;
 in mat3 nrot;
 in float radius;
+
+in float texId;
 
 in vec4 mater1;
 in vec4 mater2;
@@ -55,7 +58,7 @@ void main()
 
 	vec4 tex;
 	if( textures == 1 )
-		tex = texture2D( textureTex ,  texture_st_v2(angles) );
+		tex = texture2DArray( texturesTex,vec3(texture_st_v2(angles),texId));
 	else	tex = vec4(1);
 
 	gl_FragData[1].xyz = norm.xyz;      // normal vector

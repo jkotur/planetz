@@ -19,6 +19,7 @@ class DataFlowMgr::Impl
 		void load( const std::string &path = DATA( DEFAULT_SAVE_FILE ) );
 
 		GLuint loadMaterials();
+		GLuint loadTextures();
 
 		MISC::GfxPlanetFactory *getGfxMem();
 		MISC::PhxPlanetFactory *getPhxMem();
@@ -70,6 +71,21 @@ void DataFlowMgr::Impl::updateEmissive(MISC::CpuPlanetHolder*p , MISC::Materials
 			p->emissive[i] = 0;
 	} else	for( unsigned i=0 ; i<p->size() ; i++ )
 			p->emissive[i] = (*m)[p->model[i]].ke;
+}
+
+GLuint DataFlowMgr::Impl::loadTextures()
+{
+	MISC::Textures tex;
+	std::list<std::string> names;
+	names.push_back( DATA("textures/small_earth.jpg") );
+	names.push_back( DATA("textures/small_jupiter.jpg") );
+	names.push_back( DATA("textures/small_saturn.jpg") );
+	names.push_back( DATA("textures/small_sun.jpg") );
+	ioctl.loadTextures(&tex,names);
+	GLuint res = memmgr.loadTextures( tex );
+	for( MISC::Textures::iterator i = tex.begin() ; i != tex.end() ; ++i )
+		SDL_FreeSurface( *i );
+	return res;
 }
 
 GLuint DataFlowMgr::Impl::loadMaterials()
@@ -138,6 +154,11 @@ MISC::PhxPlanetFactory *DataFlowMgr::getPhxMem()
 GLuint DataFlowMgr::loadMaterials()
 {
 	return impl->loadMaterials();
+}
+
+GLuint DataFlowMgr::loadTextures()
+{
+	return impl->loadTextures();
 }
 
 void DataFlowMgr::registerCam( Camera *cam )

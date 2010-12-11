@@ -58,6 +58,7 @@ bool Application::init()
 	if( !gfx.window_init(window.getW(),window.getH()) ) return false;
 
 	plz.setMaterials( data_mgr.loadMaterials() );
+	plz.setTextures ( data_mgr.loadTextures () );
 
 	//
 	// init user interface

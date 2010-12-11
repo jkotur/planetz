@@ -25,6 +25,11 @@ void DeferRender::setMaterials( GLuint mat )
 	materialsTex = mat;
 }
 
+void DeferRender::setTextures ( GLuint tex )
+{
+	texturesTex = tex;
+}
+
 void DeferRender::prepare()
 {
 	prPlanet.create(
@@ -54,14 +59,14 @@ void DeferRender::prepare()
 			DATA("shaders/deffered_03.geom")),
 		GL_POINTS , GL_QUAD_STRIP );
 
-	texture = gfx->texMgr.loadTexture(DATA("textures/mars.jpg"));
+	texture = gfx->texMgr.loadTexture(DATA("textures/mars_small.jpg"));
 
 	sphereTexId    = glGetUniformLocation( prPlanet.id() , "sph_pos"   );
 	materialsTexId = glGetUniformLocation( prPlanet.id() , "materialsTex" );
 
 	anglesTexId    = glGetUniformLocation( prPlanet.id() , "anglesTex" );
 	normalsTexId   = glGetUniformLocation( prPlanet.id() , "normalsTex");
-	textureTexId   = glGetUniformLocation( prPlanet.id() , "textureTex");
+	textureTexId   = glGetUniformLocation( prPlanet.id() , "texturesTex");
 
 	anglesId       = glGetUniformLocation( prPlanet.id() , "angles"    );
                                                                           
@@ -355,7 +360,7 @@ void DeferRender::draw() const
 	glActiveTexture(GL_TEXTURE1); glBindTexture(GL_TEXTURE_2D, sphereTex    );
 //        glActiveTexture(GL_TEXTURE1); glBindTexture(GL_TEXTURE_2D, anglesTex    );
 	glActiveTexture(GL_TEXTURE2); glBindTexture(GL_TEXTURE_2D, normalsTex   );
-	glActiveTexture(GL_TEXTURE3); texture->bind();
+	glActiveTexture(GL_TEXTURE3); glBindTexture(GL_TEXTURE_2D_ARRAY, texturesTex );
 
 	glBindFramebuffer( GL_FRAMEBUFFER , fboId );
 

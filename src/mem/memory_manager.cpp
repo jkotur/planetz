@@ -10,18 +10,56 @@
 using namespace MEM;
 
 MemMgr::MemMgr()
-	: texId(0) , holder() , gpf(&holder) , ppf(&holder)
+	: matTexId(0) , texTexId(0) , holder() , gpf(&holder) , ppf(&holder)
 {
 }
 
 MemMgr::~MemMgr()
 {
-	if( texId ) glDeleteTextures(1,&texId);
+	if( matTexId ) glDeleteTextures(1,&matTexId);
+	if( texTexId ) glDeleteTextures(1,&texTexId);
+}
+
+GLuint MemMgr::loadTextures( const MISC::Textures& ctex )
+{
+	TODO("Make this more F2C-C2G-like");
+
+	if( texTexId ) glDeleteTextures(1,&texTexId);
+
+	const GLint TEX_W = 1024;
+	const GLint TEX_H = 512;
+	GLuint texNum = ctex.size();
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT,4);
+
+	glGenTextures(1,&texTexId);
+	glBindTexture( GL_TEXTURE_2D_ARRAY , texTexId );
+
+	glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+	glTexImage3D(GL_TEXTURE_2D_ARRAY,0,GL_RGB,TEX_W,TEX_H,texNum,0,GL_RGB,GL_UNSIGNED_BYTE,NULL);
+
+	int z = 0;
+	for( MISC::Textures::const_iterator i = ctex.begin() ; i != ctex.end() ; ++i , z++ )
+	{
+		ASSERT_MSG( TEX_W == (*i)->w && TEX_H == (*i)->h ,
+				"Texture must be %dx%d" , TEX_W , TEX_H );
+
+		GLenum format = (**i).format->Amask ? GL_RGBA : GL_RGB ;
+
+		glTexSubImage3D(GL_TEXTURE_2D_ARRAY,0,0,0,z,TEX_W,TEX_H,1,format,GL_UNSIGNED_BYTE,(**i).pixels);
+	}
+
+	glBindTexture( GL_TEXTURE_2D_ARRAY , 0 );
+
+	return texTexId;
 }
 
 GLuint MemMgr::loadMaterials( const MISC::Materials& materials )
 {
-	if( texId ) glDeleteTextures(1,&texId);
+	if( matTexId ) glDeleteTextures(1,&matTexId);
 
 	float*data = new float[ materials.size()*8 ];
 
@@ -41,9 +79,9 @@ GLuint MemMgr::loadMaterials( const MISC::Materials& materials )
 		data[i++] = it->alpha;
 	}
 	
-	glGenTextures(1,&texId);
+	glGenTextures(1,&matTexId);
 
-	glBindTexture(GL_TEXTURE_1D, texId );
+	glBindTexture(GL_TEXTURE_1D, matTexId );
 	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S    , GL_CLAMP  );
 	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -51,7 +89,7 @@ GLuint MemMgr::loadMaterials( const MISC::Materials& materials )
 	glBindTexture(GL_TEXTURE_1D, 0 );
 
 	delete data;
-	return texId;
+	return matTexId;
 }
 
 void MemMgr::setPlanets( MISC::CpuPlanetHolder *pl )

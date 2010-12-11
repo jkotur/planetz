@@ -31,6 +31,7 @@ public:
 	virtual void update_configuration();
 	
 	void setMaterials( GLuint );
+	void setTextures ( GLuint );
 
 	void on_camera_angle_changed( float*m );
 private:
@@ -88,6 +89,7 @@ private:
 
 	GLuint anglesTex;
 	GLuint normalsTex;
+	GLuint texturesTex;
 
 	Texture*texture;
 

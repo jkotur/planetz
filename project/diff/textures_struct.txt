@@ -10,7 +10,7 @@ MODELS TEXTURE:
 Dane następują po sobie jako 8 wartości float. Potrzebne bedą dwa odczyty z
 tekstury kolejnych texeli. Dla dwoch materiałów tekstura będzie następująca:
 
-[ r, g, b, alpha, ke, ka, kd, ks, r, g, b, alpha, ke, ka, kd, ks ]
+[ r, g, b, ke, ka, kd, ks , alpha, r, g, b, ke, ka, kd, ks , alpha ]
 
 DEFFERED GEOMETRY BUFFERS:
 -------------------------

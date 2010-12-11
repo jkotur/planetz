@@ -7,6 +7,7 @@
 #include <string>
 
 #include "misc/materials_manager.h"
+#include "misc/textures_manager.h"
 #include "misc/gfx_planet_factory.h"
 #include "misc/phx_planet_factory.h"
 #include "misc/planet_model.h"
@@ -24,11 +25,13 @@ namespace MEM {
 		MISC::PhxPlanetFactory* getPhxMem();
 		
 		GLuint loadMaterials( const MISC::Materials& materials );
+		GLuint loadTextures( const MISC::Textures& ctex );
 
 		MISC::CpuPlanetHolder *getPlanets();
 		void setPlanets( MISC::CpuPlanetHolder * );
 	private:
-		GLuint texId;
+		GLuint matTexId;
+		GLuint texTexId;
 
 		MISC::PlanetHolder holder;
 

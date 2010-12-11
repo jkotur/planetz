@@ -381,6 +381,8 @@ bool PlanetzLayout::apply_options( const CEGUI::EventArgs& e )
 bool PlanetzLayout::save( const CEGUI::EventArgs& e )
 {
 	std::string str = GETWIN("ebSave")->getText().c_str();
+	GETWIN("winSave")->setVisible(false);
+
 	if( !regex_match(str,save_file) ) {
 		if( regex_match(str,file_cont) )
 			str+=".sav";
@@ -390,8 +392,6 @@ bool PlanetzLayout::save( const CEGUI::EventArgs& e )
 			return true;
 		}
 	}
-
-	GETWIN("winSave")->setVisible(false);
 
 	log_printf(DBG,"Saving %s\n", str.c_str() );
 	on_save( SAVES(str) );
