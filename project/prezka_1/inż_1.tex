@@ -9,9 +9,10 @@
 \usepackage{subfig}
 \usepackage{rotating}
 
-\usetheme[backgroundimagefile=kosmos.jpg,opacity=0.75]{diepen}
+\usetheme[backgroundimagefile=kosmos.jpg,opacity=0.6]{diepen}
 
 \title{Symulacja układu planetarnego na GPU przy użyciu CUDA i OpenGL}
+\subtitle{część pierwsza}
 \author{Daniel Kłobuszewski\and Jakub Kotur}
 \institute{Politechnika Warszawska}
 \date{\today}
@@ -25,19 +26,198 @@
 	\tableofcontents
 }
 
-\section{Ogólny opis problemu}\label{sec:beg}
+\section{Opis technologii}\label{sec:opis technologii}
+
+
+\subsection{CUDA}\label{sub:cuda}
+\frame
+{
+	\frametitle{CUDA}
+}
+
+\subsection{OpenGL}\label{sub:opengl}
 
 \frame
 {
-	\frametitle{Giiigantyczny problem}
+	\frametitle{OpenGL 3.2}
+
+	Programowalne jednostki cieniowania (shadery):
+
+	\begin{description}
+	\item[vertex] - wykonywane dla każdego wierzchołka
+	\item[fragmet] - wykonywane dla każdego piksela
+	\pause
+	\item[geometry] - wykonywane dla każdej figury (np. trójkąt, linia)
+	\end{description}
+
+}
+
+\frame
+{
+	\frametitle{Vertex Shader}
+	\begin{block}{Wejście}
+	\begin{itemize}
+	\item pozycja (przestrzeń modelu)
+	\item kolor wierzchołka
+	\item koordynaty tekstury
+	\end{itemize}
+	\end{block}
+	\begin{block}{Wyjście}
+	\begin{itemize}
+	\item pozycja (przestrzeń projekcji)
+	\item kolor wierzchołka
+	\item koordynaty tekstury
+	\end{itemize}
+	\end{block}
+}
+
+\frame
+{
+	\frametitle{Geometry Shader}
+
+	\begin{itemize}
+	\item wejście/wyjście analogiczne do vertex shadera
+	\item może generować nowe wierzchołki
+	\item wyjściowe figury mogą się różnić od wejściowych
+	\end{itemize}
+}
+
+\frame
+{
+	\frametitle{Fragment (Pixel) Shader}
+
+	\begin{block}{Wejście}
+	\begin{itemize}
+	\item pozycja
+	\item kolor piksela
+	\item koordynaty tekstury
+	\end{itemize}
+	\end{block}
+	\begin{block}{Wyjście}
+	\begin{itemize}
+	\item kolor piksela
+	\end{itemize}
+	\end{block}
+}
+
+\subsection{Organizacja pamięci}\label{sub:organizacja pamięci}
+\frame
+{
+	\frametitle{Rodzaje pamięci na GPU}
+
+	\begin{itemize}
+	\item lokalna
+	\item globalna
+	\item tekstury
+	\end{itemize}
+}
+
+\frame
+{
+	\frametitle{Organizacja pamięci}
+
+	Część wspólna:
+	\begin{itemize}
+	\item pozycja
+	\item promień
+	\end{itemize}
+
+	\pause
+	Rodzaje buforów:
+
+	\begin{itemize}
+	\item bufory OpenGL
+	\item bufory CUDA
+	\end{itemize}
+
+}
+
+\begin{frame}[fragile]
+	\frametitle{Implementacja buforów}
+	\begin{verbatim}
+//   * GFX
+GBUF<int>    model;
+GBUF<float>  emissive;
+
+//   * COMMON
+GBUF<float3>   pos;
+GBUF<float>    radius;
+GBUF<uint32_t> count;
+
+//   * PHX
+CBUF<float>    mass;
+CBUF<float3>   velocity;
+	\end{verbatim}
+\end{frame}
+
+\frame
+{
+	\frametitle{Dane graficzne}
+
+	Dane dla silnika graficznego trzymane w pamięci tekstury.
+	\begin{itemize}
+	\item tekstura modeli
+	\item tekstura tekstur
+	\item tekstura normalnych
+	\end{itemize}
 }
 
 \section{Silnik graficzny}\label{sec:silnik graficzny}
 \frame{ \tableofcontents[currentsection] }
 
+\subsection{Deffered rendering}\label{sub:deffered rendering}
+
 \frame
 {
-	\frametitle{Zajebisty silnik}
+	\frametitle{Deffered rendering}
+
+	\begin{itemize}
+	\item generowanie bufora geometrii
+	\item bufor jest proporcjonalny do wielkości ekranu
+	\item finalny obrazek jest efektem postprocesingu g-bufora
+	\item efekty graficzne (np. oświetlenie) są proporcjonalne obliczeniowo do wielkości bufora
+	\end{itemize}
+}
+
+\frame
+{
+	\frametitle{g-bufor}
+
+	\begin{figure}
+	\centering
+	\subfloat[color]{\label{fig:gcol}\includegraphics[width=0.3\textwidth]{img/gbuff_col.jpg}} \hspace{.2\textwidth}
+	\subfloat[głębia]{\label{fig:gdepth}\includegraphics[width=0.3\textwidth]{img/gbuff_z.jpg}}  \\
+	\subfloat[normalne]{\label{fig:norm}\includegraphics[width=0.3\textwidth]{img/gbuff_norm.jpg}} \hspace{.2\textwidth}
+	\subfloat[efekt]{\label{fig:gend}\includegraphics[width=0.3\textwidth]{img/gbuff_fin.jpg}}
+	\label{fig:deffered_rednering}
+	\end{figure}
+	\setcounter{subfigure}{0}
+}
+
+\frame
+{
+	\frametitle{Wady i zalety}
+
+	\begin{block}{Zalety}
+	\begin{itemize}
+		\item dobrze skalowalny ze względu na ilość dynamicznych świateł
+		\item zmniejsza ilość obliczeń przy dużej ilości geometrii
+		\item wydajny przy dużych otwartych przestrzeniach
+	\end{itemize}
+	\end{block}
+	\begin{block}{Wady}
+	\begin{itemize}
+		\item duże bufory
+		\item na starych komputerach potrzebne jest wiele przejść do wygenerowania g-bufora
+	\end{itemize}
+	\end{block}
+}
+
+\subsection{Renderowanie planet}\label{sub:renderowanie planet}
+
+\frame
+{
+	\frametitle{Generowanie geometrii}
 }
 
 \section{Silnik fizyczny}\label{sec:silnik fizyczny}
