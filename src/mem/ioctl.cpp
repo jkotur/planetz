@@ -73,9 +73,9 @@ void IOCtl::Impl::loadMaterials( MISC::Materials* dest , const std::string & pat
 //        mgr.addMaterial( .7 , .5 , .3 , .0 , .1 , 10 , 0 , 1 );
 //        mgr.addMaterial( .4 , .6 , .8 , .0 , .1 , 10 , 0 , 1 );
 //        mgr.addMaterial( .8 , .8 , .4 , .0 , .1 , 10 , 0 , 1 );
-	mgr.addMaterial( 1. , 1. , 1. , .0 , .1 , 10 , 0 , 1 );
-	mgr.addMaterial( 1. , 1. , 1. , .0 , .1 , 10 , 0 , 1 );
-	mgr.addMaterial( 1. , 1. , 1. , .0 , .1 , 10 , 0 , 1 );
+	mgr.addMaterial( 1. , 1. , 1. , .0 , .2 , 10 , 0 , 1 );
+	mgr.addMaterial( 1. , 1. , 1. , .0 , .2 , 10 , 0 , 1 );
+	mgr.addMaterial( 1. , 1. , 1. , .0 , .2 , 10 , 0 , 1 );
 	mgr.addMaterial( 1. , 1. , 1. , .5 , 1.2 , 1.0 , 0 , 1 );
 }
 

@@ -59,8 +59,6 @@ void DeferRender::prepare()
 			DATA("shaders/deffered_03.geom")),
 		GL_POINTS , GL_QUAD_STRIP );
 
-	texture = gfx->texMgr.loadTexture(DATA("textures/mars_small.jpg"));
-
 	sphereTexId    = glGetUniformLocation( prPlanet.id() , "sph_pos"   );
 	materialsTexId = glGetUniformLocation( prPlanet.id() , "materialsTex" );
 
@@ -72,8 +70,6 @@ void DeferRender::prepare()
                                                                           
 	radiusId       = glGetAttribLocation ( prPlanet.id() , "radius"    );
 	modelId        = glGetAttribLocation ( prPlanet.id() , "model"     );
-
-	iftexturesId   = glGetUniformLocation( prPlanet.id() , "textures"  );
 
 	prPlanet.use();
 	glUniform1i( materialsTexId , 0 );
@@ -115,6 +111,10 @@ void DeferRender::prepare()
 	Program::none();
 
 	create_textures( gfx->width() , gfx->height() );
+
+	iftexturesId   = glGetUniformLocation( prPlanet.id() , "iftextures"  );
+	ifnormalsId    = glGetUniformLocation( prPlanet.id() , "ifnormals"   );
+	brightness     = glGetUniformLocation( prLightsBase.id(), "brightness");
 }
 
 void DeferRender::resize( unsigned int width , unsigned int height )
@@ -125,15 +125,18 @@ void DeferRender::resize( unsigned int width , unsigned int height )
 
 void DeferRender::update_configuration()
 {
-	gfx->cfg().get<bool>( "lighting" ) ?
+	gfx->cfg().get<bool>( "deffered.lighting" ) ?
 		flags |= LIGHTING : flags &= ~LIGHTING;
 
 	prPlanet.use();
-	glUniform1i( iftexturesId , gfx->cfg().get<bool>( "textures" ) );
-	Program::none();
+	glUniform1i( iftexturesId , gfx->cfg().get<bool>( "deffered.textures" ) );
+	glUniform1i( ifnormalsId  , gfx->cfg().get<bool>( "deffered.normals"  ) );
+
+	prLightsBase.use();
+	glUniform1f( brightness   , gfx->cfg().get<float>( "deffered.brightness" ) );
 
 	prLighting.use();
-	glUniform1i( ifplanesId   , gfx->cfg().get<bool>( "lightsplanes" ) );
+	glUniform1i( ifplanesId   , gfx->cfg().get<bool>( "deffered.lights_range" ) );
 	Program::none();
 }
 

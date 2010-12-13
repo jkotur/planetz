@@ -353,6 +353,28 @@
 						<Property Name="Text" Value="Zasięg oświetlenia" />
 					</Window>
 					
+					<Window Type="QuadraticLook/Checkbox" Name="cbNormals" >
+						<Property Name="UnifiedPosition" Value="{{0.0,20},{0.0,110}}" />
+						<Property Name="UnifiedSize" Value="{{1.0,0},{0.0,25}}" />
+						<Property Name="Text" Value="Normalne" />
+					</Window>
+					
+					<Window Type="QuadraticLook/StaticText" Name="stBright">
+						<Property Name="UnifiedPosition" Value="{{0.0,20},{0.0,135}}" />
+						<Property Name="UnifiedSize" Value="{{0.0,90},{0,25}}" />
+						<Property Name="Text" Value="Jasność:" />
+					</Window>
+
+					<Window Type="QuadraticLook/Spinner" Name="spBright" >
+						<Property Name="UnifiedPosition" Value="{{0.0,120},{0,135}}" />
+						<Property Name="UnifiedSize" Value="{{0.0,60},{0,25}}" />
+						<Property Name="MaximumValue" Value="100" />
+						<Property Name="MinimumValue" Value="0" />
+						<Property Name="StepSize" Value="0.01" />
+<!--                                                <Property Name="TextInputMode" Value="Integer" />-->
+						<Property Name="TextInputMode" Value="FloatingPoint" />
+					</Window>
+
 				</Window>
 
 				<Window Type="QuadraticLook/TabPane" Name="tabPhx">

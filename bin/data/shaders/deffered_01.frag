@@ -23,7 +23,8 @@ uniform sampler2D sph_pos;
 uniform sampler2D normalsTex;
 uniform sampler2DArray texturesTex;
 
-uniform int textures = 0;
+uniform int iftextures = 0;
+uniform int ifnormals  = 0;
 
 //in float phi;
 //in float lambda;
@@ -57,19 +58,22 @@ void main()
 //	angles.t = 1-angles.t;
 
 	vec4 tex;
-	if( textures == 1 )
+	if( iftextures == 1 )
 		tex = texture2DArray( texturesTex,vec3(texture_st_v2(angles),texId));
 	else	tex = vec4(1);
+
+	if( ifnormals == 1 )
+		gl_FragData[2] = vec4( norm.xyz , tex.a );
+	else	gl_FragData[2] = vec4( mater1.rgb * tex.rgb , mater2.a * tex.a );
 
 	gl_FragData[1].xyz = norm.xyz;      // normal vector
 	gl_FragData[1].w   = 0;        // model id (deprecated)
 
-	norm *= radius;
+	norm.xyz *= radius;
 
 	gl_FragData[0].xyz = pos + norm.xyz;
 	gl_FragData[0].a   = norm.w;	   // draw or not draw this fragment
 
-	gl_FragData[2]     = vec4( mater1.rgb * tex.rgb , mater2.a * tex.a );
 	gl_FragData[3]     = vec4( mater1.a , mater2.rgb );
 }
 

@@ -13,6 +13,8 @@ uniform sampler2D gbuff2;
 uniform sampler2D gbuff3;
 uniform sampler2D gbuff4;
 
+uniform float brightness = 0;
+
 void main()
 {	
 	vec4 gdat1 = texture2D( gbuff1 , gl_TexCoord[0].st );
@@ -22,5 +24,7 @@ void main()
 
 	gl_FragColor.rgb = gdat3.rgb*(gdat4.x + gdat4.y);
 	gl_FragColor.a = gdat1.a;
+
+	if( brightness > 0.0 ) gl_FragColor.rgb *= brightness;
 }
 

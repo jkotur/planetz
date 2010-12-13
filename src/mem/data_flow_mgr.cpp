@@ -77,7 +77,7 @@ GLuint DataFlowMgr::Impl::loadTextures()
 {
 	MISC::Textures tex;
 	std::list<std::string> names;
-	names.push_back( DATA("textures/small_earth.jpg") );
+	names.push_back( DATA("textures/small_earth_clouds.jpg") );
 	names.push_back( DATA("textures/small_jupiter.jpg") );
 	names.push_back( DATA("textures/small_saturn.jpg") );
 	names.push_back( DATA("textures/small_sun.jpg") );

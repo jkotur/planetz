@@ -6,8 +6,21 @@
 
 #include "util/logger.h"
 
-Window::Window( unsigned int w , unsigned int h )
-	: w(w) , h(h) , err(0)
+Window::Window( unsigned int w , unsigned int h , bool fs )
+	: w(w) , h(h) , err(0) , flags(0)
+{
+	if( fs ) flags |= SDL_FULLSCREEN;
+	init();
+}
+
+Window::Window( const std::vector<int>& res , bool fs )
+	: w(res[0]) , h(res[1]) , err(0) , flags(0)
+{
+	if( fs ) flags |= SDL_FULLSCREEN;
+	init();
+}
+
+void Window::init()
 {
 	if( !SDL_init(w,h) ) {
 		err = 1;
@@ -21,6 +34,7 @@ Window::Window( unsigned int w , unsigned int h )
 
 bool Window::SDL_init( unsigned int w , unsigned int h )
 {
+	log_printf(INFO,"Starting SDL with %dx%d resolution\n",w,h);
 	if( SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) ) {
 		log_printf(CRITICAL,"SDL error occurred: %s\n",SDL_GetError());
 		return false;
@@ -33,10 +47,8 @@ bool Window::SDL_init( unsigned int w , unsigned int h )
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 
-	flags = SDL_OPENGL|SDL_HWSURFACE|SDL_DOUBLEBUF;
+	flags|= SDL_OPENGL|SDL_HWSURFACE|SDL_DOUBLEBUF;
 	flags|= SDL_RESIZABLE;
-	if( FULLSCREEN_MODE )
-		flags |= SDL_FULLSCREEN;
 
 	reshape_window( w , h );
 

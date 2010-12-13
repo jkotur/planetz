@@ -56,8 +56,9 @@ const boost::regex PlanetzLayout::save_file("[\\w ]+.sav");
 const boost::regex PlanetzLayout::file_cont("[\\w ]+");
 const std::string PlanetzLayout::qsave_name = "qsave.sav";
 
-PlanetzLayout::PlanetzLayout()
+PlanetzLayout::PlanetzLayout( Config& cfg )
 	: Layout("planetz.layout") //, sel_planet(NULL)
+	, config(cfg)
 {
 	WindowManager::getSingleton().getWindow("btnAdd")
 		->subscribeEvent(PushButton::EventClicked
@@ -127,20 +128,22 @@ PlanetzLayout::~PlanetzLayout()
 {
 }
 
-Config PlanetzLayout::getOptions()
+void PlanetzLayout::updateOptions( Config& cfg )
 {
-	Config cfg;
-	cfg.set("textures",GETWINCAST(Checkbox*,"cbTextures")->isSelected());
-	cfg.set("lightsplanes",GETWINCAST(Checkbox*,"cbLights")->isSelected());
-	cfg.set("lighting",GETWINCAST(Checkbox*,"cbLighting")->isSelected());
-	return cfg;
+	cfg.set("deffered.textures",GETWINCAST(Checkbox*,"cbTextures")->isSelected());
+	cfg.set("deffered.lights_range",GETWINCAST(Checkbox*,"cbLights")->isSelected());
+	cfg.set("deffered.lighting",GETWINCAST(Checkbox*,"cbLighting")->isSelected());
+	cfg.set("deffered.normals",GETWINCAST(Checkbox*,"cbNormals")->isSelected());
+	cfg.set("deffered.brightness",GETWINCAST(Spinner*,"spBright")->getCurrentValue());
 }
 
 void PlanetzLayout::setOptions( const Config& cfg )
 {
-	GETWINCAST(Checkbox*,"cbTextures")->setSelected(cfg.get<bool>("textures"));
-	GETWINCAST(Checkbox*,"cbLights")->setSelected(cfg.get<bool>("lightsplanes"));
-	GETWINCAST(Checkbox*,"cbLighting")->setSelected(cfg.get<bool>("lighting"));
+	GETWINCAST(Checkbox*,"cbTextures")->setSelected(cfg.get<bool>("deffered.textures"));
+	GETWINCAST(Checkbox*,"cbLights")->setSelected(cfg.get<bool>("deffered.lightsplanes"));
+	GETWINCAST(Checkbox*,"cbLighting")->setSelected(cfg.get<bool>("deffered.lighting"));
+	GETWINCAST(Checkbox*,"cbNormals")->setSelected(cfg.get<bool>("deffered.normals"));
+	GETWINCAST(Spinner*,"spBright")->setCurrentValue(cfg.get<float>("deffered.brightness"));
 }
 
 /*void PlanetzLayout::add_selected_planet( Planet*p )
@@ -373,7 +376,7 @@ bool PlanetzLayout::hide_opt_win( const CEGUI::EventArgs& e )
 bool PlanetzLayout::apply_options( const CEGUI::EventArgs& e )
 {
 //        GETWIN("winOpt")->setVisible(false);
-	config = getOptions();
+	updateOptions( config );
 	on_config_changed( config );
 	return true;
 }

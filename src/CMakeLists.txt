@@ -20,7 +20,7 @@ add_subdirectory( phx )
 add_subdirectory( ui )
 add_subdirectory( util )
 
-add_executable( inz application constants main window )
+add_executable( inz application constants main window options )
 
 target_link_libraries( inz 
 	dbg gfx mem phx ui util # project libs

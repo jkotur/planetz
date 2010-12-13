@@ -17,7 +17,7 @@ find_package( SDL_image )
 
 find_package( OpenGL )
 
-find_package( Boost COMPONENTS filesystem regex signals )
+find_package( Boost COMPONENTS filesystem regex signals program_options )
 find_package( CEGUI )
 find_package( CEGUIOPENGL )
 

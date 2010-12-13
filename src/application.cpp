@@ -18,14 +18,15 @@ using boost::bind;
 
 #define CAM_START_VECS Vector3(0,0,40),Vector3(0,0,0),Vector3(0,1,0)
 
-Application::Application( Window& win )
+Application::Application( Window& win , Config& cfg )
 	: fps(0)
 	, anim_pause(true)
 	, window( win )
+	, config( cfg )
 	, phx( data_mgr.getPhxMem() )
 	, camera( CAM_START_VECS )
 	, plz( data_mgr.getGfxMem() )
-	, bkg( 0.8 , BASE_W , BASE_H )
+	, bkg( 0.8 , win.getW() , win.getH() )
 	, picker( data_mgr.getGfxMem(), 3, 3 , win.getW() , win.getH() )
 	, pprnt( data_mgr.getPhxMem(), &picker )
 {
@@ -103,7 +104,7 @@ bool Application::init()
 	// init graphical user interface
 	//
 	try {
-		pl = new PlanetzLayout(); 
+		pl = new PlanetzLayout( config ); 
 	} catch(CEGUI::InvalidRequestException e) {
 		log_printf(CRITICAL,"CEGUI exception: %s\n",e.getMessage().c_str());
 		return false;
@@ -130,6 +131,8 @@ bool Application::init()
 #ifndef _NOGUI
 	gfx.add( &ui     , 9 );
 #endif
+
+	gfx.update_configuration( config );
 
 	camera.init();
 

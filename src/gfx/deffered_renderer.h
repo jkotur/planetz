@@ -91,8 +91,6 @@ private:
 	GLuint normalsTex;
 	GLuint texturesTex;
 
-	Texture*texture;
-
 	GLint anglesTexId;
 	GLint normalsTexId;
 	GLint textureTexId;
@@ -108,6 +106,8 @@ private:
 
 	GLint ifplanesId;
 	GLint iftexturesId;
+	GLint ifnormalsId;
+	GLint brightness;
 };
 
 } // GFX

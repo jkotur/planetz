@@ -18,7 +18,7 @@ typedef boost::signal<void ()> SigVoid;
 
 class PlanetzLayout : public Layout {
 public:
-	PlanetzLayout ();
+	PlanetzLayout( Config& cfg );
 	virtual ~PlanetzLayout();
 	
 	//void add_selected_planet( Planet*p );
@@ -34,9 +34,9 @@ public:
 
 	void update_fps( int fps );
 private:
-	Config config;
+	Config& config;
 
-	Config getOptions();
+	void updateOptions( Config& cfg );
 	void setOptions( const Config& cfg );
 
 	bool clear_win( const CEGUI::EventArgs& e );

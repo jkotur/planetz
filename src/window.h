@@ -4,15 +4,19 @@
 
 #include <SDL/SDL.h>
 
+#include <vector>
+
 class Window {
 public:
-	Window( unsigned int , unsigned int );
+	Window( const std::vector<int>& res , bool fs );
+	Window( unsigned int , unsigned int , bool fs );
 	virtual ~Window();
 
 	operator bool() {
 		return !err;
 	}
 	
+	void init();
 	bool SDL_init( unsigned int w , unsigned int h );
 	bool GL_init();
 	void GL_query();

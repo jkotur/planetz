@@ -18,6 +18,8 @@
 
 #include "window.h"
 
+#include "util/config.h"
+
 #ifndef _RELEASE
 #include "gfx/planetz_picker.h"
 #include "debug/planet_printer.h"
@@ -25,7 +27,7 @@
 
 class Application {
 public:
-	Application( Window& win );
+	Application( Window& win , Config& cfg );
 	virtual ~Application();
 
 	bool init();
@@ -50,6 +52,7 @@ protected:
 	bool anim_pause;
 
 	Window& window;
+	Config& config;
 
 	MEM::DataFlowMgr data_mgr;
 

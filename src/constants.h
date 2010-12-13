@@ -24,11 +24,6 @@
 #define PI 3.1415
 #define PI2 6.283
 
-#define BASE_W 800
-#define BASE_H 600
-
-#define FULLSCREEN_MODE false
-
 #define PATH_MAX_LEN 256
 #if defined(linux)
 #include <string>
