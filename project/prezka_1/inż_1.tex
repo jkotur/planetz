@@ -35,6 +35,54 @@
 \frame
 {
 	\frametitle{CUDA}
+	\begin{itemize}
+	\item{programowanie ogólnego zastosowania na kartach graficznych}
+	\item{równoległe wykonanie}
+	\item{maksymalne wykorzystanie sprzętu}
+	\end{itemize}
+}
+
+\frame
+{
+	\frametitle{Macierz wątków}
+	\begin{figure}
+		\centering
+		\includegraphics[height=7cm]{img/cuda_threads.png}
+	\end{figure}
+}
+
+\frame
+{
+	\frametitle{Rodzaje pamięci na GPU}
+
+	\begin{itemize}
+	\item lokalna
+	\item globalna
+	\item współdzielona
+	\item tekstur
+	\item stała
+	\end{itemize}
+}
+
+\frame
+{
+	\frametitle{Dostęp do pamięci}
+	\begin{figure}
+		\centering
+		\includegraphics[height=7cm]{img/cuda_memory.png}
+	\end{figure}
+}
+
+\frame
+{
+	\frametitle{Ograniczenia}
+	\begin{itemize}
+		\item{Prędkość transferów pamięci}
+		\item{Czas dostępu do pamięci}
+		\item{Ilość rdzeni na GPU}
+		\item{Taktowanie GPU}
+		\item{Jednoczesny dostęp do pamięci ("'coalesced"')}
+	\end{itemize}
 }
 
 \subsection{OpenGL}\label{sub:opengl}
@@ -116,17 +164,6 @@
 
 \subsection{Organizacja pamięci}\label{sub:organizacja pamięci}
 \frame{ \frametitle{Organizacja pamięci} \tableofcontents[currentsubsection] }
-
-\frame
-{
-	\frametitle{Rodzaje pamięci na GPU}
-
-	\begin{itemize}
-	\item lokalna
-	\item globalna
-	\item tekstury
-	\end{itemize}
-}
 
 \frame
 {
@@ -324,9 +361,70 @@ CBUF<float3>   velocity;
 \section{Silnik fizyczny}\label{sec:silnik fizyczny}
 \frame{ \frametitle{Silnik fizyczny} \tableofcontents[currentsection] }
 
+\subsection{Problem n ciał}
+\frame{ \frametitle{Konstrukcja silnika} \tableofcontents[currentsubsection] }
+
 \frame
 {
-	\frametitle{Kiedyś-będzie-zrobiony silnik}
+	\frametitle{Problem n ciał}
+	\begin{itemize}
+		\item{Nierozwiązywalny analitycznie dla n > 3}
+		\item{Rozwiązania numeryczne muszą zamieniać czas ciągły na dyskretny}
+		\item{A zatem - symulacja}
+	\end{itemize}
+}
+
+\subsection{Klasteryzacja}
+\frame
+{
+	\frametitle{K-means}
+	\begin{itemize}
+	\item{Algorytm klasteryzacji}
+	\item{U nas - liczenie relacji tylko dla planet w klastrze i dla samych klastrów}
+	\end{itemize}
+}
+
+\frame
+{
+	\frametitle{K-means - przebieg algorytmu}
+	\begin{enumerate}
+	\item{Znajdź k początkowych punktów oznaczających środki klastrów}
+	\item{Przyporządkuj każdy punkt do najbliższego klastra (środka)}
+	\item{Wyznacz nowe środki klastrów}
+	\item{Jeżeli nastąpiła zmiana i błąd jest zbyt duży, przejdź do punktu 2.}
+	\end{enumerate}
+}
+
+\frame
+{
+	\frametitle{K-means - przebieg algorytmu}
+	\begin{figure}
+		\centering
+	   	\subfloat{\includegraphics[width=0.35\textwidth]{img/kmeans1.png}} \hspace{0cm}
+	   	\subfloat{\includegraphics[width=0.35\textwidth]{img/kmeans2.png}} \hspace{0cm}
+		\pause
+	   	\subfloat{\includegraphics[width=0.35\textwidth]{img/kmeans3.png}} \hspace{0cm}
+	   	\subfloat{\includegraphics[width=0.35\textwidth]{img/kmeans4.png}} \hspace{0cm}
+	\end{figure}
+}
+
+\subsection{Kolizje}
+\frame
+{
+	\frametitle{Kolizje}
+	\begin{itemize}
+		\item{Zderzenia sprężyste}
+		\item{Zderzenia niesprężyste}
+	\end{itemize}
+}
+
+\frame
+{
+	\frametitle{Koniec}
+	\begin{figure}
+	\centering
+	Dziękujemy za uwagę
+	\end{figure}
 }
 
 %\setbeamercolor{normal text}{bg=black}
