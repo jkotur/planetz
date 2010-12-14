@@ -30,16 +30,19 @@
 
 
 \subsection{CUDA}\label{sub:cuda}
+\frame{ \frametitle{CUDA} \tableofcontents[currentsubsection] }
+
 \frame
 {
 	\frametitle{CUDA}
 }
 
 \subsection{OpenGL}\label{sub:opengl}
+\frame{ \frametitle{OpenGL 3.2} \tableofcontents[currentsubsection] }
 
 \frame
 {
-	\frametitle{OpenGL 3.2}
+	\frametitle{Jednostki cieniowania}
 
 	Programowalne jednostki cieniowania (shadery):
 
@@ -100,7 +103,20 @@
 	\end{block}
 }
 
+\frame
+{
+	\frametitle{Potok renderowania}
+	\begin{figure}
+	\centering
+	\includegraphics[height=7cm]{img/potok.png}
+	\label{fig:potok}
+	\end{figure}
+
+}
+
 \subsection{Organizacja pamięci}\label{sub:organizacja pamięci}
+\frame{ \frametitle{Organizacja pamięci} \tableofcontents[currentsubsection] }
+
 \frame
 {
 	\frametitle{Rodzaje pamięci na GPU}
@@ -162,10 +178,8 @@ CBUF<float3>   velocity;
 	\end{itemize}
 }
 
-\section{Silnik graficzny}\label{sec:silnik graficzny}
-\frame{ \tableofcontents[currentsection] }
-
 \subsection{Deffered rendering}\label{sub:deffered rendering}
+\frame{ \frametitle{Deffered rendering} \tableofcontents[currentsubsection] }
 
 \frame
 {
@@ -185,9 +199,10 @@ CBUF<float3>   velocity;
 
 	\begin{figure}
 	\centering
-	\subfloat[color]{\label{fig:gcol}\includegraphics[width=0.3\textwidth]{img/gbuff_col.jpg}} \hspace{.2\textwidth}
-	\subfloat[głębia]{\label{fig:gdepth}\includegraphics[width=0.3\textwidth]{img/gbuff_z.jpg}}  \\
-	\subfloat[normalne]{\label{fig:norm}\includegraphics[width=0.3\textwidth]{img/gbuff_norm.jpg}} \hspace{.2\textwidth}
+	\subfloat[color]{\label{fig:gcol}\includegraphics[width=0.3\textwidth]{img/gbuff_col.jpg}} \hspace{.0\textwidth}
+	\subfloat[głębia]{\label{fig:gdepth}\includegraphics[width=0.3\textwidth]{img/gbuff_z.jpg}} \hspace{.0\textwidth} 
+	\subfloat[normalne]{\label{fig:norm}\includegraphics[width=0.3\textwidth]{img/gbuff_norm.jpg}} \hspace{.0\textwidth} \\
+	\pause
 	\subfloat[efekt]{\label{fig:gend}\includegraphics[width=0.3\textwidth]{img/gbuff_fin.jpg}}
 	\label{fig:deffered_rednering}
 	\end{figure}
@@ -208,20 +223,106 @@ CBUF<float3>   velocity;
 	\begin{block}{Wady}
 	\begin{itemize}
 		\item duże bufory
+		\item wymagane jest cieniowanie per piksel
 		\item na starych komputerach potrzebne jest wiele przejść do wygenerowania g-bufora
 	\end{itemize}
 	\end{block}
 }
 
-\subsection{Renderowanie planet}\label{sub:renderowanie planet}
+\frame
+{
+	\frametitle{Przykłady użycia}
+
+	Używany w wielu nowych grach:
+
+	\begin{itemize}
+	\item Stalker: Shadow of Chernobyl
+	\item Grand Theft Auto IV
+	\item StarCraft II
+	\item CryEngine 3
+	\end{itemize}
+}
+
+\section{Silnik graficzny}\label{sec:silnik graficzny}
+\frame{ \frametitle{Silnik graficzny} \tableofcontents[currentsection] }
+
+\subsection{Wymagania}\label{sub:wymagania}
+\frame{ \frametitle{Wymagania} \tableofcontents[currentsubsection] }
 
 \frame
 {
-	\frametitle{Generowanie geometrii}
+	\frametitle{Wymagania}
+
+	Wymagania funkcjonalne:
+	\begin{description}
+	\item[duże układy] - over 9000 planet
+	\item[gwiazdy] - świecenie, rozmycie
+	\item[komety] - warkocz pyłu
+	\item[atmosfery] - półprzezroczyste powłoki wokół planet
+	\end{description}
+}
+
+\frame
+{
+	\frametitle{Wejście}
+	\begin{figure}
+	\centering
+	\includegraphics[height=7cm]{img/r_points.png}
+	\label{fig:deffered_rednering}
+	\end{figure}
+}
+
+\frame
+{
+	\frametitle{Wyjście}
+	\begin{figure}
+	\centering
+	\includegraphics[height=7cm]{img/r_curr.png}
+	\label{fig:deffered_rednering}
+	\end{figure}
+
+}
+
+\subsection{Generowanie geometrii}\label{sub:generowanie geometrii}
+\frame{ \frametitle{Generowanie geometrii} \tableofcontents[currentsubsection] }
+
+\frame
+{
+	\frametitle{Geometria}
+
+	\begin{figure}
+	\centering
+	\subfloat[60]   {\label{fig:sph0}\includegraphics[width=0.25\textwidth]{img/sph_0.png}} \hspace{.0\textwidth}
+	\subfloat[960]  {\label{fig:sph2}\includegraphics[width=0.25\textwidth]{img/sph_2.png}} \hspace{.0\textwidth}
+	\subfloat[61440]{\label{fig:sph5}\includegraphics[width=0.25\textwidth]{img/sph_5.png}} \hspace{.0\textwidth} \\
+	\pause
+	\subfloat[4]    {\label{fig:sph_def}\includegraphics[width=0.25\textwidth]{img/sph_def.png}} \hspace{.0\textwidth} 
+	\label{fig:deffered_rednering}
+	\end{figure}
+	\setcounter{subfigure}{0}
+}
+
+\subsection{Konstrukcja silnika}\label{sub:konstrukcja silnika}
+\frame{ \frametitle{Konstrukcja silnika} \tableofcontents[currentsubsection] }
+
+\frame
+{
+	\frametitle{Przejścia}
+
+	Kolejne etapy wykonywane przez silnik graficzny:
+
+	\begin{enumerate}
+	\item generowanie g-bufora
+	\item światła ambient i emissive
+	\item światła dynamiczne
+	\item rozmycie 
+	\item efekt atmosfery
+	\item efekt komet
+	\end{enumerate}
 }
 
 \section{Silnik fizyczny}\label{sec:silnik fizyczny}
-\frame{ \tableofcontents[currentsection] }
+\frame{ \frametitle{Silnik fizyczny} \tableofcontents[currentsection] }
 
 \frame
 {
