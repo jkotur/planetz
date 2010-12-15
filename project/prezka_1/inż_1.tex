@@ -46,7 +46,7 @@
 {
 	\frametitle{Macierz wątków}
 	\begin{figure}
-		\centering
+	\centering
 		\includegraphics[height=7cm]{img/cuda_threads.png}
 	\end{figure}
 }
@@ -57,18 +57,18 @@
 
 	\begin{itemize}
 	\item lokalna
-	\item globalna
-	\item współdzielona
-	\item tekstur
-	\item stała
-	\end{itemize}
+		\item globalna
+		\item współdzielona
+		\item tekstur
+		\item stała
+		\end{itemize}
 }
 
 \frame
 {
 	\frametitle{Dostęp do pamięci}
 	\begin{figure}
-		\centering
+	\centering
 		\includegraphics[height=7cm]{img/cuda_memory.png}
 	\end{figure}
 }
@@ -77,11 +77,11 @@
 {
 	\frametitle{Ograniczenia}
 	\begin{itemize}
-		\item{Prędkość transferów pamięci}
-		\item{Czas dostępu do pamięci}
-		\item{Ilość rdzeni na GPU}
-		\item{Taktowanie GPU}
-		\item{Jednoczesny dostęp do pamięci ("'coalesced"')}
+	\item{Prędkość transferów pamięci}
+	\item{Czas dostępu do pamięci}
+	\item{Ilość rdzeni na GPU}
+	\item{Taktowanie GPU}
+	\item{Jednoczesny dostęp do pamięci ("'coalesced"')}
 	\end{itemize}
 }
 
@@ -94,12 +94,12 @@
 
 	Programowalne jednostki cieniowania (shadery):
 
-	\begin{description}
+		\begin{description}
 	\item[vertex] - wykonywane dla każdego wierzchołka
-	\item[fragmet] - wykonywane dla każdego piksela
-	\pause
-	\item[geometry] - wykonywane dla każdej figury (np. trójkąt, linia)
-	\end{description}
+		\item[fragmet] - wykonywane dla każdego piksela
+		\pause
+		\item[geometry] - wykonywane dla każdej figury (np. trójkąt, linia)
+		\end{description}
 
 }
 
@@ -109,16 +109,16 @@
 	\begin{block}{Wejście}
 	\begin{itemize}
 	\item pozycja (przestrzeń modelu)
-	\item kolor wierzchołka
-	\item koordynaty tekstury
-	\end{itemize}
+		\item kolor wierzchołka
+		\item koordynaty tekstury
+		\end{itemize}
 	\end{block}
 	\begin{block}{Wyjście}
 	\begin{itemize}
 	\item pozycja (przestrzeń projekcji)
-	\item kolor wierzchołka
-	\item koordynaty tekstury
-	\end{itemize}
+		\item kolor wierzchołka
+		\item koordynaty tekstury
+		\end{itemize}
 	\end{block}
 }
 
@@ -128,9 +128,9 @@
 
 	\begin{itemize}
 	\item wejście/wyjście analogiczne do vertex shadera
-	\item może generować nowe wierzchołki
-	\item wyjściowe figury mogą się różnić od wejściowych
-	\end{itemize}
+		\item może generować nowe wierzchołki
+		\item wyjściowe figury mogą się różnić od wejściowych
+		\end{itemize}
 }
 
 \frame
@@ -140,14 +140,14 @@
 	\begin{block}{Wejście}
 	\begin{itemize}
 	\item pozycja
-	\item kolor piksela
-	\item koordynaty tekstury
-	\end{itemize}
+		\item kolor piksela
+		\item koordynaty tekstury
+		\end{itemize}
 	\end{block}
 	\begin{block}{Wyjście}
 	\begin{itemize}
 	\item kolor piksela
-	\end{itemize}
+		\end{itemize}
 	\end{block}
 }
 
@@ -156,7 +156,7 @@
 	\frametitle{Potok renderowania}
 	\begin{figure}
 	\centering
-	\includegraphics[height=7cm]{img/potok.png}
+		\includegraphics[height=7cm]{img/potok.png}
 	\label{fig:potok}
 	\end{figure}
 
@@ -170,24 +170,24 @@
 	\frametitle{Organizacja pamięci}
 
 	Część wspólna:
-	\begin{itemize}
+		\begin{itemize}
 	\item pozycja
-	\item promień
-	\end{itemize}
+		\item promień
+		\end{itemize}
 
 	\pause
-	Rodzaje buforów:
+		Rodzaje buforów:
 
-	\begin{itemize}
+		\begin{itemize}
 	\item bufory OpenGL
-	\item bufory CUDA
-	\end{itemize}
+		\item bufory CUDA
+		\end{itemize}
 
 }
 
 \begin{frame}[fragile]
-	\frametitle{Implementacja buforów}
-	\begin{verbatim}
+\frametitle{Implementacja buforów}
+\begin{verbatim}
 //   * GFX
 GBUF<int>    model;
 GBUF<float>  emissive;
@@ -200,7 +200,7 @@ GBUF<uint32_t> count;
 //   * PHX
 CBUF<float>    mass;
 CBUF<float3>   velocity;
-	\end{verbatim}
+\end{verbatim}
 \end{frame}
 
 \frame
@@ -208,26 +208,26 @@ CBUF<float3>   velocity;
 	\frametitle{Dane graficzne}
 
 	Dane dla silnika graficznego trzymane w pamięci tekstury.
-	\begin{itemize}
+		\begin{itemize}
 	\item tekstura modeli
-	\item tekstura tekstur
-	\item tekstura normalnych
-	\end{itemize}
+		\item tekstura tekstur
+		\item tekstura normalnych
+		\end{itemize}
 }
 
-\subsection{Deffered rendering}\label{sub:deffered rendering}
-\frame{ \frametitle{Deffered rendering} \tableofcontents[currentsubsection] }
+\subsection{Deferred rendering}\label{sub:deferred rendering}
+\frame{ \frametitle{Deferred rendering} \tableofcontents[currentsubsection] }
 
 \frame
 {
-	\frametitle{Deffered rendering}
+	\frametitle{Deferred rendering}
 
 	\begin{itemize}
 	\item generowanie bufora geometrii
-	\item bufor jest proporcjonalny do wielkości ekranu
-	\item finalny obrazek jest efektem postprocesingu g-bufora
-	\item efekty graficzne (np. oświetlenie) są proporcjonalne obliczeniowo do wielkości bufora
-	\end{itemize}
+		\item bufor jest proporcjonalny do wielkości ekranu
+		\item finalny obrazek jest efektem postprocesingu g-bufora
+		\item efekty graficzne (np. oświetlenie) są proporcjonalne obliczeniowo do wielkości bufora
+		\end{itemize}
 }
 
 \frame
@@ -236,12 +236,12 @@ CBUF<float3>   velocity;
 
 	\begin{figure}
 	\centering
-	\subfloat[color]{\label{fig:gcol}\includegraphics[width=0.3\textwidth]{img/gbuff_col.jpg}} \hspace{.0\textwidth}
+		\subfloat[color]{\label{fig:gcol}\includegraphics[width=0.3\textwidth]{img/gbuff_col.jpg}} \hspace{.0\textwidth}
 	\subfloat[głębia]{\label{fig:gdepth}\includegraphics[width=0.3\textwidth]{img/gbuff_z.jpg}} \hspace{.0\textwidth} 
 	\subfloat[normalne]{\label{fig:norm}\includegraphics[width=0.3\textwidth]{img/gbuff_norm.jpg}} \hspace{.0\textwidth} \\
-	\pause
-	\subfloat[efekt]{\label{fig:gend}\includegraphics[width=0.3\textwidth]{img/gbuff_fin.jpg}}
-	\label{fig:deffered_rednering}
+		\pause
+		\subfloat[efekt]{\label{fig:gend}\includegraphics[width=0.3\textwidth]{img/gbuff_fin.jpg}}
+	\label{fig:deferred_rednering}
 	\end{figure}
 	\setcounter{subfigure}{0}
 }
@@ -252,18 +252,31 @@ CBUF<float3>   velocity;
 
 	\begin{block}{Zalety}
 	\begin{itemize}
-		\item dobrze skalowalny ze względu na ilość dynamicznych świateł
+	\item dobrze skalowalny ze względu na ilość dynamicznych świateł
 		\item zmniejsza ilość obliczeń przy dużej ilości geometrii
 		\item wydajny przy dużych otwartych przestrzeniach
-	\end{itemize}
+		\end{itemize}
 	\end{block}
 	\begin{block}{Wady}
 	\begin{itemize}
-		\item duże bufory
+	\item duże bufory
+		\item ogromny problem z przezroczystością
 		\item wymagane jest cieniowanie per piksel
 		\item na starych komputerach potrzebne jest wiele przejść do wygenerowania g-bufora
-	\end{itemize}
+		\end{itemize}
 	\end{block}
+}
+
+\frame
+{
+	\frametitle {Przezroczystości}
+
+	\begin{figure}
+	\centering
+		\includegraphics[height=7cm]{img/necro.jpg}
+	\label{fig:necro}
+	\caption*{Necrovision}
+	\end{figure}
 }
 
 \frame
@@ -272,12 +285,12 @@ CBUF<float3>   velocity;
 
 	Używany w wielu nowych grach:
 
-	\begin{itemize}
+		\begin{itemize}
 	\item Stalker: Shadow of Chernobyl
-	\item Grand Theft Auto IV
-	\item StarCraft II
-	\item CryEngine 3
-	\end{itemize}
+		\item Grand Theft Auto IV
+		\item StarCraft II
+		\item CryEngine 3
+		\end{itemize}
 }
 
 \section{Silnik graficzny}\label{sec:silnik graficzny}
@@ -291,12 +304,12 @@ CBUF<float3>   velocity;
 	\frametitle{Wymagania}
 
 	Wymagania funkcjonalne:
-	\begin{description}
+		\begin{description}
 	\item[duże układy] - over 9000 planet
-	\item[gwiazdy] - świecenie, rozmycie
-	\item[komety] - warkocz pyłu
-	\item[atmosfery] - półprzezroczyste powłoki wokół planet
-	\end{description}
+		\item[gwiazdy] - świecenie, rozmycie
+		\item[komety] - warkocz pyłu
+		\item[atmosfery] - półprzezroczyste powłoki wokół planet
+		\end{description}
 }
 
 \frame
@@ -304,8 +317,8 @@ CBUF<float3>   velocity;
 	\frametitle{Wejście}
 	\begin{figure}
 	\centering
-	\includegraphics[height=7cm]{img/r_points.png}
-	\label{fig:deffered_rednering}
+		\includegraphics[height=7cm]{img/r_points.png}
+	\label{fig:deferred_rednering}
 	\end{figure}
 }
 
@@ -314,8 +327,8 @@ CBUF<float3>   velocity;
 	\frametitle{Wyjście}
 	\begin{figure}
 	\centering
-	\includegraphics[height=7cm]{img/r_curr.png}
-	\label{fig:deffered_rednering}
+		\includegraphics[height=7cm]{img/r_curr.png}
+	\label{fig:deferred_rednering}
 	\end{figure}
 
 }
@@ -329,12 +342,12 @@ CBUF<float3>   velocity;
 
 	\begin{figure}
 	\centering
-	\subfloat[60]   {\label{fig:sph0}\includegraphics[width=0.25\textwidth]{img/sph_0.png}} \hspace{.0\textwidth}
+		\subfloat[60]   {\label{fig:sph0}\includegraphics[width=0.25\textwidth]{img/sph_0.png}} \hspace{.0\textwidth}
 	\subfloat[960]  {\label{fig:sph2}\includegraphics[width=0.25\textwidth]{img/sph_2.png}} \hspace{.0\textwidth}
 	\subfloat[61440]{\label{fig:sph5}\includegraphics[width=0.25\textwidth]{img/sph_5.png}} \hspace{.0\textwidth} \\
-	\pause
-	\subfloat[4]    {\label{fig:sph_def}\includegraphics[width=0.25\textwidth]{img/sph_def.png}} \hspace{.0\textwidth} 
-	\label{fig:deffered_rednering}
+		\pause
+		\subfloat[4]    {\label{fig:sph_def}\includegraphics[width=0.25\textwidth]{img/sph_def.png}} \hspace{.0\textwidth} 
+	\label{fig:deferred_rednering}
 	\end{figure}
 	\setcounter{subfigure}{0}
 }
@@ -348,14 +361,14 @@ CBUF<float3>   velocity;
 
 	Kolejne etapy wykonywane przez silnik graficzny:
 
-	\begin{enumerate}
+		\begin{enumerate}
 	\item generowanie g-bufora
-	\item światła ambient i emissive
-	\item światła dynamiczne
-	\item rozmycie 
-	\item efekt atmosfery
-	\item efekt komet
-	\end{enumerate}
+		\item światła ambient i emissive
+		\item światła dynamiczne
+		\item rozmycie 
+		\item efekt atmosfery
+		\item efekt komet
+		\end{enumerate}
 }
 
 \section{Silnik fizyczny}\label{sec:silnik fizyczny}
@@ -368,9 +381,9 @@ CBUF<float3>   velocity;
 {
 	\frametitle{Problem n ciał}
 	\begin{itemize}
-		\item{Nierozwiązywalny analitycznie dla n > 3}
-		\item{Rozwiązania numeryczne muszą zamieniać czas ciągły na dyskretny}
-		\item{A zatem - symulacja}
+	\item{Nierozwiązywalny analitycznie dla n > 3}
+	\item{Rozwiązania numeryczne muszą zamieniać czas ciągły na dyskretny}
+	\item{A zatem - symulacja}
 	\end{itemize}
 }
 
@@ -399,12 +412,12 @@ CBUF<float3>   velocity;
 {
 	\frametitle{K-means - przebieg algorytmu}
 	\begin{figure}
-		\centering
-	   	\subfloat{\includegraphics[width=0.35\textwidth]{img/kmeans1.png}} \hspace{0cm}
-	   	\subfloat{\includegraphics[width=0.35\textwidth]{img/kmeans2.png}} \hspace{0cm}
-		\pause
-	   	\subfloat{\includegraphics[width=0.35\textwidth]{img/kmeans3.png}} \hspace{0cm}
-	   	\subfloat{\includegraphics[width=0.35\textwidth]{img/kmeans4.png}} \hspace{0cm}
+	\centering
+		\subfloat{\includegraphics[width=0.35\textwidth]{img/kmeans1.png}} \hspace{0cm}
+	\subfloat{\includegraphics[width=0.35\textwidth]{img/kmeans2.png}} \hspace{0cm}
+	\pause
+		\subfloat{\includegraphics[width=0.35\textwidth]{img/kmeans3.png}} \hspace{0cm}
+	\subfloat{\includegraphics[width=0.35\textwidth]{img/kmeans4.png}} \hspace{0cm}
 	\end{figure}
 }
 
@@ -413,8 +426,8 @@ CBUF<float3>   velocity;
 {
 	\frametitle{Kolizje}
 	\begin{itemize}
-		\item{Zderzenia sprężyste}
-		\item{Zderzenia niesprężyste}
+	\item{Zderzenia sprężyste}
+	\item{Zderzenia niesprężyste}
 	\end{itemize}
 }
 
@@ -423,8 +436,8 @@ CBUF<float3>   velocity;
 	\frametitle{Koniec}
 	\begin{figure}
 	\centering
-	Dziękujemy za uwagę
-	\end{figure}
+		Dziękujemy za uwagę
+		\end{figure}
 }
 
 %\setbeamercolor{normal text}{bg=black}
