@@ -22,9 +22,15 @@ varying in vec3 lightColor;
 void main()
 {	
 	vec4 gdat1 = texture2D( gbuff1 , gl_TexCoord[0].st );
+
+	gl_FragColor.a = gdat1.a;
+        if( planes && gdat1.a <= .0 ) gl_FragColor.rgba = vec4(.1,.1,.1,.2);
+	if(           gdat1.a <= .0 ) return;
+
 	vec4 gdat2 = texture2D( gbuff2 , gl_TexCoord[0].st );
 	vec4 gdat3 = texture2D( gbuff3 , gl_TexCoord[0].st );
 	vec4 gdat4 = texture2D( gbuff4 , gl_TexCoord[0].st );
+
 
 	vec3 viewDir =-normalize(gdat1.xyz);
 
@@ -47,10 +53,5 @@ void main()
         vec3 fs = gdat3.rgb * i / dist;
 
 	gl_FragColor.rgb = (fd * gdat4.z + fs * gdat4.w) * lightColor;
-	gl_FragColor.a = gdat1.a;
-
-/** lights range planes */
-        if( planes && gdat1.a <= .0 )
-                gl_FragColor.rgba = vec4(.1,.1,.1,.2);
 }
 

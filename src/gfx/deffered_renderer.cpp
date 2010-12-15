@@ -62,7 +62,7 @@ void DeferRender::prepare()
 	sphereTexId    = glGetUniformLocation( prPlanet.id() , "sph_pos"   );
 	materialsTexId = glGetUniformLocation( prPlanet.id() , "materialsTex" );
 
-	anglesTexId    = glGetUniformLocation( prPlanet.id() , "anglesTex" );
+//        anglesTexId    = glGetUniformLocation( prPlanet.id() , "anglesTex" );
 	normalsTexId   = glGetUniformLocation( prPlanet.id() , "normalsTex");
 	textureTexId   = glGetUniformLocation( prPlanet.id() , "texturesTex");
 
@@ -152,7 +152,7 @@ void DeferRender::create_textures( unsigned int w , unsigned int h )
 	unsigned sphereSize = pow(2,floor(log(std::max(w,h))/log(2.0)));
 	sphereTex = generate_sphere_texture( sphereSize ,sphereSize );
 
-	anglesTex = generate_angles_texture( sphereSize , sphereSize );
+//        anglesTex = generate_angles_texture( sphereSize , sphereSize );
 	normalsTex= generate_normals_texture(sphereSize , sphereSize*2 );
 
 	for( int i=0 ;i<gbuffNum ; i++ )
@@ -193,7 +193,7 @@ void DeferRender::delete_textures()
 	glDeleteTextures(gbuffNum,gbuffTex);
 	glDeleteTextures(1,&depthTex );
 
-	glDeleteTextures(1,&anglesTex);
+//        glDeleteTextures(1,&anglesTex);
 	glDeleteTextures(1,&normalsTex);
 
 	glDeleteFramebuffers( 1 , &fboId );
