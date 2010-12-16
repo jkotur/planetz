@@ -16,6 +16,7 @@ struct Material
 	float r , g , b;
 	float ke, ka, kd, ks;
 	float alpha;
+	int   texture;
 };
 
 typedef std::vector<Material> Materials;
@@ -30,7 +31,7 @@ public:
 	unsigned int addMaterial(
 				float r , float g , float b ,
 				float ke, float ka, float kd, float ks ,
-				float alpha );
+				float alpha , int texture );
 
 	void setColor3f( float , float , float );
 	void setColor3i( int , int , int );
@@ -40,6 +41,7 @@ public:
 	void setKd( float );
 	void setKs( float );
 	void setAlpha( float );
+	void setTexture( int );
 private:
 	unsigned int id;
 	Materials*materials;

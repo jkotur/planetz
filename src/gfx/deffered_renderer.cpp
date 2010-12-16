@@ -70,6 +70,7 @@ void DeferRender::prepare()
                                                                           
 	radiusId       = glGetAttribLocation ( prPlanet.id() , "radius"    );
 	modelId        = glGetAttribLocation ( prPlanet.id() , "model"     );
+	texIdId        = glGetAttribLocation ( prPlanet.id() , "texId"     );
 
 	prPlanet.use();
 	glUniform1i( materialsTexId , 0 );
@@ -345,6 +346,7 @@ void DeferRender::draw() const
 	glEnableClientState( GL_VERTEX_ARRAY );
 	glEnableVertexAttribArray( radiusId );
 	glEnableVertexAttribArray( modelId  );
+	glEnableVertexAttribArray( texIdId  );
 
 	factory->getPositions().bind();
 	glVertexPointer( 3 , GL_FLOAT , 0 , NULL );
@@ -357,6 +359,10 @@ void DeferRender::draw() const
 	factory->getModels().bind();
 	glVertexAttribIPointer( modelId  , 1, GL_INT , 0, NULL );
 	factory->getModels().unbind();
+
+	factory->getTexIds().bind();
+	glVertexAttribIPointer( texIdId  , 1, GL_INT , 0, NULL );
+	factory->getTexIds().unbind();
 
 	prPlanet.use();
 	glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_1D, materialsTex );
@@ -378,6 +384,7 @@ void DeferRender::draw() const
 	glBindFramebuffer( GL_FRAMEBUFFER , 0 );
 	glDisableVertexAttribArray( radiusId );
 	glDisableVertexAttribArray( modelId  );
+	glDisableVertexAttribArray( texIdId  );
 
 //        glDisable(GL_DEPTH_TEST);
 

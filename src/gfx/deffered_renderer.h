@@ -49,6 +49,7 @@ private:
 	GLint radiusId;
 
 	GLint modelId ;
+	GLint texIdId ;
 	GLint modelLId ;
 	GLint emissiveLId;
 

@@ -69,14 +69,14 @@ void IOCtl::Impl::loadMaterials( MISC::Materials* dest , const std::string & pat
 
 	MISC::MaterialsMgr mgr( dest );
 
-	               // r    g    b   ke   ka   kd    ks  alpha
+	               // r    g    b   ke   ka   kd    ks  alpha texId
 //        mgr.addMaterial( .7 , .5 , .3 , .0 , .1 , 10 , 0 , 1 );
 //        mgr.addMaterial( .4 , .6 , .8 , .0 , .1 , 10 , 0 , 1 );
 //        mgr.addMaterial( .8 , .8 , .4 , .0 , .1 , 10 , 0 , 1 );
-	mgr.addMaterial( 1. , 1. , 1. , .0 , .2 , 10 , 0 , 1 );
-	mgr.addMaterial( 1. , 1. , 1. , .0 , .2 , 10 , 0 , 1 );
-	mgr.addMaterial( 1. , 1. , 1. , .0 , .2 , 10 , 0 , 1 );
-	mgr.addMaterial( 1. , 1. , 1. , .5 , 1.2 , 1.0 , 0 , 1 );
+	mgr.addMaterial( 1. , 1. , 1. , .0 ,  .2 , 10  , 0 , 1 , 0 );
+	mgr.addMaterial( .7 , .5 , .3 , .0 ,  .2 , 10  , 0 , 1 , 4 );
+	mgr.addMaterial( 1. , 1. , 1. , .0 ,  .2 , 10  , 0 , 1 , 2 );
+	mgr.addMaterial( 1. , 1. , 1. , .5 , 1.2 , 1.0 , 0 , 1 , 3 );
 }
 
 void IOCtl::Impl::loadTextures( MISC::Textures* dest , const std::list<std::string>& names )

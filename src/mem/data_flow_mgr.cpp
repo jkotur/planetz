@@ -27,7 +27,7 @@ class DataFlowMgr::Impl
 		void registerCam( Camera *_cam );
 
 	private:
-		void updateEmissive( MISC::CpuPlanetHolder*p, MISC::Materials*m );
+		void updateBuffers( MISC::CpuPlanetHolder*p, MISC::Materials*m );
 
 		IOCtl ioctl;
 		MemMgr memmgr;
@@ -59,28 +59,35 @@ void DataFlowMgr::Impl::load( const std::string &path )
 	MISC::SaverParams p( cam );
 	ioctl.load( &p, path );
 	log_printf(DBG, "got %u planets\n", p.planet_info->size() );
-	updateEmissive( p.planet_info , materials );
+	updateBuffers( p.planet_info , materials );
 	memmgr.setPlanets( p.planet_info );
 }
 
-void DataFlowMgr::Impl::updateEmissive(MISC::CpuPlanetHolder*p , MISC::Materials*m)
+void DataFlowMgr::Impl::updateBuffers(MISC::CpuPlanetHolder*p , MISC::Materials*m)
 {
 	if( !m ) {
 		log_printf(_WARNING,"There are no materials loaded\n");
-		for( unsigned i=0 ; i<p->size() ; i++ )
-			p->emissive[i] = 0;
-	} else	for( unsigned i=0 ; i<p->size() ; i++ )
+		for( unsigned i=0 ; i<p->size() ; i++ ) {
+			p->emissive[i] = 0; // no emissive
+			p->texId   [i] = 0; // dummy texture
+		}
+	} else	for( unsigned i=0 ; i<p->size() ; i++ ) {
 			p->emissive[i] = (*m)[p->model[i]].ke;
+			p->texId   [i] = (*m)[p->model[i]].texture;
+		}
 }
 
 GLuint DataFlowMgr::Impl::loadTextures()
 {
+	TODO("Read texture files from file");
+
 	MISC::Textures tex;
 	std::list<std::string> names;
 	names.push_back( DATA("textures/small_earth_clouds.jpg") );
 	names.push_back( DATA("textures/small_jupiter.jpg") );
 	names.push_back( DATA("textures/small_saturn.jpg") );
 	names.push_back( DATA("textures/small_sun.jpg") );
+	names.push_back( DATA("textures/small_mars.jpg") );
 	ioctl.loadTextures(&tex,names);
 	GLuint res = memmgr.loadTextures( tex );
 	for( MISC::Textures::iterator i = tex.begin() ; i != tex.end() ; ++i )

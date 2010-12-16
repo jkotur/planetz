@@ -119,6 +119,12 @@ void MemMgr::setPlanets( MISC::CpuPlanetHolder *pl )
 		em[i] = pl->emissive[i];
 	holder.emissive.unmap();
 
+	holder.texId.bind();
+	int *tid  = holder.texId.map( MISC::BUF_H );
+	for( unsigned i=0; i< size; ++i )
+		tid[i]= pl->texId[i];
+	holder.texId.unmap();
+
 	holder.count.assign( pl->count[0] );
 
 	holder.mass.bind();

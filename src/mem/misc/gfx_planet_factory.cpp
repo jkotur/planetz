@@ -56,6 +56,11 @@ const BufferGl<float> &GfxPlanetFactory::getEmissive() const
 	return holder->emissive;
 }
 
+const BufferGl<int> &GfxPlanetFactory::getTexIds() const
+{
+	return holder->texId;
+}
+
 const BufferGl<float3>  &GfxPlanetFactory::getPositions() const
 {
 	return holder->pos;

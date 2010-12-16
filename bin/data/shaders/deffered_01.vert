@@ -4,6 +4,7 @@ uniform sampler1D materialsTex;
 
 in float radius;
 in int   model;
+in int   texId;
 
 out float radiuses;
 out float texIds;
@@ -14,7 +15,7 @@ out vec4  maters2;
 void main()
 {	
 	radiuses = radius;
-	texIds   = model/2;
+	texIds   = texId;
 
 	gl_Position = gl_ModelViewMatrix * gl_Vertex;
 

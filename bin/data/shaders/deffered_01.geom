@@ -29,7 +29,7 @@ void main()
 	rot    = mat3(angles);
 	texId  = texIds[0];
 
-	nrot = faceme( pos );
+	nrot   = faceme( pos );
 
 	vec4 u = vec4( nrot * vec3(0,radius,0) , 0 );
 	vec4 r = vec4( nrot * vec3(radius,0,0) , 0 );

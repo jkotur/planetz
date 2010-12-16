@@ -35,6 +35,7 @@ namespace MISC
 
 		const BufferGl<int>     &getModels() const;
 		const BufferGl<float>   &getEmissive() const;
+		const BufferGl<int>     &getTexIds() const;
 
 		const BufferGl<float3>  &getPositions() const;
 		const BufferGl<float>   &getRadiuses() const;

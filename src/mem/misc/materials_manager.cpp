@@ -22,9 +22,9 @@ unsigned int MaterialsMgr::addMaterial()
 unsigned int MaterialsMgr::addMaterial(
 			float r , float g , float b ,
 			float ke, float ka, float kd, float ks ,
-			float alpha )
+			float alpha , int texture ) 
 {
-	Material m = { r , g , b , ke , ka , kd , ks , alpha };
+	Material m = { r , g , b , ke , ka , kd , ks , alpha , texture };
 	materials->push_back(m);
 	return id++;
 }
@@ -68,5 +68,10 @@ void MaterialsMgr::setKs( float ks )
 void MaterialsMgr::setAlpha( float alpha )
 {
 	materials->back().alpha = alpha;
+}
+
+void MaterialsMgr::setTexture( int texture )
+{
+	materials->back().texture = texture;
 }
 
