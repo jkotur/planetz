@@ -6,7 +6,7 @@
  * -----------+--------+--------+--------+----------
  *  FragData0 | pos.x  | pos.y  | pos.z  | alpha
  *  FragData1 | norm.x | norm.y | norm.z | material
- *  FragData2 | col.x  | col.y  | col.b  | alpha
+ *  FragData2 | col.x  | col.y  | col.b  | atmRadius
  *  FragData3 | ke     | ka     | kd     | ks
  */
 
@@ -33,6 +33,7 @@ in vec3 pos;
 in mat3 rot;
 in mat3 nrot;
 in float radius;
+in float atmRadius;
 
 in float texId;
 
@@ -63,8 +64,8 @@ void main()
 	else	tex = vec4(1);
 
 	if( ifnormals == 1 )
-		gl_FragData[2] = vec4( norm.xyz , tex.a );
-	else	gl_FragData[2] = vec4( mater1.rgb * tex.rgb , mater2.a * tex.a );
+		gl_FragData[2] = vec4( norm.xyz             , atmRadius );
+	else	gl_FragData[2] = vec4( mater1.rgb * tex.rgb , atmRadius );
 
 	gl_FragData[1].xyz = norm.xyz;      // normal vector
 	gl_FragData[1].w   = 0;        // model id (deprecated)

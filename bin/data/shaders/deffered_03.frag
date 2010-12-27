@@ -4,7 +4,7 @@
  * ---------+--------+--------+--------+----------
  *  gdat1   | pos.x  | pos.y  | pos.z  | alpha
  *  gdat2   | norm.x | norm.y | norm.z | material
- *  gdat3   | col.x  | col.y  | col.b  | alpha
+ *  gdat3   | col.x  | col.y  | col.b  | atmRadius
  *  gdat4   | ke     | ka     | kd     | ks
  */
 
@@ -31,6 +31,7 @@ void main()
 	vec4 gdat3 = texture2D( gbuff3 , gl_TexCoord[0].st );
 	vec4 gdat4 = texture2D( gbuff4 , gl_TexCoord[0].st );
 
+	if( gdat3.a > .0 ) gdat3.rgb += vec3( .3 , .4 , 1. ) * .3;
 
 	vec3 viewDir =-normalize(gdat1.xyz);
 
@@ -48,7 +49,7 @@ void main()
 
         vec3 h = normalize(lightDir + viewDir);
 
-        i = pow(clamp(dot(gdat2.xyz, h), 0.0 , 1.0 ), gdat3.w );	
+        i = pow(clamp(dot(gdat2.xyz, h), 0.0 , 1.0 ), gdat1.w );	
 
         vec3 fs = gdat3.rgb * i / dist;
 

@@ -5,6 +5,7 @@ uniform mat4 angles;
 
 in float radiuses[];
 in float texIds[];
+in float atmRadiuses[];
 
 in vec4  maters1[];
 in vec4  maters2[];
@@ -14,6 +15,7 @@ out mat3 rot;
 out mat3 nrot;
 out float radius;
 out float texId;
+out float atmRadius;
 
 out vec4 mater1;
 out vec4 mater2;
@@ -25,6 +27,7 @@ void main()
 	radius = radiuses[0];
 	mater1 = maters1 [0];
 	mater2 = maters2 [0];
+	atmRadius = atmRadiuses[0];
 	pos    = gl_PositionIn[0].xyz;
 	rot    = mat3(angles);
 	texId  = texIds[0];

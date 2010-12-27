@@ -79,6 +79,9 @@ void DeferRender::prepare()
 	radiusId       = glGetAttribLocation ( prPlanet.id() , "radius"    );
 	modelId        = glGetAttribLocation ( prPlanet.id() , "model"     );
 	texIdId        = glGetAttribLocation ( prPlanet.id() , "texId"     );
+	atmRadiusId    = glGetAttribLocation ( prPlanet.id() , "atmRadius" );
+
+	log_printf(DBG,"%d\n",atmRadiusId);
 
 	prPlanet.use();
 	glUniform1i( materialsTexId , 0 );
@@ -287,7 +290,7 @@ GLuint DeferRender::generate_atmosphere_texture( int w , int h )
 			sphere[ i     ] = .3;
 			sphere[ i + 1 ] = .4;
 			sphere[ i + 2 ] = 1.;
-			sphere[ i + 3 ] = z >= 0.3 ? 0.3 : z;
+			sphere[ i + 3 ] = xxyy <= .88 ? 0 : z >= 0.3 ? 0.3 : z;
 		}
 
 	GLuint texId;
@@ -477,6 +480,7 @@ void DeferRender::draw() const
 	glEnableVertexAttribArray( radiusId );
 	glEnableVertexAttribArray( modelId  );
 	glEnableVertexAttribArray( texIdId  );
+	glEnableVertexAttribArray( atmRadiusId );
 
 	factory->getPositions().bind();
 	glVertexPointer( 3 , GL_FLOAT , 0 , NULL );
@@ -494,6 +498,10 @@ void DeferRender::draw() const
 	glVertexAttribIPointer( texIdId  , 1, GL_INT , 0, NULL );
 	factory->getTexIds().unbind();
 
+	factory->getAtmospheres().bind();
+	glVertexAttribPointer( atmRadiusId , 1, GL_FLOAT, GL_FALSE, 0, NULL );
+	factory->getAtmospheres().unbind();
+
 	prPlanet.use();
 	glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_1D, materialsTex );
 	glActiveTexture(GL_TEXTURE1); glBindTexture(GL_TEXTURE_2D, sphereTex    );
@@ -508,12 +516,12 @@ void DeferRender::draw() const
 
 	glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
 
-
 	Program::none();
 	glBindFramebuffer( GL_FRAMEBUFFER , 0 );
 	glDisableVertexAttribArray( radiusId );
 	glDisableVertexAttribArray( modelId  );
 	glDisableVertexAttribArray( texIdId  );
+	glDisableVertexAttribArray( atmRadiusId );
 
 	glDisable( GL_DEPTH_TEST );
 //        glClear( GL_DEPTH_BUFFER_BIT ); 
