@@ -97,6 +97,8 @@ bool Camera::emit_angle_changed_signal()
 	glPopMatrix();
 
 	sigAngleChanged( m );
+
+	return false;
 }
 
 bool Camera::on_button_down( int b , int x , int y )

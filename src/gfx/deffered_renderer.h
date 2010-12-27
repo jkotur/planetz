@@ -41,7 +41,7 @@ private:
 	//
 	// Shaders
 	//
-	Program prPlanet , prLighting , prLightsBase;
+	Program prPlanet , prLighting , prLightsBase , prAtmosphere;
 
 	//
 	// Vertex data
@@ -73,7 +73,7 @@ private:
 	//
 	GLuint generate_render_target_texture( int w , int h );
 
-	GLuint fboId;
+	GLuint fboId[3];
 	GLuint depthTex;
 
 	static const GLsizei gbuffNum = 4;
@@ -81,6 +81,8 @@ private:
 	GLint  gbuffId   [gbuffNum*2];
 	GLuint gbuffTex  [gbuffNum  ];
 	GLenum bufferlist[gbuffNum  ];
+
+	GLuint screenTex;
 
 	//
 	// Texturing
@@ -99,6 +101,26 @@ private:
 	GLint anglesId;
 
 	const MEM::MISC::GfxPlanetFactory * const factory;
+
+	//
+	// Atmospehere
+	//
+	GLuint generate_atmosphere_texture( int w , int h );
+
+	GLint atmId;
+	GLint radiusAId;
+	GLuint atmTex;
+
+	//
+	// Glow
+	//
+	void generate_glow_planes( MEM::MISC::BufferGl<float>& buf , int num , int size );
+
+//        MEM::MISC::BufferGl<float> planes;
+
+	static const int glow_size = 128;
+
+	Texture*tmptex;
 
 	//
 	// options switches

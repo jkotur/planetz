@@ -33,13 +33,14 @@ namespace MISC
 		void resize(const size_t num)
 		{
 			TODO("keep previous data...");
-			model   .resize(num);
-			emissive.resize(num);
-			texId   .resize(num);
-			pos     .resize(num);
-			radius  .resize(num);
-			mass    .resize(num);
-			velocity.resize(num);
+			model     .resize(num);
+			emissive  .resize(num);
+			texId     .resize(num);
+			atmosphere.resize(num);
+			pos       .resize(num);
+			radius    .resize(num);
+			mass      .resize(num);
+			velocity  .resize(num);
 
 			count.assign( num );
 			m_size = num;
@@ -49,6 +50,7 @@ namespace MISC
 		GBUF<int>    model;
 		GBUF<float>  emissive; // redundant to model, but needed for speed
 		GBUF<int>    texId;
+		GBUF<float>  atmosphere;
 
 		//   * COMMON
 		GBUF<float3>   pos;

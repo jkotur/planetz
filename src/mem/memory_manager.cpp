@@ -22,8 +22,6 @@ MemMgr::~MemMgr()
 
 GLuint MemMgr::loadTextures( const MISC::Textures& ctex )
 {
-	TODO("Make this more F2C-C2G-like");
-
 	if( texTexId ) glDeleteTextures(1,&texTexId);
 
 	const GLint TEX_W = 1024;
@@ -118,6 +116,12 @@ void MemMgr::setPlanets( MISC::CpuPlanetHolder *pl )
 	for( unsigned i=0; i<size; ++i )
 		em[i] = pl->emissive[i];
 	holder.emissive.unmap();
+
+	holder.atmosphere.bind();
+	float *atm = holder.atmosphere.map( MISC::BUF_H );
+	for( unsigned i=0; i<size; ++i )
+		atm[i] = pl->radius[i]*pl->atmosphere[i];
+	holder.atmosphere.unmap();
 
 	holder.texId.bind();
 	int *tid  = holder.texId.map( MISC::BUF_H );

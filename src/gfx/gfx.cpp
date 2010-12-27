@@ -58,6 +58,8 @@ bool Gfx::GL_view_init()
 //        glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION,  0.00000000000f);
 	glEnable(GL_LIGHT0);
 
+	glColor3f(1,1,1);
+
 	GL_viewport(mwidth,mheight);
 
 	return true;

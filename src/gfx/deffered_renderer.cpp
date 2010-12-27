@@ -11,7 +11,7 @@
 using namespace GFX;
 
 DeferRender::DeferRender( const MEM::MISC::GfxPlanetFactory * factory )
-	: materialsTex(0) , factory(factory) , flags(NULL)
+	: materialsTex(0) , factory(factory) , flags(0)
 {
 }
 
@@ -59,10 +59,18 @@ void DeferRender::prepare()
 			DATA("shaders/deffered_03.geom")),
 		GL_POINTS , GL_QUAD_STRIP );
 
+	prAtmosphere.create(
+		gfx->shmMgr.loadShader(GL_VERTEX_SHADER  ,
+			DATA("shaders/deffered_04.vert")),
+		gfx->shmMgr.loadShader(GL_FRAGMENT_SHADER,
+			DATA("shaders/deffered_04.frag")),
+		gfx->shmMgr.loadShader(GL_GEOMETRY_SHADER,
+			DATA("shaders/deffered_04.geom")),
+		GL_POINTS , GL_QUAD_STRIP );
+
 	sphereTexId    = glGetUniformLocation( prPlanet.id() , "sph_pos"   );
 	materialsTexId = glGetUniformLocation( prPlanet.id() , "materialsTex" );
 
-//        anglesTexId    = glGetUniformLocation( prPlanet.id() , "anglesTex" );
 	normalsTexId   = glGetUniformLocation( prPlanet.id() , "normalsTex");
 	textureTexId   = glGetUniformLocation( prPlanet.id() , "texturesTex");
 
@@ -75,7 +83,6 @@ void DeferRender::prepare()
 	prPlanet.use();
 	glUniform1i( materialsTexId , 0 );
 	glUniform1i( sphereTexId    , 1 );
-//        glUniform1i( anglesTexId    , 1 );
 	glUniform1i( normalsTexId   , 2 );
 	glUniform1i( textureTexId   , 3 );
 	Program::none();
@@ -96,19 +103,22 @@ void DeferRender::prepare()
 	gbuffId[6] = glGetUniformLocation( prLightsBase.id() , "gbuff3" );
 	gbuffId[7] = glGetUniformLocation( prLightsBase.id() , "gbuff4" );
 
+	atmId      = glGetUniformLocation( prAtmosphere.id() , "texture");
+	radiusAId  = glGetAttribLocation ( prAtmosphere.id() , "radius" );
+
 	prLighting.use();
 	glUniform1i( gbuffId[0] , 0 );
 	glUniform1i( gbuffId[1] , 1 );
 	glUniform1i( gbuffId[2] , 2 );
 	glUniform1i( gbuffId[3] , 3 );
 	glUniform1i( matLId     , 4 );
-	Program::none();
-
 	prLightsBase.use();
 	glUniform1i( gbuffId[4] , 0 );
 	glUniform1i( gbuffId[5] , 1 );
 	glUniform1i( gbuffId[6] , 2 );
 	glUniform1i( gbuffId[7] , 3 );
+	prAtmosphere.use();
+	glUniform1i( atmId      , 0 );
 	Program::none();
 
 	create_textures( gfx->width() , gfx->height() );
@@ -116,6 +126,8 @@ void DeferRender::prepare()
 	iftexturesId   = glGetUniformLocation( prPlanet.id() , "iftextures"  );
 	ifnormalsId    = glGetUniformLocation( prPlanet.id() , "ifnormals"   );
 	brightness     = glGetUniformLocation( prLightsBase.id(), "brightness");
+
+	tmptex = gfx->texMgr.loadTexture( DATA("glow_test.png") );
 }
 
 void DeferRender::resize( unsigned int width , unsigned int height )
@@ -153,11 +165,14 @@ void DeferRender::create_textures( unsigned int w , unsigned int h )
 	unsigned sphereSize = pow(2,floor(log(std::max(w,h))/log(2.0)));
 	sphereTex = generate_sphere_texture( sphereSize ,sphereSize );
 
-//        anglesTex = generate_angles_texture( sphereSize , sphereSize );
+	atmTex    = generate_atmosphere_texture( sphereSize * 1.5 , sphereSize );
+
 	normalsTex= generate_normals_texture(sphereSize , sphereSize*2 );
 
 	for( int i=0 ;i<gbuffNum ; i++ )
 		gbuffTex[i] = generate_render_target_texture( w , h );
+
+	screenTex   = generate_render_target_texture( w , h );
 
 	glGenTextures( 1, &depthTex );
 	glBindTexture( GL_TEXTURE_2D, depthTex );
@@ -165,8 +180,10 @@ void DeferRender::create_textures( unsigned int w , unsigned int h )
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, w, h, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0 );
 
-	glGenFramebuffers( 1, &fboId );
-	glBindFramebuffer( GL_FRAMEBUFFER , fboId );
+//        generate_glow_planes( planes , glow_size , w );
+
+	glGenFramebuffers( 3 , fboId );
+	glBindFramebuffer( GL_FRAMEBUFFER , fboId[0] );
 
 	bufferlist[0] = GL_COLOR_ATTACHMENT0;
 	bufferlist[1] = GL_COLOR_ATTACHMENT1;
@@ -184,20 +201,31 @@ void DeferRender::create_textures( unsigned int w , unsigned int h )
 	glFramebufferTexture2D( GL_FRAMEBUFFER , GL_DEPTH_ATTACHMENT  ,
 				GL_TEXTURE_2D , depthTex  , 0 );
 
-	glBindFramebuffer( GL_FRAMEBUFFER , 0 );
+//        glBindFramebuffer( GL_FRAMEBUFFER , fboId[1] );
 
+//        glFramebufferTexture2D( GL_FRAMEBUFFER , GL_COLOR_ATTACHMENT0 ,
+//                                GL_TEXTURE_2D , screenTex , 0 );
+//        glFramebufferTexture2D( GL_FRAMEBUFFER , GL_DEPTH_ATTACHMENT  ,
+//                                GL_TEXTURE_2D , depthTex  , 0 );
+
+	glBindFramebuffer( GL_FRAMEBUFFER , fboId[2] );
+
+	glFramebufferTexture2D( GL_FRAMEBUFFER , GL_COLOR_ATTACHMENT0 ,
+				GL_TEXTURE_2D , screenTex , 0 );
+	glBindFramebuffer( GL_FRAMEBUFFER , 0 );
 }
 
 void DeferRender::delete_textures()
 {
+	glDeleteTextures(1,&atmTex);
 	glDeleteTextures(1,&sphereTex);
 	glDeleteTextures(gbuffNum,gbuffTex);
 	glDeleteTextures(1,&depthTex );
+	glDeleteTextures(1,&screenTex);
 
-//        glDeleteTextures(1,&anglesTex);
 	glDeleteTextures(1,&normalsTex);
 
-	glDeleteFramebuffers( 1 , &fboId );
+	glDeleteFramebuffers( 3 , fboId );
 }
 
 GLuint DeferRender::generate_sphere_texture( int w , int h )
@@ -223,6 +251,43 @@ GLuint DeferRender::generate_sphere_texture( int w , int h )
 			sphere[ i + 1 ] = y;
 			sphere[ i + 2 ] = z;
 			sphere[ i + 3 ] = a;
+		}
+
+	GLuint texId;
+	glGenTextures( 1 , &texId );
+	glBindTexture(GL_TEXTURE_2D, texId );
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S    , GL_CLAMP  );
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T    , GL_CLAMP  );
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+	glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA16F,w,h,0,GL_RGBA,GL_FLOAT,sphere);
+	delete[]sphere;
+	return texId;
+}
+
+GLuint DeferRender::generate_atmosphere_texture( int w , int h )
+{
+	float*sphere = new float[ w * h * 4 ];
+
+	int w4 = w*4;
+	float w2 = (float)w/2.0f;
+	float h2 = (float)h/2.0f;
+
+	for( int wi=0 ; wi<w4 ; wi+=4 )
+		for( int hi=0 ; hi<h ; hi++ )
+		{
+			float x = ((float)wi/4.0f - w2)/(float)w2;
+			float y = ((float)hi - h2)/(float)h2;
+			float xxyy = x*x + y*y;
+			float a = 1 <= xxyy ? 0.0 : 1.0 ;
+			float z = (!a?0.0f:std::sqrt( 1 - xxyy ));
+
+			int i = wi + hi*w4;
+
+			sphere[ i     ] = .3;
+			sphere[ i + 1 ] = .4;
+			sphere[ i + 2 ] = 1.;
+			sphere[ i + 3 ] = z >= 0.3 ? 0.3 : z;
 		}
 
 	GLuint texId;
@@ -338,10 +403,75 @@ GLuint DeferRender::generate_normals_texture( int w , int h )
 	return texId;
 }
 
+void DeferRender::generate_glow_planes( MEM::MISC::BufferGl<float>& buf , int num , int size )
+{
+	float ds = 1.0f/(float)size;
+
+	buf.resize( (2+1+3)*(num*2+1)*4 );
+
+	float*hf = buf.map( MEM::MISC::BUF_H );
+	unsigned char*hub;
+	for( int i=-num ; i<=num ; i++ )
+	{
+		float dx = ds*i;
+		float dy = 0;
+		unsigned char a = (unsigned char)(128.0f*(float)(num+1-abs(i))/(float)(num+1));
+
+		*  hf = 0;          // texcoord.s
+		*++hf = 0;          // texcoord.t
+		 ++hf;
+		hub = (unsigned char*)hf;
+		*  hub= 255;
+		*++hub= 255;
+		*++hub= 255;
+		*++hub= a;
+		*++hf = -1.0f + dx; // vert.x
+		*++hf = -1.0f + dy; // vert.y
+		*++hf = 0;          // vert.z
+		*++hf = 1;
+		*++hf = 0;
+		 ++hf;
+		hub = (unsigned char*)hf;
+		*  hub= 255;
+		*++hub= 255;
+		*++hub= 255;
+		*++hub= a;
+		*++hf =  1.0f + dx;
+		*++hf = -1.0f + dy;
+		*++hf = 0;
+		*++hf = 1;
+		*++hf = 1;
+		 ++hf;
+		hub = (unsigned char*)hf;
+		*  hub= 255;
+		*++hub= 255;
+		*++hub= 255;
+		*++hub= a;
+		*++hf =  1.0f + dx;
+		*++hf =  1.0f + dy;
+		*++hf = 0;
+		*++hf = 0;
+		*++hf = 1;
+		 ++hf;
+		hub = (unsigned char*)hf;
+		*  hub= 255;
+		*++hub= 255;
+		*++hub= 255;
+		*++hub= a;
+		*++hf = -1.0f + dx;
+		*++hf =  1.0f + dy;
+		*++hf = 0;
+		 ++hf;
+	}
+	buf.unmap();
+}
+
 void DeferRender::draw() const
 {
-	glAlphaFunc( GL_GREATER, 0.1 );
+	glAlphaFunc( GL_GREATER , 0.1 );
 	glEnable( GL_ALPHA_TEST );
+	glEnable( GL_DEPTH_TEST );
+	glDisable(GL_BLEND );
 
 	glEnableClientState( GL_VERTEX_ARRAY );
 	glEnableVertexAttribArray( radiusId );
@@ -367,12 +497,10 @@ void DeferRender::draw() const
 	prPlanet.use();
 	glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_1D, materialsTex );
 	glActiveTexture(GL_TEXTURE1); glBindTexture(GL_TEXTURE_2D, sphereTex    );
-//        glActiveTexture(GL_TEXTURE1); glBindTexture(GL_TEXTURE_2D, anglesTex    );
 	glActiveTexture(GL_TEXTURE2); glBindTexture(GL_TEXTURE_2D, normalsTex   );
 	glActiveTexture(GL_TEXTURE3); glBindTexture(GL_TEXTURE_2D_ARRAY, texturesTex );
 
-	glBindFramebuffer( GL_FRAMEBUFFER , fboId );
-
+	glBindFramebuffer( GL_FRAMEBUFFER , fboId[0] );
 	glDrawBuffers( gbuffNum , bufferlist );
 
 	glClearColor(0,0,0,0);
@@ -380,34 +508,26 @@ void DeferRender::draw() const
 
 	glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
 
+
 	Program::none();
 	glBindFramebuffer( GL_FRAMEBUFFER , 0 );
 	glDisableVertexAttribArray( radiusId );
 	glDisableVertexAttribArray( modelId  );
 	glDisableVertexAttribArray( texIdId  );
 
-//        glDisable(GL_DEPTH_TEST);
-
-	glClear( GL_DEPTH_BUFFER_BIT ); 
+	glDisable( GL_DEPTH_TEST );
+//        glClear( GL_DEPTH_BUFFER_BIT ); 
 
 	glActiveTexture(GL_TEXTURE0); glBindTexture( GL_TEXTURE_2D, gbuffTex[0] );
 	glActiveTexture(GL_TEXTURE1); glBindTexture( GL_TEXTURE_2D, gbuffTex[1] );
 	glActiveTexture(GL_TEXTURE2); glBindTexture( GL_TEXTURE_2D, gbuffTex[2] );
 	glActiveTexture(GL_TEXTURE3); glBindTexture( GL_TEXTURE_2D, gbuffTex[3] );
 
-	prLightsBase.use();
-	glBegin(GL_POINTS);
-	 glVertex3f(0,0,0);
-	glEnd();
-	Program::none();
-
 	glEnableVertexAttribArray( modelLId );
 	glEnableVertexAttribArray( emissiveLId );
 
 	glEnable( GL_BLEND );
 	glBlendFunc( GL_ONE , GL_ONE );
-//        glBlendFunc( GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA );
-//        glDisable( GL_DEPTH_TEST );
 
 	prLighting.use();
 
@@ -425,8 +545,23 @@ void DeferRender::draw() const
 	glVertexAttribPointer( emissiveLId , 1 , GL_FLOAT , GL_FALSE , 0 , NULL );
 	factory->getEmissive().unbind();
 
+	glBindFramebuffer( GL_FRAMEBUFFER , fboId[2] );
+	glDrawBuffer( GL_COLOR_ATTACHMENT0 );
+	glClearColor(0,0,0,0);
+	glClear(GL_COLOR_BUFFER_BIT);
+
 	if( flags & LIGHTING )
 		glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
+
+	glDisableVertexAttribArray( emissiveLId );
+	glDisableVertexAttribArray( modelLId  );
+
+	prLightsBase.use();
+	glBegin(GL_POINTS);
+	 glVertex3f(0,0,0);
+	glEnd();
+
+	glBindFramebuffer( GL_FRAMEBUFFER , 0 );
 
 	                                glBindTexture( GL_TEXTURE_1D , 0 );
 	glActiveTexture( GL_TEXTURE3 ); glBindTexture( GL_TEXTURE_2D , 0 );
@@ -435,12 +570,64 @@ void DeferRender::draw() const
 	glActiveTexture( GL_TEXTURE0 ); glBindTexture( GL_TEXTURE_2D , 0 );
 	Program::none();
 
-//        glEnable(GL_DEPTH_TEST);
-	glDisable( GL_BLEND );
-	glDisable( GL_ALPHA_TEST );
+////        glEnable(GL_TEXTURE_2D);
 
-	glDisableVertexAttribArray( emissiveLId );
-	glDisableVertexAttribArray( modelLId  );
+//        glBlendFunc( GL_SRC_ALPHA , GL_ONE );
+
+//        planes.bind();
+//        glInterleavedArrays( GL_T2F_C4UB_V3F , 0 , NULL );
+////        glVertexPointer  ( 2 , GL_FLOAT , sizeof(float)*2 , (const GLvoid*)0                 );
+////        glTexCoordPointer( 2 , GL_FLOAT , sizeof(float)*2 , (const GLvoid*)(sizeof(float)*2) );
+//        planes.unbind();
+
+//        glEnable(GL_TEXTURE_2D);
+//        tmptex->bind();
+
+//        glDrawArrays( GL_QUADS , 0 , (glow_size*2+1)*4 );
+
+//        Texture::unbind();
+
+	glBindFramebuffer( GL_READ_FRAMEBUFFER , fboId[2] );
+	glBlitFramebuffer(0,0,gfx->width(),gfx->height(),
+			  0,0,gfx->width(),gfx->height(),
+			  GL_COLOR_BUFFER_BIT,GL_NEAREST);
+	glBindFramebuffer( GL_READ_FRAMEBUFFER , 0 );
+
+	glBindFramebuffer( GL_READ_FRAMEBUFFER , fboId[0] );
+	glBlitFramebuffer(0,0,gfx->width(),gfx->height(),
+			  0,0,gfx->width(),gfx->height(),
+			  GL_DEPTH_BUFFER_BIT,GL_NEAREST);
+	glBindFramebuffer( GL_READ_FRAMEBUFFER , 0 );
+
+	glEnable( GL_DEPTH_TEST );
+//        glDisable( GL_DEPTH_TEST );
+	glBlendFunc( GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA );
+
+	glEnableVertexAttribArray( radiusAId );
+
+	factory->getPositions().bind();
+	glVertexPointer( 3 , GL_FLOAT , 0 , NULL );
+	factory->getPositions().unbind();
+
+	factory->getAtmospheres().bind();
+	glVertexAttribPointer( radiusAId , 1, GL_FLOAT, GL_FALSE, 0, NULL );
+	factory->getAtmospheres().unbind();
+
+	prAtmosphere.use();
+
+	glActiveTexture( GL_TEXTURE0 );
+	glBindTexture( GL_TEXTURE_2D , atmTex );
+
+	glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
+
+	glBindTexture( GL_TEXTURE_2D , 0 );
+
+	Program::none();
+
+	glDisableVertexAttribArray( radiusAId );
 	glDisableClientState( GL_VERTEX_ARRAY );
+
+	glDisable( GL_ALPHA_TEST );
+	glDisable( GL_DEPTH_TEST );
 }
 

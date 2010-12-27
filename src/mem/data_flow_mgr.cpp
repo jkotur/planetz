@@ -66,14 +66,16 @@ void DataFlowMgr::Impl::load( const std::string &path )
 void DataFlowMgr::Impl::updateBuffers(MISC::CpuPlanetHolder*p , MISC::Materials*m)
 {
 	if( !m ) {
-		log_printf(_WARNING,"There are no materials loaded\n");
+		log_printf(_ERROR,"There are no materials loaded\n");
 		for( unsigned i=0 ; i<p->size() ; i++ ) {
-			p->emissive[i] = 0; // no emissive
-			p->texId   [i] = 0; // dummy texture
+			p->emissive  [i] = 0; // no emissive
+			p->texId     [i] = 0; // dummy texture
+			p->atmosphere[i] = 0;
 		}
 	} else	for( unsigned i=0 ; i<p->size() ; i++ ) {
-			p->emissive[i] = (*m)[p->model[i]].ke;
-			p->texId   [i] = (*m)[p->model[i]].texture;
+			p->emissive  [i] = (*m)[p->model[i]].ke;
+			p->texId     [i] = (*m)[p->model[i]].texture;
+			p->atmosphere[i] = (*m)[p->model[i]].atmosphere;
 		}
 }
 
