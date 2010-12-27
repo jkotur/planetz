@@ -629,5 +629,6 @@ void DeferRender::draw() const
 
 	glDisable( GL_ALPHA_TEST );
 	glDisable( GL_DEPTH_TEST );
+	glDisable( GL_BLEND );
 }
 

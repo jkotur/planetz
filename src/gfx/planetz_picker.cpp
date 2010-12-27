@@ -111,6 +111,7 @@ void PlanetzPicker::render( int x , int y )
 
 	glAlphaFunc( GL_GREATER, 0.1 );
 	glEnable( GL_ALPHA_TEST );
+	glEnable( GL_DEPTH_TEST );
 
 //        glViewport( x-w/2 , y-h/2 , w , h );
 //        glViewport( 0,0 , w , h );
@@ -156,6 +157,8 @@ void PlanetzPicker::render( int x , int y )
 	glBindTexture( GL_TEXTURE_2D , sphereTex );
 
 	glDrawBuffer( GL_COLOR_ATTACHMENT0 );
+	glReadBuffer( GL_COLOR_ATTACHMENT0 );
+
 	glClearColor(.0,.0,.0,0);
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
@@ -179,6 +182,7 @@ void PlanetzPicker::render( int x , int y )
 	glPopMatrix();
 
 	glDisable( GL_ALPHA_TEST );
+	glDisable( GL_DEPTH_TEST );
 
 //        for( int i=0 ; i<w*h ; i++ )
 //                fprintf(stderr,"%.4f ",buffNames[i]);
