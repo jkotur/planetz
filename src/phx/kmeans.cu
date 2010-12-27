@@ -1,24 +1,20 @@
-#include "kmeans.h"
-#include "kmeans_kernel.cu"
-
-#include <cmath>
-#include <cstdio>
 #include <limits>
-
-#include <cuda_runtime_api.h>
-#include <cuda_gl_interop.h>
-
 #include <cudpp.h>
 
 #include "cuda/err.h"
+
+#include "kmeans.h"
+#include "kmeans_kernel.cu"
 //#define DEBUG
 
 using std::numeric_limits;
 using namespace MEM::MISC;
 using namespace PHX;
 
-Clusterer::Clusterer(BufferGl<float3> *positions)
+Clusterer::Clusterer(BufferGl<float3> *positions, BufferCu<float> *masses)
 	: m_pPositions( positions )
+	, m_pPlanetMasses( masses )
+	, m_prevSize( 0 )
 {
 }
 
@@ -30,32 +26,45 @@ void Clusterer::kmeans()
 {
 	initClusters();
 	float err = numeric_limits<float>::infinity(), prev_err;
+	unsigned iters = 0;
 	do
 	{
 		prev_err = err;
 		err = compute();
+		++iters;
 	}
-	while( abs(prev_err-err) > EPSILON * err );
+	while( abs(prev_err-err) >  1e-5 * err );
+}
+
+namespace
+{
+void massSelect( BufferCu<float3> *centers, BufferGl<float3> *planets, BufferCu<float> *masses )
+{
+	float3 *d_planets = planets->map( BUF_CU );
+	cudaMemcpy( centers->d_data(), d_planets, centers->getSize(), cudaMemcpyDeviceToDevice );
+	planets->unmap();
+
+	TODO("Wpisanie początkowych pozyji klastrów - k najcięższych planet");
+}
 }
 
 void Clusterer::initClusters()
 {
-	TODO("Mądre obliczanie k na podstawie n");
 	unsigned n = m_pPositions->getLen();
+	if( n == m_prevSize )
+	{
+		return;
+	}
+	m_prevSize = n;
+
+	TODO("Mądre obliczanie k na podstawie n");
 	unsigned k = min( 512, n / 1000 );
 	m_holder.resize( k, n );
 	m_errors.resize( n );
 	m_shuffle.resize( n );
 	m_counts.resize( k );
-	m_holder.centers.bind();
-	for( size_t i = 0; i < k; ++i )
-	{
-		m_holder.centers.h_data()[i] = make_float3( 100 * i, 200 * i, i );
-		float3 f = m_holder.centers.h_data()[i];
-		log_printf( DBG, "centers[%u] = %f, %f, %f\n", i,f.x,f.y,f.z );
-	}
-	m_holder.centers.unbind();
-	TODO("Wpisanie początkowych pozyji klastrów");
+	
+	massSelect( &m_holder.centers, m_pPositions, m_pPlanetMasses );
 }
 
 size_t Clusterer::getCount() const 
@@ -78,7 +87,7 @@ float Clusterer::compute()
 		m_holder.assignments.d_data(),
 		m_errors.d_data() );
 	CUT_CHECK_ERROR( "Kernel launch - find best" );
-
+	
 	kmeans__prepare_kernel<<< grid, block >>>( m_shuffle.d_data(), m_pPositions->getLen() );
 	CUT_CHECK_ERROR( "Kernel launch - prepare" );
 
@@ -134,4 +143,19 @@ void Clusterer::reduceMeans()
 		reduceSelective<512> <<< grid, block, mem >>>(m_pPositions->map( BUF_CU ), m_holder.centers.d_data(), m_counts.d_data(), i, m_shuffle.d_data());
 		CUT_CHECK_ERROR( "Kernel launch" );
 	}
+}
+
+MEM::MISC::BufferCu<unsigned>* Clusterer::getCounts()
+{
+	return &m_counts;
+}
+
+MEM::MISC::BufferCu<unsigned>* Clusterer::getShuffle()
+{
+	return &m_shuffle;
+}
+
+MEM::MISC::BufferCu<float3>* Clusterer::getCenters()
+{
+	return &m_holder.centers;
 }

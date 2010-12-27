@@ -14,7 +14,6 @@ include_directories( ${INCLUDE_DIRS} )
 
 add_subdirectory( phx )
 add_subdirectory( util )
-#add_subdirectory( ../src/phx ../src/phx )
 
 add_executable( tests test_main )
 

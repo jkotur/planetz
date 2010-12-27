@@ -3,6 +3,14 @@
 #include "buffer.h"
 #include <debug/routines.h>
 
+#define PRINT_OUT_BUF( buf, format ) \
+	{ \
+		(buf).bind(); \
+		for( unsigned i = 0; i < (buf).getLen(); ++i )\
+		{log_printf( DBG, #buf"[%u] = "format"\n", i, (buf).h_data()[i]);}\
+		(buf).unbind();\
+	}
+
 namespace MEM
 {
 namespace MISC
@@ -146,8 +154,11 @@ namespace MISC
 		ASSERT( !d_cuPtr );
 		this->length = num;
 		this->size = this->realsize = num * sizeof(T);
+		if( 0 == num )
+			return;
 		cudaMalloc((void**)&d_cuPtr, this->size );
 		DBGPUT( CUT_CHECK_ERROR( "malloc" ) );
+		ASSERT( d_cuPtr );
 	}
 
 	template<typename T>

@@ -4,7 +4,6 @@ set( INCLUDE_DIRS
 	.
 	${PROJECT_INCLUDE_DIR}
 	${CUDA_INCLUDE_DIRS}
-#	${CUDPP_INCLUDE_DIR}
 	${OPENGL_INCLUDE_DIR}
 	${SDL_INCLUDE_DIR}
 	${CEGUI_INCLUDE_DIR}
@@ -26,7 +25,6 @@ target_link_libraries( inz
 	dbg gfx mem phx ui util # project libs
 	cudpp cutil # third party libs
 	${CUDA_LIBRARIES}
-#	${CUDPP_LIBRARY}
 	${OPENGL_LIBRARY}
 	${SDL_LIBRARY}
 	${SDLIMAGE_LIBRARY}

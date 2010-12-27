@@ -100,20 +100,19 @@ template <unsigned int blockSize>
 __global__ void reduceSelective(float3 *g_idata, float3 *g_odata, unsigned *counts, unsigned id, unsigned* shuffle)
 {
 	extern __shared__ float3 s_data[];
-	float3 *sdata = s_data; // WTF!? inaczej nie działa - wyjebka kompilacji
 	unsigned int n = counts[id];
 	unsigned int tid = threadIdx.x;
 	unsigned int i = blockIdx.x*(blockSize*2) + tid + (id ? counts[id-1] : 0);
 	unsigned int gridSize = blockSize*gridDim.x;
-	sdata[tid] = make_float3(0,0,0);
+	s_data[tid] = make_float3(0,0,0);
 	while (i < n)
 	{
-		sdata[tid] += g_idata[ shuffle[i] ];
+		s_data[tid] += g_idata[ shuffle[i] ];
 		i += gridSize;
 	}
 	__syncthreads();
-	reduce<float3, blockSize>(g_idata, n, tid, i, sdata);
-	if (tid == 0) g_odata[id] = sdata[0] / (n - (id ? counts[id-1] : 0));
+	reduce<float3, blockSize>(g_idata, n, tid, i, s_data);
+	if (tid == 0) g_odata[id] = s_data[0] / (n - (id ? counts[id-1] : 0));
 }
 
 template <class T, unsigned int blockSize>

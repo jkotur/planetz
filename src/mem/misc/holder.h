@@ -81,6 +81,29 @@ namespace MISC
 	typedef PlanetHolderBase< BufferCu, BufferGl > PlanetHolder;
 	typedef PlanetHolderBase< BufferCpu, BufferCpu > CpuPlanetHolder;
 
+	class ClusterHolder // taki tam class - w sumie zjebana enkapsulacja w tych holderach, skoro każdy i tak trzyma buffer jako public membera
+	{
+		public:
+			ClusterHolder();
+			virtual ~ClusterHolder();
+
+			// środki klastrów
+			BufferCu<float3>    centers;
+
+			// sumaryczne masy w klastrze
+			BufferCu<float>     masses;
+
+			// przyporządkowania planet do klastrów
+			// planeta i należy do klastra j <=> assignments[i] = j
+			BufferCu<unsigned>  assignments;
+
+			void resize(size_t k_size, size_t n_size);
+			size_t k_size() const;
+
+		private:
+			size_t m_size;
+	};
+
 	struct PointsCloudHolder
 	{
 		BufferCu<float>    phx_dt;

@@ -1,4 +1,5 @@
 #include <sstream>
+#include <cmath>
 #include "planet_printer.h"
 #include "gfx/planetz_picker.h"
 #include "mem/misc/phx_planet_factory.h"
@@ -29,6 +30,7 @@ void PlanetPrinter::print( int id )
 	ss << "Radius: " << p.getRadius() << std::endl;
 	ss << "Mass: " << p.getMass() << std::endl;
 	float3 v = p.getVelocity();
-	ss << "Velocity: [" << v.x << ", " << v.y << ", " << v.z << "]\n";
+	float vlen = sqrt( v.x * v.x + v.y * v.y + v.z * v.z );
+	ss << "Velocity: [" << v.x << ", " << v.y << ", " << v.z << "] " << vlen << "\n";
 	log_printf(INFO, ss.str().c_str());
 }
