@@ -350,6 +350,7 @@ bool PlanetzLayout::load( const CEGUI::EventArgs& e )
 
 bool PlanetzLayout::qload( const CEGUI::EventArgs& e )
 {
+	GETWIN("btnPause")->setText("Start");
 	on_load( SAVES(qsave_name) );
 	return true;
 }
