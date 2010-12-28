@@ -40,9 +40,9 @@ namespace
 {
 void massSelect( BufferCu<float3> *centers, BufferGl<float3> *planets, BufferCu<float> *masses )
 {
-	float3 *d_planets = planets->map( BUF_CU );
-	cudaMemcpy( centers->d_data(), d_planets, centers->getSize(), cudaMemcpyDeviceToDevice );
-	planets->unmap();
+//	float3 *d_planets = planets->map( BUF_CU );
+//	cudaMemcpy( centers->d_data(), d_planets, centers->getSize(), cudaMemcpyDeviceToDevice );
+//	planets->unmap();
 
 	TODO("Wpisanie początkowych pozyji klastrów - k najcięższych planet");
 }
@@ -57,8 +57,9 @@ void Clusterer::initClusters()
 	}
 	m_prevSize = n;
 
+	ASSERT( n );
 	TODO("Mądre obliczanie k na podstawie n");
-	unsigned k = min( 512, n / 1000 );
+	unsigned k = min( 512, 1 + n / 1000 );
 	m_holder.resize( k, n );
 	m_errors.resize( n );
 	m_shuffle.resize( n );
@@ -91,6 +92,7 @@ float Clusterer::compute()
 	kmeans__prepare_kernel<<< grid, block >>>( m_shuffle.d_data(), m_pPositions->getLen() );
 	CUT_CHECK_ERROR( "Kernel launch - prepare" );
 
+	return 0;
 	sortByCluster();
 
 	kmeans__count_kernel<<< grid, block >>>( m_holder.assignments.d_data() , m_counts.d_data(), m_pPositions->getLen() - 1, k );
@@ -108,7 +110,7 @@ void Clusterer::sortByCluster()
 	cfg.options = CUDPP_OPTION_KEY_VALUE_PAIRS;
 	cfg.op = CUDPP_MIN;
 
-	CUDPPHandle sortplan = 0;
+	CUDPPHandle sortplan;
 	CUDPPResult result = cudppPlan(&sortplan, cfg, m_holder.assignments.getLen(), 1, 0);
 	ASSERT( result == CUDPP_SUCCESS );
 	if (result != CUDPP_SUCCESS)
@@ -118,6 +120,11 @@ void Clusterer::sortByCluster()
 	}
 
 	/// 9 bitów - magiczna stała wynika z faktu, że w tej chwili może i tak istnieć najwyżej 512 klastrów, co oznacza, że numer klastra mieści się w 9 bitach.
+	ASSERT( m_holder.assignments.getLen() == m_shuffle.getLen() );
+	ASSERT( m_holder.assignments.getSize() == m_shuffle.getSize() );
+	ASSERT( m_shuffle.getSize() == sizeof(unsigned int) * m_shuffle.getLen() );
+	ASSERT( sizeof(unsigned int) == 4 );
+	log_printf(DBG, "getLen() = %u\n", m_holder.assignments.getLen() );
 	cudppSort( sortplan, m_holder.assignments.d_data(), m_shuffle.d_data(), 9, m_holder.assignments.getLen() );
 	
 	cudppDestroyPlan(sortplan);
