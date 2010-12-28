@@ -68,60 +68,72 @@ void DeferRender::prepare()
 			DATA("shaders/deffered_04.geom")),
 		GL_POINTS , GL_QUAD_STRIP );
 
-	sphereTexId    = glGetUniformLocation( prPlanet.id() , "sph_pos"   );
-	materialsTexId = glGetUniformLocation( prPlanet.id() , "materialsTex" );
+	prPostAtm.create(
+		gfx->shmMgr.loadShader(GL_VERTEX_SHADER  ,
+			DATA("shaders/deffered_03.vert")),
+		gfx->shmMgr.loadShader(GL_FRAGMENT_SHADER,
+			DATA("shaders/deffered_05.frag")),
+		gfx->shmMgr.loadShader(GL_GEOMETRY_SHADER,
+			DATA("shaders/deffered_03.geom")),
+		GL_POINTS , GL_QUAD_STRIP );
 
-	normalsTexId   = glGetUniformLocation( prPlanet.id() , "normalsTex");
+	sphereTexId    = glGetUniformLocation( prPlanet.id() , "sph_pos"    );
+	materialsTexId = glGetUniformLocation( prPlanet.id() , "materialsTex");
+	normalsTexId   = glGetUniformLocation( prPlanet.id() , "normalsTex" );
 	textureTexId   = glGetUniformLocation( prPlanet.id() , "texturesTex");
+	anglesId       = glGetUniformLocation( prPlanet.id() , "angles"     );
+	radiusId       = glGetAttribLocation ( prPlanet.id() , "radius"     );
+	modelId        = glGetAttribLocation ( prPlanet.id() , "model"      );
+	texIdId        = glGetAttribLocation ( prPlanet.id() , "texId"      );
+	atmRadiusId    = glGetAttribLocation ( prPlanet.id() , "atmRadius"  );
 
-	anglesId       = glGetUniformLocation( prPlanet.id() , "angles"    );
-                                                                          
-	radiusId       = glGetAttribLocation ( prPlanet.id() , "radius"    );
-	modelId        = glGetAttribLocation ( prPlanet.id() , "model"     );
-	texIdId        = glGetAttribLocation ( prPlanet.id() , "texId"     );
-	atmRadiusId    = glGetAttribLocation ( prPlanet.id() , "atmRadius" );
+	gbuffId[0]     = glGetUniformLocation( prLighting.id() , "gbuff1"   );
+	gbuffId[1]     = glGetUniformLocation( prLighting.id() , "gbuff2"   );
+	gbuffId[2]     = glGetUniformLocation( prLighting.id() , "gbuff3"   );
+	gbuffId[3]     = glGetUniformLocation( prLighting.id() , "gbuff4"   );
+	matLId         = glGetUniformLocation( prLighting.id() , "materials");
+	ifplanesId     = glGetUniformLocation( prLighting.id() , "planes"   );
+	modelLId       = glGetAttribLocation ( prLighting.id() , "model"    );
+	emissiveLId    = glGetAttribLocation ( prLighting.id() , "emissive" );
+                       
+	gbuffId[4]     = glGetUniformLocation( prLightsBase.id() , "gbuff1" );
+	gbuffId[5]     = glGetUniformLocation( prLightsBase.id() , "gbuff2" );
+	gbuffId[6]     = glGetUniformLocation( prLightsBase.id() , "gbuff3" );
+	gbuffId[7]     = glGetUniformLocation( prLightsBase.id() , "gbuff4" );
+                       
+	atmId          = glGetUniformLocation( prAtmosphere.id() , "texture");
+	radiusAId      = glGetAttribLocation ( prAtmosphere.id() , "radius" );
 
-	log_printf(DBG,"%d\n",atmRadiusId);
+	gbuffId[8 ]    = glGetUniformLocation( prPostAtm.id() , "gbuff1"    );
+	gbuffId[9 ]    = glGetUniformLocation( prPostAtm.id() , "gbuff2"    );
+	gbuffId[10]    = glGetUniformLocation( prPostAtm.id() , "gbuff3"    );
+	atmMaterialsId = glGetUniformLocation( prPostAtm.id() , "materials" );
+	atmModelId     = glGetAttribLocation ( prPostAtm.id() , "model"     );
+	atmEmissiveId  = glGetAttribLocation ( prPostAtm.id() , "emissive"  );
 
 	prPlanet.use();
 	glUniform1i( materialsTexId , 0 );
 	glUniform1i( sphereTexId    , 1 );
 	glUniform1i( normalsTexId   , 2 );
 	glUniform1i( textureTexId   , 3 );
-	Program::none();
-
-	gbuffId[0] = glGetUniformLocation( prLighting.id() , "gbuff1"   );
-	gbuffId[1] = glGetUniformLocation( prLighting.id() , "gbuff2"   );
-	gbuffId[2] = glGetUniformLocation( prLighting.id() , "gbuff3"   );
-	gbuffId[3] = glGetUniformLocation( prLighting.id() , "gbuff4"   );
-	matLId     = glGetUniformLocation( prLighting.id() , "materials");
-
-	ifplanesId = glGetUniformLocation( prLighting.id() , "planes"   );
-
-	modelLId   = glGetAttribLocation( prLighting.id()  , "model"    );
-	emissiveLId= glGetAttribLocation( prLighting.id()  , "emissive" );
-
-	gbuffId[4] = glGetUniformLocation( prLightsBase.id() , "gbuff1" );
-	gbuffId[5] = glGetUniformLocation( prLightsBase.id() , "gbuff2" );
-	gbuffId[6] = glGetUniformLocation( prLightsBase.id() , "gbuff3" );
-	gbuffId[7] = glGetUniformLocation( prLightsBase.id() , "gbuff4" );
-
-	atmId      = glGetUniformLocation( prAtmosphere.id() , "texture");
-	radiusAId  = glGetAttribLocation ( prAtmosphere.id() , "radius" );
-
 	prLighting.use();
-	glUniform1i( gbuffId[0] , 0 );
-	glUniform1i( gbuffId[1] , 1 );
-	glUniform1i( gbuffId[2] , 2 );
-	glUniform1i( gbuffId[3] , 3 );
-	glUniform1i( matLId     , 4 );
-	prLightsBase.use();
-	glUniform1i( gbuffId[4] , 0 );
-	glUniform1i( gbuffId[5] , 1 );
-	glUniform1i( gbuffId[6] , 2 );
-	glUniform1i( gbuffId[7] , 3 );
+	glUniform1i( gbuffId[0]     , 0 );
+	glUniform1i( gbuffId[1]     , 1 );
+	glUniform1i( gbuffId[2]     , 2 );
+	glUniform1i( gbuffId[3]     , 3 );
+	glUniform1i( matLId         , 4 );
+	prLightsBase.use();         
+	glUniform1i( gbuffId[4]     , 0 );
+	glUniform1i( gbuffId[5]     , 1 );
+	glUniform1i( gbuffId[6]     , 2 );
+	glUniform1i( gbuffId[7]     , 3 );
 	prAtmosphere.use();
-	glUniform1i( atmId      , 0 );
+	glUniform1i( atmId          , 0 );
+	prPostAtm.use();
+	glUniform1i( gbuffId[8]     , 0 );
+	glUniform1i( gbuffId[9]     , 1 );
+	glUniform1i( gbuffId[10]    , 2 );
+	glUniform1i( atmMaterialsId , 3 );
 	Program::none();
 
 	create_textures( gfx->width() , gfx->height() );
@@ -130,7 +142,7 @@ void DeferRender::prepare()
 	ifnormalsId    = glGetUniformLocation( prPlanet.id() , "ifnormals"   );
 	brightness     = glGetUniformLocation( prLightsBase.id(), "brightness");
 
-	tmptex = gfx->texMgr.loadTexture( DATA("glow_test.png") );
+//        tmptex = gfx->texMgr.loadTexture( DATA("glow_test.png") );
 }
 
 void DeferRender::resize( unsigned int width , unsigned int height )
@@ -287,10 +299,13 @@ GLuint DeferRender::generate_atmosphere_texture( int w , int h )
 
 			int i = wi + hi*w4;
 
-			sphere[ i     ] = .3;
-			sphere[ i + 1 ] = .4;
-			sphere[ i + 2 ] = 1.;
-			sphere[ i + 3 ] = xxyy <= .88 ? 0 : z >= 0.3 ? 0.3 : z;
+			x /= sqrt( xxyy );
+			y /= sqrt( xxyy );
+
+			sphere[ i     ] = x;
+			sphere[ i + 1 ] = y;
+			sphere[ i + 2 ] = 0;
+			sphere[ i + 3 ] = z;
 		}
 
 	GLuint texId;
@@ -471,6 +486,7 @@ void DeferRender::generate_glow_planes( MEM::MISC::BufferGl<float>& buf , int nu
 
 void DeferRender::draw() const
 {
+	glClearColor(0,0,0,0);
 	glAlphaFunc( GL_GREATER , 0.1 );
 	glEnable( GL_ALPHA_TEST );
 	glEnable( GL_DEPTH_TEST );
@@ -511,19 +527,21 @@ void DeferRender::draw() const
 	glBindFramebuffer( GL_FRAMEBUFFER , fboId[0] );
 	glDrawBuffers( gbuffNum , bufferlist );
 
-	glClearColor(0,0,0,0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
 
-	Program::none();
 	glBindFramebuffer( GL_FRAMEBUFFER , 0 );
+	Program::none();
 	glDisableVertexAttribArray( radiusId );
 	glDisableVertexAttribArray( modelId  );
 	glDisableVertexAttribArray( texIdId  );
 	glDisableVertexAttribArray( atmRadiusId );
 
 	glDisable( GL_DEPTH_TEST );
+	glEnable( GL_BLEND );
+	glBlendFunc( GL_ONE , GL_ONE );
+
 //        glClear( GL_DEPTH_BUFFER_BIT ); 
 
 	glActiveTexture(GL_TEXTURE0); glBindTexture( GL_TEXTURE_2D, gbuffTex[0] );
@@ -533,9 +551,6 @@ void DeferRender::draw() const
 
 	glEnableVertexAttribArray( modelLId );
 	glEnableVertexAttribArray( emissiveLId );
-
-	glEnable( GL_BLEND );
-	glBlendFunc( GL_ONE , GL_ONE );
 
 	prLighting.use();
 
@@ -553,9 +568,8 @@ void DeferRender::draw() const
 	glVertexAttribPointer( emissiveLId , 1 , GL_FLOAT , GL_FALSE , 0 , NULL );
 	factory->getEmissive().unbind();
 
-	glBindFramebuffer( GL_FRAMEBUFFER , fboId[2] );
+//        glBindFramebuffer( GL_FRAMEBUFFER , fboId[2] );
 	glDrawBuffer( GL_COLOR_ATTACHMENT0 );
-	glClearColor(0,0,0,0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	if( flags & LIGHTING )
@@ -569,7 +583,7 @@ void DeferRender::draw() const
 	 glVertex3f(0,0,0);
 	glEnd();
 
-	glBindFramebuffer( GL_FRAMEBUFFER , 0 );
+//        glBindFramebuffer( GL_FRAMEBUFFER , 0 );
 
 	                                glBindTexture( GL_TEXTURE_1D , 0 );
 	glActiveTexture( GL_TEXTURE3 ); glBindTexture( GL_TEXTURE_2D , 0 );
@@ -595,21 +609,16 @@ void DeferRender::draw() const
 
 //        Texture::unbind();
 
-	glBindFramebuffer( GL_READ_FRAMEBUFFER , fboId[2] );
-	glBlitFramebuffer(0,0,gfx->width(),gfx->height(),
-			  0,0,gfx->width(),gfx->height(),
-			  GL_COLOR_BUFFER_BIT,GL_NEAREST);
-	glBindFramebuffer( GL_READ_FRAMEBUFFER , 0 );
-
-	glBindFramebuffer( GL_READ_FRAMEBUFFER , fboId[0] );
-	glBlitFramebuffer(0,0,gfx->width(),gfx->height(),
-			  0,0,gfx->width(),gfx->height(),
-			  GL_DEPTH_BUFFER_BIT,GL_NEAREST);
-	glBindFramebuffer( GL_READ_FRAMEBUFFER , 0 );
+//        glBindFramebuffer( GL_READ_FRAMEBUFFER , fboId[2] );
+//        glBlitFramebuffer(0,0,gfx->width(),gfx->height(),
+//                          0,0,gfx->width(),gfx->height(),
+//                          GL_COLOR_BUFFER_BIT,GL_NEAREST);
+//        glBindFramebuffer( GL_READ_FRAMEBUFFER , 0 );
 
 	glEnable( GL_DEPTH_TEST );
+	glDisable( GL_BLEND );
 //        glDisable( GL_DEPTH_TEST );
-	glBlendFunc( GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA );
+//        glBlendFunc( GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA );
 
 	glEnableVertexAttribArray( radiusAId );
 
@@ -626,13 +635,60 @@ void DeferRender::draw() const
 	glActiveTexture( GL_TEXTURE0 );
 	glBindTexture( GL_TEXTURE_2D , atmTex );
 
+	glBindFramebuffer( GL_FRAMEBUFFER , fboId[0] );
+	glDrawBuffers( 3 , bufferlist );
+
+	glClear( GL_COLOR_BUFFER_BIT );
+
 	glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
+
+	glBindFramebuffer( GL_FRAMEBUFFER , 0 );
 
 	glBindTexture( GL_TEXTURE_2D , 0 );
 
 	Program::none();
 
 	glDisableVertexAttribArray( radiusAId );
+
+	glDisable( GL_DEPTH_TEST );
+	glEnable( GL_BLEND );
+	glBlendFunc( GL_ONE , GL_ONE );
+
+	glActiveTexture(GL_TEXTURE0); glBindTexture( GL_TEXTURE_2D, gbuffTex[0] );
+	glActiveTexture(GL_TEXTURE1); glBindTexture( GL_TEXTURE_2D, gbuffTex[1] );
+	glActiveTexture(GL_TEXTURE2); glBindTexture( GL_TEXTURE_2D, gbuffTex[2] );
+	glActiveTexture(GL_TEXTURE3); glBindTexture( GL_TEXTURE_1D, materialsTex);
+
+	glEnableVertexAttribArray( atmModelId );
+	glEnableVertexAttribArray( atmEmissiveId );
+
+	prPostAtm.use();
+
+	factory->getPositions().bind();
+	glVertexPointer( 3 , GL_FLOAT , 0 , NULL );
+	factory->getPositions().unbind();
+
+	factory->getModels().bind();
+	glVertexAttribIPointer( atmModelId  , 1, GL_INT , 0, NULL );
+	factory->getModels().unbind();
+
+	factory->getEmissive().bind();
+	glVertexAttribPointer( atmEmissiveId , 1 , GL_FLOAT , GL_FALSE , 0 , NULL );
+	factory->getEmissive().unbind();
+
+//        if( flags & ATMOSPHERE )
+		glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
+
+	Program::none();
+
+	                                glBindTexture( GL_TEXTURE_1D , 0 );
+	glActiveTexture( GL_TEXTURE2 ); glBindTexture( GL_TEXTURE_2D , 0 );
+	glActiveTexture( GL_TEXTURE1 ); glBindTexture( GL_TEXTURE_2D , 0 );
+	glActiveTexture( GL_TEXTURE0 ); glBindTexture( GL_TEXTURE_2D , 0 );
+
+	glDisableVertexAttribArray( atmModelId );
+	glDisableVertexAttribArray( atmEmissiveId );
+
 	glDisableClientState( GL_VERTEX_ARRAY );
 
 	glDisable( GL_ALPHA_TEST );

@@ -31,8 +31,6 @@ void main()
 	vec4 gdat3 = texture2D( gbuff3 , gl_TexCoord[0].st );
 	vec4 gdat4 = texture2D( gbuff4 , gl_TexCoord[0].st );
 
-	if( gdat3.a > .0 ) gdat3.rgb += vec3( .3 , .4 , 1. ) * .3;
-
 	vec3 viewDir =-normalize(gdat1.xyz);
 
 	vec3 lightDir = lightPos - gdat1.xyz; // lightpos - pos
@@ -43,9 +41,14 @@ void main()
 	dist /= ke;
         lightDir = normalize(lightDir);
 
-	float i = clamp(dot(lightDir, gdat2.xyz) , 0.0 , 1.0 ); 
+	float i = dot(lightDir, gdat2.xyz);
 
-	vec3 fd = gdat3.rgb * i / dist;
+	vec3 fd = gdat3.rgb * clamp( i , 0.0 , 1.0 ) / dist;
+
+	vec3 atm= vec3(0);
+
+	if( gdat3.a > .0 )
+		atm = vec3( .3 , .4 , 1. ) * .3 * clamp( i + .6 , 0.0 , 1.0 ) / dist;
 
         vec3 h = normalize(lightDir + viewDir);
 
@@ -53,6 +56,8 @@ void main()
 
         vec3 fs = gdat3.rgb * i / dist;
 
-	gl_FragColor.rgb = (fd * gdat4.z + fs * gdat4.w) * lightColor;
+	gl_FragColor.rgb = ((fd + atm) * gdat4.z + fs * gdat4.w) * lightColor;
+
+
 }
 

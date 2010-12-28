@@ -41,7 +41,7 @@ private:
 	//
 	// Shaders
 	//
-	Program prPlanet , prLighting , prLightsBase , prAtmosphere;
+	Program prPlanet , prLighting , prLightsBase , prAtmosphere , prPostAtm;
 
 	//
 	// Vertex data
@@ -78,9 +78,9 @@ private:
 
 	static const GLsizei gbuffNum = 4;
 
-	GLint  gbuffId   [gbuffNum*2];
-	GLuint gbuffTex  [gbuffNum  ];
-	GLenum bufferlist[gbuffNum  ];
+	GLint  gbuffId   [gbuffNum*2+3];
+	GLuint gbuffTex  [gbuffNum    ];
+	GLenum bufferlist[gbuffNum    ];
 
 	GLuint screenTex;
 
@@ -111,6 +111,10 @@ private:
 	GLint atmRadiusId;
 	GLint radiusAId;
 	GLuint atmTex;
+
+	GLint atmMaterialsId;
+	GLint atmModelId;
+	GLint atmEmissiveId;
 
 	//
 	// Glow

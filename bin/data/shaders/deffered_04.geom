@@ -3,16 +3,23 @@
 
 in float radiuses[];
 
+out vec3 pos;
+out mat3 nrot;
+out float radius;
+
 mat3 faceme( vec3 pos );
 
 void main()
 {
 	if( radiuses[0] <= 0.0f ) return;
 
-	mat3 nrot = faceme( gl_PositionIn[0].xyz );
+	pos    = gl_PositionIn[0].xyz;
+	radius = radiuses[0];
 
-	vec4 u = vec4( nrot * vec3(0,radiuses[0],0) , 0 );
-	vec4 r = vec4( nrot * vec3(radiuses[0],0,0) , 0 );
+	nrot = faceme( pos );
+
+	vec4 u = vec4( nrot * vec3(0,radius,0) , 0 );
+	vec4 r = vec4( nrot * vec3(radius,0,0) , 0 );
 
 	// upper right
 	gl_Position    = gl_PositionIn[0] + u + r;
