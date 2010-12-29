@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include "util/logger.h"
+#include "debug/routines.h"
 
 #define CUT_CHECK_ERROR(errorMessage) do {                                \
 	cudaThreadSynchronize();                                          \
@@ -13,7 +14,7 @@
 			"Cuda error: %s in file '%s' in line %i : %s.\n", \
 			errorMessage, __FILE__, __LINE__,                 \
 			cudaGetErrorString( err ) );                      \
-		exit(EXIT_FAILURE);                                       \
+		NOENTRY();                                                \
 	} } while (0)
 
 #endif /* __CUDA_UTIL_H__ */

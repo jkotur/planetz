@@ -7,10 +7,11 @@
 #ifndef _RELEASE
 #include "../util/logger.h"
 #include <assert.h>
+#include <stdlib.h>
 #define ASSERT(x) assert(x)
 #define ASSERT_MSG_2(...) log_printf(__VA_ARGS__);
 #define ASSERT_MSG(x, form , ... ) do{if(!(x)){ASSERT_MSG_2(_ERROR,"[ASSERT]" WHERESTR form "\n" , WHEREARG , ##__VA_ARGS__ ); assert(x);}}while(0);
-#define NOENTRY() assert(false)
+#define NOENTRY() do{log_printf(_ERROR, "This line should never be reached: '%s:%d'\n", __FILE__,__LINE__); abort();}while(0);
 #define TODO(x) log_printf(_WARNING, "[TODO]" WHERESTR " %s\n", WHEREARG , x);
 #define DBGPUT(x) x
 #define RELPUT(x)
