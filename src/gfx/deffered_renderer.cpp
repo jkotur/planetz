@@ -710,11 +710,11 @@ void DeferRender::draw() const
 
 //        glClear( GL_DEPTH_BUFFER_BIT );
 
-//        glBindFramebuffer( GL_READ_FRAMEBUFFER , fboId[0] );
-//        glBlitFramebuffer(0,0,gfx->width(),gfx->height(),
-//                          0,0,gfx->width(),gfx->height(),
-//                          GL_DEPTH_BUFFER_BIT,GL_NEAREST);
-//        glBindFramebuffer( GL_READ_FRAMEBUFFER , 0 );
+	glBindFramebuffer( GL_READ_FRAMEBUFFER , fboId[0] );
+	glBlitFramebuffer(0,0,gfx->width(),gfx->height(),
+			  0,0,gfx->width(),gfx->height(),
+			  GL_DEPTH_BUFFER_BIT,GL_NEAREST);
+	glBindFramebuffer( GL_READ_FRAMEBUFFER , 0 );
 
 	glDisable( GL_DEPTH_TEST );
 }

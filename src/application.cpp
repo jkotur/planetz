@@ -22,7 +22,7 @@ Application::Application( Window& win , Config& cfg )
 	, phx( data_mgr.getPhxMem() )
 	, camera( CAM_START_VECS )
 	, plz( data_mgr.getGfxMem() )
-	, trace( *data_mgr.getGfxMem() , 100 )
+	, trace( *data_mgr.getGfxMem() , cfg.get<unsigned>( "trace.length" ) )
 	, bkg( 0.8 , win.getW() , win.getH() )
 	, picker( data_mgr.getGfxMem(), 3, 3 , win.getW() , win.getH() )
 	, pprnt( data_mgr.getPhxMem(), &picker )
@@ -114,6 +114,7 @@ bool Application::init()
 	pl->on_save.connect( bind(&MEM::DataFlowMgr::save,&data_mgr,_1) );
 	pl->on_load.connect( bind(&MEM::DataFlowMgr::load,&data_mgr,_1) );
 	pl->on_load.connect( bind(&Application::pause_anim,this) );
+	pl->on_load.connect( bind(&GFX::PlanetsTracer::clear,&trace) );
 	pl->on_config_changed.connect(bind(&GFX::Gfx::update_configuration,&gfx,_1));
 	//pl->on_planet_add.connect( bind(&Planetz::add,&planetz,_1) );
 	//pl->on_planet_delete.connect( bind(&Planetz::erase,&planetz,_1) );
@@ -125,7 +126,9 @@ bool Application::init()
 //        gfx.add( &bkg    , 0 );
 	gfx.add( &camera , 1 );
 	gfx.add( &plz    , 2 );
-	gfx.add( &trace  , 3 );
+	log_printf(DBG,"%d\n",config.get<unsigned>( "trace.length" ) );
+	if( config.get<bool>( "trace.enable" ) )
+		gfx.add( &trace  , 3 );
 #ifndef _NOGUI
 	gfx.add( &ui     , 9 );
 #endif
@@ -145,7 +148,7 @@ void Application::main_loop()
 {
 	bool running = true;
 
-	Timer::Caller tc=timer.call(bind(&GFX::PlanetsTracer::update,&trace) , 0.1 , true);
+	Timer::Caller tc=timer.call(bind(&GFX::PlanetsTracer::update,&trace) , config.get<double>("trace.frequency") , true);
 
 	log_printf(DBG,"Starting main loop\n");
 	do

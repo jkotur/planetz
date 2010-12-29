@@ -13,7 +13,7 @@ class PlanetsTracer : public Drawable {
 	public:
 		PlanetsTracer ( const MEM::MISC::GfxPlanetFactory& gpf
 				, unsigned num = 10 , double freq = 1.0 )
-			: gpf(gpf) , number(num) , oldest(0)
+			: gpf(gpf) , number(num) , oldest(0) , begin(0)
 		{
 		}
 
@@ -27,13 +27,16 @@ class PlanetsTracer : public Drawable {
 		}
 
 		void update();
+		virtual void update_configuration();
 		virtual void draw() const;
+		void clear();
 	private:
 		const MEM::MISC::GfxPlanetFactory& gpf;
 
 		MEM::MISC::BufferGl<float3> positions;
 		unsigned number;
 		unsigned oldest;
+		unsigned begin;
 };
 
 } // GFX

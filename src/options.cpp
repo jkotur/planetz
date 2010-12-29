@@ -32,6 +32,12 @@ Options::Options()
 		 "normalne")
 		("deffered.brightness", po::value<float>(),
 		 "jasność światła otoczenia")
+		("trace.enable", po::value<bool>(),
+		 "włączenie lub wyłączenie śladu")
+		("trace.frequency", po::value<double>(),
+		 "częstotliwość stawiania śladu (w sekundach)")
+		("trace.length", po::value<unsigned>(),
+		 "ilość śladów które zostawia planeta")
 		;
 }
 
@@ -89,6 +95,10 @@ const Config& Options::getCfg()
 	vmtocfg<bool>        ( cfg , vm , "deffered.lighting"   );
 	vmtocfg<bool>        ( cfg , vm , "deffered.normals"   );
 	vmtocfg<float>       ( cfg , vm , "deffered.brightness"   );
+
+	vmtocfg<bool>        ( cfg , vm , "trace.enable"    );
+	vmtocfg<double>      ( cfg , vm , "trace.frequency" );
+	vmtocfg<unsigned>    ( cfg , vm , "trace.length"    );
 
 	converted = true;
 	return cfg;
