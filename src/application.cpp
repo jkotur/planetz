@@ -6,10 +6,6 @@
 
 #include <boost/bind.hpp>
 
-#ifndef _RELEASE
-#include "gfx/arrow.h"
-#endif
-
 #include "util/vector.h"
 #include "util/timer/timer.h"
 #include "util/logger.h"
@@ -26,6 +22,7 @@ Application::Application( Window& win , Config& cfg )
 	, phx( data_mgr.getPhxMem() )
 	, camera( CAM_START_VECS )
 	, plz( data_mgr.getGfxMem() )
+	, trace( *data_mgr.getGfxMem() , 100 )
 	, bkg( 0.8 , win.getW() , win.getH() )
 	, picker( data_mgr.getGfxMem(), 3, 3 , win.getW() , win.getH() )
 	, pprnt( data_mgr.getPhxMem(), &picker )
@@ -128,6 +125,7 @@ bool Application::init()
 //        gfx.add( &bkg    , 0 );
 	gfx.add( &camera , 1 );
 	gfx.add( &plz    , 2 );
+	gfx.add( &trace  , 3 );
 #ifndef _NOGUI
 	gfx.add( &ui     , 9 );
 #endif
@@ -135,15 +133,6 @@ bool Application::init()
 	gfx.update_configuration( config );
 
 	camera.init();
-
-#ifndef _RELEASE
-	ox = new GFX::Arrow(Vector3(1,0,0));
-	oy = new GFX::Arrow(Vector3(0,1,0));
-	oz = new GFX::Arrow(Vector3(0,0,1));
-	gfx.add(  ox      );
-	gfx.add(  oy      );
-	gfx.add(  oz      );
-#endif
 
 //        bkg.set_img(DATA("text.tga"));
 
@@ -156,6 +145,8 @@ void Application::main_loop()
 {
 	bool running = true;
 
+	Timer::Caller tc=timer.call(bind(&GFX::PlanetsTracer::update,&trace) , 0.1 , true);
+
 	log_printf(DBG,"Starting main loop\n");
 	do
 	{
@@ -167,10 +158,11 @@ void Application::main_loop()
 
 		if( !anim_pause )
 		{
+			tc.unblock();
 			//Timer t;
 			phx.compute(10);
 			//log_printf(DBG, "Kernel running time: %.2fms\n", timer.get_dt_ms());
-		}
+		} else	tc.block();
 		gfx.render();
 
 		(running && (running &= ui.event_handle() ));
@@ -179,17 +171,13 @@ void Application::main_loop()
 	}
 	while( running );
 
+	tc.die();
+
 	timer.stop();
 }
 
 Application::~Application()
 {
-#ifndef _RELEASE
-	delete ox;
-	delete oy;
-	delete oz;
-#endif
-
 	log_printf(INFO,"Program is shutting down. It was running %lf seconds\n",timer.get());
 	log_printf(DBG,"kthxbye\n");
 	log_del(f_log);

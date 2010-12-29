@@ -5,9 +5,9 @@
  *  buffers   |          values 
  * -----------+--------+--------+--------+----------
  *  FragData0 | pos.x  | pos.y  | pos.z  | alpha
- *  FragData1 | norm.x | norm.y | norm.z | material
- *  FragData2 | col.x  | col.y  | col.b  | atmRadius
- *  FragData3 | ke     | ka     | kd     | ks
+ *  FragData1 | norm.x | norm.y | norm.z | acol.r
+ *  FragData2 | col.x  | col.y  | col.b  | acol.g
+ *  FragData3 | ke     | ka     | kd     | acol.b
  */
 
 /**

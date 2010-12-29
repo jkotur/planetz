@@ -7,8 +7,8 @@
 #include "phx/phx.h"
 #include "gfx/gfx.h"
 #include "gfx/background.h"
+#include "gfx/planetz_tracer.h"
 #include "gfx/deffered_renderer.h"
-#include "gfx/arrow.h"
 
 #include "constants.h"
 
@@ -64,15 +64,12 @@ protected:
 	PlanetzLayout*pl;
 
 	GFX::DeferRender plz;
+	GFX::PlanetsTracer trace;
 	GFX::Background bkg;
 
 	std::FILE*f_log;
 
 #ifndef _RELEASE
-	GFX::Arrow * ox;
-	GFX::Arrow * oy;
-	GFX::Arrow * oz;
-
 	GFX::PlanetzPicker picker;
 	PlanetPrinter pprnt;
 #endif
