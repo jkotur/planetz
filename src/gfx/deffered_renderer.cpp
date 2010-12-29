@@ -77,39 +77,41 @@ void DeferRender::prepare()
 			DATA("shaders/deffered_03.geom")),
 		GL_POINTS , GL_QUAD_STRIP );
 
-	sphereTexId    = glGetUniformLocation( prPlanet.id() , "sph_pos"    );
+	sphereTexId    = glGetUniformLocation( prPlanet.id() , "sph_pos"     );
 	materialsTexId = glGetUniformLocation( prPlanet.id() , "materialsTex");
-	normalsTexId   = glGetUniformLocation( prPlanet.id() , "normalsTex" );
-	textureTexId   = glGetUniformLocation( prPlanet.id() , "texturesTex");
-	anglesId       = glGetUniformLocation( prPlanet.id() , "angles"     );
-	radiusId       = glGetAttribLocation ( prPlanet.id() , "radius"     );
-	modelId        = glGetAttribLocation ( prPlanet.id() , "model"      );
-	texIdId        = glGetAttribLocation ( prPlanet.id() , "texId"      );
-	atmRadiusId    = glGetAttribLocation ( prPlanet.id() , "atmRadius"  );
-
-	gbuffId[0]     = glGetUniformLocation( prLighting.id() , "gbuff1"   );
-	gbuffId[1]     = glGetUniformLocation( prLighting.id() , "gbuff2"   );
-	gbuffId[2]     = glGetUniformLocation( prLighting.id() , "gbuff3"   );
-	gbuffId[3]     = glGetUniformLocation( prLighting.id() , "gbuff4"   );
-	matLId         = glGetUniformLocation( prLighting.id() , "materials");
-	ifplanesId     = glGetUniformLocation( prLighting.id() , "planes"   );
-	modelLId       = glGetAttribLocation ( prLighting.id() , "model"    );
-	emissiveLId    = glGetAttribLocation ( prLighting.id() , "emissive" );
-                       
-	gbuffId[4]     = glGetUniformLocation( prLightsBase.id() , "gbuff1" );
-	gbuffId[5]     = glGetUniformLocation( prLightsBase.id() , "gbuff2" );
-	gbuffId[6]     = glGetUniformLocation( prLightsBase.id() , "gbuff3" );
-	gbuffId[7]     = glGetUniformLocation( prLightsBase.id() , "gbuff4" );
-                       
-	atmId          = glGetUniformLocation( prAtmosphere.id() , "texture");
-	radiusAId      = glGetAttribLocation ( prAtmosphere.id() , "radius" );
-
-	gbuffId[8 ]    = glGetUniformLocation( prPostAtm.id() , "gbuff1"    );
-	gbuffId[9 ]    = glGetUniformLocation( prPostAtm.id() , "gbuff2"    );
-	gbuffId[10]    = glGetUniformLocation( prPostAtm.id() , "gbuff3"    );
-	atmMaterialsId = glGetUniformLocation( prPostAtm.id() , "materials" );
-	atmModelId     = glGetAttribLocation ( prPostAtm.id() , "model"     );
-	atmEmissiveId  = glGetAttribLocation ( prPostAtm.id() , "emissive"  );
+	normalsTexId   = glGetUniformLocation( prPlanet.id() , "normalsTex"  );
+	textureTexId   = glGetUniformLocation( prPlanet.id() , "texturesTex" );
+	anglesId       = glGetUniformLocation( prPlanet.id() , "angles"      );
+	radiusId       = glGetAttribLocation ( prPlanet.id() , "radius"      );
+	modelId        = glGetAttribLocation ( prPlanet.id() , "model"       );
+	texIdId        = glGetAttribLocation ( prPlanet.id() , "texId"       );
+	atmDataId      = glGetAttribLocation ( prPlanet.id() , "atmData"     );
+	atmColorId     = glGetAttribLocation ( prPlanet.id() , "atmColor"    );
+                                                                             
+	gbuffId[0]     = glGetUniformLocation( prLighting.id() , "gbuff1"    );
+	gbuffId[1]     = glGetUniformLocation( prLighting.id() , "gbuff2"    );
+	gbuffId[2]     = glGetUniformLocation( prLighting.id() , "gbuff3"    );
+	gbuffId[3]     = glGetUniformLocation( prLighting.id() , "gbuff4"    );
+	matLId         = glGetUniformLocation( prLighting.id() , "materials" );
+	ifplanesId     = glGetUniformLocation( prLighting.id() , "planes"    );
+	modelLId       = glGetAttribLocation ( prLighting.id() , "model"     );
+	emissiveLId    = glGetAttribLocation ( prLighting.id() , "emissive"  );
+                                                                             
+	gbuffId[4]     = glGetUniformLocation( prLightsBase.id() , "gbuff1"  );
+	gbuffId[5]     = glGetUniformLocation( prLightsBase.id() , "gbuff2"  );
+	gbuffId[6]     = glGetUniformLocation( prLightsBase.id() , "gbuff3"  );
+	gbuffId[7]     = glGetUniformLocation( prLightsBase.id() , "gbuff4"  );
+                                                                             
+	atmId          = glGetUniformLocation( prAtmosphere.id() , "texture" );
+	atmAtmDataId   = glGetAttribLocation ( prAtmosphere.id() , "atmData" );
+	atmAtmColorId  = glGetAttribLocation ( prAtmosphere.id() , "atmColor");
+                                                                             
+	gbuffId[8 ]    = glGetUniformLocation( prPostAtm.id() , "gbuff1"     );
+	gbuffId[9 ]    = glGetUniformLocation( prPostAtm.id() , "gbuff2"     );
+	gbuffId[10]    = glGetUniformLocation( prPostAtm.id() , "gbuff3"     );
+	atmMaterialsId = glGetUniformLocation( prPostAtm.id() , "materials"  );
+	atmModelId     = glGetAttribLocation ( prPostAtm.id() , "model"      );
+	atmEmissiveId  = glGetAttribLocation ( prPostAtm.id() , "emissive"   );
 
 	prPlanet.use();
 	glUniform1i( materialsTexId , 0 );
@@ -496,7 +498,8 @@ void DeferRender::draw() const
 	glEnableVertexAttribArray( radiusId );
 	glEnableVertexAttribArray( modelId  );
 	glEnableVertexAttribArray( texIdId  );
-	glEnableVertexAttribArray( atmRadiusId );
+	glEnableVertexAttribArray( atmDataId );
+	glEnableVertexAttribArray( atmColorId );
 
 	factory->getPositions().bind();
 	glVertexPointer( 3 , GL_FLOAT , 0 , NULL );
@@ -514,9 +517,13 @@ void DeferRender::draw() const
 	glVertexAttribIPointer( texIdId  , 1, GL_INT , 0, NULL );
 	factory->getTexIds().unbind();
 
-	factory->getAtmospheres().bind();
-	glVertexAttribPointer( atmRadiusId , 1, GL_FLOAT, GL_FALSE, 0, NULL );
-	factory->getAtmospheres().unbind();
+	factory->getAtmData().bind();
+	glVertexAttribPointer( atmDataId , 2, GL_FLOAT, GL_FALSE, 0, NULL );
+	factory->getAtmData().unbind();
+
+	factory->getAtmColor().bind();
+	glVertexAttribPointer( atmColorId , 3, GL_FLOAT, GL_FALSE, 0, NULL );
+	factory->getAtmColor().unbind();
 
 	prPlanet.use();
 	glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_1D, materialsTex );
@@ -536,7 +543,8 @@ void DeferRender::draw() const
 	glDisableVertexAttribArray( radiusId );
 	glDisableVertexAttribArray( modelId  );
 	glDisableVertexAttribArray( texIdId  );
-	glDisableVertexAttribArray( atmRadiusId );
+	glDisableVertexAttribArray( atmDataId );
+	glDisableVertexAttribArray( atmColorId );
 
 	glDisable( GL_DEPTH_TEST );
 	glEnable( GL_BLEND );
@@ -620,15 +628,20 @@ void DeferRender::draw() const
 //        glDisable( GL_DEPTH_TEST );
 //        glBlendFunc( GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA );
 
-	glEnableVertexAttribArray( radiusAId );
+	glEnableVertexAttribArray( atmAtmDataId );
+	glEnableVertexAttribArray( atmAtmColorId );
 
 	factory->getPositions().bind();
 	glVertexPointer( 3 , GL_FLOAT , 0 , NULL );
 	factory->getPositions().unbind();
 
-	factory->getAtmospheres().bind();
-	glVertexAttribPointer( radiusAId , 1, GL_FLOAT, GL_FALSE, 0, NULL );
-	factory->getAtmospheres().unbind();
+	factory->getAtmData().bind();
+	glVertexAttribPointer( atmAtmDataId , 2, GL_FLOAT, GL_FALSE, 0, NULL );
+	factory->getAtmData().unbind();
+
+	factory->getAtmColor().bind();
+	glVertexAttribPointer( atmAtmColorId , 3, GL_FLOAT, GL_FALSE, 0, NULL );
+	factory->getAtmColor().unbind();
 
 	prAtmosphere.use();
 
@@ -648,7 +661,8 @@ void DeferRender::draw() const
 
 	Program::none();
 
-	glDisableVertexAttribArray( radiusAId );
+	glDisableVertexAttribArray( atmAtmDataId );
+	glDisableVertexAttribArray( atmAtmColorId );
 
 	glDisable( GL_DEPTH_TEST );
 	glEnable( GL_BLEND );

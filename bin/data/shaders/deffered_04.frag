@@ -12,6 +12,7 @@ uniform sampler2D texture;
 in vec3 pos;
 in mat3 nrot;
 in float radius;
+in vec3 color;
 
 void main()
 {
@@ -24,7 +25,7 @@ void main()
 	norm.xyz *= radius;
 
 	gl_FragData[1].rgb  = pos + norm.xyz;
-	gl_FragData[1].a    = 1; // unused
-	gl_FragData[2].rgba = vec4( vec3( .3 , .4 , 1. ) , norm.a );
+	gl_FragData[1].a    = 1;
+	gl_FragData[2].rgba = vec4( color , norm.a );
 }
 

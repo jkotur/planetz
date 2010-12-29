@@ -34,6 +34,7 @@ in mat3 rot;
 in mat3 nrot;
 in float radius;
 in float atmRadius;
+in vec3 atmColor;
 
 in float texId;
 
@@ -64,18 +65,16 @@ void main()
 	else	tex = vec4(1);
 
 	if( ifnormals == 1 )
-		gl_FragData[2] = vec4( norm.xyz             , atmRadius );
-	else	gl_FragData[2] = vec4( mater1.rgb * tex.rgb , atmRadius );
+		gl_FragData[2] = vec4( norm.xyz             , atmColor.g );
+	else	gl_FragData[2] = vec4( mater1.rgb * tex.rgb , atmColor.g );
 
-	gl_FragData[1].xyz = norm.xyz;      // normal vector
-	gl_FragData[1].w   = 0;        // model id (deprecated)
+	gl_FragData[1] = vec4( norm.xyz , atmColor.r );
 
 	norm.xyz *= radius;
 
-	gl_FragData[0].xyz = pos + norm.xyz;
-	gl_FragData[0].a   = norm.w;	   // draw or not draw this fragment
+	gl_FragData[0] = vec4( pos + norm.xyz , norm.w );
 
-	gl_FragData[3]     = vec4( mater1.a , mater2.rgb );
+	gl_FragData[3] = vec4( mater1.a , mater2.rg , atmColor.b );
 }
 
 vec2 texture_st_f2( float ax , float ay )

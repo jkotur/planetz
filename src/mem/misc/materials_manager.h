@@ -17,7 +17,8 @@ struct Material
 	float ke, ka, kd, ks;
 	float alpha;
 	int   texture;
-	float atmosphere;
+	float ar, ag, ab;
+	float ad, al;
 };
 
 typedef std::vector<Material> Materials;
@@ -34,7 +35,7 @@ public:
 				float ke, float ka, float kd, float ks ,
 				float alpha ,
 				int texture ,
-				float atmosphere );
+				float ar, float ag, float ab, float ad, float al);
 
 	void setColor3f( float , float , float );
 	void setColor3i( int , int , int );
@@ -45,7 +46,7 @@ public:
 	void setKs( float );
 	void setAlpha( float );
 	void setTexture( int );
-	void setAtmosphere( float );
+	void setAtmosphere( float ar, float ag, float ab, float ad, float al );
 private:
 	unsigned int id;
 	Materials*materials;

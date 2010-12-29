@@ -108,8 +108,8 @@ private:
 	GLuint generate_atmosphere_texture( int w , int h );
 
 	GLint atmId;
-	GLint atmRadiusId;
-	GLint radiusAId;
+	GLint atmDataId  , atmAtmDataId ;
+	GLint atmColorId , atmAtmColorId;
 	GLuint atmTex;
 
 	GLint atmMaterialsId;

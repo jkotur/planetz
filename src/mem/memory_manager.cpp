@@ -96,38 +96,33 @@ void MemMgr::setPlanets( MISC::CpuPlanetHolder *pl )
 
 	holder.resize( size );
 
-	float3 * pos = holder.pos.map( MISC::BUF_H );
+	float3 * pos  = holder.pos      .map( MISC::BUF_H );
+	float  * rad  = holder.radius   .map( MISC::BUF_H );
+	int    * type = holder.model    .map( MISC::BUF_H );
+	float  * em   = holder.emissive .map( MISC::BUF_H );
+	int    * tid  = holder.texId    .map( MISC::BUF_H );
+	float2 * atm  = holder.atm_data .map( MISC::BUF_H );
+	float3 * acol = holder.atm_color.map( MISC::BUF_H );
+
 	for( unsigned i=0 ; i<size ; i++ )
-		pos[i] = pl->pos[i];
-	holder.pos.unmap();
+	{
+		pos [i]   = pl->pos      [i]  ;
+		rad [i]   = pl->radius   [i]  ;
+		type[i]   = pl->model    [i] * 2; // model must be even
+		em  [i]   = pl->emissive [i]  ;
+		tid [i]   = pl->texId    [i]  ;
+		atm [i].x = pl->atm_data [i].x;
+		atm [i].y = pl->radius   [i] * pl->atm_data[i].y;
+		acol[i]   = pl->atm_color[i]  ;
+	}
 
-	float  * rad = holder.radius.map( MISC::BUF_H );
-	for( unsigned i=0 ; i<size ; i++ )
-		rad[i] = pl->radius[i];
-	holder.radius.unmap();
-
-	int* type = holder.model.map( MISC::BUF_H );
-	for( unsigned i=0 ; i<size ; i++ )
-		type[i] = pl->model[i] * 2; // model must be even
-	holder.model.unmap();
-
-	holder.emissive.bind();
-	float *em = holder.emissive.map( MISC::BUF_H );
-	for( unsigned i=0; i<size; ++i )
-		em[i] = pl->emissive[i];
-	holder.emissive.unmap();
-
-	holder.atmosphere.bind();
-	float *atm = holder.atmosphere.map( MISC::BUF_H );
-	for( unsigned i=0; i<size; ++i )
-		atm[i] = pl->radius[i]*pl->atmosphere[i];
-	holder.atmosphere.unmap();
-
-	holder.texId.bind();
-	int *tid  = holder.texId.map( MISC::BUF_H );
-	for( unsigned i=0; i< size; ++i )
-		tid[i]= pl->texId[i];
-	holder.texId.unmap();
+	holder.atm_color.unmap();
+	holder.atm_data .unmap();
+	holder.texId    .unmap();
+	holder.emissive .unmap();
+	holder.model    .unmap();
+	holder.radius   .unmap();
+	holder.pos      .unmap();
 
 	holder.count.assign( pl->count[0] );
 
@@ -144,6 +139,10 @@ void MemMgr::setPlanets( MISC::CpuPlanetHolder *pl )
 	holder.velocity.unbind();
 }
 
+/**
+ * FIXME: if there is any need to copy data from material back to host?
+ *        this is: atm_data , atm_color , emissive , etc.
+ */
 MISC::CpuPlanetHolder *MemMgr::getPlanets()
 {
 	size_t size = holder.size();

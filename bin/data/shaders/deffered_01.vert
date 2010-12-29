@@ -5,11 +5,14 @@ uniform sampler1D materialsTex;
 in float radius;
 in int   model;
 in int   texId;
-in float atmRadius;
+in vec2 atmData;
+in vec3 atmColor;
 
 out float radiuses;
 out float texIds;
+
 out float atmRadiuses;
+out vec3  atmColors;
 
 out vec4  maters1;
 out vec4  maters2;
@@ -18,7 +21,8 @@ void main()
 {	
 	radiuses = radius;
 	texIds   = texId;
-	atmRadiuses = atmRadius;
+	atmRadiuses = atmData.y;
+	atmColors = atmColor;
 
 	gl_Position = gl_ModelViewMatrix * gl_Vertex;
 

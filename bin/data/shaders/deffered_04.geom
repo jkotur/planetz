@@ -1,11 +1,13 @@
 #version 130 
 #extension GL_EXT_geometry_shader4 : enable
 
+in vec3 colors[];
 in float radiuses[];
 
 out vec3 pos;
 out mat3 nrot;
 out float radius;
+out vec3 color;
 
 mat3 faceme( vec3 pos );
 
@@ -15,6 +17,7 @@ void main()
 
 	pos    = gl_PositionIn[0].xyz;
 	radius = radiuses[0];
+	color  = colors[0];
 
 	nrot = faceme( pos );
 

@@ -33,15 +33,15 @@ namespace MISC
 
 		const GfxPlanet getPlanet( int id ) const;
 
-		const BufferGl<int>     &getModels() const;
-		const BufferGl<float>   &getEmissive() const;
-		const BufferGl<int>     &getTexIds() const;
-		const BufferGl<float>   &getAtmospheres() const;
+		const BufferGl<int>     &getModels   () const;
+		const BufferGl<float>   &getEmissive () const;
+		const BufferGl<int>     &getTexIds   () const;
+		const BufferGl<float3>  &getAtmColor () const;
+		const BufferGl<float2>  &getAtmData  () const;
 
 		const BufferGl<float3>  &getPositions() const;
-		const BufferGl<float>   &getRadiuses() const;
-		const BufferGl<uint32_t>&getCounts() const;
-
+		const BufferGl<float>   &getRadiuses () const;
+		const BufferGl<uint32_t>&getCounts   () const;
 	private:
 
 		const PlanetHolder* const holder;

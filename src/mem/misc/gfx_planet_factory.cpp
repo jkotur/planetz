@@ -61,9 +61,19 @@ const BufferGl<int> &GfxPlanetFactory::getTexIds() const
 	return holder->texId;
 }
 
-const BufferGl<float> &GfxPlanetFactory::getAtmospheres() const
+//const BufferGl<float> &GfxPlanetFactory::getAtmospheres() const
+//{
+//        return holder->atmosphere;
+//}
+
+const BufferGl<float3>  &GfxPlanetFactory::getAtmColor () const
 {
-	return holder->atmosphere;
+	return holder->atm_color;
+}
+
+const BufferGl<float2>  &GfxPlanetFactory::getAtmData  () const
+{
+	return holder->atm_data;
 }
 
 const BufferGl<float3>  &GfxPlanetFactory::getPositions() const

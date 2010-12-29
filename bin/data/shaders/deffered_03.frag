@@ -3,9 +3,9 @@
  *  buffers |          values 
  * ---------+--------+--------+--------+----------
  *  gdat1   | pos.x  | pos.y  | pos.z  | alpha
- *  gdat2   | norm.x | norm.y | norm.z | material
- *  gdat3   | col.x  | col.y  | col.b  | atmRadius
- *  gdat4   | ke     | ka     | kd     | ks
+ *  gdat2   | norm.x | norm.y | norm.z | acol.r
+ *  gdat3   | col.x  | col.y  | col.b  | acol.g
+ *  gdat4   | ke     | ka     | kd     | acol.b
  */
 
 uniform sampler2D gbuff1;
@@ -48,16 +48,15 @@ void main()
 	vec3 atm= vec3(0);
 
 	if( gdat3.a > .0 )
-		atm = vec3( .3 , .4 , 1. ) * .3 * clamp( i + .6 , 0.0 , 1.0 ) / dist;
+		atm = vec3( gdat2.a , gdat3.a , gdat4.a ) * .3 * clamp( i + .6 , 0.0 , 1.0 ) / dist;
 
-        vec3 h = normalize(lightDir + viewDir);
+//        vec3 h = normalize(lightDir + viewDir);
 
-        i = pow(clamp(dot(gdat2.xyz, h), 0.0 , 1.0 ), gdat1.w );	
+//        i = pow(clamp(dot(gdat2.xyz, h), 0.0 , 1.0 ), gdat1.w );	
 
-        vec3 fs = gdat3.rgb * i / dist;
+//        vec3 fs = gdat3.rgb * i / dist;
 
-	gl_FragColor.rgb = ((fd + atm) * gdat4.z + fs * gdat4.w) * lightColor;
-
-
+//        gl_FragColor.rgb = ((fd + atm) * gdat4.z + fs * gdat4.w) * lightColor;
+	gl_FragColor.rgb = ((fd + atm) * gdat4.z) * lightColor;
 }
 

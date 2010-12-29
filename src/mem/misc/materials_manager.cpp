@@ -24,9 +24,9 @@ unsigned int MaterialsMgr::addMaterial(
 			float ke, float ka, float kd, float ks ,
 			float alpha ,
 			int texture ,
-			float atmosphere ) 
+			float ar, float ag, float ab, float ad, float al)
 {
-	Material m = { r , g , b , ke , ka , kd , ks , alpha , texture , atmosphere };
+	Material m = { r , g , b , ke , ka , kd , ks , alpha , texture , ar , ag , ab , ad , al };
 	materials->push_back(m);
 	return id++;
 }
@@ -77,8 +77,12 @@ void MaterialsMgr::setTexture( int texture )
 	materials->back().texture = texture;
 }
 
-void MaterialsMgr::setAtmosphere( float atmosphere )
+void MaterialsMgr::setAtmosphere( float ar , float ag , float ab , float ad , float al )
 {
-	materials->back().atmosphere = atmosphere;
+	materials->back().ar = ar;
+	materials->back().ag = ag;
+	materials->back().ab = ab;
+	materials->back().ad = ad;
+	materials->back().al = al;
 }
 

@@ -68,14 +68,18 @@ void DataFlowMgr::Impl::updateBuffers(MISC::CpuPlanetHolder*p , MISC::Materials*
 	if( !m ) {
 		log_printf(_ERROR,"There are no materials loaded\n");
 		for( unsigned i=0 ; i<p->size() ; i++ ) {
-			p->emissive  [i] = 0; // no emissive
-			p->texId     [i] = 0; // dummy texture
-			p->atmosphere[i] = 0;
+			p->emissive [i]   = 0; // no emissive
+			p->texId    [i]   = 0; // dummy texture
+			p->atm_data [i].y = 0; // no atmosphere
 		}
 	} else	for( unsigned i=0 ; i<p->size() ; i++ ) {
-			p->emissive  [i] = (*m)[p->model[i]].ke;
-			p->texId     [i] = (*m)[p->model[i]].texture;
-			p->atmosphere[i] = (*m)[p->model[i]].atmosphere;
+			p->emissive [i]   = (*m)[p->model[i]].ke;
+			p->texId    [i]   = (*m)[p->model[i]].texture;
+			p->atm_color[i].x = (*m)[p->model[i]].ar;
+			p->atm_color[i].y = (*m)[p->model[i]].ag;
+			p->atm_color[i].z = (*m)[p->model[i]].ab;
+			p->atm_data [i].x = (*m)[p->model[i]].ad;
+			p->atm_data [i].y = (*m)[p->model[i]].al;
 		}
 }
 
