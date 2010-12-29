@@ -15,6 +15,8 @@ namespace PHX
 			/// @param n Ilość klatek
 			/// @details Przed właściwym obliczeniem następuje klasteryzacja planet. W przypadku n = 0 metoda compute podzieli przestrzeń na klastry, nie przemieszczając samych planet.
 			virtual void compute(unsigned n=1);
+			virtual void enableClusters(bool orly=true);
+			virtual bool clustersEnabled() const;
 
 		private:
 			class CImpl;

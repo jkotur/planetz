@@ -40,9 +40,9 @@ namespace
 {
 void massSelect( BufferCu<float3> *centers, BufferGl<float3> *planets, BufferCu<float> *masses )
 {
-//	float3 *d_planets = planets->map( BUF_CU );
-//	cudaMemcpy( centers->d_data(), d_planets, centers->getSize(), cudaMemcpyDeviceToDevice );
-//	planets->unmap();
+	float3 *d_planets = planets->map( BUF_CU );
+	cudaMemcpy( centers->d_data(), d_planets, centers->getSize(), cudaMemcpyDeviceToDevice );
+	planets->unmap();
 
 	TODO("Wpisanie początkowych pozyji klastrów - k najcięższych planet");
 }
@@ -92,7 +92,6 @@ float Clusterer::compute()
 	kmeans__prepare_kernel<<< grid, block >>>( m_shuffle.d_data(), m_pPositions->getLen() );
 	CUT_CHECK_ERROR( "Kernel launch - prepare" );
 
-	return 0;
 	sortByCluster();
 
 	kmeans__count_kernel<<< grid, block >>>( m_holder.assignments.d_data() , m_counts.d_data(), m_pPositions->getLen() - 1, k );
@@ -123,8 +122,6 @@ void Clusterer::sortByCluster()
 	ASSERT( m_holder.assignments.getLen() == m_shuffle.getLen() );
 	ASSERT( m_holder.assignments.getSize() == m_shuffle.getSize() );
 	ASSERT( m_shuffle.getSize() == sizeof(unsigned int) * m_shuffle.getLen() );
-	ASSERT( sizeof(unsigned int) == 4 );
-	log_printf(DBG, "getLen() = %u\n", m_holder.assignments.getLen() );
 	cudppSort( sortplan, m_holder.assignments.d_data(), m_shuffle.d_data(), 9, m_holder.assignments.getLen() );
 	
 	cudppDestroyPlan(sortplan);
