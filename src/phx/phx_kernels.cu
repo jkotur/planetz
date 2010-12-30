@@ -5,7 +5,7 @@
 if( !(x) ) { if( error[0] != '\0' ) return; unsigned i = 0; while( #x[i] != '\0' ){error[i] = #x[i]; ++i;} error[i] = '\0'; return; }
 
 __device__ const float dt = 2e-2f;
-__device__ const float G = 1e3f;
+__device__ const float G = 1.f;
 __device__ char error[ERROR_LEN] = "";
 
 __global__ void getErr( char *err )
@@ -33,13 +33,13 @@ __device__ float3 get_dV( float3 myPos, float3 theirPos, float theirMass )
 	float3 dir = theirPos - myPos;
 	float r2 = dir.x * dir.x + dir.y * dir.y + dir.z * dir.z;
 	if( r2 < 1 ) r2 = 1; //return dir / sqrtf( r2 ) * dt;
-	return dir / sqrtf( r2 )  * ( G * dt / r2 );
+	return theirMass * dir / sqrtf( r2 ) * ( G * dt / r2 );
 }
 
 #ifndef PHX_DEBUG
-__global__ void basic_interaction( float3 *positions, float *masses, float3 *velocities, unsigned *cnt, float3 *tmp_pos, float3 *tmp_vel )
+__global__ void basic_interaction( float3 *positions, float *masses, float3 *velocities, unsigned *cnt )
 #else
-__global__ void basic_interaction( float3 *positions, float *masses, float3 *velocities, unsigned *cnt, float3 *tmp_pos, float3 *tmp_vel, float3 *dvs, unsigned who )
+__global__ void basic_interaction( float3 *positions, float *masses, float3 *velocities, unsigned *cnt, float3 *dvs, unsigned who )
 #endif
 {
 	// shared mem temporarily turned off
@@ -101,9 +101,7 @@ __global__ void basic_interaction( float3 *positions, float *masses, float3 *vel
 		return;
 	}
 
-	new_vel += velocities[ index ];
-	tmp_pos[ index ] = old_pos + new_vel * dt;
-	tmp_vel[ index ] = new_vel;
+	velocities[ index ] += new_vel;
 }
 
 #ifndef PHX_DEBUG
@@ -197,4 +195,92 @@ __global__ void update_positions_kernel( float3 *positions, float3 *velocities, 
 	{
 		positions[ index ] += velocities[ index ] * dt;
 	}
+}
+
+__device__ bool collision_detected( float3 pos1, float r1, float3 pos2, float r2 )
+{
+	if( r1 == 0 || r2 == 0 ) return false;
+	float3 dp = pos1 - pos2;
+	float d2 = dp.x*dp.x + dp.y*dp.y + dp.z*dp.z; //kwadrat odległości środków
+	return d2 < (r1+r2)*(r1+r2); // TODO coverage?
+}
+
+__global__ void detect_collisions( float3 *positions, float *radiuses, unsigned *count, unsigned *shuffle, unsigned last_cluster, unsigned *merges, unsigned *merge_needed )
+{
+	unsigned index = threadIdx.x + blockDim.x * blockIdx.x;
+	if( index >= count[last_cluster] )
+	{
+		return;
+	}
+	unsigned mapped_index = shuffle[ index ];
+	float3 my_pos = positions[ mapped_index ];
+	float my_radius = radiuses[ mapped_index ];
+	unsigned cluster = 0;
+	
+	// znajdujemy nasz klaster
+	while( count[cluster] <= index ) ++cluster;
+	unsigned limit = count[cluster];
+	
+	for( unsigned i = index + 1; i < limit; ++i )
+	{
+		unsigned other_index = shuffle[i];
+		if( collision_detected( my_pos, my_radius, positions[other_index], radiuses[other_index] ) )
+		{
+			merges[ mapped_index ] = other_index;
+			*merge_needed = 1;
+			return;
+		}
+	}
+	merges[ mapped_index ] = mapped_index; // brak kolizji
+}
+
+__device__ void internal_merge( float3 *positions, float3 *velocities, float *masses, float *radiuses, unsigned idx1, unsigned idx2 )
+{
+	// wynik sklejenia ląduje w idx1, więc być może trzeba je zamienić
+	if( radiuses[idx1] < radiuses[idx2] )
+	{
+		unsigned tmp = idx1;
+		idx1 = idx2;
+		idx2 = tmp;
+	}
+
+	float a1 = ( radiuses[idx1] * masses[idx1] ) / ( (radiuses[idx1] * masses[idx1]) + (radiuses[idx2] * masses[idx2]) );
+	float b1 = masses[idx1] / ( masses[idx1] + masses[idx2] );
+	positions[idx1] = positions[idx1] * a1 + positions[idx2] * (1-a1);
+	velocities[idx1] = velocities[idx1] * b1 + velocities[idx2] * (1-b1);
+	masses[idx1] += masses[idx2];
+	radiuses[idx1] = powf( powf(radiuses[idx1], 3.) + powf(radiuses[idx2], 3.), 1.f/3.f );
+
+	// oznacz jako skasowaną
+	masses[idx2] = 0;
+	radiuses[idx2] = 0;
+}
+
+__global__ void merge_collisions( unsigned *in_merges, unsigned *out_merges, float3 *positions, float3 *velocities, float *masses, float *radiuses, unsigned *count, unsigned *done )
+{
+	unsigned index = threadIdx.x + blockDim.x * blockIdx.x;
+	if( index >= *count )
+	{
+		return;
+	}
+	unsigned to_merge = in_merges[ index ];
+	
+	if( index == to_merge )
+	{
+		out_merges[ index ] = in_merges[ index ];
+		return;
+	}
+
+	if( in_merges[ to_merge ] != to_merge )
+	{
+		// ups, nasz kandydat na planetę znalazł kogoś innego - czekamy na lepsze czasy
+		out_merges[ index ] = in_merges[ index ];
+		*done = 0;
+		return;
+	}
+
+	// jeżeli dotarliśmy tutaj, to już można mergować
+	internal_merge( positions, velocities, masses, radiuses, index, to_merge );
+
+	out_merges[ index ] = index;
 }

@@ -31,14 +31,14 @@ class Phx::CImpl
 		void run_clusters();
 
 		void update_positions();
+		void handle_collisions();
 
 		MEM::MISC::PhxPlanetFactory *planets;
 		Clusterer clusterer;
 
-		MEM::MISC::BufferCu<float3> tmp_pos;
+		MEM::MISC::BufferCu<unsigned> merges1;
+		MEM::MISC::BufferCu<unsigned> merges2;
 		MEM::MISC::BufferCu<float3> tmp_vel;
-		MEM::MISC::BufferCu<float> tmp_mass;
-
 		bool clusters_on;
 };
 
@@ -69,7 +69,9 @@ void Phx::CImpl::compute(unsigned n)
 		mass_checker.checkBuf();
 		vel_checker.checkBuf();
 		run_nbodies( planet_count );
+		update_positions();
 	}
+	handle_collisions();
 	unmap_buffers();
 }
 
@@ -78,10 +80,9 @@ void Phx::CImpl::map_buffers()
 	planets->getPositions().map( MEM::MISC::BUF_CU );
 	planets->getRadiuses().map( MEM::MISC::BUF_CU );
 	planets->getCount().map( MEM::MISC::BUF_CU );
-	tmp_pos.resize( planets->size() );
-	tmp_vel.resize( planets->size() );
-	cudaMemset( tmp_pos.d_data(), 0, planets->size() * sizeof(float3) );
-	cudaMemset( tmp_vel.d_data(), 0, planets->size() * sizeof(float3) );
+	merges1.resize( planets->size() );
+	merges2.resize( planets->size() );
+	tmp_vel.resize( planets->size() ); // prawdopodobnie wystarczy mniej, bo teraz to już tylko dla klastrów jest
 }
 
 void Phx::CImpl::unmap_buffers()
@@ -150,7 +151,6 @@ void Phx::CImpl::run_nbodies( unsigned threads )
 	{
 		run_nbodies2();
 		run_nbodies_for_clusters();
-		update_positions();
 		return; // taaa, brzydkie, kiedyś będzie ładniej
 	}
 	dim3 block( min( threads, 512 ) );
@@ -165,9 +165,7 @@ void Phx::CImpl::run_nbodies( unsigned threads )
 		planets->getPositions().map(MEM::MISC::BUF_CU), 
 		planets->getMasses().d_data(), 
 		planets->getVelocities().d_data(),
-		planets->getCount().map(MEM::MISC::BUF_CU),
-		tmp_pos.d_data(),
-		tmp_vel.d_data()
+		planets->getCount().map(MEM::MISC::BUF_CU)
 #ifdef PHX_DEBUG
 		, d_dvs, 4210
 #endif
@@ -175,10 +173,6 @@ void Phx::CImpl::run_nbodies( unsigned threads )
 	
 	CUT_CHECK_ERROR("Kernel launch");
 	
-	TODO("zamieniać się pointerami, żeby nie robić cudaMemcpy");
-	
-	cudaMemcpy( planets->getPositions().map(MEM::MISC::BUF_CU), tmp_pos.d_data(), threads * sizeof(float3), cudaMemcpyDeviceToDevice );
-	cudaMemcpy( planets->getVelocities().d_data(), tmp_vel.d_data(), threads * sizeof(float3), cudaMemcpyDeviceToDevice );
 #ifdef PHX_DEBUG
 	float3 *dvs = new float3[ threads ];
 	cudaMemcpy( dvs, d_dvs, threads * sizeof(float3), cudaMemcpyDeviceToHost );
@@ -258,6 +252,66 @@ void Phx::CImpl::update_positions()
 		planets->getVelocities().d_data(),
 		planets->getCount().map(MEM::MISC::BUF_CU) );
 	CUT_CHECK_ERROR( "kernel launch" );
+}
+
+void Phx::CImpl::handle_collisions()
+{
+	MEM::MISC::BufferCu<unsigned> merge_needed(1);
+	do
+	{
+		merge_needed.assign(0);
+		unsigned *in_merges = merges1.d_data();
+		unsigned *out_merges = merges2.d_data();
+
+		unsigned threads = planets->size();
+		dim3 block( min( 512, threads ) );
+		dim3 grid( 1 + ( threads - 1 ) / block.x );
+		
+		detect_collisions<<<grid, block>>>(
+			planets->getPositions().map(MEM::MISC::BUF_CU),
+			planets->getRadiuses().map(MEM::MISC::BUF_CU),
+			clusterer.getCounts()->d_data(),
+			clusterer.getShuffle()->d_data(),
+			clusterer.getCount() - 1,
+			out_merges,
+			merge_needed.d_data() );
+		CUT_CHECK_ERROR("kernel launch");
+
+		if( merge_needed.getAt(0) == 0 )
+		{
+			return;
+		}
+
+	/*	merges2.bind();
+		for( unsigned i = 0; i < threads; ++i )
+		{
+			if( merges2.h_data()[i] != i )
+				log_printf( DBG, "merges[%u] = %u\n", i, merges2.h_data()[i] );
+		}
+		merges2.unbind();
+		static unsigned safety_buf = 0;
+		if( ++safety_buf > 10 ) abort(); */
+		MEM::MISC::BufferCu<unsigned> done(1);
+		
+		do
+		{
+			//log_printf(DBG, "mergin'\n" );
+			done.assign(1);
+			std::swap( in_merges, out_merges );
+			merge_collisions<<<grid, block>>>(
+				in_merges,
+				out_merges,
+				planets->getPositions().map(MEM::MISC::BUF_CU),
+				planets->getVelocities().d_data(),
+				planets->getMasses().d_data(),
+				planets->getRadiuses().map(MEM::MISC::BUF_CU),
+				planets->getCount().map(MEM::MISC::BUF_CU),
+				done.d_data() );
+			CUT_CHECK_ERROR("kernel launch");
+		}
+		while( !done.getAt(0) );
+	}
+	while(true);
 }
 
 void Phx::CImpl::enableClusters(bool orly)

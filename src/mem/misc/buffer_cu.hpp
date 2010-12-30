@@ -84,7 +84,7 @@ namespace MISC
 	template<typename T>
 	void BufferCu<T>::assign( T val )
 	{
-		ASSERT( 1 == BufferBase<T>::getLen() );
+		ASSERT_MSG( 1 == BufferBase<T>::getLen(), "assign() works for one field buffers only!" );
 		setAt(0, val);
 	}
 
