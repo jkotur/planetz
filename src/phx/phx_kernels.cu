@@ -107,9 +107,9 @@ __global__ void basic_interaction( float3 *positions, float *masses, float3 *vel
 }
 
 #ifndef PHX_DEBUG
-__global__ void inside_cluster_interaction( float3 *positions, float *masses, float3 *velocities, unsigned *shuffle, unsigned *counts, unsigned cluster, float3 *tmp_pos, float3 *tmp_vel )
+__global__ void inside_cluster_interaction( float3 *positions, float *masses, float3 *velocities, unsigned *shuffle, unsigned *counts, unsigned cluster )
 #else
-__global__ void inside_cluster_interaction( float3 *positions, float *masses, float3 *velocities, unsigned *shuffle, unsigned *counts, unsigned cluster, float3 *tmp_pos, float3 *tmp_vel, float3 *dvs, unsigned who, unsigned *whois )
+__global__ void inside_cluster_interaction( float3 *positions, float *masses, float3 *velocities, unsigned *shuffle, unsigned *counts, unsigned cluster, float3 *dvs, unsigned who, unsigned *whois )
 #endif
 {
 	unsigned index = blockIdx.x * blockDim.x + threadIdx.x;
@@ -118,7 +118,7 @@ __global__ void inside_cluster_interaction( float3 *positions, float *masses, fl
 	unsigned mapped_index = shuffle[ index ];
 	unsigned count = counts[ cluster ];
 
-	float3 new_vel;
+	float3 vel_diff;
 	float3 old_pos;
 
 	if( index >= count )
@@ -126,7 +126,7 @@ __global__ void inside_cluster_interaction( float3 *positions, float *masses, fl
 		return;
 	}
 	old_pos = positions[ mapped_index ];
-	new_vel = make_float3(0,0,0);
+	vel_diff = make_float3(0,0,0);
 	
 	for( unsigned i = offset; i < count; i += blockDim.x )
 	{
@@ -136,24 +136,65 @@ __global__ void inside_cluster_interaction( float3 *positions, float *masses, fl
 			if( other_index != mapped_index )
 			{
 #ifndef PHX_DEBUG
-				new_vel += get_dV( old_pos, positions[other_index], masses[other_index] );
+				vel_diff += get_dV( old_pos, positions[other_index], masses[other_index] );
 #else
 				float3 dv = get_dV( old_pos, positions[other_index], masses[other_index] );
 				if( index == who )
 				{
 					dvs[ i + j ] = dv;
 				}
-				new_vel += dv;
+				vel_diff += dv;
 #endif
 			}
 		}
 	}
 	
-	new_vel += velocities[ mapped_index ];
-	tmp_pos[ mapped_index ] = old_pos + new_vel * dt;
-	tmp_vel[ mapped_index ] = new_vel;
+	velocities[ mapped_index ] += vel_diff;
 #ifdef PHX_DEBUG
 	CUDA_ASSERT( whois[ mapped_index ] == 0 );
 	whois[ mapped_index ] = index;
 #endif
+}
+
+__global__ void outside_cluster_interaction( float3 *centers, float *masses, unsigned count, float3 *velocities_impact )
+{
+	unsigned tid = threadIdx.x;
+	
+	float3 pos = centers[tid];
+	float3 new_vel = make_float3(0,0,0);
+
+	for( unsigned i = 0; i < count; ++i )
+	{
+		if( i != tid )
+		{
+			new_vel += get_dV( pos, centers[i], masses[i] );
+		}
+	}
+	velocities_impact[tid] = new_vel;
+}
+
+__global__ void propagate_velocities( float3 *velocities_impact, float3 *positions, float3 *velocities, unsigned *shuffle, unsigned *count, unsigned last_cluster )
+{
+	unsigned index = threadIdx.x + blockDim.x * blockIdx.x;
+	unsigned cluster = 0;
+
+	if( index >= count[last_cluster] )
+	{
+		return;
+	}
+
+	// znajdujemy nasz klaster
+	while( count[cluster] <= index ) ++cluster;
+
+	// i zwiększamy swoją prędkość
+	velocities[ shuffle[ index ] ] += velocities_impact[ cluster ];
+}
+
+__global__ void update_positions_kernel( float3 *positions, float3 *velocities, unsigned *count )
+{
+	unsigned index = threadIdx.x + blockDim.x * blockIdx.x;
+	if( index < *count )
+	{
+		positions[ index ] += velocities[ index ] * dt;
+	}
 }

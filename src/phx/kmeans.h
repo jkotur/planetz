@@ -51,6 +51,9 @@ namespace PHX
 			/// @brief Oblicza błąd klasteryzacji
 			float reduceErrors();
 
+			/// @brief Oblicza parametry klastrów - masy, promienie(?)
+			void calcAttributes();
+
 			MEM::MISC::BufferGl<float3> *m_pPositions;
 			MEM::MISC::BufferCu<float> *m_pPlanetMasses;
 

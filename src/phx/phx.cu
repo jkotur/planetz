@@ -27,7 +27,10 @@ class Phx::CImpl
 
 		void run_nbodies( unsigned planet_count );
 		void run_nbodies2();
+		void run_nbodies_for_clusters();
 		void run_clusters();
+
+		void update_positions();
 
 		MEM::MISC::PhxPlanetFactory *planets;
 		Clusterer clusterer;
@@ -101,9 +104,6 @@ void Phx::CImpl::run_nbodies2()
 
 	for( unsigned c = 0, prev_count = 0; c < clusters; ++c ) // TODO: odpalić te kernele jednocześnie?
 	{
-#ifdef PHX_DEBUG
-		log_printf( DBG, "counts[%u]: %u\n", c, h_counts[c] );
-#endif
 		unsigned threads = h_counts[c] - prev_count;
 		if( threads == 0 )
 			continue;
@@ -119,9 +119,7 @@ void Phx::CImpl::run_nbodies2()
 			planets->getVelocities().d_data(),
 			clusterer.getShuffle()->d_data(),
 			clusterer.getCounts()->d_data(),
-			c, // cluster id
-			tmp_pos.d_data(),
-			tmp_vel.d_data()
+			c // cluster id
 #ifdef PHX_DEBUG
 			, d_dvs, 1,whois.d_data()
 #endif
@@ -142,15 +140,6 @@ void Phx::CImpl::run_nbodies2()
 	delete[] dvs;
 #endif
 	}
-	cudaMemcpy(
-		planets->getPositions().map(MEM::MISC::BUF_CU),
-		tmp_pos.d_data(), planets->size() * sizeof(float3), cudaMemcpyDeviceToDevice );
-	cudaMemcpy(
-		planets->getVelocities().d_data(),
-		tmp_vel.d_data(), planets->size() * sizeof(float3), cudaMemcpyDeviceToDevice );
-#ifdef PHX_DEBUG
-//	PRINT_OUT_BUF( whois, "%u" );
-#endif
 	delete[] h_counts;
 }
 
@@ -160,7 +149,9 @@ void Phx::CImpl::run_nbodies( unsigned threads )
 	if( clusters_on )
 	{
 		run_nbodies2();
-		return;
+		run_nbodies_for_clusters();
+		update_positions();
+		return; // taaa, brzydkie, kiedyś będzie ładniej
 	}
 	dim3 block( min( threads, 512 ) );
 	dim3 grid( 1 + (threads - 1) / block.x );
@@ -184,6 +175,7 @@ void Phx::CImpl::run_nbodies( unsigned threads )
 	
 	CUT_CHECK_ERROR("Kernel launch");
 	
+	TODO("zamieniać się pointerami, żeby nie robić cudaMemcpy");
 	
 	cudaMemcpy( planets->getPositions().map(MEM::MISC::BUF_CU), tmp_pos.d_data(), threads * sizeof(float3), cudaMemcpyDeviceToDevice );
 	cudaMemcpy( planets->getVelocities().d_data(), tmp_vel.d_data(), threads * sizeof(float3), cudaMemcpyDeviceToDevice );
@@ -200,12 +192,72 @@ void Phx::CImpl::run_nbodies( unsigned threads )
 #endif
 }
 
+void Phx::CImpl::run_nbodies_for_clusters()
+{
+	unsigned threads = clusterer.getCount();
+	ASSERT( threads <= 512 );
+	dim3 block( min( threads, 512 ) );
+	dim3 grid( 1 );
+
+	static unsigned print_modulo = 0;
+	print_modulo = (print_modulo+1)%5000;
+	MEM::MISC::BufferCu<float3> *centers = clusterer.getCenters();
+	centers->bind();
+	if( print_modulo == 0 )
+	for( unsigned i = 0; i < centers->getLen(); ++i )
+	{
+		log_printf( DBG, "centers[%u] = (%f,%f,%f)\n", i, centers->h_data()[i].x, centers->h_data()[i].y, centers->h_data()[i].z );
+	}
+	centers->unbind();
+	outside_cluster_interaction<<<grid, block>>>(
+		clusterer.getCenters()->d_data(),
+		clusterer.getMasses()->d_data(),
+		threads,
+		tmp_vel.d_data() );
+	CUT_CHECK_ERROR( "kernel launch" );
+
+	tmp_vel.bind();
+	if( print_modulo == 0 )
+	for( unsigned i = 0; i < centers->getLen(); ++i )
+	{
+		log_printf( DBG, "vel[%u] = (%f, %f, %f)\n", i, tmp_vel.h_data()[i].x, tmp_vel.h_data()[i].y, tmp_vel.h_data()[i].z );
+	}
+	tmp_vel.unbind();
+
+	threads = planets->size();
+	block = min( threads, 512 );
+	grid = 1 + ( threads - 1 ) / block.x;
+
+	propagate_velocities<<<grid, block>>>(
+		tmp_vel.d_data(),
+		planets->getPositions().map(MEM::MISC::BUF_CU),
+		planets->getVelocities().d_data(),
+		clusterer.getShuffle()->d_data(),
+		clusterer.getCounts()->d_data(),
+		clusterer.getCount() - 1
+		);
+	CUT_CHECK_ERROR( "kernel launch" );
+}
+
 void Phx::CImpl::run_clusters()
 {
 	if( clusters_on )
 	{
 		clusterer.kmeans();
 	}
+}
+
+void Phx::CImpl::update_positions()
+{
+	unsigned threads = planets->size();
+	dim3 block( min( 512, threads ) );
+	dim3 grid( 1 + ( threads - 1 ) / block.x );
+
+	update_positions_kernel<<<grid, block>>>(
+		planets->getPositions().map(MEM::MISC::BUF_CU),
+		planets->getVelocities().d_data(),
+		planets->getCount().map(MEM::MISC::BUF_CU) );
+	CUT_CHECK_ERROR( "kernel launch" );
 }
 
 void Phx::CImpl::enableClusters(bool orly)

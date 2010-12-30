@@ -12,40 +12,11 @@ namespace MISC
 	template<template<class T>class CBUF, template<class S>class GBUF>
 	struct PlanetHolderBase
 	{
-		PlanetHolderBase( unsigned num = 0 )
-			: model(0)
-			, emissive(0)
-			, pos(0)
-			, radius(0)
-			, count(1)
-			, mass(0)
-			, velocity(0)
-			, m_size(num)
-		{
-			resize( num );
-		}
+		PlanetHolderBase( unsigned num = 0 );
+		virtual ~PlanetHolderBase();
 
-		virtual ~PlanetHolderBase()
-		{
-			log_printf(INFO, "deleted planetholder\n");
-		}
-
-		void resize(const size_t num)
-		{
-			TODO("keep previous data...");
-			model    .resize(num);
-			emissive .resize(num);
-			texId    .resize(num);
-			atm_color.resize(num);
-			atm_data .resize(num);
-			pos      .resize(num);
-			radius   .resize(num);
-			mass     .resize(num);
-			velocity .resize(num);
-
-			count.assign( num );
-			m_size = num;
-		}
+		void resize(const size_t num);
+		size_t size() const;
 
 		//   * GFX
 		GBUF<int>    model;
@@ -63,22 +34,9 @@ namespace MISC
 		CBUF<float>    mass;
 		CBUF<float3>   velocity;
 
-		size_t size()
-		{
-			return m_size;
-		}
 	private:
 		size_t m_size;
 	};
-
-	//template<template<class T>class CBUF, template<class S>class GBUF>
-	//PlanetHolderBase<CBUF, GBUF>::PlanetHolderBase( unsigned num )
-
-	//template<template<class T>class CBUF, template<class S>class GBUF>
-	//PlanetHolderBase<CBUF, GBUF>::~PlanetHolderBase()
-
-	//template<template<class T>class CBUF, template<class S>class GBUF>
-	//void PlanetHolderBase<CBUF, GBUF>::resize(const size_t num)
 
 	typedef PlanetHolderBase< BufferCu, BufferGl > PlanetHolder;
 	typedef PlanetHolderBase< BufferCpu, BufferCpu > CpuPlanetHolder;
@@ -106,13 +64,49 @@ namespace MISC
 			size_t m_size;
 	};
 
-	struct PointsCloudHolder
+	template<template<class T>class CBUF, template<class S>class GBUF>
+	PlanetHolderBase<CBUF, GBUF>::PlanetHolderBase( unsigned num )
+		: model(0)
+		, emissive(0)
+		, pos(0)
+		, radius(0)
+		, count(1)
+		, mass(0)
+		, velocity(0)
+		, m_size(num)
 	{
-		BufferCu<float>    phx_dt;
+		resize( num );
+	}
 
-		BufferGl<float3>   pointsCloud_points;
-		BufferGl<uint32_t> pointsCloud_size;
-	};
+	template<template<class T>class CBUF, template<class S>class GBUF>
+	PlanetHolderBase<CBUF, GBUF>::~PlanetHolderBase()
+	{
+		log_printf(INFO, "deleted planetholder\n");
+	}
+
+	template<template<class T>class CBUF, template<class S>class GBUF>
+	void PlanetHolderBase<CBUF, GBUF>::resize(const size_t num)
+	{
+		TODO("keep previous data...");
+		model    .resize(num);
+		emissive .resize(num);
+		texId    .resize(num);
+		atm_color.resize(num);
+		atm_data .resize(num);
+		pos      .resize(num);
+		radius   .resize(num);
+		mass     .resize(num);
+		velocity .resize(num);
+
+		count.assign( num );
+		m_size = num;
+	}
+
+	template<template<class T>class CBUF, template<class S>class GBUF>
+	size_t PlanetHolderBase<CBUF, GBUF>::size() const
+	{
+		return m_size;
+	}
 }
 }
 #endif // HOLDER_H

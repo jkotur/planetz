@@ -97,7 +97,7 @@ __device__ void reduce(T *g_idata, unsigned n, unsigned tid, unsigned i, T sdata
 }
 
 template <unsigned int blockSize>
-__global__ void reduceSelective(float3 *g_idata, float3 *g_odata, unsigned *counts, unsigned id, unsigned* shuffle)
+__global__ void reduceSelective_f3(float3 *g_idata, float3 *g_odata, unsigned *counts, unsigned id, unsigned* shuffle)
 {
 	extern __shared__ float3 s_data[];
 	unsigned int n = counts[id];
@@ -113,6 +113,25 @@ __global__ void reduceSelective(float3 *g_idata, float3 *g_odata, unsigned *coun
 	__syncthreads();
 	reduce<float3, blockSize>(g_idata, n, tid, i, s_data);
 	if (tid == 0) g_odata[id] = s_data[0] / (n - (id ? counts[id-1] : 0));
+}
+
+template <unsigned int blockSize>
+__global__ void sumSelective_f(float *g_idata, float *g_odata, unsigned *counts, unsigned id, unsigned* shuffle)
+{
+	extern __shared__ float s_dataf[];
+	unsigned int n = counts[id];
+	unsigned int tid = threadIdx.x;
+	unsigned int i = blockIdx.x*(blockSize*2) + tid + (id ? counts[id-1] : 0);
+	unsigned int gridSize = blockSize*gridDim.x;
+	s_dataf[tid] = .0f;
+	while (i < n)
+	{
+		s_dataf[tid] += g_idata[ shuffle[i] ];
+		i += gridSize;
+	}
+	__syncthreads();
+	reduce<float, blockSize>(g_idata, n, tid, i, s_dataf);
+	if (tid == 0) g_odata[id] = s_dataf[0];
 }
 
 template <class T, unsigned int blockSize>

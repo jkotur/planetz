@@ -34,6 +34,7 @@ void Clusterer::kmeans()
 		++iters;
 	}
 	while( abs(prev_err-err) >  1e-5 * err );
+	calcAttributes();
 }
 
 namespace
@@ -59,7 +60,7 @@ void Clusterer::initClusters()
 
 	ASSERT( n );
 	TODO("Mądre obliczanie k na podstawie n");
-	unsigned k = min( 512, 1 + n / 1000 );
+	unsigned k = min( 512, 1 + n / 100 );
 	m_holder.resize( k, n );
 	m_errors.resize( n );
 	m_shuffle.resize( n );
@@ -144,7 +145,20 @@ void Clusterer::reduceMeans()
 		dim3 block( 512 );
 		dim3 grid( 1 );
 		unsigned mem = sizeof(float3) * 512;
-		reduceSelective<512> <<< grid, block, mem >>>(m_pPositions->map( BUF_CU ), m_holder.centers.d_data(), m_counts.d_data(), i, m_shuffle.d_data());
+		reduceSelective_f3<512> <<< grid, block, mem >>>(m_pPositions->map( BUF_CU ), m_holder.centers.d_data(), m_counts.d_data(), i, m_shuffle.d_data());
+		CUT_CHECK_ERROR( "Kernel launch" );
+	}
+}
+
+void Clusterer::calcAttributes()
+{
+	// DELICIOUS COPY PASTA // TODO: zrobić to kiedyś ładnie
+	for(unsigned i = 0; i < m_holder.k_size(); ++i)
+	{
+		dim3 block( 512 );
+		dim3 grid( 1 );
+		unsigned mem = sizeof(float) * 512;
+		sumSelective_f<512> <<< grid, block, mem >>>(m_pPlanetMasses->d_data(), m_holder.masses.d_data(), m_counts.d_data(), i, m_shuffle.d_data());
 		CUT_CHECK_ERROR( "Kernel launch" );
 	}
 }
@@ -162,4 +176,9 @@ MEM::MISC::BufferCu<unsigned>* Clusterer::getShuffle()
 MEM::MISC::BufferCu<float3>* Clusterer::getCenters()
 {
 	return &m_holder.centers;
+}
+
+MEM::MISC::BufferCu<float>* Clusterer::getMasses()
+{
+	return &m_holder.masses;
 }
