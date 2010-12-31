@@ -231,8 +231,15 @@ namespace MISC
 
 			cudaGLRegisterBufferObject( glId );
 			CUT_CHECK_ERROR("Registering buffer while resizing BufferGl");
-		} else
+		} else {
+			cudaGLUnregisterBufferObject( glId );
+			CUT_CHECK_ERROR("Unregistering buffer while resizing old BufferGl");
+
 			gl_resize( new_size , data );
+
+			cudaGLRegisterBufferObject( glId );
+			CUT_CHECK_ERROR("Registering buffer while resizing old BufferGl");
+		}
 
 		this->length = num;
 		this->size =this-> realsize = new_size;

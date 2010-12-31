@@ -37,7 +37,7 @@ void main()
 
 	float dist = length(lightDir);
 //        dist = dist * dist / 10;
-	dist /= 5; // magic constans
+	dist /= 50; // magic constans
 	dist /= ke;
         lightDir = normalize(lightDir);
 
@@ -45,10 +45,7 @@ void main()
 
 	vec3 fd = gdat3.rgb * clamp( i , 0.0 , 1.0 ) / dist;
 
-	vec3 atm= vec3(0);
-
-	if( gdat3.a > .0 )
-		atm = vec3( gdat2.a , gdat3.a , gdat4.a ) * .3 * clamp( i + .6 , 0.0 , 1.0 ) / dist;
+	vec3 atm = vec3( gdat2.a , gdat3.a , gdat4.a ) * .3 * clamp( i + .6 , 0.0 , 1.0 ) / dist;
 
 //        vec3 h = normalize(lightDir + viewDir);
 

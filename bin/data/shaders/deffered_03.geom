@@ -18,7 +18,7 @@ out vec3 lightColor;
 out vec3 lightPos;
 
 // this magic const should corespond to magic const in fragment shader
-const float lightStdRange = 5000.0;
+const float lightStdRange = 50000.0;
 
 mat3 faceme( vec3 pos );
 

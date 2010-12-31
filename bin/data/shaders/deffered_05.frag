@@ -30,7 +30,7 @@ void main()
 	vec3 lightDir = lightPos - gdat2.xyz; // lightpos - pos
 
 	float dist = length(lightDir);
-	dist /= 5;
+	dist /= 50;
 	dist /= ke;
         lightDir = normalize(lightDir);
 

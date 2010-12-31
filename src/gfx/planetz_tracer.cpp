@@ -1,18 +1,42 @@
 #include "planetz_tracer.h"
 
-#include "gfx.h"
-
 #include <cmath>
+
+#include <boost/bind.hpp>
+
+#include "gfx.h"
+#include "util/logger.h"
+
+
+void GFX::PlanetsTracer::start()
+{
+	if( dt <= 0 ) {
+		log_printf(_WARNING,"Cannot update tracer so frequently (%f).\n",dt);
+		return;
+	}
+	tc = timer.call(boost::bind(&GFX::PlanetsTracer::update,this),dt,true);
+}
+
+void GFX::PlanetsTracer::stop()
+{
+	tc.die();
+}
 
 void GFX::PlanetsTracer::clear()
 {
 	begin = 0 ;
 }
 
-
 void GFX::PlanetsTracer::update_configuration()
 {
-	number = gfx->cfg().get<unsigned>( "trace.length" );
+	update_configuration( gfx->cfg() );
+}
+
+void GFX::PlanetsTracer::update_configuration( const Config& cfg )
+{
+	number   = cfg.get<unsigned>( "trace.length" );
+	dt       = cfg.get<double>( "trace.frequency" );
+	drawable = cfg.get<bool>( "trace.enable" );
 }
 
 void GFX::PlanetsTracer::update()
@@ -39,6 +63,8 @@ void GFX::PlanetsTracer::update()
 
 void GFX::PlanetsTracer::draw() const
 {
+	if( !drawable ) return;
+
 	glEnableClientState( GL_VERTEX_ARRAY );
 
 	glEnable( GL_DEPTH_TEST );

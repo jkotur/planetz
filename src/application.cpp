@@ -22,7 +22,7 @@ Application::Application( Window& win , Config& cfg )
 	, phx( data_mgr.getPhxMem() )
 	, camera( CAM_START_VECS )
 	, plz( data_mgr.getGfxMem() )
-	, trace( *data_mgr.getGfxMem() , cfg.get<unsigned>( "trace.length" ) )
+	, trace( *data_mgr.getGfxMem() , cfg )
 	, bkg( 0.8 , win.getW() , win.getH() )
 	, picker( data_mgr.getGfxMem(), 3, 3 , win.getW() , win.getH() )
 	, pprnt( data_mgr.getPhxMem(), &picker )
@@ -148,7 +148,6 @@ void Application::main_loop()
 {
 	bool running = true;
 
-	Timer::Caller tc=timer.call(bind(&GFX::PlanetsTracer::update,&trace) , config.get<double>("trace.frequency") , true);
 
 	log_printf(DBG,"Starting main loop\n");
 	do
@@ -161,11 +160,10 @@ void Application::main_loop()
 
 		if( !anim_pause )
 		{
-			tc.unblock();
 			//Timer t;
 			phx.compute(10);
 			//log_printf(DBG, "Kernel running time: %.2fms\n", timer.get_dt_ms());
-		} else	tc.block();
+		}
 		gfx.render();
 
 		(running && (running &= ui.event_handle() ));
@@ -173,8 +171,6 @@ void Application::main_loop()
 		do_fps();
 	}
 	while( running );
-
-	tc.die();
 
 	timer.stop();
 }
@@ -201,11 +197,16 @@ void Application::do_fps()
 void Application::pause_toggle()
 {
 	anim_pause = !anim_pause;
+
+	if( anim_pause )
+		trace.stop();
+	else	trace.start();
 }
 
 void Application::pause_anim()
 {
 	anim_pause = true;
+	trace.stop();
 }
 
 void Application::reset() // Planetz*pl , Camera*c )
@@ -213,6 +214,7 @@ void Application::reset() // Planetz*pl , Camera*c )
 	//planetz.clear();
 	camera.set_perspective(CAM_START_VECS);
 	anim_pause = true;
+	trace.stop();
 	//planetz.select(-1); // clear selection
 }
 
