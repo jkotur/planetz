@@ -91,3 +91,7 @@ const BufferGl<uint32_t>&GfxPlanetFactory::getCounts() const
 	return holder->count;
 }
 
+unsigned GfxPlanetFactory::size() const
+{
+	return holder->size();
+}

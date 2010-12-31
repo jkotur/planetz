@@ -44,6 +44,7 @@ namespace MISC
 		BufferGl<uint32_t>&getCount();
 
 		unsigned size() const;
+		void filter( BufferCu<unsigned> *mask );
 
 	private:
 

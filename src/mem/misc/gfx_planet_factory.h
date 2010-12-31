@@ -42,6 +42,9 @@ namespace MISC
 		const BufferGl<float3>  &getPositions() const;
 		const BufferGl<float>   &getRadiuses () const;
 		const BufferGl<uint32_t>&getCounts   () const;
+
+		unsigned size() const;
+
 	private:
 
 		const PlanetHolder* const holder;

@@ -284,3 +284,13 @@ __global__ void merge_collisions( unsigned *in_merges, unsigned *out_merges, flo
 
 	out_merges[ index ] = index;
 }
+
+__global__ void create_filter( float *masses, unsigned *filter, unsigned *count )
+{
+	unsigned index = threadIdx.x + blockDim.x * blockIdx.x;
+	if( index >= *count )
+	{
+		return;
+	}
+	filter[ index ] = masses[ index ] ? 1 : 0;
+}

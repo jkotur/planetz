@@ -26,6 +26,10 @@ __global__ void detect_collisions( float3 *positions, float *radiuses, unsigned 
 /// @brief Skleja planety wg tablicy in_merges. Jeżeli nie sklei wszystkiego, *done jest ustawiane na 0, a w out_merges są dane do kolejnego wywołania.
 __global__ void merge_collisions( unsigned *in_merges, unsigned *out_merges, float3 *positions, float3 *velocities, float *masses, float *radiuses, unsigned *count, unsigned *done );
 
+/// @brief Tworzy filtr do usuwania planet.
+/// @detail Usunięte zostaną planety, których masa wynosi 0.
+__global__ void create_filter( float *masses, unsigned *filter, unsigned *count );
+
 std::string getErr();
 
 #endif // _PHX_KERNELS_H_

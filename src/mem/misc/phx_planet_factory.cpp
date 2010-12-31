@@ -13,7 +13,6 @@ PhxPlanet::PhxPlanet( unsigned _id , const PlanetHolder* h )
 
 PhxPlanet::~PhxPlanet()
 {
-	log_printf(DBG,"[DEL] PhxPlanet\n");
 }
 
 float3   PhxPlanet::getPosition() const
@@ -83,4 +82,9 @@ BufferCu<float3> &PhxPlanetFactory::getVelocities()
 unsigned PhxPlanetFactory::size() const
 {
 	return holder->size();
+}
+
+void PhxPlanetFactory::filter( BufferCu<unsigned> *mask )
+{
+	holder->filter( mask );
 }

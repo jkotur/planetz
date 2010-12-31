@@ -11,9 +11,8 @@ using std::numeric_limits;
 using namespace MEM::MISC;
 using namespace PHX;
 
-Clusterer::Clusterer(BufferGl<float3> *positions, BufferCu<float> *masses)
-	: m_pPositions( positions )
-	, m_pPlanetMasses( masses )
+Clusterer::Clusterer(PhxPlanetFactory *ppf)
+	: m_planets( ppf )
 	, m_prevSize( 0 )
 {
 }
@@ -51,7 +50,7 @@ void massSelect( BufferCu<float3> *centers, BufferGl<float3> *planets, BufferCu<
 
 void Clusterer::initClusters()
 {
-	unsigned n = m_pPositions->getLen();
+	unsigned n = m_planets->size();
 	if( n == m_prevSize )
 	{
 		return;
@@ -66,7 +65,7 @@ void Clusterer::initClusters()
 	m_shuffle.resize( n );
 	m_counts.resize( k );
 	
-	massSelect( &m_holder.centers, m_pPositions, m_pPlanetMasses );
+	massSelect( &m_holder.centers, &m_planets->getPositions(), &m_planets->getMasses() );
 }
 
 size_t Clusterer::getCount() const 
@@ -76,7 +75,7 @@ size_t Clusterer::getCount() const
 
 float Clusterer::compute()
 {
-	unsigned threads = m_pPositions->getLen();
+	unsigned threads = m_planets->size();
 	unsigned k = getCount();
 	dim3 block( min( threads, 512 ) );
 	dim3 grid( 1 + ( threads - 1 ) / block.x );
@@ -84,18 +83,18 @@ float Clusterer::compute()
 	
 	kmeans__findbest_kernel<<< grid, block, mem >>>( k,
 		m_holder.centers.d_data(),
-		m_pPositions->map( BUF_CU ),
-		m_pPositions->getLen(),
+		m_planets->getPositions().map( BUF_CU ),
+		m_planets->size(),
 		m_holder.assignments.d_data(),
 		m_errors.d_data() );
 	CUT_CHECK_ERROR( "Kernel launch - find best" );
 	
-	kmeans__prepare_kernel<<< grid, block >>>( m_shuffle.d_data(), m_pPositions->getLen() );
+	kmeans__prepare_kernel<<< grid, block >>>( m_shuffle.d_data(), m_planets->size() );
 	CUT_CHECK_ERROR( "Kernel launch - prepare" );
 
 	sortByCluster();
 
-	kmeans__count_kernel<<< grid, block >>>( m_holder.assignments.d_data() , m_counts.d_data(), m_pPositions->getLen() - 1, k );
+	kmeans__count_kernel<<< grid, block >>>( m_holder.assignments.d_data() , m_counts.d_data(), m_planets->size() - 1, k );
 	CUT_CHECK_ERROR( "Kernel launch - count" );
 
 	reduceMeans();
@@ -145,7 +144,7 @@ void Clusterer::reduceMeans()
 		dim3 block( 512 );
 		dim3 grid( 1 );
 		unsigned mem = sizeof(float3) * 512;
-		reduceSelective_f3<512> <<< grid, block, mem >>>(m_pPositions->map( BUF_CU ), m_holder.centers.d_data(), m_counts.d_data(), i, m_shuffle.d_data());
+		reduceSelective_f3<512> <<< grid, block, mem >>>(m_planets->getPositions().map( BUF_CU ), m_holder.centers.d_data(), m_counts.d_data(), i, m_shuffle.d_data());
 		CUT_CHECK_ERROR( "Kernel launch" );
 	}
 }
@@ -158,7 +157,7 @@ void Clusterer::calcAttributes()
 		dim3 block( 512 );
 		dim3 grid( 1 );
 		unsigned mem = sizeof(float) * 512;
-		sumSelective_f<512> <<< grid, block, mem >>>(m_pPlanetMasses->d_data(), m_holder.masses.d_data(), m_counts.d_data(), i, m_shuffle.d_data());
+		sumSelective_f<512> <<< grid, block, mem >>>(m_planets->getMasses().d_data(), m_holder.masses.d_data(), m_counts.d_data(), i, m_shuffle.d_data());
 		CUT_CHECK_ERROR( "Kernel launch" );
 	}
 }

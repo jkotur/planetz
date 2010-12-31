@@ -28,6 +28,7 @@ namespace MISC
 
 		virtual void resize( size_t num , const T*data = NULL );
 		virtual void assign( T val );
+		virtual T retrieve();
 
 		T* h_data();
 		T* d_data();
@@ -86,6 +87,13 @@ namespace MISC
 	{
 		ASSERT_MSG( 1 == BufferBase<T>::getLen(), "assign() works for one field buffers only!" );
 		setAt(0, val);
+	}
+
+	template<typename T>
+	T BufferCu<T>::retrieve()
+	{
+		ASSERT_MSG( 1 == BufferBase<T>::getLen(), "retrieve() works for one field buffers only!" );
+		return getAt(0);
 	}
 
 	template<typename T>

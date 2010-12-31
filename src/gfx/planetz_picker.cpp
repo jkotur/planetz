@@ -162,7 +162,7 @@ void PlanetzPicker::render( int x , int y )
 	glClearColor(.0,.0,.0,0);
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-	glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
+	glDrawArrays( GL_POINTS , 0 , factory->size() );
 
 
 //        glReadPixels(0,0,w,h,GL_RED            ,GL_FLOAT,buffNames);
@@ -206,9 +206,9 @@ int PlanetzPicker::getId()
 
 void PlanetzPicker::resizeNames()
 {
-	if( factory->getPositions().getLen() == names.getLen() ) return;
+	if( factory->size() == names.getLen() ) return;
 
-	names.resize( factory->getPositions().getLen() );
+	names.resize( factory->size() );
 
 	float* pname = names.map( MEM::MISC::BUF_H );
 	for( unsigned int i=0 ; i<names.getLen() ; i++ )

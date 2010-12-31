@@ -39,12 +39,13 @@ class Phx::CImpl
 		MEM::MISC::BufferCu<unsigned> merges1;
 		MEM::MISC::BufferCu<unsigned> merges2;
 		MEM::MISC::BufferCu<float3> tmp_vel;
+		MEM::MISC::BufferCu<unsigned> filter; // a może użyć jakiegoś merge'a? taniej dla ramu
 		bool clusters_on;
 };
 
 Phx::CImpl::CImpl(MEM::MISC::PhxPlanetFactory *p)
-	: planets(p)
-	, clusterer( &p->getPositions(), &p->getMasses() )
+	: planets( p )
+	, clusterer( p )
 	, clusters_on( true )
 {
 }
@@ -256,13 +257,14 @@ void Phx::CImpl::update_positions()
 
 void Phx::CImpl::handle_collisions()
 {
+	bool merge_was_needed = false;
 	MEM::MISC::BufferCu<unsigned> merge_needed(1);
+	unsigned *in_merges = merges1.d_data();
+	unsigned *out_merges = merges2.d_data();
+
 	do
 	{
 		merge_needed.assign(0);
-		unsigned *in_merges = merges1.d_data();
-		unsigned *out_merges = merges2.d_data();
-
 		unsigned threads = planets->size();
 		dim3 block( min( 512, threads ) );
 		dim3 grid( 1 + ( threads - 1 ) / block.x );
@@ -277,10 +279,21 @@ void Phx::CImpl::handle_collisions()
 			merge_needed.d_data() );
 		CUT_CHECK_ERROR("kernel launch");
 
-		if( merge_needed.getAt(0) == 0 )
+		if( merge_needed.retrieve() == 0 )
 		{
+			if( merge_was_needed )
+			{
+				TODO("rzadziej filtrować");
+				filter.resize(threads);
+				create_filter<<<grid, block>>>(
+					planets->getMasses().d_data(),
+					filter.d_data(),
+					planets->getCount().map(MEM::MISC::BUF_CU) );
+				planets->filter( &filter );
+			}
 			return;
 		}
+		merge_was_needed = true;
 
 	/*	merges2.bind();
 		for( unsigned i = 0; i < threads; ++i )
@@ -293,9 +306,16 @@ void Phx::CImpl::handle_collisions()
 		if( ++safety_buf > 10 ) abort(); */
 		MEM::MISC::BufferCu<unsigned> done(1);
 		
+		unsigned __debug_counter = 0;
 		do
 		{
-			//log_printf(DBG, "mergin'\n" );
+			log_printf(DBG, "mergin' #%u\n", __debug_counter++ );
+			if( __debug_counter >= threads )
+			{
+				PRINT_OUT_BUF( merges1, "%u" );
+				PRINT_OUT_BUF( merges2, "%u" );
+				abort();
+			}
 			done.assign(1);
 			std::swap( in_merges, out_merges );
 			merge_collisions<<<grid, block>>>(
@@ -309,7 +329,7 @@ void Phx::CImpl::handle_collisions()
 				done.d_data() );
 			CUT_CHECK_ERROR("kernel launch");
 		}
-		while( !done.getAt(0) );
+		while( !done.retrieve() );
 	}
 	while(true);
 }

@@ -10,32 +10,36 @@ namespace MEM
 namespace MISC
 {
 	template<template<class T>class CBUF, template<class S>class GBUF>
-	struct PlanetHolderBase
+	class PlanetHolderBase
 	{
-		PlanetHolderBase( unsigned num = 0 );
-		virtual ~PlanetHolderBase();
+		public:
+			PlanetHolderBase( unsigned num = 0 );
+			virtual ~PlanetHolderBase();
 
-		void resize(const size_t num);
-		size_t size() const;
+			void resize(const size_t num);
+			size_t size() const;
 
-		//   * GFX
-		GBUF<int>    model;
-		GBUF<float>  emissive; // redundant to model, but needed for speed
-		GBUF<int>    texId;
-		GBUF<float3> atm_color;
-		GBUF<float2> atm_data;
+			void filter(BufferCu<unsigned> *deleted);
 
-		//   * COMMON
-		GBUF<float3>   pos;
-		GBUF<float>    radius;
-		GBUF<uint32_t> count;
+			//   * GFX
+			GBUF<int>    model;
+			GBUF<float>  emissive; // redundant to model, but needed for speed
+			GBUF<int>    texId;
+			GBUF<float3> atm_color;
+			GBUF<float2> atm_data;
 
-		//   * PHX
-		CBUF<float>    mass;
-		CBUF<float3>   velocity;
+			//   * COMMON
+			GBUF<float3>   pos;
+			GBUF<float>    radius;
+			GBUF<uint32_t> count;
 
-	private:
-		size_t m_size;
+			//   * PHX
+			CBUF<float>    mass;
+			CBUF<float3>   velocity;
+
+		private:
+			size_t m_size;
+			size_t m_realsize;
 	};
 
 	typedef PlanetHolderBase< BufferCu, BufferGl > PlanetHolder;
@@ -74,6 +78,7 @@ namespace MISC
 		, mass(0)
 		, velocity(0)
 		, m_size(num)
+		, m_realsize(num)
 	{
 		resize( num );
 	}
@@ -87,17 +92,20 @@ namespace MISC
 	template<template<class T>class CBUF, template<class S>class GBUF>
 	void PlanetHolderBase<CBUF, GBUF>::resize(const size_t num)
 	{
-		TODO("keep previous data...");
-		model    .resize(num);
-		emissive .resize(num);
-		texId    .resize(num);
-		atm_color.resize(num);
-		atm_data .resize(num);
-		pos      .resize(num);
-		radius   .resize(num);
-		mass     .resize(num);
-		velocity .resize(num);
-
+		if( num > m_realsize ) // ew. można zmniejszać kiedy num << m_realsize
+		{
+			TODO("keep previous data...");
+			model    .resize(num);
+			emissive .resize(num);
+			texId    .resize(num);
+			atm_color.resize(num);
+			atm_data .resize(num);
+			pos      .resize(num);
+			radius   .resize(num);
+			mass     .resize(num);
+			velocity .resize(num);
+			m_realsize = num;
+		}
 		count.assign( num );
 		m_size = num;
 	}
@@ -106,6 +114,40 @@ namespace MISC
 	size_t PlanetHolderBase<CBUF, GBUF>::size() const
 	{
 		return m_size;
+	}
+
+	template<template<class T>class CBUF, template<class S>class GBUF>
+	class PlanetHolderFilterFunctor
+	{
+		public:
+			PlanetHolderFilterFunctor( PlanetHolderBase<CBUF, GBUF> *owner );
+			void operator()( BufferCu<unsigned> *mask );
+	};
+
+	void __filter( PlanetHolder *what, BufferCu<unsigned> *how );
+
+	template<>
+	class PlanetHolderFilterFunctor< BufferCu, BufferGl >
+	{
+		public:
+			PlanetHolderFilterFunctor( PlanetHolder *_owner )
+				: owner( _owner )
+			{}
+
+			void operator()( BufferCu<unsigned> *mask )
+			{
+				__filter( owner, mask );
+			}
+		private:
+			PlanetHolder *owner;
+	};
+
+	template<template<class T>class CBUF, template<class S>class GBUF>
+	void PlanetHolderBase<CBUF, GBUF>::filter( BufferCu<unsigned> *mask )
+	{
+		PlanetHolderFilterFunctor<CBUF, GBUF> filt( this );
+		filt( mask );
+		m_size = count.retrieve();
 	}
 }
 }

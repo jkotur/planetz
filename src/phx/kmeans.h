@@ -1,8 +1,6 @@
 #pragma once
 
-#include "mem/misc/holder.h"
-#include "mem/misc/buffer.h"
-#include "mem/misc/buffer_cu.hpp"
+#include <mem/misc/phx_planet_factory.h>
 
 const float EPSILON = 1e-5;
 
@@ -11,7 +9,7 @@ namespace PHX
 	class Clusterer
 	{
 		public:
-			Clusterer(MEM::MISC::BufferGl<float3> *positions, MEM::MISC::BufferCu<float> *masses);
+			Clusterer( MEM::MISC::PhxPlanetFactory *ppf );
 			virtual ~Clusterer();
 
 			/// @brief Oblicza klastry na podstawie znanych buforów - ilość klastrów jest obliczana na podstawie ilości planet.
@@ -54,8 +52,7 @@ namespace PHX
 			/// @brief Oblicza parametry klastrów - masy, promienie(?)
 			void calcAttributes();
 
-			MEM::MISC::BufferGl<float3> *m_pPositions;
-			MEM::MISC::BufferCu<float> *m_pPlanetMasses;
+			MEM::MISC::PhxPlanetFactory *m_planets;
 
 			MEM::MISC::ClusterHolder m_holder;
 			MEM::MISC::BufferCu<float> m_errors;

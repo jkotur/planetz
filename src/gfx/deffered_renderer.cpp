@@ -536,7 +536,7 @@ void DeferRender::draw() const
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
+	glDrawArrays( GL_POINTS , 0 , factory->size() );
 
 	glBindFramebuffer( GL_FRAMEBUFFER , 0 );
 	Program::none();
@@ -581,7 +581,7 @@ void DeferRender::draw() const
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	if( flags & LIGHTING )
-		glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
+		glDrawArrays( GL_POINTS , 0 , factory->size() );
 
 	glDisableVertexAttribArray( emissiveLId );
 	glDisableVertexAttribArray( modelLId  );
@@ -653,7 +653,7 @@ void DeferRender::draw() const
 
 	glClear( GL_COLOR_BUFFER_BIT );
 
-	glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
+	glDrawArrays( GL_POINTS , 0 , factory->size() );
 
 	glBindFramebuffer( GL_FRAMEBUFFER , 0 );
 
@@ -691,7 +691,7 @@ void DeferRender::draw() const
 	factory->getEmissive().unbind();
 
 //        if( flags & ATMOSPHERE )
-		glDrawArrays( GL_POINTS , 0 , factory->getPositions().getLen() );
+		glDrawArrays( GL_POINTS , 0 , factory->size() );
 
 	Program::none();
 

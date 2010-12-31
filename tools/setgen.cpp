@@ -97,13 +97,14 @@ void cube_gen(int dist, unsigned edge)
 		{
 			for( int z = 0; z < edge; ++z )
 			{
-				unsigned mass = rand() % (1 << 15);
-				if( x == y && z == x ) mass *= 1e3;;
-				g.add( point( dist * (x - half_edge), dist * (y - half_edge), dist * (z - half_edge), mass, pow(mass, 0.2),
-					.03f * rand() / RAND_MAX,
-					.03f * rand() / RAND_MAX,
-					.03f * rand() / RAND_MAX,
-					x == y && y == z ? 3 : ( x + y + z ) % 3
+				unsigned mass = rand() % (1 << 5) + 1;
+				bool star = (0 == rand() % (edge * edge));
+				if( star ) mass *= 1e4;
+				g.add( point( dist * (x - half_edge), dist * (y - half_edge), dist * (z - half_edge), mass, pow(mass, 0.3),
+					1.f * edge * rand() / RAND_MAX,
+					1.f * edge * rand() / RAND_MAX,
+					1.f * edge * rand() / RAND_MAX,
+					star ? 3 : ( x + y + z ) % 3
 					) );
 			}
 		}
@@ -144,7 +145,7 @@ int main()
 	g.print();
 	g.iterate( 4 );*/
 
-	cube_gen(100, 20);
+	cube_gen(100, 15);
 	//spiral_gen();
 	
 	return 0;

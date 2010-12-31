@@ -35,7 +35,15 @@ namespace MISC
 		virtual ~BufferBase() {}
 
 		virtual void resize( size_t num , const T*data = NULL ) =0;
-		virtual void assign( T val ) = 0; // for one-element buffers - set its value to val
+
+		/// @brief Ustawia zawartość bufora na val. Wyłącznie do buforów jednoelementowych.
+		virtual void assign( T val ) = 0;
+
+		/// @brief Pobiera wartość z bufora. Wyłącznie do buforów jednoelementowych.
+		virtual T retrieve()
+		{
+			NOENTRY(); // nie każdy musi to implementować - np. BufferCpu
+		}
 
 		virtual size_t getSize() const
 		{
@@ -65,6 +73,7 @@ namespace MISC
 
 		virtual void resize( const size_t num , const T*data = NULL );
 		virtual void assign( T val );
+		virtual T retrieve();
 
 		T*       map( enum BUFFER_STATE state );
 		const T* map( enum BUFFER_STATE state ) const;
@@ -150,6 +159,15 @@ namespace MISC
 		ASSERT( 1 == BufferBase<T>::getLen() );
 		map( BUF_H )[0] = val;
 		unmap();
+	}
+
+	template<typename T>
+	T BufferGl<T>::retrieve()
+	{
+		ASSERT( 1 == BufferBase<T>::getLen() );
+		T retval = map( BUF_H )[0];
+		unmap();
+		return retval;
 	}
 
 	template<typename T>
