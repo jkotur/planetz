@@ -20,36 +20,55 @@ namespace MISC
 {
 	typedef unsigned int uint;
 
-	/** buffer mapped states */
+	/** możliwe stany bufforów */
 	enum BUFFER_STATE {
-		BUF_GL , // opengl
-		BUF_CU , // cuda 
-		BUF_H    // host 
+		BUF_GL , /**< opengl */
+		BUF_CU , /**< cuda   */
+		BUF_H    /**< host   */
 	};
 
+	/** 
+	 * @brief Bazowa klasa dla buforów pamięci
+	 */
 	template<typename T>
 	class BufferBase
 	{
 	public:
+		/** 
+		 * @brief Konstruktor pustego bufora
+		 */
 		BufferBase() : length(0), size(0) , realsize(0){}
 		virtual ~BufferBase() {}
 
+		/** 
+		 * @brief Funkcja zmieniająca wielkość bufora.
+		 * 
+		 * @param num nowa wielkość bufora w byte'ach.
+		 * @param data dodatkowo można podać dane które mają być skopiowane do bufora
+		 */
 		virtual void resize( size_t num , const T*data = NULL ) =0;
+		/** 
+		 * @brief Funkcja przypisująca wartość dla jednoelementowych buforów.
+		 * 
+		 * @param val wartość do wpisania
+		 */
+		virtual void assign( T val ) = 0; // for one-element buffers - set its value to val
 
-		/// @brief Ustawia zawartość bufora na val. Wyłącznie do buforów jednoelementowych.
-		virtual void assign( T val ) = 0;
-
-		/// @brief Pobiera wartość z bufora. Wyłącznie do buforów jednoelementowych.
-		virtual T retrieve()
-		{
-			NOENTRY(); // nie każdy musi to implementować - np. BufferCpu
-		}
-
+		/** 
+		 * @brief Zwraca wielkość bufora.
+		 * 
+		 * @return wielkość bufora w bajtach
+		 */
 		virtual size_t getSize() const
 		{
 			return size;
 		}
 
+		/** 
+		 * @brief Zwraca długość bufora.
+		 * 
+		 * @return wielkość bufora w ilości elementów
+		 */
 		virtual uint   getLen() const
 		{
 			return length;
@@ -61,6 +80,12 @@ namespace MISC
 		// TODO: void fireEventContentChanged();
 	};
 
+	/** 
+	 * @brief Buffor trzymający pamięć na karcie graficznej przy pomocy OpenGLa.
+	 * API OpenGLa pozwala na mapowanie takich bufforów do pamięci hosta,
+	 * czyli w tym przypadku CPU, natomiast API CUDA pozwala na mapowanie ich
+	 * do pamięci CUDA. Są one więc najbardziej wszechstronnymi buforami karty graficznej.
+	 */
 	template<typename T>
 	class BufferGl : public BufferBase<T> {
 		// prevent from copying buffer. If so, smart counter is needed 
@@ -75,13 +100,42 @@ namespace MISC
 		virtual void assign( T val );
 		virtual T retrieve();
 
+		/** 
+		 * @brief mapuje bufor. Możliwe mapowania to OpenGL, CUDA lub HOST
+		 * 
+		 * @param state nowy stan bufora
+		 * 
+		 * @return wskaźnik do pamięci na którą zmapowany został bufor.
+		 */
 		T*       map( enum BUFFER_STATE state );
+		/** 
+		 * @brief stała wersja funkcji mapującaej. Zwraca stały wskaźnik.
+		 * 
+		 * @param state nowy stan bufora.
+		 * 
+		 * @return stały wskaźnik do pamięci.
+		 */
 		const T* map( enum BUFFER_STATE state ) const;
+		/** 
+		 * @brief przywraca buffor do domyślego stanu. Po wywołaniu tej funckji
+		 * wszystkie wskaźniki otrzymane przez wywołanie map stają się nieaktualne.
+		 */
 		void unmap() const;
 		
+		/** 
+		 * @brief binduje buffor do użycia przez opengl jako GL_ARRAY_BUFFER
+		 */
 		void bind() const;
+		/** 
+		 * @brief ustawia pusty bufor jako GL_ARRAY_BUFFER
+		 */
 		void unbind() const;
 
+		/** 
+		 * @brief Zwraca id bufora w API OpenGLa
+		 * 
+		 * @return id bufora.
+		 */
 		GLuint getId() const;
 	protected:
 		T* fucking_no_const_cast_workaround( enum BUFFER_STATE state ) const;
@@ -99,20 +153,6 @@ namespace MISC
 		enum BUFFER_STATE* const pstate;
 	};
 	
-	//
-	// BUF and host data in one buffer (only concept)
-	//
-	template<typename T,typename BUF>
-	class BufferBoth : public BUF
-	{
-	public:
-		BufferBoth( size_t , const T*data = NULL );
-		virtual ~BufferBoth();
-	protected:
-		T*     hostDataPtr;
-	};
-	
-
 	//
 	// Implementation BufferGl
 	//

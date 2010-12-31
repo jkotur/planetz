@@ -69,21 +69,38 @@ public:
 	typedef boost::function<void ( double )> Function;
 	typedef std::priority_queue<TimeFunc*,std::vector<TimeFunc*>,cmp_func<TimeFunc*> > ToCallQueue;
 #endif
-
+	/** 
+	 * @brief Obiekt dający kontrolę nad zaplanowanymi w timerze zdarzeniami
+	 */
 	class Caller {
 	public:
 		Caller( States*_s =NULL) : state(_s) {}
 		Caller( const Caller& c ) : state(c.state) {}
+		/** 
+		 * @brief Sprawdza czy obiekt jest poprawnym obiektem zdarzenia.
+		 * 
+		 * @return true jeśli jest dobry, false wpp
+		 */
 		bool good()
 		{	return state!=NULL; }
+		/** 
+		 * @brief Kasuje zdarzenie z kolejki wywołań. Po wywołaniu tej funkcji
+		 * obiekt staje się bezużyteczny.
+		 */
 		void die()
 		{	if( state ) {
 			    *state = STOPED;
 			    state = NULL;
 			}
 		}
+		/** 
+		 * @brief Blockuje zdarzenie. Nie będzie ono wykonywane do czasu odblokowania.
+		 */
 		void block()
 		{	( state && (*state = PAUSED) );}
+		/** 
+		 * @brief Odblokowuje zdarzenie.
+		 */
 		void unblock()
 		{	( state && (*state = RUNNING));}
 	private:

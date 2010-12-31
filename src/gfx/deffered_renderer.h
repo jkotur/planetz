@@ -10,6 +10,10 @@
 
 namespace GFX
 {
+/** 
+ * @brief Klasa odpowiedzialna za wyświetlanie planet na ekran,
+ * oraz wszystkich efektów towarzyszących.
+ */
 class DeferRender : public Drawable {
 	enum OPT {
 		LIGHTING    = 1 << 0,
@@ -17,6 +21,11 @@ class DeferRender : public Drawable {
 		TEXTURES    = 1 << 2,
 	};
 public:
+	/** 
+	 * @brief Tworzy pustą, niegotową do pracy klasę.
+	 * 
+	 * @param factory
+	 */
 	DeferRender( const MEM::MISC::GfxPlanetFactory * factory );
 	virtual ~DeferRender();
 
@@ -30,9 +39,28 @@ public:
 
 	virtual void update_configuration();
 	
-	void setMaterials( GLuint );
-	void setTextures ( GLuint );
+	/** 
+	 * @brief Ustawia teksturę przetrzymującą informację o materiałach.
+	 * Musi to być jednowymiarowa tekstura.
+	 * 
+	 * @param id id tekstury
+	 */
+	void setMaterials( GLuint id );
+	/** 
+	 * @brief Ustawia teksturę tekstur planet. Wymagana jest dwuwymiarowa
+	 * tablica tekstur (GL_TEXTURE_2D_ARRAY), która w kolejnych warstwach
+	 * przetrzymuje tekstury planet.
+	 * 
+	 * @param id id tekstury
+	 */
+	void setTextures ( GLuint id );
 
+	/** 
+	 * @brief Funkcja wywoływana za każdym razem gdy zmieni się kąt patrzenia
+	 * kamery. Konieczne do poprawnego teksturowania planet.
+	 * 
+	 * @param m macierz 4x4 obrotu kamery.
+	 */
 	void on_camera_angle_changed( float*m );
 private:
 	void create_textures( unsigned int w , unsigned int h );

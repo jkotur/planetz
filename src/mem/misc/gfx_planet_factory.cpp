@@ -4,34 +4,6 @@
 
 using namespace MEM::MISC;
 
-GfxPlanet::GfxPlanet( int id , const PlanetHolder* h )
-{
-}
-
-GfxPlanet::~GfxPlanet()
-{
-}
-
-uint8_t  GfxPlanet::getModel() const
-{
-	return 0;
-}
-
-float3   GfxPlanet::getPosition() const
-{
-	return make_float3(0,0,0);
-}
-
-float    GfxPlanet::getRadius() const
-{
-	return 0;
-}
-
-uint32_t GfxPlanet::getCount() const
-{
-	return 0;
-}
-
 GfxPlanetFactory::GfxPlanetFactory( const PlanetHolder* holder )
 	: holder(holder)
 {
@@ -39,11 +11,6 @@ GfxPlanetFactory::GfxPlanetFactory( const PlanetHolder* holder )
 
 GfxPlanetFactory::~GfxPlanetFactory( )
 {
-}
-
-const GfxPlanet GfxPlanetFactory::getPlanet( int id ) const
-{
-	return GfxPlanet( id , holder );
 }
 
 const BufferGl<int> &GfxPlanetFactory::getModels() const
@@ -60,11 +27,6 @@ const BufferGl<int> &GfxPlanetFactory::getTexIds() const
 {
 	return holder->texId;
 }
-
-//const BufferGl<float> &GfxPlanetFactory::getAtmospheres() const
-//{
-//        return holder->atmosphere;
-//}
 
 const BufferGl<float3>  &GfxPlanetFactory::getAtmColor () const
 {
