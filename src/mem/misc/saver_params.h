@@ -9,13 +9,20 @@ namespace MEM
 {
 namespace MISC
 {
+	/// @brief Klasa określająca zbiór danych potrzebnych do zapisu/odczytu symulacji.
 	class SaverParams
 	{
 		public:
+			/// @brief Inicjalizacja parametrów - ustawienie informacji o kamerze.
 			SaverParams(Camera *cam);
-			virtual ~SaverParams(); // deletes planet_info
+			
+			/// @brief Zwalnia pamięć po planet_info, jeżeli było ustawione.
+			virtual ~SaverParams();
 
+			/// @brief Informacje o planetach.
 			CpuPlanetHolder *planet_info;
+
+			/// @brief Informacja o kamerze.
 			Camera *cam_info;
 	};
 }

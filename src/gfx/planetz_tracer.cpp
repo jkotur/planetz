@@ -19,9 +19,9 @@ void GFX::PlanetsTracer::update()
 {
 	if( oldest >= number ) oldest = 0;
 
-	positions.resize(number * gpf.getPositions().getLen());
+	positions.resize(number * gpf.size());
 
-	unsigned buffbytelen = gpf.getPositions().getLen()*3*sizeof(float);
+	unsigned buffbytelen = gpf.size()*3*sizeof(float);
 
 	glBindBuffer( GL_COPY_READ_BUFFER , gpf.getPositions().getId() );
 	glBindBuffer( GL_COPY_WRITE_BUFFER, positions.getId() );
@@ -34,7 +34,7 @@ void GFX::PlanetsTracer::update()
 	glBindBuffer( GL_COPY_WRITE_BUFFER, 0 );
 
 	++oldest;
-	begin += gpf.getPositions().getLen();
+	begin += gpf.size();
 }
 
 void GFX::PlanetsTracer::draw() const
