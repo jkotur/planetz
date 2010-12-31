@@ -11,14 +11,22 @@ ConstChecker<float3, MEM::MISC::BufferGl> pos_checker;
 ConstChecker<float, MEM::MISC::BufferCu> mass_checker;
 ConstChecker<float3, MEM::MISC::BufferCu> vel_checker;
 
+/// @brief Implementacja klasy Phx.
+/// @details Ukrywa szczegóły implementacji, aby nie były widoczne w publicznym interfejsie.
 class Phx::CImpl
 {
 	public:
+		/// @brief Inicjalizacja fizyki
 		CImpl(MEM::MISC::PhxPlanetFactory *p);
 		virtual ~CImpl();
 
+		/// @brief Implementacja Phx::compute
 		void compute(unsigned n);
+
+		/// @brief Implementacja Phx::enableClusters
 		void enableClusters(bool orly);
+
+		/// @brief Implementacja Phx::clustersEnabled
 		bool clustersEnabled() const;
 
 	private:

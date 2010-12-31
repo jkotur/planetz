@@ -1,5 +1,6 @@
 #include "phx_kernels.h"
 #include "cuda/math.h"
+
 #define ERROR_LEN 256
 #define CUDA_ASSERT( x ) \
 if( !(x) ) { if( error[0] != '\0' ) return; unsigned i = 0; while( #x[i] != '\0' ){error[i] = #x[i]; ++i;} error[i] = '\0'; return; }
@@ -37,9 +38,9 @@ __device__ float3 get_dV( float3 myPos, float3 theirPos, float theirMass )
 }
 
 #ifndef PHX_DEBUG
-__global__ void basic_interaction( float3 *positions, float *masses, float3 *velocities, unsigned *cnt )
+__global__ void PHX::basic_interaction( float3 *positions, float *masses, float3 *velocities, unsigned *cnt )
 #else
-__global__ void basic_interaction( float3 *positions, float *masses, float3 *velocities, unsigned *cnt, float3 *dvs, unsigned who )
+__global__ void PHX::basic_interaction( float3 *positions, float *masses, float3 *velocities, unsigned *cnt, float3 *dvs, unsigned who )
 #endif
 {
 	// shared mem temporarily turned off
@@ -105,9 +106,9 @@ __global__ void basic_interaction( float3 *positions, float *masses, float3 *vel
 }
 
 #ifndef PHX_DEBUG
-__global__ void inside_cluster_interaction( float3 *positions, float *masses, float3 *velocities, unsigned *shuffle, unsigned *counts, unsigned cluster )
+__global__ void PHX::inside_cluster_interaction( float3 *positions, float *masses, float3 *velocities, unsigned *shuffle, unsigned *counts, unsigned cluster )
 #else
-__global__ void inside_cluster_interaction( float3 *positions, float *masses, float3 *velocities, unsigned *shuffle, unsigned *counts, unsigned cluster, float3 *dvs, unsigned who, unsigned *whois )
+__global__ void PHX::inside_cluster_interaction( float3 *positions, float *masses, float3 *velocities, unsigned *shuffle, unsigned *counts, unsigned cluster, float3 *dvs, unsigned who, unsigned *whois )
 #endif
 {
 	unsigned index = blockIdx.x * blockDim.x + threadIdx.x;
@@ -154,7 +155,7 @@ __global__ void inside_cluster_interaction( float3 *positions, float *masses, fl
 #endif
 }
 
-__global__ void outside_cluster_interaction( float3 *centers, float *masses, unsigned count, float3 *velocities_impact )
+__global__ void PHX::outside_cluster_interaction( float3 *centers, float *masses, unsigned count, float3 *velocities_impact )
 {
 	unsigned tid = threadIdx.x;
 	
@@ -171,7 +172,7 @@ __global__ void outside_cluster_interaction( float3 *centers, float *masses, uns
 	velocities_impact[tid] = new_vel;
 }
 
-__global__ void propagate_velocities( float3 *velocities_impact, float3 *positions, float3 *velocities, unsigned *shuffle, unsigned *count, unsigned last_cluster )
+__global__ void PHX::propagate_velocities( float3 *velocities_impact, float3 *positions, float3 *velocities, unsigned *shuffle, unsigned *count, unsigned last_cluster )
 {
 	unsigned index = threadIdx.x + blockDim.x * blockIdx.x;
 	unsigned cluster = 0;
@@ -188,7 +189,7 @@ __global__ void propagate_velocities( float3 *velocities_impact, float3 *positio
 	velocities[ shuffle[ index ] ] += velocities_impact[ cluster ];
 }
 
-__global__ void update_positions_kernel( float3 *positions, float3 *velocities, unsigned *count )
+__global__ void PHX::update_positions_kernel( float3 *positions, float3 *velocities, unsigned *count )
 {
 	unsigned index = threadIdx.x + blockDim.x * blockIdx.x;
 	if( index < *count )
@@ -205,7 +206,7 @@ __device__ bool collision_detected( float3 pos1, float r1, float3 pos2, float r2
 	return d2 < (r1+r2)*(r1+r2); // TODO coverage?
 }
 
-__global__ void detect_collisions( float3 *positions, float *radiuses, unsigned *count, unsigned *shuffle, unsigned last_cluster, unsigned *merges, unsigned *merge_needed )
+__global__ void PHX::detect_collisions( float3 *positions, float *radiuses, unsigned *count, unsigned *shuffle, unsigned last_cluster, unsigned *merges, unsigned *merge_needed )
 {
 	unsigned index = threadIdx.x + blockDim.x * blockIdx.x;
 	if( index >= count[last_cluster] )
@@ -256,7 +257,7 @@ __device__ void internal_merge( float3 *positions, float3 *velocities, float *ma
 	radiuses[idx2] = 0;
 }
 
-__global__ void merge_collisions( unsigned *in_merges, unsigned *out_merges, float3 *positions, float3 *velocities, float *masses, float *radiuses, unsigned *count, unsigned *done )
+__global__ void PHX::merge_collisions( unsigned *in_merges, unsigned *out_merges, float3 *positions, float3 *velocities, float *masses, float *radiuses, unsigned *count, unsigned *done )
 {
 	unsigned index = threadIdx.x + blockDim.x * blockIdx.x;
 	if( index >= *count )
@@ -285,7 +286,7 @@ __global__ void merge_collisions( unsigned *in_merges, unsigned *out_merges, flo
 	out_merges[ index ] = index;
 }
 
-__global__ void create_filter( float *masses, unsigned *filter, unsigned *count )
+__global__ void PHX::create_filter( float *masses, unsigned *filter, unsigned *count )
 {
 	unsigned index = threadIdx.x + blockDim.x * blockIdx.x;
 	if( index >= *count )

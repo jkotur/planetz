@@ -6,9 +6,13 @@ const float EPSILON = 1e-5;
 
 namespace PHX
 {
+	/// @brief Klasa odpowiedzialna za klasteryzację.
+	/// @details Używa algorytmu k-means do podziału przestrzeni na klastry.
 	class Clusterer
 	{
 		public:
+			/// @brief Konstruktor 
+			/// @param ppf wskaźnik na faktorię, z której klasa ma czerpać informacje.
 			Clusterer( MEM::MISC::PhxPlanetFactory *ppf );
 			virtual ~Clusterer();
 
@@ -25,14 +29,14 @@ namespace PHX
 			MEM::MISC::BufferCu<float> *getMasses();
 
 			/// @brief Zwraca mapowanie indeksów.
-			/// @detail Klastry określone są poprzez dwie tablice - shuffle oraz counts. Planeta shuffle[i] należy do klastra j <=> counts[j-1] <= i < counts[j]. counts[-1] jest umownie równe 0.
+			/// @details Klastry określone są poprzez dwie tablice - shuffle oraz counts. Planeta shuffle[i] należy do klastra j <=> counts[j-1] <= i < counts[j]. counts[-1] jest umownie równe 0.
 			MEM::MISC::BufferCu<unsigned> *getShuffle();
 
 			/// @brief Zwraca liczności klastrów.
-			/// @detail Klastry określone są poprzez dwie tablice - shuffle oraz counts. Planeta shuffle[i] należy do klastra j <=> counts[j-1] <= i < counts[j]. counts[-1] jest umownie równe 0.
+			/// @details Klastry określone są poprzez dwie tablice - shuffle oraz counts. Planeta shuffle[i] należy do klastra j <=> counts[j-1] <= i < counts[j]. counts[-1] jest umownie równe 0.
 			MEM::MISC::BufferCu<unsigned> *getCounts();
 
-		protected:
+		private:
 			/// @brief Określa początkowe położenia środków klastrów
 			void initClusters();
 
@@ -49,7 +53,8 @@ namespace PHX
 			/// @brief Oblicza błąd klasteryzacji
 			float reduceErrors();
 
-			/// @brief Oblicza parametry klastrów - masy, promienie(?)
+			/// @brief Oblicza parametry klastrów - masy
+			/// @todo Być może promienie klastrów?
 			void calcAttributes();
 
 			MEM::MISC::PhxPlanetFactory *m_planets;

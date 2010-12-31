@@ -3,19 +3,25 @@
 
 #include <mem/misc/phx_planet_factory.h>
 
+/// @brief Przestrzeń nazw dla obiektów odpowiedzialnych za fizykę.
 namespace PHX
 {
+	/// @brief Główna klasa odpowiedzialna za obliczenia fizyczne.
 	class Phx
 	{
 		public:
+			/// @brief Inicjalizacja fizyki.
 			Phx(MEM::MISC::PhxPlanetFactory *p);
 			virtual ~Phx();
 
-			/// @brief Obliczenie n klatek fizyki
+			/// @brief Oblicza n klatek fizyki
 			/// @param n Ilość klatek
-			/// @details Przed właściwym obliczeniem następuje klasteryzacja planet. W przypadku n = 0 metoda compute podzieli przestrzeń na klastry, nie przemieszczając samych planet.
 			virtual void compute(unsigned n=1);
+
+			/// @brief Włącza/wyłącza klasteryzację.
 			virtual void enableClusters(bool orly=true);
+
+			/// @brief Sprawdza, czy klasteryzacja jest włączona.
 			virtual bool clustersEnabled() const;
 
 		private:
