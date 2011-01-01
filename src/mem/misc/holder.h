@@ -77,8 +77,8 @@ namespace MISC
 		, count(1)
 		, mass(0)
 		, velocity(0)
-		, m_size(num)
-		, m_realsize(num)
+		, m_size(0) // ustawi się w resize
+		, m_realsize(0) // jw.
 	{
 		resize( num );
 	}

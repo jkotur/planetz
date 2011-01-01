@@ -86,7 +86,7 @@ GLuint MemMgr::loadMaterials( const MISC::Materials& materials )
 	glTexImage1D(GL_TEXTURE_1D,0,GL_RGBA16F,materials.size()*2,0,GL_RGBA, GL_FLOAT,data);
 	glBindTexture(GL_TEXTURE_1D, 0 );
 
-	delete data;
+	delete[] data;
 	return matTexId;
 }
 

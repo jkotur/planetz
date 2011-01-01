@@ -8,7 +8,7 @@ PhxPlanet::PhxPlanet( unsigned _id , const PlanetHolder* h )
 	: id( _id )
 	, holder( h )
 {
-	assert( h );
+	ASSERT( h );
 }
 
 PhxPlanet::~PhxPlanet()
@@ -42,7 +42,6 @@ float3 PhxPlanet::getVelocity() const
 PhxPlanetFactory::PhxPlanetFactory( PlanetHolder* holder )
 	: holder(holder)
 {
-	log_printf(DBG, "TESTING: pos addr = %x\n", this );
 }
 
 PhxPlanetFactory::~PhxPlanetFactory( )

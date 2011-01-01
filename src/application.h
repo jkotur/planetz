@@ -21,6 +21,7 @@
 #include "constants.h"
 
 #include "ui/ui.h"
+#include "ui/planet_tracer.h"
 
 #include "mem/data_flow_mgr.h"
 
@@ -100,6 +101,7 @@ protected:
 #ifndef _RELEASE
 	GFX::PlanetzPicker picker;
 	PlanetPrinter pprnt;
+	PlanetTracer pt;
 #endif
 };
 

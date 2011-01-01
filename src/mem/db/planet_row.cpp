@@ -21,7 +21,7 @@ std::string PlanetRow::getSaveString() const
 	char *buf = new char[ save_string.size() + 666 ];
 	sprintf(buf, save_string.c_str(), xcoord, ycoord, zcoord, radius, mass, xvel, yvel, zvel, model_id);
 	std::string retval( buf );
-	delete buf;
+	delete[] buf;
 	return retval;
 }
 

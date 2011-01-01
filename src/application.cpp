@@ -26,6 +26,7 @@ Application::Application( Window& win , Config& cfg )
 	, bkg( 0.8 , win.getW() , win.getH() )
 	, picker( data_mgr.getGfxMem(), 3, 3 , win.getW() , win.getH() )
 	, pprnt( data_mgr.getPhxMem(), &picker )
+	, pt( data_mgr.getPhxMem(), &picker, &camera )
 {
 }
 
@@ -94,6 +95,8 @@ bool Application::init()
 #ifndef _RELEASE
 	ui.sigMouseButtonDown.
 		connect(1,bind(&PlanetPrinter::on_button_down,&pprnt,_1,_2,_3));
+	ui.sigMouseButtonDown.
+		connect(1,bind(&PlanetTracer::on_button_down,&pt,_1,_2,_3));
 #endif
 
 #ifndef _NOGUI
@@ -158,6 +161,7 @@ void Application::main_loop()
 #endif
 		camera.signal();
 
+		pt.refresh();
 		if( !anim_pause )
 		{
 			//Timer t;

@@ -21,7 +21,7 @@ std::string CameraRow::getSaveString() const
 	char *buf = new char[ save_string.size() + 666 ];
 	sprintf(buf, save_string.c_str(), xcoord, ycoord, zcoord, xlook, ylook, zlook, xup, yup, zup);
 	std::string retval( buf );
-	delete buf;
+	delete[] buf;
 	return retval;
 }
 
