@@ -43,7 +43,7 @@ namespace MISC
 		/** 
 		 * @brief Funkcja zmieniająca wielkość bufora.
 		 * 
-		 * @param num nowa wielkość bufora w byte'ach.
+		 * @param num nowa ilość elementów bufora.
 		 * @param data dodatkowo można podać dane które mają być skopiowane do bufora
 		 */
 		virtual void resize( size_t num , const T*data = NULL ) =0;
@@ -74,10 +74,20 @@ namespace MISC
 			return length;
 		}
 	protected:
-		uint   length; // number of Ts in buffer
-		size_t size; // size of pointed data == number of bytes
+		/**
+		 * @brief Liczba elementów bufora.
+		 */
+		uint   length;
+
+		/**
+		 * @brief Logiczna wielkość (w bajtach) bufora.
+		 */
+		size_t size;
+		
+		/**
+		 * @brief Fizyczna wielkość (w bajtach) bufora.
+		 */
 		size_t realsize;
-		// TODO: void fireEventContentChanged();
 	};
 
 	/** 

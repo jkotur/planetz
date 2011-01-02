@@ -15,35 +15,115 @@ namespace MEM
 {
 namespace MISC
 {
-	//
-	// Cuda buffer declaration
-	//
+	/**
+	 * @brief Bufor danych przechowywanych na karcie graficznej z wykorzystaniem CUDA.
+	 */
 	template<typename T>
 	class BufferCu : public BufferBase<T>
 	{
 	public:
 		BufferCu( );
+		/**
+		 * @brief Tworzy bufor o podanym rozmiarze.
+		 *
+		 * @param num Ilość elementów w tworzonym buforze.
+		 *
+		 * @param data Opcjonalnie - dane do skopiowania.
+		 */
 		BufferCu( const size_t num , const T*data = NULL );
 		virtual ~BufferCu();
 
+		/**
+		 * @brief Zmienia rozmiar bufora.
+		 *
+		 * @param num Nowa ilość elementów.
+		 *
+		 * @param data Opcjonalnie - dane do skopiowania.
+		 */
 		virtual void resize( size_t num , const T*data = NULL );
+
+		/**
+		 * @brief Wpisuje wartość do bufora. Działa tylko dla buforów jednoelementowych.
+		 *
+		 * @param val Wartość do wpisania.
+		 */
 		virtual void assign( T val );
+
+		/**
+		 * @brief Pobiera wartość z bufora. Działa tylko dla buforów jednoelementowych.
+		 *
+		 * @returns Pobrana wartość.
+		 */
 		virtual T retrieve();
 
+		/**
+		 * @brief Dane dostępne z CPU. Wymaga wcześniejszego wywołania metody bind().
+		 */
 		T* h_data();
-		T* d_data();
-		T getAt(unsigned i) const;
-		void setAt(unsigned i, const T&);
 
+		/**
+		 * @brief Dane dostępne z GPU.
+		 */
+		T* d_data();
+
+		/**
+		 * @brief Pobiera wartość spod konkretnego indeksu.
+		 *
+		 * @param i Indeks.
+		 *
+		 * @returns Wartość skopiowana z GPU.
+		 */
+		T getAt(unsigned i) const;
+
+		/**
+		 * @brief Ustawia wartość pod zadanym indeksem.
+		 *
+		 * @param i Indeks.
+		 *
+		 * @param val Wartość do skopiowania na GPU.
+		 */
+		void setAt( unsigned i, const T& val );
+
+		/**
+		 * @brief Udostępnia dane z karty graficznej na CPU. 
+		 *
+		 * @details Ta metoda musi zostać wywołana przed pobraniem wkaźnika na dane metodą h_data().
+		 */
 		void bind();
+
+		/**
+		 * @brief Zwalnia dane do użycia przez kartę graficzną.
+		 *
+		 * @details Ta metoda musi zostać wywołana po zakończeniu operacji na danych zwróconych przez h_data(), a przed rozpocząciem korzystania z danych zwracanych przez d_data().
+		 */
 		void unbind();
 
 	protected:
+		/**
+		 * @brief Wskaźnik na dane na karcie graficznej.
+		 */
 		T* d_cuPtr;
+
+		/**
+		 * @brief Wskaźnik na dane na CPU.
+		 */
 		T* h_cuPtr;
 
+		/**
+		 * @brief Zwalnia pamięc na GPU.
+		 */
 		void device_ptr_free();
+
+		/**
+		 * @brief Alokuje pamięć na GPU.
+		 */
 		void device_ptr_alloc(unsigned n);
+
+		/**
+		 * @brief Przypisuje dane z CPU do zaalokowanej pamięci na GPU.
+		 *
+		 * @param data Dane do skopiowania. Wywołanie z NULL nie wykona żadnej akcji.
+		 */
 		void device_ptr_assign(const T* data);
 	};
 

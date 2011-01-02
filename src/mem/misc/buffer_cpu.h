@@ -8,12 +8,15 @@ namespace MEM
 {
 namespace MISC
 {
+	/// @brief Implementacja bufora przechowującego dane wyłącznie na CPU.
 	template<typename T>
 	class BufferCpu
 		: public BufferBase<T>
 		, public std::vector<T>
 	{
 	public:
+		/// @brief Tworzy bufor o podanym rozmiarze.
+		/// @param num Rozmiar bufora.
 		BufferCpu( unsigned num = 0 )
 		{
 			resize( num );

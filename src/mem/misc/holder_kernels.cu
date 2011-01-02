@@ -1,5 +1,9 @@
 #include "holder_kernels.h"
 
+namespace MEM
+{
+namespace MISC
+{
 __global__ void stretch_kernel( unsigned *in_data, unsigned *out_data, unsigned in_data_size, unsigned factor )
 {
 	unsigned index = threadIdx.x + blockDim.x * blockIdx.x;
@@ -27,3 +31,5 @@ void stretch( MEM::MISC::BufferCu<unsigned> *in, MEM::MISC::BufferCu<unsigned> *
 		factor );
 	CUT_CHECK_ERROR("kernel launch");
 }
+} // namespace MISC
+} // namespace MEM

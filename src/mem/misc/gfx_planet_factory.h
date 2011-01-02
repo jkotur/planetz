@@ -80,6 +80,9 @@ namespace MISC
 		 */
 		const BufferGl<uint32_t>&getCounts   () const;
 
+		/**
+		 * @brief Zwraca ilość planet.
+		 */
 		unsigned size() const;
 
 	private:
