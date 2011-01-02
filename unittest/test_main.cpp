@@ -5,6 +5,7 @@
 
 #include "phx/phx_test.h"
 #include "gfx/shader_test.h"
+#include "gfx/planetz_picker_test.h"
 #include "util/config_test.h"
 #include "mem/misc/buffer_test.h"
 #include "mem/misc/holder_test.h"
@@ -14,6 +15,7 @@ void collectTests( CppUnit::TextUi::TestRunner &runner )
 	runner.addTest( PhxTest::suite() );
 	runner.addTest( CfgTest::suite() );
 	runner.addTest( BufTest::suite() );
+	runner.addTest( PzPTest::suite() );
 	runner.addTest( ShaderTest::suite() );
 	runner.addTest( HolderTest::suite() );
 }
@@ -25,7 +27,7 @@ int main(int argc, char **argv)
 		return 1;
 	}
 	Uint32 flags = SDL_OPENGL|SDL_HWSURFACE|SDL_DOUBLEBUF;
-	if( !SDL_SetVideoMode(600,400, 0, flags) ) {
+	if( !SDL_SetVideoMode(640,480, 0, flags) ) {
 		fprintf(stderr,"Cannot set video mode: %s\n",SDL_GetError() );
 		return 2;
 	}

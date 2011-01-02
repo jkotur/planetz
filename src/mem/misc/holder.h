@@ -45,41 +45,37 @@ namespace MISC
 			 */
 			void filter( BufferCu<unsigned> *mask );
 
+			//
 			//   * GFX
+			//
 			/**
 			 * @brief Bufor zawierający id modeli planet.
 			 */
 			GBUF<int>    model;
 
 			/**
-			 * @brief ???
-			 *
-			 * @todo Kuba, udokumentuj mnie!
+			 * @brief Bufor z informacją o emisji światła przez planetę
 			 */
 			GBUF<float>  emissive; // redundant to model, but needed for speed
 
 			/**
-			 * @brief ???
-			 *
-			 * @todo Kuba, udokumentuj mnie!
+			 * @brief Bufor z informacją o numerze tekstury
 			 */
 			GBUF<int>    texId;
 
 			/**
-			 * @brief ???
-			 *
-			 * @todo Kuba, udokumentuj mnie!
+			 * @brief Bufor z informacją o kolorze atmosfery
 			 */
 			GBUF<float3> atm_color;
 
 			/**
-			 * @brief ???
-			 *
-			 * @todo Kuba, udokumentuj mnie!
+			 * @brief Bufor z dodatkowymi danymi o atmosferze (promień,gęstość)
 			 */
 			GBUF<float2> atm_data;
 
+			//
 			//   * COMMON
+			//
 			/**
 			 * @brief Bufor z pozycjami planet.
 			 */
@@ -97,7 +93,9 @@ namespace MISC
 			 */
 			GBUF<uint32_t> count;
 
+			//
 			//   * PHX
+			//
 			/**
 			 * @brief Bufor z masami planet.
 			 */

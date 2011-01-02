@@ -22,7 +22,7 @@ namespace MISC
 		 * @brief Ustawia klasę na podstawie holdera posiadającego
 		 * wszystkie informacjie o planetach.
 		 * 
-		 * @param 
+		 * @param Holder z danymi na karcie graficznej
 		 */
 		GfxPlanetFactory( const PlanetHolder* );
 		/** 
