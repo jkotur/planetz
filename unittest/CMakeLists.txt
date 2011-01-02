@@ -13,11 +13,13 @@ set( INCLUDE_DIRS
 include_directories( ${INCLUDE_DIRS} )
 
 add_subdirectory( phx )
+add_subdirectory( mem )
 add_subdirectory( util )
+add_subdirectory( gfx )
 
 add_executable( tests test_main )
 
-target_link_libraries( tests phx_test util_test
+target_link_libraries( tests phx_test util_test memmisc_test gfx_test
 	${CUDA_LIBRARIES}
 	${OPENGL_LIBRARY}
 	${SDL_LIBRARY}

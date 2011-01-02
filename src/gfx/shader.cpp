@@ -49,7 +49,7 @@ bool Shader::checkShaderLog()
                 glGetShaderInfoLog(_id, logLength, &charsWritten,log);
 		log_printf(stat?_WARNING:_ERROR,"Shader %s compile %s:\n%s\n",_path.c_str(),stat?"warnings":"errors",log);
                 free(log);
-		return false;
+		return stat;
         } else	log_printf(INFO,"Shader %s compiled succesfully\n",_path.c_str());
 	return stat;
 }                        
@@ -89,8 +89,11 @@ Shader* ShaderManager::loadShader( GLenum type , const std::string& path )
 }
 
 Program::Program( Shader*vs , Shader*fs , Shader*gs )
-	: linked(false)  , _id(glCreateProgram()) , vs(vs) , fs(fs) , gs(gs)
+	: linked(false)  , _id(glCreateProgram())
 {
+	attach( vs );
+	attach( fs );
+	attach( gs );
 }
 
 Program::~Program()
@@ -141,11 +144,11 @@ void Program::geomParams( GLenum in , GLenum out )
 	glProgramParameteriEXT(_id,GL_GEOMETRY_OUTPUT_TYPE_EXT,out);
 }
 
-void Program::link()
+bool Program::link()
 {
 	glLinkProgram( _id );
-	checkProgramLog( _id );
-	linked = true;
+	linked = checkProgramLog( _id );
+	return linked;
 }
 
 void Program::use() const

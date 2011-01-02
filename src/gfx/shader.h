@@ -130,8 +130,10 @@ public:
 	void attach( const Shader* const sh );
 	/** 
 	 * @brief Linkuje program, tak aby był gotowy do użycia w openglu.
+	 *
+	 * @return true jeśli linkowanie wypadnie poprawnie, false wpp
 	 */
-	void link();
+	bool link();
 	/** 
 	 * @brief Nakazuje openglowi używania danego programu od tej chwili
 	 */
