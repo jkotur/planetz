@@ -11,20 +11,40 @@ namespace MEM
 namespace MISC
 {
 
+/** 
+ * @brief Struktura zawierająca wszystkie informacje o materiale planety
+ */
 struct Material 
 {
-	float r , g , b;
-	float ke, ka, kd, ks;
-	float alpha;
-	int   texture;
-	float ar, ag, ab;
-	float ad, al;
+	float r; /**< ilość czerwonego 0-1 */
+	float g; /**< ilość zielonego  0-1 */
+	float b; /**< ilość niebieskiego 0-1 */
+	float ke; /**< ilość emitowangeo śiatła >0 */
+	float ka; /**< reakcja na światło otoczenia  >0 */
+	float kd; /**< reakcja na światło rozproszone >0 */
+	float ks; /**< rekacja na światło odbite (nie używane) */
+	float alpha; /**< przezroczystość */
+	int   texture; /**< id tekstury */
+	float ar; /**< czerowność atmosfery 0-1 */
+	float ag; /**< zieloność atmosfery  0-1 */
+	float ab; /**< niebieskość atmosfery 0-1 */
+	float ad; /**< gęstość atmosfery (nie używane) */
+	float al; /**< promień atmosfery, wyrażony wielokrotnością wzlgędem promienia planety */
 };
 
 typedef std::vector<Material> Materials;
 
+/** 
+ * @brief Klasa wspomagająca tworzenie zbioru materiałów.
+ */
 class MaterialsMgr {
 public:
+	/** 
+	 * @brief Tworzy klasę na podstawie zbioru materiałów do którego
+	 * mają być dodawane nowe materiały.
+	 * 
+	 * @param mat zbiór materiałów
+	 */
 	MaterialsMgr( Materials*mat );
 	virtual ~MaterialsMgr();
 

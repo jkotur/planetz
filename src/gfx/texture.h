@@ -35,11 +35,9 @@ using std::string;
 
 namespace GFX {
 	
-/**
- * Klasa odpowiedzialan za ładownie tekstur z plików.
- * Korzysta z bibliotedki devil.
- * Zawiera optymalizację polegającą na agregowaniu już załadownych
- * tekstur, i zwracaniu ich gdy były już ładowane.
+/** 
+ * @brief Klasa reprezentująca teksturę. Może być zbindowana do api opengla.
+ * Za konstrukcję i dekstrukcję jej instancji odpowiada TextureManager.
  */
 class Texture {
 	friend class TextureManager;
@@ -47,19 +45,52 @@ class Texture {
 	Texture( string _path , GLuint _tex ) : path(_path) , tex(_tex) {}
 	virtual ~Texture();
 public:
+	/** 
+	 * @brief binduje teksturę jako GL_TEXTURE_2D do api opengla,
+	 * w aktulanie aktywnej teksturze
+	 */
 	void bind() const;
+	/** 
+	 * @brief binduję pustą teksturę do GL_TEXTURE_2D
+	 */
 	static void unbind();
 private:
 	string path;
 	GLuint tex;
 };
 
+/** 
+ * Klasa odpowiedzialan za ładownie tekstur 2D z plików. Wszystkie tekstury
+ * są mipmapowane i mają bilinearne mapowanie. 
+ * Zawiera optymalizację polegającą na agregowaniu już załadownych
+ * tekstur, i zwracaniu ich gdy były już ładowane.
+ */
 class TextureManager {
 public:
+	/** 
+	 * @brief Konstruuje pustego menadżera tekstur.
+	 */
 	TextureManager();
+	/** 
+	 * @brief Kasuje wszystkie załadowne tekstury z pamięci karty graficznej.
+	 */
 	virtual ~TextureManager();
 
+	/** 
+	 * @brief Ładuje z pliku nową teksturę
+	 * 
+	 * @param str ścieżka względem binarki lub bezwzgędne do pliku z obrazem
+	 * 
+	 * @return wkaśnik na teksturę
+	 */
 	Texture* loadTexture( const string& str );
+	/** 
+	 * @brief Analogincznie tylko przyjmue c-stinga
+	 * 
+	 * @param str ścieżka względem binarki lub bezwzgędne do pliku z obrazem
+	 * 
+	 * @return wkaśnik na teksturę
+	 */
 	Texture* loadTexture( const char* str );
 	// TODO: unloading texutres
 private:

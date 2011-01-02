@@ -10,6 +10,9 @@ using std::cos;
 using std::sqrt;
 using std::abs;
 
+/** 
+ * @brief Implementacja trójwymiarowego wektora matematycznego
+ */
 class Vector3 {
 public:
 	double x,y,z;
@@ -20,6 +23,9 @@ public:
 		y=copy.y;
 		z=copy.z;
 	}
+	/** 
+	 * @brief Normalizuje wektor
+	 */
 	const Vector3& normalize() {
 
 		double len = sqrt(x*x + y*y + z*z);
@@ -30,6 +36,9 @@ public:
 		}
 		return *this;
 	}
+	/** 
+	 * @return długość wektora
+	 */
 	double length() const
 	{	return sqrt(x*x + y*y + z*z); }
 	const Vector3& operator += (const Vector3 &v2)
@@ -69,14 +78,25 @@ public:
 		Vector3 out( x*s , y*s , z*s );
 		return out;
 	}
+	/** 
+	 * @return zwraca iloczyn skalarny dwóch wektorów
+	 */
 	double dot(const Vector3 &v2)
 	{
 		return x*v2.x + y*v2.y + z*v2.z;
 	}
+	/** 
+	 * @return iloczyn skalarany po osiach x i z
+	 */
 	double dotXZ(const Vector3 &v2)
 	{
 		return x*v2.x + z*v2.z;
 	}
+	/** 
+	 * @brief obraca wektor wokół osi OX
+	 * 
+	 * @param angle kąt obrotu wyrażony w radianach
+	 */
 	void rotateX(double angle)
 	{
 		double newy = cos(angle) * y - sin(angle) * z;
@@ -84,6 +104,11 @@ public:
 		y=newy;
 		z=newz;
 	}
+	/** 
+	 * @brief obraca wektor wokół osi OY
+	 * 
+	 * @param angle kąt obrotu wyrażony w radianach
+	 */
 	void rotateY(double angle)
 	{
 		double newx = cos(angle) * x - sin(angle) * z;
@@ -91,6 +116,11 @@ public:
 		x = newx;
 		z = newz;
 	}
+	/** 
+	 * @brief obraca wektor wokół osi OZ
+	 * 
+	 * @param angle kąt obrotu wyrażony w radianach
+	 */
 	void rotateZ(double angle)
 	{
 		double newx = cos(angle) * x - sin(angle) * y;
@@ -99,6 +129,12 @@ public:
 		y=newy;
 	}
 
+	/** 
+	 * @brief Obraca wektor wokół zadanej osi
+	 * 
+	 * @param u oś obrotu
+	 * @param angle kąt obrotu wyrażony w radianach
+	 */
 	void rotate( const Vector3& u , double angle )
 	{
 		double c = cos(angle);
@@ -133,16 +169,27 @@ public:
 	}
 	*/
 
+	/** 
+	 * @return odległość między wektorami
+	 */
 	double distance(const Vector3 &v2)
 	{
 		double p = x-v2.x , q = y-v2.y, r=z-v2.z;
 		return sqrt(p*p + q*q + r*r);
 	}
+	/** 
+	 * @return odległość między wektorami w osiach OX i OZ
+	 */
 	double distanceXZ(const Vector3 &v2)
 	{
 		double p = x-v2.x , r=z-v2.z;
 		return sqrt(p*p + r*r);
 	}
+	/** 
+	 * @brief Oblicza iloczyn wektorowy z drugim wektorem
+	 * 
+	 * @param v2 drugi wektor
+	 */
 	void cross( const Vector3&v2 )
 	{
 		double tx = y*v2.z - z*v2.y;

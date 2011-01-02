@@ -34,9 +34,9 @@
  * Szablon funktora implemetnujący liniową
  * interpolację. Działa poprawnie gdy posiada
  * następujące operatory:
- * + : (T,T)->T
- * - : (T,T)->T
- * * : (T,double)->T
+ * - + : (T,T)->T
+ * - - : (T,T)->T
+ * - * : (T,double)->T
  */
 template<typename T>
 class Lerp {

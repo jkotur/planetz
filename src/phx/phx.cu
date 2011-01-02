@@ -5,6 +5,8 @@
 #include "kmeans.h"
 #include "cuda/math.h"
 
+#define MIN_THREADS 256
+
 using namespace PHX;
 
 ConstChecker<float3, MEM::MISC::BufferGl> pos_checker;
@@ -121,7 +123,7 @@ void Phx::CImpl::run_nbodies2()
 	float3 *d_dvs;
 	cudaMalloc( &d_dvs, threads * sizeof(float3) );
 #endif
-		dim3 block( min( threads, 512 ) );
+		dim3 block( min( threads, MIN_THREADS ) );
 		dim3 grid( 1 + ( threads - 1 ) / block.x );
 		inside_cluster_interaction<<<grid, block>>>(
 			planets->getPositions().map(MEM::MISC::BUF_CU),
@@ -162,7 +164,7 @@ void Phx::CImpl::run_nbodies( unsigned threads )
 		run_nbodies_for_clusters();
 		return; // taaa, brzydkie, kiedyś będzie ładniej
 	}
-	dim3 block( min( threads, 512 ) );
+	dim3 block( min( threads, MIN_THREADS ) );
 	dim3 grid( 1 + (threads - 1) / block.x );
 	//unsigned mem = block.x * ( sizeof(float3) + sizeof(float) );
 
@@ -198,8 +200,8 @@ void Phx::CImpl::run_nbodies( unsigned threads )
 void Phx::CImpl::run_nbodies_for_clusters()
 {
 	unsigned threads = clusterer.getCount();
-	ASSERT( threads <= 512 );
-	dim3 block( min( threads, 512 ) );
+	ASSERT( threads <= MIN_THREADS );
+	dim3 block( min( threads, MIN_THREADS ) );
 	dim3 grid( 1 );
 
 	static unsigned print_modulo = 0;
@@ -228,7 +230,7 @@ void Phx::CImpl::run_nbodies_for_clusters()
 	tmp_vel.unbind();
 
 	threads = planets->size();
-	block = min( threads, 512 );
+	block = min( threads, MIN_THREADS );
 	grid = 1 + ( threads - 1 ) / block.x;
 
 	propagate_velocities<<<grid, block>>>(
@@ -253,7 +255,7 @@ void Phx::CImpl::run_clusters()
 void Phx::CImpl::update_positions()
 {
 	unsigned threads = planets->size();
-	dim3 block( min( 512, threads ) );
+	dim3 block( min( MIN_THREADS, threads ) );
 	dim3 grid( 1 + ( threads - 1 ) / block.x );
 
 	update_positions_kernel<<<grid, block>>>(
@@ -274,7 +276,7 @@ void Phx::CImpl::handle_collisions()
 	{
 		merge_needed.assign(0);
 		unsigned threads = planets->size();
-		dim3 block( min( 512, threads ) );
+		dim3 block( min( MIN_THREADS, threads ) );
 		dim3 grid( 1 + ( threads - 1 ) / block.x );
 		
 		detect_collisions<<<grid, block>>>(
@@ -326,6 +328,7 @@ void Phx::CImpl::handle_collisions()
 			}
 			done.assign(1);
 			std::swap( in_merges, out_merges );
+			log_printf(DBG,"grid: %d   block: %d\n",grid.x,block.x);
 			merge_collisions<<<grid, block>>>(
 				in_merges,
 				out_merges,

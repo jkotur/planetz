@@ -10,7 +10,6 @@
 #include "misc/textures_manager.h"
 #include "misc/gfx_planet_factory.h"
 #include "misc/phx_planet_factory.h"
-#include "misc/planet_model.h"
 
 /**
  * @brief Przestrzeń nazw dla obiektów odpowiedzialnych za zarządzanie pamięcią.

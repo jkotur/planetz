@@ -12,14 +12,30 @@
 
 namespace GFX
 {
+/** 
+ * @brief Prosta klasa odpowiedzialna za rysowanie śladów za planetami.
+ */
 class PlanetsTracer : public Drawable {
 	public:
+		/** 
+		 * @brief Tworzy nowego śledzika
+		 * 
+		 * @param gpf pamięć graficzna karty
+		 * @param num ilość śladów
+		 * @param freq częstość z jaką powinny pojawiać się ślady
+		 */
 		PlanetsTracer( const MEM::MISC::GfxPlanetFactory& gpf
 				, unsigned num = 10 , double freq = 1.0 )
 			: gpf(gpf) , number(num) , oldest(0) , begin(0) , dt(freq)
 		{
 		}
 
+		/** 
+		 * @brief Tworzy nowgo śledzika na podstawie konfiguracji.
+		 * 
+		 * @param gpf pamięć graficzna karty
+		 * @param cfg konfiguracja programu
+		 */
 		PlanetsTracer( const MEM::MISC::GfxPlanetFactory& gpf
 		             , const Config& cfg )
 			: gpf(gpf) , oldest(0) , begin(0)
@@ -31,21 +47,27 @@ class PlanetsTracer : public Drawable {
 		{
 		}
 
+		/** 
+		 * @brief Ustawia ilość śladów
+		 * 
+		 * @param num nowa ilość śladów
+		 */
 		void setLenght( unsigned int num )
 		{
 			number = num;
 		}
 
-		void start();
-		void stop();
-		void clear();
+		void start(); /**< Uruchamia śledzenie */
+		void stop(); /**< Zatrzymuje śledzenie */
+		void clear(); /**< Czyści pamięć śledzika */
 
-		void update();
-		virtual void update_configuration();
+		virtual void update_configuration(); 
 		void update_configuration( const Config& cfg );
-		virtual void draw() const;
+		virtual void draw() const; /**< Wyświetla ślad na ekranie */
 	private:
 		const MEM::MISC::GfxPlanetFactory& gpf;
+
+		void update();
 
 		Timer::Caller tc;
 

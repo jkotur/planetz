@@ -16,8 +16,17 @@ typedef boost::signal<void (std::string)> SigSetString;
 typedef boost::signal<void (double)> SigSetDouble;
 typedef boost::signal<void ()> SigVoid;
 
+/** 
+ * @brief Klasa odpowiedzialna za stworzenie konkretnego GUI i 
+ * obsługę zdarzeń z nim związanych.
+ */
 class PlanetzLayout : public Layout {
 public:
+	/** 
+	 * @brief Tworzy guziki i okienka na podstawie konfiguracji.
+	 * 
+	 * @param cfg konfiguracja początkowa programu
+	 */
 	PlanetzLayout( Config& cfg );
 	virtual ~PlanetzLayout();
 	
@@ -25,13 +34,24 @@ public:
 
 	//SigSetPlanet on_planet_delete;
 	//SigSetPlanet on_planet_add;
+	/** @brief Sygnał emitowany gdy zmienia się prędkość kamery */
 	SigSetDouble on_cam_speed_changed;
+	/** @brief Sygnał emitowany gdy symulacja jest pauzowana */
 	SigVoid      on_pause_click;
+	/** @brief Sygnał emitowany gdy symulacja jest resetowana */
 	SigVoid      on_reset_click;
+	/** @brief Sygnał emitowany gdy układ jest zapisywany */
 	SigSetString on_save;
+	/** @brief Sygnał emitowany gdy układ jest wczytywany */
 	SigSetString on_load;
+	/** @brief Sygnał emitowany gdy zmienia się konfiguracja programu */
 	boost::signal<void ( const Config&)> on_config_changed;
 
+	/** 
+	 * @brief Funkcja ustawiająca nową ilość wyświetlonych klatek.
+	 * 
+	 * @param fps ilość klatek wyświetlonych przez sekundę.
+	 */
 	void update_fps( int fps );
 private:
 	Config& config;
