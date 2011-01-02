@@ -29,6 +29,10 @@ Shader::~Shader()
 std::string Shader::readFile( const std::string& path )
 {
 	std::ifstream file( path.c_str() );
+	if( file.fail() ) {
+		log_printf(_ERROR,"Cannot open %s for read\n",path.c_str());
+		return std::string("");
+	}
 	std::stringstream sstr;
 	sstr << file.rdbuf();
 	return sstr.str();
@@ -91,9 +95,9 @@ Shader* ShaderManager::loadShader( GLenum type , const std::string& path )
 Program::Program( Shader*vs , Shader*fs , Shader*gs )
 	: linked(false)  , _id(glCreateProgram())
 {
-	attach( vs );
-	attach( fs );
-	attach( gs );
+	if( vs ) attach( vs );
+	if( fs ) attach( fs );
+	if( gs ) attach( gs );
 }
 
 Program::~Program()
