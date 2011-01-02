@@ -7,6 +7,7 @@
 #include "gfx/shader_test.h"
 #include "util/config_test.h"
 #include "mem/misc/buffer_test.h"
+#include "mem/misc/holder_test.h"
 
 void collectTests( CppUnit::TextUi::TestRunner &runner )
 {
@@ -14,6 +15,7 @@ void collectTests( CppUnit::TextUi::TestRunner &runner )
 	runner.addTest( CfgTest::suite() );
 	runner.addTest( BufTest::suite() );
 	runner.addTest( ShaderTest::suite() );
+	runner.addTest( HolderTest::suite() );
 }
 
 int main(int argc, char **argv)
