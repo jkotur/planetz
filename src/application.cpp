@@ -161,13 +161,14 @@ void Application::main_loop()
 #endif
 		camera.signal();
 
-		pt.refresh();
 		if( !anim_pause )
 		{
 			//Timer t;
-			phx.compute(10);
-			//log_printf(DBG, "Kernel running time: %.2fms\n", timer.get_dt_ms());
+			unsigned phx_frames = 10;
+			phx.compute(phx_frames);
+			//log_printf(DBG, "phx.compute(%u) running time: %.2fms\n", phx_frames, timer.get_dt_ms());
 		}
+		pt.refresh();
 		gfx.render();
 
 		(running && (running &= ui.event_handle() ));

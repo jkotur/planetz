@@ -55,15 +55,9 @@ void Saver::save( const MISC::SaverParams *source, const std::string &path )
 	{
 		Table<CameraRow> cTable;
 		CameraRow *c = new CameraRow;
-		c->xcoord = source->cam_info->get_pos().x; 
-		c->ycoord = source->cam_info->get_pos().y; 
-		c->zcoord = source->cam_info->get_pos().z;
-		c->xlook = source->cam_info->get_lookat().x;
-		c->ylook = source->cam_info->get_lookat().y;
-		c->zlook = source->cam_info->get_lookat().z;
-		c->xup = source->cam_info->get_up().x;
-		c->yup = source->cam_info->get_up().y;
-		c->zup = source->cam_info->get_up().z;
+		c->coords = source->cam_info->get_pos();
+		c->lookat = source->cam_info->get_lookat();
+		c->up = source->cam_info->get_up();
 		cTable.add( c );
 		db.save( cTable );
 	}
@@ -109,9 +103,6 @@ void Saver::load( MISC::SaverParams *dest, const std::string &path )
 	if( cTable.size() && dest->cam_info )
 	{
 		CameraRow *r = *cTable.begin();
-		dest->cam_info->set_perspective(
-			Vector3(r->xcoord, r->ycoord, r->zcoord),
-			Vector3(r->xlook, r->ylook, r->zlook),
-			Vector3(r->xup, r->yup, r->zup) );
+		dest->cam_info->set_perspective( r->coords, r->lookat, r->up );
 	}
 }

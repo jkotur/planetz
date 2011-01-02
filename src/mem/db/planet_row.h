@@ -5,6 +5,9 @@
 
 namespace MEM
 {
+	/**
+	 * @brief Klasa definiująca wiersz planety z bazy danych.
+	 */
 	class PlanetRow : public Row
 	{
 		public:
@@ -18,15 +21,44 @@ namespace MEM
 			virtual uint8_t size() const;
 			virtual void setCell( unsigned idx, const std::string &val );
 
-		public: // You are allowed to modify these freely. Remember, however, to save them in db later.
+		public:
+			
+			/**
+			 * @brief Położenie x planety.
+			 */
 			float xcoord;
+			/**
+			 * @brief Położenie y planety.
+			 */
 			float ycoord;
+			/**
+			 * @brief Położenie z planety.
+			 */
 			float zcoord;
+
+			/**
+			 * @brief Promień planety
+			 */
 			float radius;
+			/**
+			 * @brief Masa planety.
+			 */
 			float mass;
+			/**
+			 * @brief Prędkość x planety.
+			 */
 			float xvel;
+			/**
+			 * @brief Prędkość y planety.
+			 */
 			float yvel;
+			/**
+			 * @brief Prędkość z planety.
+			 */
 			float zvel;
+			/**
+			 * @brief ID modelu planety.
+			 */
 			int model_id;
 
 		private:

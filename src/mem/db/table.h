@@ -9,6 +9,9 @@
 
 namespace MEM
 {
+	/**
+	 * @brief Implementacja tabeli w bazie danych
+	 */
 	template<class RowType>
 	class Table : public ITable
 	{
@@ -20,24 +23,75 @@ namespace MEM
 			virtual std::string getLoadString() const;
 			virtual std::string getCreationString() const;
 
+			/**
+			 * @brief Dodaje wiersz do tabeli.
+			 *
+			 * @details Table zarządza czasem życia wszystkich wierszy - nie wolno
+			 * ręcznie zwalniać pamięci wiersza, który został dodany do tabeli.
+			 *
+			 * @param row Wiersz, który ma być dodany.
+			 */
 			virtual void add( RowType *row );
+
 			virtual Row* insert_new();
 
+			/**
+			 * @brief Kontener, używany do przechowywania wierszy tabeli.
+			 */
 			typedef std::list<RowType*> RowContainer;
+			/**
+			 * @brief Iterator po wierszach tabeli.
+			 */
 			typedef typename RowContainer::iterator iterator;
+			/**
+			 * @brief Stały iterator po wierszach tabeli.
+			 *
+			 * @details Stały iterator nie ma możliwości modyfikacji danych,
+			 * po których iteruje
+			 */
 			typedef typename RowContainer::const_iterator const_iterator;
+			/**
+			 * @brief Liczba całkowita bez znaku.
+			 */
 			typedef typename RowContainer::size_type size_type;
+			/**
+			 * @brief Liczba całkowita ze znakiem.
+			 */
 			typedef typename RowContainer::difference_type difference_type;
+			/**
+			 * @brief Wskaźnik na element.
+			 */
 			typedef typename RowContainer::pointer pointer;
+			/**
+			 * @brief Referencja do elementu.
+			 */
 			typedef typename RowContainer::reference reference;
 
+			/**
+			 * @brief Zwraca iterator do pierwszego wiersza w tabeli.
+			 */
 			iterator begin();
+			/**
+			 * @brief Zwraca iterator do końca tabeli.
+			 */
 			iterator end();
 
+			/**
+			 * @brief Zwraca stały iterator do pierwszego wiersza w tabeli.
+			 */
 			const_iterator begin() const;
+			/**
+			 * @brief Zwraca stały iterator do końca tabeli.
+			 */
 			const_iterator end() const;
 
+			/**
+			 * @brief Czyści tabelę ze wszystkich wierszy.
+			 */
 			void clear();
+			/**
+			 * @brief Zwraca ilość wierszy w tabeli.
+			 */
 			size_type size() const;
 
 		private:

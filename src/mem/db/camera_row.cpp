@@ -19,7 +19,7 @@ std::string CameraRow::getSaveString() const
 {
 	TODO("make it more safely, too");
 	char *buf = new char[ save_string.size() + 666 ];
-	sprintf(buf, save_string.c_str(), xcoord, ycoord, zcoord, xlook, ylook, zlook, xup, yup, zup);
+	sprintf(buf, save_string.c_str(), coords.x, coords.y, coords.z, lookat.x, lookat.y, lookat.z, up.x, up.y, up.z);
 	std::string retval( buf );
 	delete[] buf;
 	return retval;
@@ -43,15 +43,15 @@ uint8_t CameraRow::size() const
 void CameraRow::setCell( unsigned idx, const std::string &val )
 {
 	ROW_SWITCH_BEGIN( idx, val )
-		ROW_CASE( 0, xcoord )
-		ROW_CASE( 1, ycoord )
-		ROW_CASE( 2, zcoord )
-		ROW_CASE( 3, xlook )
-		ROW_CASE( 4, ylook )
-		ROW_CASE( 5, zlook )
-		ROW_CASE( 6, xup )
-		ROW_CASE( 7, yup )
-		ROW_CASE( 8, zup )
+		ROW_CASE( 0, coords.x )
+		ROW_CASE( 1, coords.y )
+		ROW_CASE( 2, coords.z )
+		ROW_CASE( 3, lookat.x )
+		ROW_CASE( 4, lookat.y )
+		ROW_CASE( 5, lookat.z )
+		ROW_CASE( 6, up.x )
+		ROW_CASE( 7, up.y )
+		ROW_CASE( 8, up.z )
 	ROW_SWITCH_END()
 }
 

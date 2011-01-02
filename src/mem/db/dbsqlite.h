@@ -5,10 +5,18 @@
 
 namespace MEM
 {
+	/**
+	 * @brief Implementacja Database dla bazy danych sqlite3.
+	 */
 	class DBSqlite : public Database
 	{
 		public:
-			DBSqlite( const std::string& );
+			/**
+			 * @brief Tworzy połączenie z bazą danych.
+			 *
+			 * @param cs Nazwa pliku z bazą.
+			 */
+			DBSqlite( const std::string& cs );
 			virtual ~DBSqlite();
 
 		protected:
