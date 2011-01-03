@@ -26,7 +26,7 @@ unsigned int MaterialsMgr::addMaterial(
 			int texture ,
 			float ar, float ag, float ab, float ad, float al)
 {
-	Material m = { r , g , b , ke , 1 + ka , kd , ks , alpha , texture , ar , ag , ab , ad , al };
+	Material m = { r , g , b , ke , ka , kd , ks , alpha , texture , ar , ag , ab , ad , al };
 	materials->push_back(m);
 	return id++;
 }
