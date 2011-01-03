@@ -79,7 +79,7 @@ private:
 	GLint modelId ;
 	GLint texIdId ;
 	GLint modelLId ;
-	GLint emissiveLId;
+	GLint lightId;
 
 	//
 	// Sphere normals (deprecated)
@@ -136,13 +136,14 @@ private:
 	GLuint generate_atmosphere_texture( int w , int h );
 
 	GLint atmId;
+	GLint atmRadiusId;
 	GLint atmDataId  , atmAtmDataId ;
 	GLint atmColorId , atmAtmColorId;
 	GLuint atmTex;
 
 	GLint atmMaterialsId;
 	GLint atmModelId;
-	GLint atmEmissiveId;
+	GLint atmLightId;
 
 	//
 	// Glow

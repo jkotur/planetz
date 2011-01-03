@@ -22,9 +22,7 @@ void main()
 	vec4 gdat3 = texture2D( gbuff3 , gl_TexCoord[0].st );
 	vec4 gdat4 = texture2D( gbuff4 , gl_TexCoord[0].st );
 
-	gl_FragColor.rgb = gdat3.rgb*(gdat4.x + gdat4.y);
+	gl_FragColor.rgb = gdat3.rgb*(gdat4.x + gdat4.y * brightness);
 	gl_FragColor.a = gdat1.a;
-
-	if( brightness > 0.0 ) gl_FragColor.rgb *= brightness;
 }
 

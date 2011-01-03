@@ -55,8 +55,8 @@
 		<Window Type="QuadraticLook/HorizontalScrollbar" Name="slAnimSpeed" >
 			<Property Name="UnifiedPosition" Value="{{1.0,-240},{1.0,-30}}" />
 			<Property Name="UnifiedSize" Value="{{0,120},{0,20}}" />
-			<Property Name="DocumentSize" Value="5000.0" />
-			<Property Name="StepSize" Value="500.0" />
+			<Property Name="DocumentSize" Value="20.0" />
+			<Property Name="StepSize" Value="1.0" />
 		</Window>
 
 		<Window Type="QuadraticLook/StaticText" Name="stCamSpeed" >

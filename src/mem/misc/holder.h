@@ -41,36 +41,31 @@ namespace MISC
 			/**
 			 * @brief Usuwa planety na podstawie podanej maski.
 			 * 
-			 * @param mask Bufor zawierający 0 i 1. Planety o indeksach, pod którymi mask ma wartość 0 zostaną usunięte.
+			 * @param mask Bufor zawierający 0 i 1. Planety o
+			 * indeksach, pod którymi mask ma wartość 0 zostaną
+			 * usunięte.
 			 */
 			void filter( BufferCu<unsigned> *mask );
 
 			//
 			//   * GFX
 			//
-			/**
-			 * @brief Bufor zawierający id modeli planet.
-			 */
+			/** @brief Bufor zawierający id modeli planet.  */
 			GBUF<int>    model;
 
-			/**
-			 * @brief Bufor z informacją o emisji światła przez planetę
-			 */
-			GBUF<float>  emissive; // redundant to model, but needed for speed
+			/** @brief Bufor z informacją kolorze planety */
+			GBUF<float4> color;
 
-			/**
-			 * @brief Bufor z informacją o numerze tekstury
-			 */
+			/** @brief Bufor z informacją o reakcji na światło */
+			GBUF<float3> light;
+
+			/** @brief Bufor z informacją o numerze tekstury */
 			GBUF<int>    texId;
 
-			/**
-			 * @brief Bufor z informacją o kolorze atmosfery
-			 */
+			/** @brief Bufor z informacją o kolorze atmosfery */
 			GBUF<float3> atm_color;
 
-			/**
-			 * @brief Bufor z dodatkowymi danymi o atmosferze (promień,gęstość)
-			 */
+			/** @brief Bufor z dodatkowymi danymi o atmosferze (promień,gęstość) */
 			GBUF<float2> atm_data;
 
 			//
@@ -167,7 +162,7 @@ namespace MISC
 	template<template<class T>class CBUF, template<class S>class GBUF>
 	PlanetHolderBase<CBUF, GBUF>::PlanetHolderBase( unsigned num )
 		: model(0)
-		, emissive(0)
+		, light(0)
 		, pos(0)
 		, radius(0)
 		, count(1)
@@ -192,7 +187,7 @@ namespace MISC
 		{
 			TODO("keep previous data...");
 			model    .resize(num);
-			emissive .resize(num);
+			light    .resize(num);
 			texId    .resize(num);
 			atm_color.resize(num);
 			atm_data .resize(num);

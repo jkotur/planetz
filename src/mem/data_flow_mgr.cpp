@@ -4,6 +4,7 @@
 #include "ioctl.h"
 #include "memory_manager.h"
 #include "misc/saver_params.h"
+#include "cuda/math.h"
 
 using namespace MEM;
 
@@ -68,12 +69,15 @@ void DataFlowMgr::Impl::updateBuffers(MISC::CpuPlanetHolder*p , MISC::Materials*
 	if( !m ) {
 		log_printf(_ERROR,"There are no materials loaded\n");
 		for( unsigned i=0 ; i<p->size() ; i++ ) {
-			p->emissive [i]   = 0; // no emissive
+			p->light    [i]   = make_float3(0);
 			p->texId    [i]   = 0; // dummy texture
 			p->atm_data [i].y = 0; // no atmosphere
 		}
 	} else	for( unsigned i=0 ; i<p->size() ; i++ ) {
-			p->emissive [i]   = (*m)[p->model[i]].ke;
+			p->light    [i]   = make_float3(
+					(*m)[p->model[i]].ke ,
+					(*m)[p->model[i]].ka ,
+					(*m)[p->model[i]].kd );
 			p->texId    [i]   = (*m)[p->model[i]].texture;
 			p->atm_color[i].x = (*m)[p->model[i]].ar;
 			p->atm_color[i].y = (*m)[p->model[i]].ag;

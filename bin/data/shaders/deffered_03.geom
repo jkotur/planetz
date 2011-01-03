@@ -46,24 +46,36 @@ void main(void)
 	gl_Position    = gl_ProjectionMatrix * gl_Position;
 	gl_Position.z  = 0;
 	gl_TexCoord[0].st=(vec2(gl_Position.x,gl_Position.y)/gl_Position.w+1)/ 2.0f;
+	gl_Position /= gl_Position.w;
+	if( gl_Position.x > 1 ) { gl_Position.x = 1; gl_TexCoord[0].s = 1; }
+	if( gl_Position.y > 1 ) { gl_Position.y = 1; gl_TexCoord[0].t = 1; }
 	EmitVertex();
 	// upper left
 	gl_Position    = vec4(lightPos.xyz + vec3(-lmax , lmax , lz ) , 1 );
 	gl_Position    = gl_ProjectionMatrix * gl_Position;
 	gl_Position.z  = 0;
 	gl_TexCoord[0].st=(vec2(gl_Position.x,gl_Position.y)/gl_Position.w+1)/ 2.0f;
+	gl_Position /= gl_Position.w;
+	if( gl_Position.x > 1 ) { gl_Position.x = 1; gl_TexCoord[0].s = 1; }
+	if( gl_Position.y <-1 ) { gl_Position.y =-1; gl_TexCoord[0].t = 0; }
 	EmitVertex();
 	// lower right
 	gl_Position    = vec4(lightPos.xyz + vec3( lmax ,-lmax , lz ) , 1 );
 	gl_Position    = gl_ProjectionMatrix * gl_Position;
 	gl_Position.z  = 0;
 	gl_TexCoord[0].st=(vec2(gl_Position.x,gl_Position.y)/gl_Position.w+1)/ 2.0f;
+	gl_Position /= gl_Position.w;
+	if( gl_Position.x <-1 ) { gl_Position.x =-1; gl_TexCoord[0].s = 0; }
+	if( gl_Position.y > 1 ) { gl_Position.y = 1; gl_TexCoord[0].t = 1; }
 	EmitVertex();
 	// lower left
 	gl_Position    = vec4(lightPos.xyz + vec3(-lmax ,-lmax , lz ) , 1 );
 	gl_Position    = gl_ProjectionMatrix * gl_Position;
 	gl_Position.z  = 0;
 	gl_TexCoord[0].st=(vec2(gl_Position.x,gl_Position.y)/gl_Position.w+1)/ 2.0f;
+	gl_Position /= gl_Position.w;
+	if( gl_Position.x <-1 ) { gl_Position.x =-1; gl_TexCoord[0].s = 0; }
+	if( gl_Position.y <-1 ) { gl_Position.y =-1; gl_TexCoord[0].t = 0; }
 	EmitVertex();
 	EndPrimitive();
 }

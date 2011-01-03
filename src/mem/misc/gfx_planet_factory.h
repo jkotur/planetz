@@ -41,7 +41,7 @@ namespace MISC
 		 * 
 		 * @return bufor
 		 */
-		const BufferGl<float>   &getEmissive () const;
+		const BufferGl<float3>  &getLight () const;
 		/** 
 		 * @brief Zwraca bufor z informacją o numerze tekstury
 		 * 

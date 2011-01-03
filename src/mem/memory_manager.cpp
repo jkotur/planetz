@@ -99,27 +99,26 @@ void MemMgr::setPlanets( MISC::CpuPlanetHolder *pl )
 	float3 * pos  = holder.pos      .map( MISC::BUF_H );
 	float  * rad  = holder.radius   .map( MISC::BUF_H );
 	int    * type = holder.model    .map( MISC::BUF_H );
-	float  * em   = holder.emissive .map( MISC::BUF_H );
+	float3 * light= holder.light    .map( MISC::BUF_H );
 	int    * tid  = holder.texId    .map( MISC::BUF_H );
 	float2 * atm  = holder.atm_data .map( MISC::BUF_H );
 	float3 * acol = holder.atm_color.map( MISC::BUF_H );
 
 	for( unsigned i=0 ; i<size ; i++ )
 	{
-		pos [i]   = pl->pos      [i]  ;
-		rad [i]   = pl->radius   [i]  ;
-		type[i]   = pl->model    [i] * 2; // model must be even
-		em  [i]   = pl->emissive [i]  ;
-		tid [i]   = pl->texId    [i]  ;
-		atm [i].x = pl->atm_data [i].x;
-		atm [i].y = pl->radius   [i] * pl->atm_data[i].y;
-		acol[i]   = pl->atm_color[i]  ;
+		pos  [i] = pl->pos      [i] ;
+		rad  [i] = pl->radius   [i] ;
+		type [i] = pl->model    [i] * 2; // model must be even
+		light[i] = pl->light    [i] ;
+		tid  [i] = pl->texId    [i] ;
+		atm  [i] = pl->atm_data [i] ;
+		acol [i] = pl->atm_color[i] ;
 	}
 
 	holder.atm_color.unmap();
 	holder.atm_data .unmap();
 	holder.texId    .unmap();
-	holder.emissive .unmap();
+	holder.light    .unmap();
 	holder.model    .unmap();
 	holder.radius   .unmap();
 	holder.pos      .unmap();
@@ -141,7 +140,7 @@ void MemMgr::setPlanets( MISC::CpuPlanetHolder *pl )
 
 /**
  * FIXME: if there is any need to copy data from material back to host?
- *        this is: atm_data , atm_color , emissive , etc.
+ *        this is: atm_data , atm_color , light , etc.
  */
 MISC::CpuPlanetHolder *MemMgr::getPlanets()
 {

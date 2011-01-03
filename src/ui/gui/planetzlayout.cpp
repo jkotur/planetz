@@ -416,9 +416,9 @@ bool PlanetzLayout::reset_anim( const CEGUI::EventArgs& e )
 
 bool PlanetzLayout::set_anim_speed( const CEGUI::EventArgs& e )
 {
-	//Phx::Model::set_speed(
-	//		static_cast<Scrollbar*>(WindowManager::getSingleton().getWindow("slAnimSpeed"))
-	//		->getScrollPosition() + 100 );
+	on_sim_speed_changed(
+		GETWINCAST(Scrollbar*,"slAnimSpeed")
+			->getScrollPosition() + 1.0 ); // at least one frame
 	return true;
 }
 

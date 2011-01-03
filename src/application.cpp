@@ -17,6 +17,7 @@ using boost::bind;
 Application::Application( Window& win , Config& cfg )
 	: fps(0)
 	, anim_pause(true)
+	, phx_frames(10)
 	, window( win )
 	, config( cfg )
 	, phx( data_mgr.getPhxMem() )
@@ -112,6 +113,7 @@ bool Application::init()
 	ui.gui.set_layout(pl);
 
 	pl->on_cam_speed_changed.connect( bind(&Camera::set_speed,&camera,_1) );
+	pl->on_sim_speed_changed.connect( bind(&Application::set_phx_speed,this,_1) );
 	pl->on_pause_click.connect( bind(&Application::pause_toggle,this) );
 	pl->on_reset_click.connect( bind(&Application::reset,this) );
 	pl->on_save.connect( bind(&MEM::DataFlowMgr::save,&data_mgr,_1) );
@@ -164,7 +166,6 @@ void Application::main_loop()
 		if( !anim_pause )
 		{
 			//Timer t;
-			unsigned phx_frames = 10;
 			phx.compute(phx_frames);
 			//log_printf(DBG, "phx.compute(%u) running time: %.2fms\n", phx_frames, timer.get_dt_ms());
 		}

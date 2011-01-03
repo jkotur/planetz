@@ -67,6 +67,9 @@ public:
 	 */
 	void main_loop();
 
+	void set_phx_speed( double s )
+	{	phx_frames = (unsigned)s; }
+
 protected:
 	void do_fps();
 
@@ -79,6 +82,8 @@ protected:
 	float oldtime;
 
 	bool anim_pause;
+
+	unsigned phx_frames;
 
 	Window& window;
 	Config& config;

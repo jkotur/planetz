@@ -5,7 +5,7 @@
 #include "kmeans.h"
 #include "cuda/math.h"
 
-#define MIN_THREADS 256
+#define MIN_THREADS 384
 
 using namespace PHX;
 
@@ -328,7 +328,7 @@ void Phx::CImpl::handle_collisions()
 			}
 			done.assign(1);
 			std::swap( in_merges, out_merges );
-			log_printf(DBG,"grid: %d   block: %d\n",grid.x,block.x);
+/*                        log_printf(DBG,"grid: %d   block: %d\n",grid.x,block.x);*/
 			merge_collisions<<<grid, block>>>(
 				in_merges,
 				out_merges,

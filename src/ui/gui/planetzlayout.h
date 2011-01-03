@@ -34,6 +34,8 @@ public:
 
 	//SigSetPlanet on_planet_delete;
 	//SigSetPlanet on_planet_add;
+	/** @brief Sygnał emitowany gdy zmienia się prędkość symulacji */
+	SigSetDouble on_sim_speed_changed;
 	/** @brief Sygnał emitowany gdy zmienia się prędkość kamery */
 	SigSetDouble on_cam_speed_changed;
 	/** @brief Sygnał emitowany gdy symulacja jest pauzowana */

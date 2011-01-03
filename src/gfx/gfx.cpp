@@ -71,7 +71,7 @@ void Gfx::GL_viewport( int w , int h )
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(75.0, (double)w/(double)h, 1, 10000);
+	gluPerspective(75.0, (double)w/(double)h, 1, 100000);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

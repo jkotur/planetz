@@ -62,7 +62,7 @@ void __filter_4bytes( CUDPPHandle handle, PlanetHolder *what, BufferCu<unsigned>
 	COMPACT( what->model.map(BUF_CU) ); what->model.unmap();
 	COMPACT( what->texId.map(BUF_CU) ); what->texId.unmap();
 	// float
-	COMPACT( what->emissive.map(BUF_CU) ); what->emissive.unmap();
+	COMPACT( what->light.map(BUF_CU) ); what->light.unmap();
 	COMPACT( what->radius.map(BUF_CU) ); what->radius.unmap();
 	COMPACT( what->mass.d_data() );
 	

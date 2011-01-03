@@ -18,9 +18,9 @@ const BufferGl<int> &GfxPlanetFactory::getModels() const
 	return holder->model;
 }
 
-const BufferGl<float> &GfxPlanetFactory::getEmissive() const
+const BufferGl<float3> &GfxPlanetFactory::getLight() const
 {
-	return holder->emissive;
+	return holder->light;
 }
 
 const BufferGl<int> &GfxPlanetFactory::getTexIds() const
