@@ -1,4 +1,13 @@
 \subsection{Silnik graficzny}\label{sub:silnik graficzny}
 
 \subsection{Silnik fizyczny}\label{sub:silnik fizyczny}
+\subsubsection{Wydajność}
+Jednym z założeń aplikacji było osiągnięcie dużej wydajności. Podczas testów na sprzęcie:
+\begin{enumerate}
+\item{Procesor Intel Core i7 930 2.8GHz}
+\item{Karta graficzna nVidia GeForce GTX 275, 896MB, 240 rdzeni CUDA}
+\end{enumerate}
+obliczenia w czasie rzeczywistym (minimum 20fps) odbywały się z udziałem 16 tysięcy planet. Wydajność znacząco spadała przy dużej ilości występujących kolizji - liczba fps spadała nawet dwukrotnie.
 
+\subsubsection{Stabilność}
+Przy większości układów aplikacja mogła działać przez kilkanaście godzin bez przerwy. Niestety, niektóre układy powodowały powstawanie błędnych danych w postaci wartości NaN w pozycjach planet.
