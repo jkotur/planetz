@@ -38,5 +38,6 @@ void PlanetTracer::refresh()
 	float3 f3pos = p.getPosition();
 	Vector3 planet_pos( f3pos.x, f3pos.y, f3pos.z );
 	Vector3 cam_pos = planet_pos + dist;
-	camera->set_perspective( cam_pos, camera->get_lookat(), camera->get_up() );
+	Vector3 look = camera->get_lookat() - camera->get_pos();
+	camera->set_perspective( cam_pos, cam_pos+look, camera->get_up() );
 }

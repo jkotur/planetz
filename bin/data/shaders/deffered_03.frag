@@ -55,5 +55,6 @@ void main()
 
 //        gl_FragColor.rgb = ((fd + atm) * gdat4.z + fs * gdat4.w) * lightColor;
 	gl_FragColor.rgb = ((fd + atm) * gdat4.z) * lightColor;
+	gl_FragDepth = gl_FragCoord.z;// - gdat2.z;
 }
 

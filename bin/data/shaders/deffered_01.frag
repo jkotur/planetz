@@ -95,7 +95,7 @@ vec2 texture_st_f2( float ax , float ay )
 	if( ax <-PI )
 		ax = 2*PI + ax;
 
-	ax *= abs( cos( ay ) );
+	ax *= abs( cos( ay ) - 0.01 ); // nasty bugfix for texture zip
 
 	return vec2(.5) - vec2(ax,ay) / vec2(PI*2,PI);
 }
