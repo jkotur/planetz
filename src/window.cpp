@@ -54,6 +54,15 @@ bool Window::SDL_init( unsigned int w , unsigned int h )
 	flags|= SDL_OPENGL|SDL_HWSURFACE|SDL_DOUBLEBUF;
 	flags|= SDL_RESIZABLE;
 
+	SDL_Surface * image = SDL_LoadBMP(DATA("icon.bmp").c_str());
+	if( image ) {
+		Uint32 colorkey = SDL_MapRGB(image->format, 255, 0, 255);
+		SDL_SetColorKey(image, SDL_SRCCOLORKEY, colorkey);              
+		SDL_WM_SetIcon(image,NULL);
+	}
+
+	SDL_WM_SetCaption("Planetz","Planetz");
+
 	reshape_window( w , h );
 
 	return true;
