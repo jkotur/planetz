@@ -17,7 +17,7 @@ using boost::bind;
 Application::Application( Window& win , Config& cfg )
 	: fps(0)
 	, anim_pause(true)
-	, phx_frames(10)
+	, phx_frames(1)
 	, window( win )
 	, config( cfg )
 	, phx( data_mgr.getPhxMem() )

@@ -2,16 +2,10 @@
 #define _ROW_H_
 
 #include <string>
+#include "util/types.h"
 
 namespace MEM
 {
-	/**
-	 * @brief Definicja typu - pojedyńczy bajt bez znaku. 
-	 *
-	 * @todo Przenieść to w sensowniejsze miejsce.
-	 */
-	typedef unsigned char uint8_t;
-
 	/**
 	 * @brief Klasa definiująca abstrakcyjny wiersz z bazy danych.
 	 */
