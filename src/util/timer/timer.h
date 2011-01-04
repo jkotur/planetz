@@ -84,6 +84,13 @@ public:
 		bool good()
 		{	return state!=NULL; }
 		/** 
+		 * @brief Sprawdza czy zdarzenie uktualnie działa
+		 * 
+		 * @return true jeśli tak, false wpp
+		 */
+		bool running()
+		{	return state && *state==RUNNING; }
+		/** 
 		 * @brief Kasuje zdarzenie z kolejki wywołań. Po wywołaniu tej funkcji
 		 * obiekt staje się bezużyteczny.
 		 */

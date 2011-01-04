@@ -135,15 +135,23 @@ void PlanetzLayout::updateOptions( Config& cfg )
 	cfg.set("deffered.lighting",GETWINCAST(Checkbox*,"cbLighting")->isSelected());
 	cfg.set("deffered.normals",GETWINCAST(Checkbox*,"cbNormals")->isSelected());
 	cfg.set("deffered.brightness",GETWINCAST(Spinner*,"spBright")->getCurrentValue());
+
+	cfg.set("trace.enable",GETWINCAST(Checkbox*,"cbTrace")->isSelected());
+	cfg.set("trace.frequency",(double)GETWINCAST(Spinner*,"spTraceFreq")->getCurrentValue());
+	cfg.set("trace.length",(unsigned)GETWINCAST(Spinner*,"spTraceLenght")->getCurrentValue());
 }
 
 void PlanetzLayout::setOptions( const Config& cfg )
 {
 	GETWINCAST(Checkbox*,"cbTextures")->setSelected(cfg.get<bool>("deffered.textures"));
-	GETWINCAST(Checkbox*,"cbLights")->setSelected(cfg.get<bool>("deffered.lightsplanes"));
+	GETWINCAST(Checkbox*,"cbLights")->setSelected(cfg.get<bool>("deffered.lights_range"));
 	GETWINCAST(Checkbox*,"cbLighting")->setSelected(cfg.get<bool>("deffered.lighting"));
 	GETWINCAST(Checkbox*,"cbNormals")->setSelected(cfg.get<bool>("deffered.normals"));
 	GETWINCAST(Spinner*,"spBright")->setCurrentValue(cfg.get<float>("deffered.brightness"));
+
+	GETWINCAST(Checkbox*,"cbTrace")->setSelected(cfg.get<bool>("trace.enable"));
+	GETWINCAST(Spinner*,"spTraceLenght")->setCurrentValue(cfg.get<unsigned>("trace.length"));
+	GETWINCAST(Spinner*,"spTraceFreq")->setCurrentValue(cfg.get<double>("trace.frequency"));
 }
 
 /*void PlanetzLayout::add_selected_planet( Planet*p )

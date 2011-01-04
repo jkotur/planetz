@@ -82,7 +82,7 @@ private:
 	GLint lightId;
 
 	//
-	// Sphere normals (deprecated)
+	// Sphere normals
 	//
 	GLuint generate_sphere_texture( int w , int h );
 

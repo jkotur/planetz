@@ -697,7 +697,7 @@ void DeferRender::draw() const
 	glVertexAttribPointer( atmLightId , 3 , GL_FLOAT , GL_FALSE , 0 , NULL );
 	factory->getLight().unbind();
 
-//        if( flags & ATMOSPHERE )
+	if( flags & LIGHTING )
 		glDrawArrays( GL_POINTS , 0 , factory->size() );
 
 	Program::none();

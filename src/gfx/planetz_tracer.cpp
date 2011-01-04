@@ -24,6 +24,7 @@ void GFX::PlanetsTracer::stop()
 
 void GFX::PlanetsTracer::clear()
 {
+	oldest= 0 ;
 	begin = 0 ;
 }
 
@@ -34,9 +35,22 @@ void GFX::PlanetsTracer::update_configuration()
 
 void GFX::PlanetsTracer::update_configuration( const Config& cfg )
 {
-	number   = cfg.get<unsigned>( "trace.length" );
-	dt       = cfg.get<double>( "trace.frequency" );
+	unsigned newnumber   = cfg.get<unsigned>( "trace.length" );
+	double newdt       = cfg.get<double>( "trace.frequency" );
 	drawable = cfg.get<bool>( "trace.enable" );
+
+	if( newdt != dt ) {
+		dt = newdt;
+		if( tc.running() ) {
+			stop();
+			start();
+		}
+	}
+
+	if( newnumber != number ) {
+		number = newnumber;
+		clear();
+	}
 }
 
 void GFX::PlanetsTracer::update()

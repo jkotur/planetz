@@ -14,8 +14,12 @@ Window::Window( unsigned int w , unsigned int h , bool fs )
 }
 
 Window::Window( const std::vector<int>& res , bool fs )
-	: w(res[0]) , h(res[1]) , err(0) , flags(0)
+	: w(0) , h(0) , err(0) , flags(0)
 {
+	if( res.size() >= 2 ) {
+		w = res[0];
+		h = res[1];
+	}
 	if( fs ) flags |= SDL_FULLSCREEN;
 	init();
 }

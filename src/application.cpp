@@ -131,9 +131,7 @@ bool Application::init()
 //        gfx.add( &bkg    , 0 );
 	gfx.add( &camera , 1 );
 	gfx.add( &plz    , 2 );
-	log_printf(DBG,"%d\n",config.get<unsigned>( "trace.length" ) );
-	if( config.get<bool>( "trace.enable" ) )
-		gfx.add( &trace  , 3 );
+	gfx.add( &trace  , 3 );
 #ifndef _NOGUI
 	gfx.add( &ui     , 9 );
 #endif
