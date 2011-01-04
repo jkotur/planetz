@@ -1,0 +1,28 @@
+\subsection{Silnik graficzny}\label{sub:silnik graficzny}
+\subsubsection{Geometria}\label{ssub:geometria}
+\paragraph{}
+
+Największą zmianą dla silnika graficznego była zmiana podejścia renderowania planet. W pierwotnych założeniach użyty miał zostać standardowy forward rendering, który wymaga siatek zarówno dla geometrii, jak i do tekstur. Po testach, okazało się że z powodów ograniczeń technicznych zastosowanie forward renderingu w takiej formie w jakiej chcieliśmy jest niemożliwe. Przeszkodą były ograniczenia karty graficznej, która pozwala na generowanie zaledwie około 100 wierzchołków przy pomocy geometry shaderów. Dla realistycznego wyglądu kuli potrzebne było natomiast przy zbliżeniach około 1000. Wszelkie podejścia wyświetlenia tak dużej geometrii prosto z karty graficznej, były skazane na niepowodzenie. Dlatego zdecydowaliśmy się na użycie techniki nazywanej deferred renderingiem. Ma ona te zalety że skaluje się bardzo dobrze dla wielu obiektów, oraz można było przy jej pomocy uzyskać realistyczne kule bez dużej ilości geometrii w programie. Wadami takiego rozwiązania są dość duże koszty, związane ze sporymi buforami ekranu, oraz obliczeniami per-piksel. Dodatkowo na starszych kartach bez MTR (Multiple Render Targets), są dodatkowe nakłady związane z wymuszonym robieniem kilku przejść. W efekcie silnik graficzny, aby działać wydajnie potrzebuje dość nowych kart graficznych, co i tak było wymuszone przez użycie CUDA w silniku fizycznym.
+
+\paragraph{}
+
+Powiązana zmiana z wyżej wymienioną dotyczy dynamicznego generowania geometrii. W pierwotnych założeniach siatki planet miały być generowane na różnym poziomie dokładności, następnie wyświetlana miała być właściwa dla danej planety. W podejściu deferred renderingu nie jest to konieczne, ponieważ obliczenia są robione dla każdego piksela. Oznacza to, że jeśli planeta widoczna jest jako kilka pikseli, obliczenia dla niej będą wykonywane tylko dla tych kilku pikseli. Deferred rendering w tym przypadku skaluje się idealnie, i nie ma potrzeby poprawiania go.
+
+\subsubsection{Pamięć}\label{ssub:pamiec}
+\paragraph{}
+
+Użycie deferred renderingu poniosło za sobą pewne zmiany w strukturze programu. Niepotrzebne okazały się wszelkie struktury odpowiedzialne za generowanie, oraz przetrzymywanie geometrii. Konieczne natomiast stało się generowanie map normalnych, oraz map atmosfery. Jednak to zadanie silnik graficzny realizuje sam, dlatego w efekcie zarządzanie pamięcią się uprościło, na rzecz skomplikowania silnika graficznego.
+
+\subsubsection{Struktura programu}\label{ssub:struktura programu}
+\paragraph{}
+
+Podejście deferred renderingu spowodowało również to, że silnik graficzny musi mieć wszystko pod swoją kontrolą. Nie można już założyć że każdy efekt graficzny komunikuje się niezależnie z openglem. Spowodowane jest to niestandardowym podejściem do wyświetlania planet. Dlatego usunięte z struktury programu zostały oddzielne klasy realizujące każdy efekt graficzny, na rzecz jednej klasy wyświetlającej całość planet.
+
+\subsubsection{Klikanie}\label{ssub:klikanie}
+\paragraph{}
+
+Niestandardowy silnik graficzny spowodował również, że niemożliwe było użycie bezpośrednio opengla do sprawdzania która planeta została kliknięta. Konieczne było napisanie swojego rozwiązania. Bazuje ono mocno na podejściu które można znaleźć w openglu, jednak jest napisane ręcznie.
+
+\subsection{Silnik fizyczny}\label{sub:silnik fizyczny}
+\paragraph{}
+

@@ -1,0 +1,49 @@
+\paragraph{}
+
+Poniżej przedstawiony jest efektywny harmonogram prac nad projektem. Niektóre zadania wypadły w ogóle, ale pojawiły się też nowe. Okazało się też że przez zmianę podejścia do wyświetlania, inaczej przedstawiał się nakład pracy który trzeba było włożyć we wcześniej zaplanowane zadania.
+
+\paragraph{}
+
+Kolorem czarnym zostały oznaczone zadania do wykonania przez Jakuba Kotura, natomiast białym zadania dla Daniela Klobuszewskiego. Kolorem szarym oznaczone są zadania wykonywane wspólnie.
+
+\begin{landscape}
+\begin{figure}[ht]
+	\begin{gantt}{21}{14}
+		\begin{ganttitle}
+			\titleelement{Październik}{4}
+			\titleelement{Listopad}{4}
+			\titleelement{Grudzień}{4}
+			\titleelement{\footnotesize Święta}{1}
+			\titleelement{Styczeń}{1}
+		\end{ganttitle}
+		\begin{ganttitle}
+			\numtitle{40}{1}{52}{1}
+			\numtitle{1}{1}{1}{1}
+		\end{ganttitle}
+		\ganttgroup{\bf{Projekt}}{0}{3}
+		\ganttbar{Dokumentacja biznesowa}{0}{1}
+		\ganttbar{Dokumentacja techniczna}{1}{2}
+		\ganttgroup{\bf{Grafika}}{3}{9}
+		\ganttbar[pattern=]{Wyświetlanie planet}{3}{2}
+		\ganttbar[pattern=]{Oświetlenie}{7}{1}
+		\ganttbar[pattern=]{Teksturowanie planet}{8}{2}
+		\ganttbar[pattern=]{Efekt atmosfery}{10}{2}
+		\ganttgroup{\bf{Interfejs użytkownika}}{5}{2}
+		\ganttbar[pattern=]{Sterowanie symulacją}{5}{2}
+		\ganttbar[pattern=]{Interaktywna kamera}{5}{1}
+		\ganttgroup{\bf{Symulacja fizyczna}}{3}{9}
+		\ganttbar[color=white]{Obliczanie nowych pozycji planet}{3}{3}
+		\ganttbar[color=white]{Klasteryzacja planet}{6}{3}
+		\ganttbar[color=white]{Detekcja i obsługa kolizji}{9}{3}
+		\ganttgroup{\bf{Inne}}{25}{0}
+		\ganttbar[color=white]{Serializacja i deserializacja układów}{4}{1}
+		\ganttbar{Reprezentacja planet w pamięci}{2}{1}
+		\ganttbar{Poprawki}{13}{1}
+%                \ganttcon{11}{23}{11}{12}
+	\end{gantt}
+	\caption{Wykres Gantta}
+	\label{gantt}
+\end{figure}
+%  \scalebox{0.8}{
+%  \begin{gantt}[xunitlength=0.5cm,fontsize=\small,titlefontsize=\small,drawledgerline=true]{10}{48}
+\end{landscape}

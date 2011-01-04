@@ -1,7 +1,7 @@
 \documentclass[a4paper,titlepage,10pt]{article}
 
 \usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
+\usepackage[utf8x]{inputenc}
 \usepackage{polski}
 
 \usepackage{enumerate}
@@ -15,14 +15,18 @@
 \usepackage{lastpage}
 \usepackage{fancyhdr}
 
+\usepackage{subfig}
+
 \usepackage{pdflscape}
+\usepackage{gantt}
 
 \usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
 
 \linespread{1.3}
 
-\title{\huge Symulacja układu planetarnego na GPU\\ przy użyciu CUDA i OpenGL\\\small Dokumentacja końcowa\\\large Promotor: Krzysztof Kaczmarski}
+\title{\huge Symulacja układu planetarnego na GPU\\ przy użyciu CUDA i OpenGL\\\small Dokumentacja końcowa}
 \author{Daniel Kłobuszewski\and Jakub Kotur}
+\date{Promotor: Krzysztof Kaczmarski\\\vspace{24pt}\today}
 
 \begin{document}
 	\maketitle
@@ -31,15 +35,13 @@
 %        \fancyhf{}
 	\cfoot{\thepage/\pageref{LastPage}}
 
-	\hfill \\
-	\input{metric.tex}
-	\hfill \\
-	%\newpage
-	\input{history.tex}
+	\hfill \\ \input{metric.tex}
+	\hfill \\ \input{history.tex}
 
 	\newpage
 
 	\tableofcontents
+
 	\newpage
 
 	\section{Streszczenie}\label{sec:streszczenie}
@@ -54,6 +56,8 @@
 	\input{tests.tex}
 	\section{Opis zmian}\label{sec:opis zmian}
 	\input{diff.tex}
+	\section{Harmonogram}\label{sec:harmonogram}
+	\input{schedule.tex}
 
 \end{document}
 
