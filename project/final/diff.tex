@@ -1,3 +1,25 @@
+\subsection{Silnik fizyczny}
+\subsubsection{Kolizje}
+\paragraph{}
+
+Z powodu braku dobrego modelu fizycznego jedynym wynikiem kolizji jest w tej chwili sklejenie dwóch planet w jedną. Wynik takiego sklejenia ma masę równą sumie mas planet przed zderzeniem, objętość równą sumie objętości, oraz pęd równy sumie pędów - czyli wypadkowa prędkość powstałego tworu jest równa średniej ważonej prędkości zderzających się planet, z wagami równymi masom.
+
+Zależność tę widać poniżej:
+\begin{align}
+p_3 & = p_1 + p_2 \\
+m_3 * V_3 & = m_1 * V_1 + m_2 * V_2 \\
+( m_1 + m_2 ) * V_3 & = m_1 * V_1 + m_2 * V_2 \\
+V_3 & = \frac{ m_1 * V_1 + m_2 * V_2 }{ m_1 + m_2 }
+\end{align}
+
+\paragraph{}
+
+\subsubsection{Organizacja kodu}
+Główną zmianą w module fizycznym w stosunku do dokumentacji technicznej jest brak wspólnego interfejsu CudaAlgorithm. Pojawiła się natomiast klasa Clusterer, dzieląca przestrzeń na klastry. Konieczność jej wydzielenia wynikała ze złożoności kodu implementującego algorytm k-means.
+
+Pewną zmianą jest także rezygnacja z przestrzeni nazw CPU2GPU oraz FILE2CPU. Zmieniona została również nazwa Holder na PlanetHolder - jako kontener służący do przechowywania informacji o planetach. Stało się tak dla odróżnienia go od ClusterHoldera przechowującego bufory z informacjami o klastrach.
+
+
 \subsection{Silnik graficzny}\label{sub:silnik graficzny}
 \subsubsection{Geometria}\label{ssub:geometria}
 \paragraph{}
@@ -25,4 +47,3 @@ Niestandardowy silnik graficzny spowodował również, że niemożliwe było uż
 
 \subsection{Silnik fizyczny}\label{sub:silnik fizyczny}
 \paragraph{}
-

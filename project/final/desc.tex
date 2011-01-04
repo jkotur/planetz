@@ -62,3 +62,58 @@ Drugim problemem jest mapowanie tekstury na kulę, tak aby z koordynat kuli 3D, 
 \subsubsection{Atmosfery}\label{ssub:atmosfery}
 \paragraph{}
 
+\subsection{Silnik fizyczny}
+
+\subsubsection{Klastertyzacja}
+
+\paragraph{} Do klasteryzacji używany jest alorytm k-means. Klastry definiowane są przez dwie tablice - \ensuremath{shuffle} oraz \ensuremath{count}. Do klastra o numerze k należą te planety, których indeksy znajdują się w tablicy \ensuremath{shuffle} pod indeksami z przedziału \ensuremath{< count[k-1], count[k] )}. Przyjmujemy, że \ensuremath{count[-1] = 0}.
+
+\paragraph{} Taka reprezentacja pozwala na łatwe korzystanie z planet z danego klastra w module fizycznym i jest transparentna dla modułu graficznego.
+
+\subsubsection{Kolizje} w teorii rozwiązywane są prosto - jeżeli dwa obiekty zachodzą na siebie, należy je skleić. Algorytm sekwencyjny do tego celu sprawdzałby kolejne pary planet, usuwając te kolidujące ze sobą. Jeżeli jednak chcemy zrealizować obsługę kolizji równolegle, rozwiązanie naiwne okazuje się nie być prawidłowe. Gdyby każda planeta w osobnym wątku CUDA sprawdzała kolizje ze wszystkimi planetami po kolei, mogłoby dojść do konfliktów.
+
+\paragraph{} Najpierw opiszę sposób, w jaki usuwamy planety. Przy każdej kolizji jedna planeta musi zostać usunięta, a druga staje się sumą fizyczną tych dwóch planet. Usuwanie planet przebiega dwuetapowo. Pierwszy etap, usunięcie logiczne, to zwykłe wyzerowanie masy oraz promienia usuwanej planety. Wyzerowanie masy powoduje, że planeta nie oddziałuje na inne, jest więc transparentna dla modułu fizyki. Wyzerowanie promienia natomiast "ukrywa" planetę przed modułem graficznym, który dzięki temu jej nie wyświetla. Dodatkowo, algorytm wykrywający kolizje ignoruje planety o zerowym promieniu.
+Drugi etap usuwania, usunięcie fizyczne, powoduje przesunięcie wszystkich "istniejących" planet do początku tablicy - dla każdego parametru osobno. Realizowane jest to przy pomocy funkcji cudppCompact z biblioteki cudpp.
+Wewnątrz tej funkcji, używana jest funkcja cudppScan, która efektywnie zamienia tablicę zerojedynkową, odróżniającą planety nieusunięte od usuniętych, na tablicę indeksów, pod które należy skopiować te planety.
+
+\paragraph{} Wracając do problemu z równoległością w rozwiązywaniu kolizji - w implementacji naiwnej mogłoby się zdarzyć tak, że dwie planety w tym samym czasie wykryłyby kolizję z trzecią planetą, obliczyłyby parametry wynikowej planety (każda ze sobą), po czym wyzerowałyby parametry tej planety. W efekcie kolidująca planeta zostałaby "zdublowana" - w szczególności jej masa dodałaby się do obu kolidujących z nią planet.
+
+\paragraph{} Obsługa kolizji przebiega w efekcie dwuetapowo: pierwszy etap to wykrycie kolizji, drugi to ich rozwiązanie, czyli sklejanie kolidujących planet. Poza wymienionymi wyżej czynnikami należy wspomnieć o jeszcze jednym - o klasteryzacji. Kolizje rozwiązywane są jedynie wewnątrz klastrów, gdyż zakładamy, że prawdopodobieństwo kolizji planet z różnych klastrów jest pomijalnie niewielkie.
+
+\paragraph{Detekcja kolizji} - definiujemy tablicę kolizji k. Jeżeli planeta i nie koliduje z żadną, \ensuremath{k[i] = i}. Jeżeli natomiast wykryła kolizję z planetą j, \ensuremath{k[i] = j}. Dodatkowo wymagamy, żeby relacja ta spełniała warunek \ensuremath{i\prec j} w pewnym porządku liniowym. Dzięki temu kolidujące planety nie utworzą cyklu.
+
+\paragraph{} Kolizje rozwiązujemy wewnątrz klastra.  Z definicji tablicy shuffle wynika, że \ensuremath{i \neq j \Rightarrow shuffle[i]\neq shuffle[j]}. Wobec tego relacja \ensuremath{shuffle[i] \prec shuffle[j] \Leftrightarrow i<j } tworzy porządek liniowy.
+
+\paragraph{} Detekcja przebiega następująco:
+\begin{lstlisting}
+merge_needed = false
+foreach planet p in parallel
+	id = p.index + 1
+	while id < count[ p.cluster ]
+		if( kolizja( p, planet[ shuffle[ id ] ] ) )
+			merge_needed = true
+			k[ shuffle[ p.id ] ] = shuffle[ id ]
+			return;
+		++id
+	k[ shuffle[ p.id ] ] = shuffle[ p.id ]
+\end{lstlisting}
+
+\paragraph{} W efekcie dostajemy tablicę k. Jeżeli nie została ustawiona flaga merge\_needed, kończymy. Jeżeli została, zaczynamy sklejanie planet:
+\begin{lstlisting}
+done = false
+k_in = k
+while !done
+	done = true
+	foreach planet p in parallel	
+		if( k_in[ p.id ] == p.id )
+			k_out[ p.id ] = p.id
+			return
+		if( k_in[ k_in[ p.id ] ] != k_in[ p.id ] )
+			k_out[ p.id ] = k_in[ p.id ]
+			done = false
+		merge( p, planet[ k_in[ p.id ] ] )
+		k_out[ p.id ] = p.id
+	k_in <=> k_out
+\end{lstlisting}
+
+\paragraph{} Po czym powtarzamy detekcję.
