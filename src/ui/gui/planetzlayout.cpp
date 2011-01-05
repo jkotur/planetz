@@ -255,8 +255,8 @@ bool PlanetzLayout::add_planet( const CEGUI::EventArgs& e )
 bool PlanetzLayout::set_cam_speed( const CEGUI::EventArgs& e )
 {
 	on_cam_speed_changed( 
-			static_cast<Scrollbar*>(WindowManager::getSingleton().getWindow("slCamSpeed"))
-			->getScrollPosition() );
+			pow(static_cast<Scrollbar*>(WindowManager::getSingleton().getWindow("slCamSpeed"))
+			->getScrollPosition(),2) );
 	return true;
 }
 
@@ -384,7 +384,7 @@ bool PlanetzLayout::hide_opt_win( const CEGUI::EventArgs& e )
 
 bool PlanetzLayout::apply_options( const CEGUI::EventArgs& e )
 {
-//        GETWIN("winOpt")->setVisible(false);
+	GETWIN("winOpt")->setVisible(false);
 	updateOptions( config );
 	on_config_changed( config );
 	return true;

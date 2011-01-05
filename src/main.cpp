@@ -14,6 +14,8 @@ int main (int argc, char const* argv[])
 {
 	log_add(LOG_STREAM(stderr),LOG_PRINTER(std::vfprintf));
 
+	log_set_lev( INFO );
+
 	Options opt;
 
 	opt.addCmdLine( argc , argv );

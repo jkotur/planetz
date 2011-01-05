@@ -69,7 +69,7 @@
 		<Window Type="QuadraticLook/HorizontalScrollbar" Name="slCamSpeed" >
 			<Property Name="UnifiedPosition" Value="{{1.0,-110},{1.0,-30}}" />
 			<Property Name="UnifiedSize" Value="{{0,105},{0,20}}" />
-			<Property Name="DocumentSize" Value="25000.0" />
+			<Property Name="DocumentSize" Value="200.0" />
 			<Property Name="StepSize" Value="1.0" />
 		</Window>
 
