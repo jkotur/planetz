@@ -143,9 +143,36 @@ void Gui::on_mouse_button_up( int b , int x , int y )
 	}
 }
 
+#define SDL_TO_CEGUI(s,c) 		\
+	case SDLK_##s: 			\
+		okey = CEGUI::Key::c;	\
+		break;
+
+
 void Gui::on_key_down( SDLKey k , Uint16 u , Uint8 code )
 {
-	CEGUI::System::getSingleton().injectKeyDown(code);
+	unsigned okey;
+
+	switch( k )
+	{
+		SDL_TO_CEGUI(RETURN	,Return		)
+		SDL_TO_CEGUI(BACKSPACE	,Backspace	)
+		SDL_TO_CEGUI(LEFT	,ArrowLeft	)
+		SDL_TO_CEGUI(RIGHT	,ArrowRight	)
+		SDL_TO_CEGUI(UP		,ArrowUp	)
+		SDL_TO_CEGUI(DOWN	,ArrowDown	)
+		SDL_TO_CEGUI(PAGEUP	,PageUp		)
+		SDL_TO_CEGUI(PAGEDOWN	,PageDown	)
+		SDL_TO_CEGUI(HOME	,Home		)
+		SDL_TO_CEGUI(END	,End		)
+		SDL_TO_CEGUI(DELETE	,Delete		)
+		SDL_TO_CEGUI(TAB	,Tab		)
+		SDL_TO_CEGUI(RSHIFT	,RightShift	)
+		SDL_TO_CEGUI(LSHIFT	,LeftShift	)
+		default: okey = k;
+	}
+
+	CEGUI::System::getSingleton().injectKeyDown(okey);//k);//code);
 
 	if (u != 0) {
 		CEGUI::System::getSingleton().injectChar(u);
