@@ -46,6 +46,19 @@ namespace MISC
 			 * usunięte.
 			 */
 			void filter( BufferCu<unsigned> *mask );
+			
+			/**
+			 * @brief Ustawia ilość używanych planet.
+			 *
+			 * @param num Nowa ilość.
+			 */
+			void setUsed( const size_t num );
+			/**
+			 * @brief Pobiera ilość używanych planet.
+			 *
+			 * @returns Ilość używanych planet.
+			 */
+			size_t getUsed() const;
 
 			//
 			//   * GFX
@@ -102,8 +115,18 @@ namespace MISC
 			CBUF<float3>   velocity;
 
 		private:
+			/**
+			 * @brief Rozmiar buforów w użyciu.
+			 */
 			size_t m_size;
+			/**
+			 * @brief Fizyczny, zaalokowany rozmiar buforów.
+			 */
 			size_t m_realsize;
+			/**
+			 * @brief Ilość używanych (nieusuniętych) planet w buforach.
+			 */
+			size_t m_usedsize;
 	};
 
 	/**
@@ -170,6 +193,7 @@ namespace MISC
 		, velocity(0)
 		, m_size(0) // ustawi się w resize
 		, m_realsize(0) // jw.
+		, m_usedsize(0)
 	{
 		resize( num );
 	}
@@ -199,12 +223,26 @@ namespace MISC
 		}
 		count.assign( num );
 		m_size = num;
+		m_usedsize = num;
 	}
 
 	template<template<class T>class CBUF, template<class S>class GBUF>
 	size_t PlanetHolderBase<CBUF, GBUF>::size() const
 	{
 		return m_size;
+	}
+
+	template<template<class T>class CBUF, template<class S>class GBUF>
+	void PlanetHolderBase<CBUF, GBUF>::setUsed( size_t num )
+	{
+		ASSERT( num <= m_size );
+		m_usedsize = num;
+	}
+
+	template<template<class T>class CBUF, template<class S>class GBUF>
+	size_t PlanetHolderBase<CBUF, GBUF>::getUsed() const
+	{
+		return m_usedsize;
 	}
 
 	/**

@@ -286,12 +286,3 @@ __global__ void PHX::merge_collisions( unsigned *in_merges, unsigned *out_merges
 	out_merges[ index ] = index;
 }
 
-__global__ void PHX::create_filter( float *masses, unsigned *filter, unsigned *count )
-{
-	unsigned index = threadIdx.x + blockDim.x * blockIdx.x;
-	if( index >= *count )
-	{
-		return;
-	}
-	filter[ index ] = masses[ index ] ? 1 : 0;
-}

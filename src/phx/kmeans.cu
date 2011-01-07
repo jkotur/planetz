@@ -59,7 +59,7 @@ void Clusterer::initClusters()
 
 	ASSERT( n );
 	TODO("Mądre obliczanie k na podstawie n");
-	unsigned k = min( 512, 1 + n / 100 );
+	unsigned k = min( 512, 1 + n / 1000 );
 	m_holder.resize( k, n );
 	m_errors.resize( n );
 	m_shuffle.resize( n );
@@ -101,6 +101,7 @@ float Clusterer::compute()
 	return reduceErrors();
 }
 
+/// @todo Przenieść CUDPPHandle'a poza pętlę kmeans
 void Clusterer::sortByCluster()
 {
 	CUDPPConfiguration cfg;
@@ -118,11 +119,11 @@ void Clusterer::sortByCluster()
 		exit(1);
 	}
 
-	/// 9 bitów - magiczna stała wynika z faktu, że w tej chwili może i tak istnieć najwyżej 512 klastrów, co oznacza, że numer klastra mieści się w 9 bitach.
-	ASSERT( m_holder.assignments.getLen() == m_shuffle.getLen() );
-	ASSERT( m_holder.assignments.getSize() == m_shuffle.getSize() );
-	ASSERT( m_shuffle.getSize() == sizeof(unsigned int) * m_shuffle.getLen() );
-	cudppSort( sortplan, m_holder.assignments.d_data(), m_shuffle.d_data(), 9, m_holder.assignments.getLen() );
+	unsigned n = m_holder.assignments.getLen();
+	unsigned bitCount = 2;
+	while( (n-1) >> bitCount ) ++bitCount;
+	ASSERT( 1u << bitCount >= n );
+	cudppSort( sortplan, m_holder.assignments.d_data(), m_shuffle.d_data(), bitCount, n );
 	
 	cudppDestroyPlan(sortplan);
 }
@@ -131,8 +132,8 @@ float Clusterer::reduceErrors()
 {
 	dim3 grid( 1 );
 	dim3 block( 512 );
-	unsigned mem = sizeof(float) * 512;
-	reduceFull<float, 512><<< grid, block, mem>>>(m_errors.d_data(), m_errors.d_data(), m_errors.getLen());
+	//TODO( "tablica out != in" ) !!!!!
+	reduceFull<float, 512><<< grid, block>>>(m_errors.d_data(), m_errors.d_data(), m_errors.getLen());
 	CUT_CHECK_ERROR( "Kernel launch" );
 	return m_errors.getAt(0);
 }
@@ -144,7 +145,7 @@ void Clusterer::reduceMeans()
 		dim3 block( 512 );
 		dim3 grid( 1 );
 		unsigned mem = sizeof(float3) * 512;
-		reduceSelective_f3<512> <<< grid, block, mem >>>(m_planets->getPositions().map( BUF_CU ), m_holder.centers.d_data(), m_counts.d_data(), i, m_shuffle.d_data());
+		avgSelective_f3<512> <<< grid, block, mem >>>(m_planets->getPositions().map( BUF_CU ), m_holder.centers.d_data(), m_counts.d_data(), i, m_shuffle.d_data());
 		CUT_CHECK_ERROR( "Kernel launch" );
 	}
 }

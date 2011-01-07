@@ -39,10 +39,6 @@ namespace PHX
 	/// @brief Skleja planety wg tablicy in_merges. Jeżeli nie sklei wszystkiego, *done jest ustawiane na 0, a w out_merges są dane do kolejnego wywołania.
 	__global__ void merge_collisions( unsigned *in_merges, unsigned *out_merges, float3 *positions, float3 *velocities, float *masses, float *radiuses, unsigned *count, unsigned *done );
 
-	/// @brief Tworzy filtr do usuwania planet.
-	/// @details Usunięte zostaną planety, których masa wynosi 0.
-	__global__ void create_filter( float *masses, unsigned *filter, unsigned *count );
-
 	/// @brief Pobiera tekst błędu.
 	/// @details Jeżeli podczas działania kernela nie został spełniony warunek w CUDA_ASSERT, to zwrócona zostanie jego treść. W przeciwnym wypadku, zwrócony zostanie pusty ciąg znaków.
 	std::string getErr();

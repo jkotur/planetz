@@ -28,6 +28,7 @@
 #include "window.h"
 
 #include "util/config.h"
+#include "mem/misc/holder_cleaner.h"
 
 #ifndef _RELEASE
 #include "gfx/planetz_picker.h"
@@ -102,6 +103,8 @@ protected:
 	GFX::Background bkg;
 
 	std::FILE*f_log;
+
+	MEM::MISC::PlanetHolderCleaner phcleaner;
 
 #ifndef _RELEASE
 	GFX::PlanetzPicker picker;

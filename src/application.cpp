@@ -25,6 +25,7 @@ Application::Application( Window& win , Config& cfg )
 	, plz( data_mgr.getGfxMem() )
 	, trace( *data_mgr.getGfxMem() , cfg )
 	, bkg( 0.8 , win.getW() , win.getH() )
+	, phcleaner( data_mgr.getPhxMem() )
 	, picker( data_mgr.getGfxMem(), 3, 3 , win.getW() , win.getH() )
 	, pprnt( data_mgr.getPhxMem(), &picker )
 	, pt( data_mgr.getPhxMem(), &picker, &camera )
@@ -144,6 +145,8 @@ bool Application::init()
 
 	data_mgr.registerCam( &camera );
 
+	phx.registerCleaner( &phcleaner );
+
 	return true;
 }
 
@@ -173,6 +176,7 @@ void Application::main_loop()
 		(running && (running &= ui.event_handle() ));
 
 		do_fps();
+		phcleaner.work();
 	}
 	while( running );
 

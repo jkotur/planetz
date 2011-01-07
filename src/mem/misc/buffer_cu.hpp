@@ -7,7 +7,7 @@
 	{ \
 		(buf).bind(); \
 		for( unsigned i = 0; i < (buf).getLen(); ++i )\
-		{log_printf( DBG, #buf"[%u] = "format"\n", i, (buf).h_data()[i]);}\
+		{log_printf( INFO, #buf"[%u] = "format"\n", i, (buf).h_data()[i]);}\
 		(buf).unbind();\
 	}
 

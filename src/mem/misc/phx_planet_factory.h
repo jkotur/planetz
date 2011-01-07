@@ -1,11 +1,9 @@
-
 #ifndef __PHX_PLANET_FACTORY_H__
 
 #define __PHX_PLANET_FACTORY_H__
 
 #include "buffer.h"
 #include "holder.h"
-#include <boost/shared_ptr.hpp>
 
 namespace MEM
 {

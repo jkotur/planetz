@@ -35,6 +35,11 @@ void PlanetTracer::refresh()
 	if( -1 == id )
 		return;
 	MEM::MISC::PhxPlanet p = factory->getPlanet( id );
+	if( 0 == p.getMass() )
+	{
+		id = -1;
+		return;
+	}
 	float3 f3pos = p.getPosition();
 	Vector3 planet_pos( f3pos.x, f3pos.y, f3pos.z );
 	Vector3 cam_pos = planet_pos + dist;

@@ -13,23 +13,36 @@ ConstChecker<float3, MEM::MISC::BufferGl> pos_checker;
 ConstChecker<float, MEM::MISC::BufferCu> mass_checker;
 ConstChecker<float3, MEM::MISC::BufferCu> vel_checker;
 
-/// @brief Implementacja klasy Phx.
-/// @details Ukrywa szczegóły implementacji, aby nie były widoczne w publicznym interfejsie.
+/**
+ * @brief Implementacja klasy Phx.
+ *
+ * @details Ukrywa szczegóły implementacji, aby nie były widoczne w publicznym interfejsie.
+ */
 class Phx::CImpl
 {
 	public:
-		/// @brief Inicjalizacja fizyki
+		/**
+		 * @brief Inicjalizacja fizyki
+		 */
 		CImpl(MEM::MISC::PhxPlanetFactory *p);
 		virtual ~CImpl();
 
-		/// @brief Implementacja Phx::compute
+		/**
+		 * @brief Implementacja Phx::compute
+		 */
 		void compute(unsigned n);
 
-		/// @brief Implementacja Phx::enableClusters
+		/**
+		 * @brief Implementacja Phx::enableClusters
+		 */
 		void enableClusters(bool orly);
 
-		/// @brief Implementacja Phx::clustersEnabled
+		/**
+		 * @brief Implementacja Phx::clustersEnabled
+		 */
 		bool clustersEnabled() const;
+
+		void registerCleaner( MEM::MISC::PlanetHolderCleaner *c );
 
 	private:
 		void map_buffers();
@@ -49,14 +62,16 @@ class Phx::CImpl
 		MEM::MISC::BufferCu<unsigned> merges1;
 		MEM::MISC::BufferCu<unsigned> merges2;
 		MEM::MISC::BufferCu<float3> tmp_vel;
-		MEM::MISC::BufferCu<unsigned> filter; // a może użyć jakiegoś merge'a? taniej dla ramu
 		bool clusters_on;
+
+		MEM::MISC::PlanetHolderCleaner *cleaner;
 };
 
 Phx::CImpl::CImpl(MEM::MISC::PhxPlanetFactory *p)
 	: planets( p )
 	, clusterer( p )
 	, clusters_on( true )
+	, cleaner( NULL )
 {
 }
 
@@ -204,30 +219,14 @@ void Phx::CImpl::run_nbodies_for_clusters()
 	dim3 block( min( threads, MIN_THREADS ) );
 	dim3 grid( 1 );
 
-	static unsigned print_modulo = 0;
-	print_modulo = (print_modulo+1)%5000;
 	MEM::MISC::BufferCu<float3> *centers = clusterer.getCenters();
-	centers->bind();
-	if( print_modulo == 0 )
-	for( unsigned i = 0; i < centers->getLen(); ++i )
-	{
-		log_printf( DBG, "centers[%u] = (%f,%f,%f)\n", i, centers->h_data()[i].x, centers->h_data()[i].y, centers->h_data()[i].z );
-	}
-	centers->unbind();
+
 	outside_cluster_interaction<<<grid, block>>>(
 		clusterer.getCenters()->d_data(),
 		clusterer.getMasses()->d_data(),
 		threads,
 		tmp_vel.d_data() );
 	CUT_CHECK_ERROR( "kernel launch" );
-
-	tmp_vel.bind();
-	if( print_modulo == 0 )
-	for( unsigned i = 0; i < centers->getLen(); ++i )
-	{
-		log_printf( DBG, "vel[%u] = (%f, %f, %f)\n", i, tmp_vel.h_data()[i].x, tmp_vel.h_data()[i].y, tmp_vel.h_data()[i].z );
-	}
-	tmp_vel.unbind();
 
 	threads = planets->size();
 	block = min( threads, MIN_THREADS );
@@ -267,7 +266,7 @@ void Phx::CImpl::update_positions()
 
 void Phx::CImpl::handle_collisions()
 {
-	bool merge_was_needed = false;
+	bool merge_performed = false;
 	MEM::MISC::BufferCu<unsigned> merge_needed(1);
 	unsigned *in_merges = merges1.d_data();
 	unsigned *out_merges = merges2.d_data();
@@ -291,29 +290,17 @@ void Phx::CImpl::handle_collisions()
 
 		if( merge_needed.retrieve() == 0 )
 		{
-			if( merge_was_needed )
-			{
-				TODO("rzadziej filtrować");
-				filter.resize(threads);
-				create_filter<<<grid, block>>>(
-					planets->getMasses().d_data(),
-					filter.d_data(),
-					planets->getCount().map(MEM::MISC::BUF_CU) );
-				planets->filter( &filter );
-			}
+			if( !merge_performed )
+				return;
+
+			if( cleaner )
+				cleaner->notifyCheckNeeded();
+			else
+				log_printf( _WARNING, "Merge performed, but cleaner not set!\n" );
 			return;
 		}
-		merge_was_needed = true;
+		merge_performed = true;
 
-	/*	merges2.bind();
-		for( unsigned i = 0; i < threads; ++i )
-		{
-			if( merges2.h_data()[i] != i )
-				log_printf( DBG, "merges[%u] = %u\n", i, merges2.h_data()[i] );
-		}
-		merges2.unbind();
-		static unsigned safety_buf = 0;
-		if( ++safety_buf > 10 ) abort(); */
 		MEM::MISC::BufferCu<unsigned> done(1);
 		
 		unsigned __debug_counter = 0;
@@ -355,6 +342,11 @@ bool Phx::CImpl::clustersEnabled() const
 	return clusters_on;
 }
 
+void Phx::CImpl::registerCleaner( MEM::MISC::PlanetHolderCleaner *c )
+{
+	cleaner = c;
+}
+
 Phx::Phx(MEM::MISC::PhxPlanetFactory *p)
 	: impl( new CImpl(p) )
 {
@@ -378,4 +370,9 @@ void Phx::enableClusters(bool orly)
 bool Phx::clustersEnabled() const
 {
 	return impl->clustersEnabled();
+}
+
+void Phx::registerCleaner( MEM::MISC::PlanetHolderCleaner *c )
+{
+	impl->registerCleaner( c );
 }
