@@ -2,7 +2,7 @@
 #define __HOLDER_CLEANER_H__
 
 #include "phx_planet_factory.h"
-#include "util/event.h"
+//#include "util/event.h"
 
 namespace MEM
 {
