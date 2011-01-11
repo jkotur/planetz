@@ -1,4 +1,5 @@
-include_directories( . ../../3rdparty/cudpp/include/ )
+include_directories( . ../../3rdparty/cudpp/include/
+	../../3rdparty/cudpp/src/ )
 
 CUDA_ADD_LIBRARY( memmisc gfx_planet_factory phx_planet_factory holder buffer
 	buffer_cu buffer_cpu materials_manager saver_params holder_kernels.cu

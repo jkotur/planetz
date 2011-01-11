@@ -2,6 +2,7 @@
 #define __HOLDER_CLEANER_H__
 
 #include "phx_planet_factory.h"
+#include "util/event.h"
 
 namespace MEM
 {
@@ -31,6 +32,20 @@ class PlanetHolderCleaner
 		 */
 		void work();
 	
+		/**
+		 * @brief Zapisuje się na zmianę id planety.
+		 *
+		 * @param callback Metoda wołana w reakcji na zmianę id.
+		 *
+		 * @param id Monitorowane ID.
+		 */
+	//	void subscribeForIdChange( EventDelegate1<unsigned> callback, unsigned id );
+
+		/**
+		 * @brief Wypisuje się z informowania o zmianie planety.
+		 */
+		//void unsubscribeForIdChange( EventDelegate1<unsigned> callback );
+
 	private:
 		void createFilter();
 		bool filteringNeeded();

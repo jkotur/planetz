@@ -57,7 +57,7 @@ bool PlanetHolderCleaner::filteringNeeded()
 		filter.d_data(),
 		planetsInUse.d_data(),
 		threads );
-	log_printf( INFO, "%u of %u planets in use.\n", planetsInUse.retrieve(), threads );
+	//log_printf( INFO, "%u of %u planets in use.\n", planetsInUse.retrieve(), threads );
 	return planetsInUse.retrieve() < 0.8 * threads - 20; // magic numbers!
 }
 
@@ -65,3 +65,12 @@ void PlanetHolderCleaner::filterHolder()
 {
 	fact->filter( &filter );
 }
+
+/*void subscribeForIdChange( EventDelegate1<unsigned> callback, unsigned id )
+{
+}
+
+void unsubscribeForIdChange( EventDelegate1<unsigned> callback )
+{
+}
+*/

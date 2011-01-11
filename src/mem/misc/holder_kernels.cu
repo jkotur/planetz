@@ -1,4 +1,5 @@
 #include "holder_kernels.h"
+#include "kernel/compact_kernel.cu"
 
 namespace MEM
 {
@@ -31,5 +32,26 @@ void stretch( MEM::MISC::BufferCu<unsigned> *in, MEM::MISC::BufferCu<unsigned> *
 		factor );
 	CUT_CHECK_ERROR("kernel launch");
 }
+
+size_t reassign( void* data, BufferCu<unsigned> *indices, BufferCu<unsigned> *mask )
+{
+	unsigned size = indices->getLen();
+	BufferCu<size_t> count(1);
+	BufferCu<unsigned> tmp( size );
+	unsigned threads = 1 + size / 8;
+	dim3 block( min( 512, threads ) );
+	dim3 grid( 1 + ( threads - 1 ) / block.x );
+	compactData<unsigned, false><<<grid, block>>>(
+		tmp.d_data(),
+		count.d_data(),
+		indices->d_data(),
+		mask->d_data(),
+		(unsigned*)data,
+		size );
+	CUT_CHECK_ERROR( "kernel launch" );
+	cudaMemcpy( data, tmp.d_data(), size * sizeof(unsigned), cudaMemcpyDeviceToDevice );
+	return count.retrieve();
+}
+
 } // namespace MISC
 } // namespace MEM

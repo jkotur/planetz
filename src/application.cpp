@@ -168,7 +168,7 @@ void Application::main_loop()
 		{
 			//Timer t;
 			phx.compute(phx_frames);
-			//log_printf(DBG, "phx.compute(%u) running time: %.2fms\n", phx_frames, timer.get_dt_ms());
+			//log_printf(INFO,"phx.compute(%u) running time: %.2fms\n", phx_frames, t.get_ms());
 		}
 		pt.refresh();
 		gfx.render();

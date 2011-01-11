@@ -52,7 +52,7 @@ namespace MISC
 		 * 
 		 * @param val wartość do wpisania
 		 */
-		virtual void assign( T val ) = 0; // for one-element buffers - set its value to val
+		virtual void assign( T val ) = 0;
 
 		/** 
 		 * @brief Zwraca wielkość bufora.
