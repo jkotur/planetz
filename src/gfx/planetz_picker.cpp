@@ -61,6 +61,17 @@ void PlanetzPicker::resize( int w , int h )
 	winh = h ;
 }
 
+bool PlanetzPicker::on_button_down( int b , int x , int y )
+{
+	if( b != PICK_BUTTON ) return false;
+
+	render( x , y );
+
+	sigPlanetPicked( getId() );
+
+	return false;
+}
+
 void PlanetzPicker::generate_fb_textures()
 {
 	glBindTexture(GL_TEXTURE_2D, colorTex );

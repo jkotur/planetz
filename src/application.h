@@ -73,14 +73,17 @@ public:
 
 	void set_cam_speed( double s )
 	{	camera.update(UI::CameraMgr::FREELOOK,(void*)&s); }
-
 protected:
+	void set_picked_planet( int id );
+
 	void do_fps();
 
 	void pause_toggle();
 	void pause_anim();
 
 	void reset();
+
+	MEM::MISC::PhxPlanet pp;
 
 	unsigned fps;
 	float oldtime;

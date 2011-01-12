@@ -4,6 +4,11 @@
 
 using namespace MEM::MISC;
 
+PhxPlanet::PhxPlanet()
+	: id(-1)
+{
+}
+
 PhxPlanet::PhxPlanet( unsigned _id , const PlanetHolder* h )
 	: id( _id )
 	, holder( h )
@@ -17,25 +22,29 @@ PhxPlanet::~PhxPlanet()
 
 float3   PhxPlanet::getPosition() const
 {
+	if( id < 0 ) return make_float3(0);
 	float3 result = holder->pos.map( BUF_H )[ id ];
-	holder->pos.unmap(); // FIXME: what if it was already mapped?
+	holder->pos.unmap();
 	return result;
 }
 
 float    PhxPlanet::getRadius() const
 {
+	if( id < 0 ) return 0.0f;
 	float result = holder->radius.map( BUF_H )[ id ];
-	holder->radius.unmap(); // FIXME as above
+	holder->radius.unmap();
 	return result;
 }
 
 float	PhxPlanet::getMass() const
 {
+	if( id < 0 ) return 0.0f;
 	return holder->mass.getAt( id );
 }
 
 float3 PhxPlanet::getVelocity() const
 {
+	if( id < 0 ) return make_float3(0);
 	return holder->velocity.getAt( id );
 }
 

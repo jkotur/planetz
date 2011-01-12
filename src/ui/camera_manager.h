@@ -29,9 +29,11 @@ public:
 	virtual ~CameraMgr();
 
 	void init();
+	void clear();
+
 	void set_speed( double _s ) {}
 
-	void request( enum CAMERA_TYPES type , void*data );
+	void request( enum CAMERA_TYPES type , void*data = NULL );
 	void update ( enum CAMERA_TYPES type , void*data );
 
 	void set_perspective(
@@ -52,7 +54,7 @@ public:
 private:
 	void emit_sig();
 	void swap_camera();
-	
+
 	Camera * cams[CAMERA_NUM];
 
 	float* currmat;

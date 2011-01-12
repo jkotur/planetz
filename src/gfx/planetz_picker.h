@@ -2,9 +2,12 @@
 
 #define __PLANETZ_PICKER_H__
 
+#include <boost/signal.hpp>
+
 #include "mem/misc/gfx_planet_factory.h"
 #include "mem/misc/buffer.h"
 #include "gfx/shader.h"
+#include "ui/input_listener.h"
 
 namespace GFX
 {
@@ -14,7 +17,7 @@ namespace GFX
  * Działa ona poprzez renderowanie planet w dodatkowym buforze, i sprawdznie która
  * planeta, w okolicy myszki, znajduje się najbliżej kamery.
  */
-class PlanetzPicker {
+class PlanetzPicker : public UI::InputListener {
 public:
 	/** 
 	 * @brief Tworzy klasę i przygotowuje ją do działania.
@@ -54,7 +57,10 @@ public:
 	 * @param h wysokość okna.
 	 */
 	void resize( int w , int h );
-	
+
+	virtual bool on_button_down( int , int , int );
+
+	boost::signal<void (int)> sigPlanetPicked;
 private:
 	void resizeNames();
 	void generate_fb_textures();

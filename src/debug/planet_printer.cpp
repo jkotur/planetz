@@ -9,19 +9,9 @@ PlanetPrinter::PlanetPrinter( MEM::MISC::PhxPlanetFactory *f, GFX::PlanetzPicker
 	, picker( pp )
 {}
 
-bool PlanetPrinter::on_button_down( int button, int x, int y )
-{
-	picker->render( x, y );
-	int id = picker->getId();
-	if( -1 != id )
-	{
-		print( id );
-	}
-	return false;
-}
-
 void PlanetPrinter::print( int id )
 {
+	if( id == -1 ) return;
 	MEM::MISC::PhxPlanet p = factory->getPlanet( id );
 	std::stringstream ss;
 	ss << "Picked planet " << id << std::endl;

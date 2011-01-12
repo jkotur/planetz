@@ -4,6 +4,8 @@
 
 #include "util/logger.h"
 
+#include "debug/routines.h"
+
 using namespace UI;
 
 CameraMgr::CameraMgr(
@@ -20,15 +22,21 @@ CameraMgr::CameraMgr(
 
 	set_perspective( p , l , u );
 
-	float spd = .2f;
-
-	currcam = cams[0];
-	currcam->born( currmat , (void*)&spd );
+	clear();
 }
 
 void CameraMgr::init()
 {
 	emit_sig();
+}
+
+void CameraMgr::clear()
+{
+	next.clear();
+
+	currcam = cams[0];
+	float defaultspd = .2f;
+	currcam->born( currmat , (void*)&defaultspd );
 }
 
 CameraMgr::~CameraMgr()
@@ -78,14 +86,27 @@ void CameraMgr::signal()
 {
 	currmat = currcam->work();
 
-	emit_sig();
-
 	swap_camera();
+
+	if( !currmat ) {
+		request(FREELOOK);
+		swap_camera();
+		ASSERT_MSG( currmat , "currmat should never be NULL");
+	}
+
+	emit_sig();
 }
 
 void CameraMgr::swap_camera()
 {
 	if( !next.size() ) return;
+
+	if( next.front().first == currcam ) {
+		CameraQueuePair cp = next.front();
+		next.pop_front();
+		currcam->learn(cp.second);
+		return;
+	}
 
 	float* m = currcam->die();
 

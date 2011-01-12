@@ -8,6 +8,7 @@
 #include "util/vector.h"
 #include "gfx/drawable.h"
 #include "ui/input_listener.h"
+#include "mem/misc/phx_planet_factory.h"
 
 namespace UI
 {
@@ -92,6 +93,10 @@ public:
 	virtual Matrix work();
 	virtual Matrix die ();
 	
+	virtual void signal();
+protected:
+	bool invalid;
+	MEM::MISC::PhxPlanet pp;
 };
 
 } // UI

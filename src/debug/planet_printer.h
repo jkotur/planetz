@@ -19,8 +19,6 @@ class PlanetPrinter
 	public:
 		PlanetPrinter( MEM::MISC::PhxPlanetFactory *f, GFX::PlanetzPicker *pp );
 		
-		bool on_button_down( int b, int x, int y );
-
 		void print( int id );
 	private:
 

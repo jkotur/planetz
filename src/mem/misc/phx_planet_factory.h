@@ -14,10 +14,14 @@ namespace MISC
 	class PhxPlanet
 	{
 	public:
+		PhxPlanet();
+
 		/// @brief Tworzy obiekt planety o zadanym id.
 		/// Konstruktor powinien być używany jedynie przez PhxPlanetFactory.
 		PhxPlanet( unsigned id , const PlanetHolder* h );
 		virtual ~PhxPlanet();
+
+		int getId() const { return id; }
 		
 		/// @brief Pozycja planety.
 		float3  getPosition() const;
@@ -32,7 +36,7 @@ namespace MISC
 		float3	getVelocity() const;
 
 	private:
-		unsigned id;
+		int id;
 		const PlanetHolder* holder;
 	};
 

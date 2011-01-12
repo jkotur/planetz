@@ -86,14 +86,17 @@ bool Application::init()
 	ui.sigMouseButtonDown.
 		connect(1,bind(&GFX::Background::on_button_down,&bkg,_1,_2,_3));
 
-	camera.sigCamChanged.
-		connect( bind(&GFX::DeferRender::on_camera_angle_changed,&plz,_1) );
-
-#ifndef _RELEASE
 	ui.sigMouseButtonDown.
-		connect(1,bind(&PlanetPrinter::on_button_down,&pprnt,_1,_2,_3));
-//        ui.sigMouseButtonDown.
-//                connect(1,bind(&PlanetTracer::on_button_down,&pt,_1,_2,_3));
+		connect( bind(&GFX::PlanetzPicker::on_button_down,&picker,_1,_2,_3) );
+
+	camera.sigCamChanged.
+		connect( 2 , bind(&GFX::DeferRender::on_camera_angle_changed,&plz,_1) );
+
+	picker.sigPlanetPicked.
+		connect( bind(&Application::set_picked_planet,this,_1) );
+#ifndef _RELEASE
+	picker.sigPlanetPicked.
+		connect( bind(&PlanetPrinter::print,&pprnt,_1));
 #endif
 
 #ifndef _NOGUI
@@ -119,6 +122,7 @@ bool Application::init()
 	pl->on_load.connect( bind(&MEM::DataFlowMgr::load,&data_mgr,_1) );
 	pl->on_load.connect( bind(&Application::pause_anim,this) );
 	pl->on_load.connect( bind(&GFX::PlanetsTracer::clear,&trace) );
+	pl->on_load.connect( bind(&UI::CameraMgr::clear,&camera) );
 	pl->on_config_changed.connect(bind(&GFX::Gfx::update_configuration,&gfx,_1));
 	//pl->on_planet_add.connect( bind(&Planetz::add,&planetz,_1) );
 	//pl->on_planet_delete.connect( bind(&Planetz::erase,&planetz,_1) );
@@ -187,6 +191,16 @@ Application::~Application()
 	log_printf(DBG,"kthxbye\n");
 	log_del(f_log);
 	fclose(f_log);
+}
+
+void Application::set_picked_planet( int id )
+{
+	if( id < 0 )
+		camera.request(UI::CameraMgr::ZOOMIN);
+	else {
+		pp = data_mgr.getPhxMem()->getPlanet( id );
+		camera.request(UI::CameraMgr::ZOOMIN,&pp);
+	}
 }
 
 void Application::do_fps()
