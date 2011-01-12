@@ -2,7 +2,7 @@
 
 using namespace MEM::MISC;
 
-SaverParams::SaverParams(Camera *cam)
+SaverParams::SaverParams( UI::CameraMgr *cam)
 	: planet_info( NULL )
 	, cam_info( cam ) 
 {

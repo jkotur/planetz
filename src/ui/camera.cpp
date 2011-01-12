@@ -7,57 +7,44 @@
 
 #include "constants.h"
 
-Camera::Camera( const Vector3& _p ,
-		const Vector3& _l ,
-		const Vector3& _u )
-	: pos(_p) , lookat(_l) , up(_u)
-	, ox(0) , oy(0) , speed(0.2) , move_speed(0.2)
+using UI::CamFreeLook;
+using UI::CamLocked;
+using UI::CamZoomIn;
+
+CamFreeLook::CamFreeLook()
+	: ox(0) , oy(0) , move_speed(0.0)
 	, rot(false) 
 {
 }
 
-Camera::~Camera()
+CamFreeLook::~CamFreeLook()
 {
-	log_printf(DBG,"[DEL] Camera is dying\n");
 }
 
-void Camera::init()
+void CamFreeLook::born( Matrix state , void*data )
 {
-	right = up;
-	right.cross( pos - lookat );
-	right.normalize();
-
-	forward = lookat - pos;
-	forward.normalize();
-
-	emit_angle_changed_signal();
+	matrix = state;
+	learn(data);
 }
 
-void Camera::on_key_down( int k )
+void CamFreeLook::learn( void * data )
 {
-	switch( k )
-	{
-	case SDLK_UP:
-		pos += forward*move_speed;
-		lookat += forward*move_speed;
-		break;
-	case SDLK_DOWN:
-		pos -= forward*move_speed;
-		lookat -= forward*move_speed;
-		break;
-	case LEFT_CAM_KEY_0:
-		pos -= right*move_speed;
-		lookat -= right*move_speed;
-		break;
-	case RIGHT_CAM_KEY_0:
-		pos += right*move_speed;
-		lookat += right*move_speed;
-		break;
-	}
+	move_speed = *(double*)data;
 }
 
-void Camera::on_mouse_motion( int x , int y )
-{	// FIXME: to potrzebuje optymalizacji
+UI::Camera::Matrix CamFreeLook::work()
+{
+	signal();
+	return matrix;
+}
+
+UI::Camera::Matrix CamFreeLook::die ()
+{
+	return matrix; // always ready to die
+}
+
+void CamFreeLook::on_mouse_motion( int x , int y )
+{
 	if( !rot ) return;
 	int dx = x - ox;
 	int dy = y - oy;
@@ -67,41 +54,23 @@ void Camera::on_mouse_motion( int x , int y )
 	double angle_x = dx*CAM_ROT_SPEED;
 	double angle_y = dy*CAM_ROT_SPEED;
 
-	lookat-=pos;
-	lookat.rotate( up , angle_x );
-	right.rotate( up , angle_x );
-	forward.rotate( up , angle_x );
-
-	up.rotate( right , angle_y );
-	lookat.rotate( right ,  angle_y );
-	forward.rotate( right , angle_y );
-	lookat+=pos;
-
-	emit_angle_changed_signal();
-}
-
-bool Camera::emit_angle_changed_signal()
-{
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
-	Vector3 tmplook = lookat - pos;
-	gluLookAt(
-		0,0,0,
-		tmplook.x , tmplook.y , tmplook.z,
-		up.x , up.y , up.z 
-	);
-
-	float m[16];
-	glGetFloatv(GL_MODELVIEW_MATRIX,m);
+	glRotatef( angle_x , 0, 1, 0 );
+	glRotatef( angle_y , 1, 0, 0 );
+	glMultMatrixf( matrix );
+	glGetFloatv(GL_MODELVIEW_MATRIX,matrix);
 	glPopMatrix();
-
-	sigAngleChanged( m );
-
-	return false;
 }
 
-bool Camera::on_button_down( int b , int x , int y )
+void CamFreeLook::on_button_up( int b , int , int )
+{
+	if( b == ROT_BUTTON )
+		rot = false;
+}
+
+bool CamFreeLook::on_button_down( int b , int x , int y )
 {
 	if( b == ROT_BUTTON ) {
 		rot = true;
@@ -111,51 +80,74 @@ bool Camera::on_button_down( int b , int x , int y )
 	return false; // do not end mouse singal
 }
 
-void Camera::on_button_up( int b , int x , int y )
-{
-	if( b == ROT_BUTTON ) {
-		rot = false;
-	}
-}
-
-void Camera::draw() const 
-{
-	gluLookAt(
-		pos.x , pos.y , pos.z ,
-		lookat.x , lookat.y , lookat.z ,
-		up.x , up.y , up.z
-	);
-}
-
-void Camera::signal()
+void CamFreeLook::signal()
 {
 	Uint8 *keystate = SDL_GetKeyState(NULL);
+	float ds = (move_speed*timer.get_dt_s()+BASE_CAM_SPEED);
 
-	if ( keystate[FWD_CAM_KEY_0] || keystate[FWD_CAM_KEY_1] ) {
-		pos +=    forward*(move_speed*timer.get_dt_s()+BASE_CAM_SPEED);
-		lookat += forward*(move_speed*timer.get_dt_s()+BASE_CAM_SPEED);
-	}
-	if ( keystate[BCK_CAM_KEY_0]  || keystate[BCK_CAM_KEY_1] ) {
-		pos -=    forward*(move_speed*timer.get_dt_s()+BASE_CAM_SPEED);
-		lookat -= forward*(move_speed*timer.get_dt_s()+BASE_CAM_SPEED);
-	}
-	if ( keystate[LEFT_CAM_KEY_0] || keystate[LEFT_CAM_KEY_1] ) {
-		pos -=    right*(move_speed*timer.get_dt_s()+BASE_CAM_SPEED);
-		lookat -= right*(move_speed*timer.get_dt_s()+BASE_CAM_SPEED);
-	}
-	if ( keystate[RIGHT_CAM_KEY_0] || keystate[RIGHT_CAM_KEY_1] ) {
-		pos +=    right*(move_speed*timer.get_dt_s()+BASE_CAM_SPEED);
-		lookat += right*(move_speed*timer.get_dt_s()+BASE_CAM_SPEED);
-	}
-	if ( keystate[UP_CAM_KEY_0] || keystate[UP_CAM_KEY_1] ) {
-		Vector3 tmp = up*(move_speed*timer.get_dt_s()+BASE_CAM_SPEED);
-		pos +=    tmp;
-		lookat += tmp;
-	}
-	if ( keystate[DOWN_CAM_KEY_0] || keystate[DOWN_CAM_KEY_1] ) {
-		Vector3 tmp = up*(move_speed*timer.get_dt_s()+BASE_CAM_SPEED);
-		pos -=    tmp;
-		lookat -= tmp;
-	}
+	if( keystate[FWD_CAM_KEY_0  ] || keystate[FWD_CAM_KEY_1  ] )
+		matrix[14] += ds;
+	if( keystate[BCK_CAM_KEY_0  ] || keystate[BCK_CAM_KEY_1  ] )
+		matrix[14] -= ds;
+	if( keystate[LEFT_CAM_KEY_0 ] || keystate[LEFT_CAM_KEY_1 ] )
+		matrix[12] += ds;
+	if( keystate[RIGHT_CAM_KEY_0] || keystate[RIGHT_CAM_KEY_1] )
+		matrix[12] -= ds;
+	if( keystate[UP_CAM_KEY_0   ] || keystate[UP_CAM_KEY_1   ] )
+		matrix[13] -= ds;
+	if( keystate[DOWN_CAM_KEY_0 ] || keystate[DOWN_CAM_KEY_1 ] )
+		matrix[13] += ds;
+}
+
+CamLocked::CamLocked()
+{
+}
+
+CamLocked::~CamLocked()
+{
+}
+
+void CamLocked::born( Matrix state , void*data )
+{
+}
+
+void CamLocked::learn( void * data )
+{
+}
+
+UI::Camera::Matrix CamLocked::work()
+{
+	return NULL;
+}
+
+UI::Camera::Matrix CamLocked::die ()
+{
+	return NULL;
+}
+
+CamZoomIn::CamZoomIn()
+{
+}
+
+CamZoomIn::~CamZoomIn()
+{
+}
+
+void CamZoomIn::born( Matrix state , void*data )
+{
+}
+
+void CamZoomIn::learn( void * data )
+{
+}
+
+UI::Camera::Matrix CamZoomIn::work()
+{
+	return NULL;
+}
+
+UI::Camera::Matrix CamZoomIn::die ()
+{
+	return NULL;
 }
 

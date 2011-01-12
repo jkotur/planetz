@@ -5,7 +5,7 @@
 
 #include <string>
 
-class Camera;
+#include "ui/camera_manager.h"
 
 namespace MEM
 {
@@ -72,7 +72,7 @@ namespace MEM
 			 * @details Po rejestracji, kamera jest automatycznie zapisywana i
 			 * wczytywana wraz z symulacją.
 			 */
-			void registerCam( Camera *cam );
+			void registerCam( UI::CameraMgr *cam );
 
 		private:
 			class Impl;

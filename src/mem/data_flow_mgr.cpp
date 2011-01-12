@@ -25,14 +25,14 @@ class DataFlowMgr::Impl
 		MISC::GfxPlanetFactory *getGfxMem();
 		MISC::PhxPlanetFactory *getPhxMem();
 
-		void registerCam( Camera *_cam );
+		void registerCam( UI::CameraMgr *_cam );
 
 	private:
 		void updateBuffers( MISC::CpuPlanetHolder*p, MISC::Materials*m );
 
 		IOCtl ioctl;
 		MemMgr memmgr;
-		Camera *cam;
+		UI::CameraMgr *cam;
 		MISC::Materials*materials;
 };
 
@@ -123,7 +123,7 @@ MISC::PhxPlanetFactory *DataFlowMgr::Impl::getPhxMem()
 	return memmgr.getPhxMem();
 }
 
-void DataFlowMgr::Impl::registerCam( Camera *_cam )
+void DataFlowMgr::Impl::registerCam( UI::CameraMgr *_cam )
 {
 	cam = _cam;
 }
@@ -178,7 +178,7 @@ GLuint DataFlowMgr::loadTextures()
 	return impl->loadTextures();
 }
 
-void DataFlowMgr::registerCam( Camera *cam )
+void DataFlowMgr::registerCam( UI::CameraMgr *cam )
 {
 	impl->registerCam( cam );
 }

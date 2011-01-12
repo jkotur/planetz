@@ -18,8 +18,8 @@
 #define UP_CAM_KEY_1	SDLK_q
 #define DOWN_CAM_KEY_1	SDLK_e
 
-#define CAM_ROT_SPEED 0.01
-#define BASE_CAM_SPEED 0.01
+#define CAM_ROT_SPEED 1.15
+#define BASE_CAM_SPEED 0.15
 
 #define PI 3.1415
 #define PI2 6.283

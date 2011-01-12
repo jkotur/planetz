@@ -5,6 +5,7 @@
 #include <string>
 
 #include <boost/bind.hpp>
+#include <boost/lambda/lambda.hpp>
 
 #include "util/vector.h"
 #include "util/timer/timer.h"
@@ -12,7 +13,7 @@
 
 using boost::bind;
 
-#define CAM_START_VECS Vector3(0,0,40),Vector3(0,0,0),Vector3(0,1,0)
+#define CAM_START_VECS Vector3(10,10,10),Vector3(0,0,0),Vector3(0,1,0)
 
 Application::Application( Window& win , Config& cfg )
 	: fps(0)
@@ -28,7 +29,6 @@ Application::Application( Window& win , Config& cfg )
 	, phcleaner( data_mgr.getPhxMem() )
 	, picker( data_mgr.getGfxMem(), 3, 3 , win.getW() , win.getH() )
 	, pprnt( data_mgr.getPhxMem(), &picker )
-	, pt( data_mgr.getPhxMem(), &picker, &camera )
 {
 }
 
@@ -74,12 +74,7 @@ bool Application::init()
 	ui.sigVideoResize.
 		connect( 2 , bind(&GFX::PlanetzPicker::resize,&picker,_1,_2) );
 
-	ui.sigMouseMotion.
-		connect( bind(&Camera::on_mouse_motion,&camera,_1,_2) );
-	ui.sigMouseButtonUp.
-		connect( bind(&Camera::on_button_up,&camera,_1,_2,_3) );
-	ui.sigMouseButtonDown.
-		connect( 1 , bind(&Camera::on_button_down,&camera,_1,_2,_3));
+	ui.add_listener( &camera , 1 );
 
 	ui.sigKeyDown.
 		connect( bind(&GFX::Background::on_key_down,&bkg,_1) );
@@ -91,14 +86,14 @@ bool Application::init()
 	ui.sigMouseButtonDown.
 		connect(1,bind(&GFX::Background::on_button_down,&bkg,_1,_2,_3));
 
-	camera.sigAngleChanged.
+	camera.sigCamChanged.
 		connect( bind(&GFX::DeferRender::on_camera_angle_changed,&plz,_1) );
 
 #ifndef _RELEASE
 	ui.sigMouseButtonDown.
 		connect(1,bind(&PlanetPrinter::on_button_down,&pprnt,_1,_2,_3));
-	ui.sigMouseButtonDown.
-		connect(1,bind(&PlanetTracer::on_button_down,&pt,_1,_2,_3));
+//        ui.sigMouseButtonDown.
+//                connect(1,bind(&PlanetTracer::on_button_down,&pt,_1,_2,_3));
 #endif
 
 #ifndef _NOGUI
@@ -113,7 +108,10 @@ bool Application::init()
 	}
 	ui.gui.set_layout(pl);
 
-	pl->on_cam_speed_changed.connect( bind(&Camera::set_speed,&camera,_1) );
+//        pl->on_cam_speed_changed.connect(
+//                        bind(	&UI::CameraMgr::update,&camera
+//                                ,UI::CameraMgr::FREELOOK,&boost::lambda::_1) );
+	pl->on_cam_speed_changed.connect( bind(&Application::set_cam_speed,this,_1) );
 	pl->on_sim_speed_changed.connect( bind(&Application::set_phx_speed,this,_1) );
 	pl->on_pause_click.connect( bind(&Application::pause_toggle,this) );
 	pl->on_reset_click.connect( bind(&Application::reset,this) );
@@ -170,7 +168,7 @@ void Application::main_loop()
 			phx.compute(phx_frames);
 			//log_printf(INFO,"phx.compute(%u) running time: %.2fms\n", phx_frames, t.get_ms());
 		}
-		pt.refresh();
+//                pt.refresh();
 		gfx.render();
 
 		(running && (running &= ui.event_handle() ));

@@ -213,6 +213,8 @@ public:
 Vector3 operator+( const Vector3& a , const Vector3& b );
 Vector3 operator-( const Vector3& a , const Vector3& b );
 Vector3 operator/( const Vector3& a , const int b);
+Vector3 mul4f( const float * m , const Vector3& v );
+Vector3 mul4f( const Vector3& v , const float * m );
 bool operator==( const Vector3& a , const Vector3& b );
 bool operator!=( const Vector3& a , const Vector3& b );
 bool vcompare(const Vector3& a , const Vector3& b );

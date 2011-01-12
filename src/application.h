@@ -21,7 +21,7 @@
 #include "constants.h"
 
 #include "ui/ui.h"
-#include "ui/planet_tracer.h"
+#include "ui/camera_manager.h"
 
 #include "mem/data_flow_mgr.h"
 
@@ -71,6 +71,9 @@ public:
 	void set_phx_speed( double s )
 	{	phx_frames = (unsigned)s; }
 
+	void set_cam_speed( double s )
+	{	camera.update(UI::CameraMgr::FREELOOK,(void*)&s); }
+
 protected:
 	void do_fps();
 
@@ -94,8 +97,8 @@ protected:
 	PHX::Phx phx;
 	GFX::Gfx gfx;
 
-	Camera camera;
-	UI ui;
+	UI::CameraMgr camera;
+	UI::UI ui;
 	PlanetzLayout*pl;
 
 	GFX::DeferRender plz;
@@ -109,7 +112,6 @@ protected:
 #ifndef _RELEASE
 	GFX::PlanetzPicker picker;
 	PlanetPrinter pprnt;
-	PlanetTracer pt;
 #endif
 };
 

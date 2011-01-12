@@ -3,6 +3,8 @@
 
 #define __UI_H__
 
+#include <list>
+
 #include <boost/signals.hpp>
 #include <boost/bind.hpp>
 
@@ -13,6 +15,10 @@
 #include "./gui/gui.h"
 #include "./camera.h"
 
+#include "ui/input_listener.h"
+
+namespace UI
+{
 /** 
  * @brief Klasa odpowiedzialna za wszystko co związane z interfejsem użytkownika.
  * Odpowiada zarówno za peryferia takie jak myszka/klawiatura/joystick,
@@ -56,9 +62,24 @@ public:
 	 * @return zwraca 0 jeśli program powinien zakończyć działanie, 1 wpp
 	 */
 	int event_handle();
+
+	/** 
+	 * @brief Funkcja dodająca słuchacza wejścia programu.
+	 * 
+	 * @param lst słuchacz wejścia
+	 * @param level poziom na którym powinien być przyłączony sygnał
+	 */
+	void add_listener( InputListener* lst , int level = 0 );
+
+	/** 
+	 * @brief Funkcja usuwająca słuchacza wejścia programu
+	 * 
+	 * @param lst słuchacz wejścia
+	 */
+	void del_listener( InputListener* lst );
 	
 	/** @brief Sygnał emitowany gdy klawisz zostaje zwolniony */
-	boost::signal<void (int,int,int)> sigKeyUp;
+	boost::signal<void (SDLKey,Uint16,Uint8)> sigKeyUp;
 	/** @brief Sygnał emitowany gdy klawisz zostaje wciśnięty */
 	boost::signal<void (SDLKey,Uint16,Uint8)> sigKeyDown;
 	/** @brief Sygnał emitowany gdy myszka zmieni pozycję */
@@ -74,6 +95,8 @@ public:
 private:
 	CLocationDriver*joy;
 };
+
+}; // UI
 
 #endif /* __UI_H__ */
 

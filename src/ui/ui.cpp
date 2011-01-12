@@ -1,17 +1,21 @@
 #include "ui.h"
 
+#include <boost/bind.hpp>
+
 #include "util/logger.h"
 
-UI::UI()
+using boost::bind;
+
+UI::UI::UI()
 {
 }
 
-UI::~UI()
+UI::UI::~UI()
 {
 	if( joy ) delete joy;
 }
 
-bool UI::init()
+bool UI::UI::init()
 {
 	log_printf(INFO,"Starting UI\n");
 
@@ -42,17 +46,17 @@ bool UI::init()
 	return true;
 }
 
-void UI::draw() const 
+void UI::UI::draw() const 
 {
 	gui.render();
 }
 
-void UI::signal()
+void UI::UI::signal()
 {
 	gui.signal();
 }
 
-int UI::event_handle()
+int UI::UI::event_handle()
 {
 	SDL_Event event;
 
@@ -93,5 +97,28 @@ int UI::event_handle()
 		}
 	}
 	return 1;
+}
+
+void UI::UI::add_listener( InputListener* lst , int level )
+{
+	sigKeyUp          .   connect( level
+			, bind(&InputListener::on_key_up      ,lst,_1,_2,_3));
+	sigKeyDown        .   connect( level
+			, bind(&InputListener::on_key_down    ,lst,_1,_2,_3));
+	sigMouseMotion    .   connect( level
+			, bind(&InputListener::on_mouse_motion,lst,_1,_2   ));
+	sigMouseButtonUp  .   connect( level
+			, bind(&InputListener::on_button_up   ,lst,_1,_2,_3));
+	sigMouseButtonDown.   connect( level
+			, bind(&InputListener::on_button_down ,lst,_1,_2,_3));
+}
+
+void UI::UI::del_listener( InputListener* lst )
+{
+	sigKeyUp          .disconnect(bind(&InputListener::on_key_up      ,lst,_1,_2,_3));
+	sigKeyDown        .disconnect(bind(&InputListener::on_key_down    ,lst,_1,_2,_3));
+	sigMouseMotion    .disconnect(bind(&InputListener::on_mouse_motion,lst,_1,_2   ));
+	sigMouseButtonUp  .disconnect(bind(&InputListener::on_button_up   ,lst,_1,_2,_3));
+	sigMouseButtonDown.disconnect(bind(&InputListener::on_button_down ,lst,_1,_2,_3));
 }
 

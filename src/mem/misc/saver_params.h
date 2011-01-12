@@ -3,7 +3,7 @@
 
 #include "holder.h"
 
-class Camera;
+#include "ui/camera_manager.h"
 
 namespace MEM
 {
@@ -14,7 +14,7 @@ namespace MISC
 	{
 		public:
 			/// @brief Inicjalizacja parametrów - ustawienie informacji o kamerze.
-			SaverParams(Camera *cam);
+			SaverParams( UI::CameraMgr *cam);
 			
 			/// @brief Zwalnia pamięć po planet_info, jeżeli było ustawione.
 			virtual ~SaverParams();
@@ -23,7 +23,7 @@ namespace MISC
 			CpuPlanetHolder *planet_info;
 
 			/// @brief Informacja o kamerze.
-			Camera *cam_info;
+			UI::CameraMgr *cam_info;
 	};
 }
 }

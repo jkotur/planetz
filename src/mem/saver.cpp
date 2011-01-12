@@ -9,7 +9,6 @@
 #include "db/planet_row.h"
 #include "db/camera_row.h"
 #include "misc/saver_params.h"
-#include "ui/camera.h"
 
 #define foreach BOOST_FOREACH
 
@@ -51,16 +50,16 @@ void Saver::save( const MISC::SaverParams *source, const std::string &path )
 	}
 	db.save( table );
 
-	if( source->cam_info )
-	{
-		Table<CameraRow> cTable;
-		CameraRow *c = new CameraRow;
-		c->coords = source->cam_info->get_pos();
-		c->lookat = source->cam_info->get_lookat();
-		c->up = source->cam_info->get_up();
-		cTable.add( c );
-		db.save( cTable );
-	}
+//        if( source->cam_info )
+//        {
+//                Table<CameraRow> cTable;
+//                CameraRow *c = new CameraRow;
+//                c->coords = source->cam_info->get_pos();
+//                c->lookat = source->cam_info->get_lookat();
+//                c->up = source->cam_info->get_up();
+//                cTable.add( c );
+//                db.save( cTable );
+//        }
 }
 
 namespace
@@ -105,4 +104,5 @@ void Saver::load( MISC::SaverParams *dest, const std::string &path )
 		CameraRow *r = *cTable.begin();
 		dest->cam_info->set_perspective( r->coords, r->lookat, r->up );
 	}
+
 }
