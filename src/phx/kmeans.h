@@ -1,6 +1,7 @@
 #pragma once
 
 #include <mem/misc/phx_planet_factory.h>
+#include <cudpp.h>
 
 const float EPSILON = 1e-5;
 
@@ -57,6 +58,25 @@ namespace PHX
 			/// @todo Być może promienie klastrów?
 			void calcAttributes();
 
+			/**
+			 * @brief Inicjalizuje CUDPPHandle do sortowania.
+			 *
+			 * @param uint true, jeżeli inicjalizacja jest dla pętli
+			 * głównej (klucz - unsigned int, rosnąco), natomiast 
+			 * false - dla initClusters (klucz - float, malejąco).
+			 */
+			void initCudpp( bool uint=true );
+
+			/**
+			 * @brief Cleanup po initCudpp.
+			 */
+			void termCudpp();
+
+			/**
+			 * @brief Wybiera środki klastrów na podstawie mas planet.
+			 */
+			void massSelect();
+
 			MEM::MISC::PhxPlanetFactory *m_planets;
 
 			MEM::MISC::ClusterHolder m_holder;
@@ -65,6 +85,8 @@ namespace PHX
 			MEM::MISC::BufferCu<unsigned> m_counts;
 
 			unsigned m_prevSize;
+
+			CUDPPHandle sortplan;
 	};
 }
 

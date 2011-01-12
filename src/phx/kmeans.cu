@@ -24,6 +24,7 @@ Clusterer::~Clusterer()
 void Clusterer::kmeans()
 {
 	initClusters();
+	initCudpp();
 	float err = numeric_limits<float>::infinity(), prev_err;
 	unsigned iters = 0;
 	do
@@ -34,18 +35,29 @@ void Clusterer::kmeans()
 	}
 	while( abs(prev_err-err) >  1e-5 * err );
 	calcAttributes();
+	termCudpp();
 }
 
-namespace
+/// @todo posprzątać tutaj
+void Clusterer::massSelect()
 {
-void massSelect( BufferCu<float3> *centers, BufferGl<float3> *planets, BufferCu<float> *masses )
-{
-	float3 *d_planets = planets->map( BUF_CU );
-	cudaMemcpy( centers->d_data(), d_planets, centers->getSize(), cudaMemcpyDeviceToDevice );
-	planets->unmap();
-
-	TODO("Wpisanie początkowych pozyji klastrów - k najcięższych planet");
-}
+	unsigned n = m_planets->size();
+	BufferCu<float> masses_copy( n );
+	BufferCu<unsigned> indices( n );
+	cudaMemcpy( masses_copy.d_data(), m_planets->getMasses().d_data(), sizeof(float) * n, cudaMemcpyDeviceToDevice );
+	dim3 block( min( n, 512 ) );
+	dim3 grid( 1 + ( n - 1 ) / block.x );
+	kmeans__prepare_kernel<<<grid, block>>>( indices.d_data(), n );
+	CUT_CHECK_ERROR("kernel launch");
+	cudppSort( sortplan, masses_copy.d_data(), indices.d_data(), 8 * sizeof(float), n );
+	
+	float3 *d_planets = m_planets->getPositions().map( BUF_CU );
+	unsigned k = m_holder.centers.getLen();
+	block.x = min( 512, k );
+	grid.x = 1 + ( k - 1 )/block.x;
+	assignCenters<<<grid, block>>>( m_holder.centers.d_data(), d_planets, indices.d_data() + (n - k), k );
+	CUT_CHECK_ERROR("kernel launch");
+	m_planets->getPositions().unmap();
 }
 
 void Clusterer::initClusters()
@@ -64,8 +76,10 @@ void Clusterer::initClusters()
 	m_errors.resize( n );
 	m_shuffle.resize( n );
 	m_counts.resize( k );
-	
-	massSelect( &m_holder.centers, &m_planets->getPositions(), &m_planets->getMasses() );
+
+	initCudpp( false );
+	massSelect();
+	termCudpp();
 }
 
 size_t Clusterer::getCount() const 
@@ -101,31 +115,13 @@ float Clusterer::compute()
 	return reduceErrors();
 }
 
-/// @todo Przenieść CUDPPHandle'a poza pętlę kmeans
 void Clusterer::sortByCluster()
 {
-	CUDPPConfiguration cfg;
-	cfg.datatype = CUDPP_UINT;
-	cfg.algorithm = CUDPP_SORT_RADIX;
-	cfg.options = CUDPP_OPTION_KEY_VALUE_PAIRS;
-	cfg.op = CUDPP_MIN;
-
-	CUDPPHandle sortplan;
-	CUDPPResult result = cudppPlan(&sortplan, cfg, m_holder.assignments.getLen(), 1, 0);
-	ASSERT( result == CUDPP_SUCCESS );
-	if (result != CUDPP_SUCCESS)
-	{
-		log_printf(CRITICAL,"Error creating CUDPPPlan: %d\n", result);
-		exit(1);
-	}
-
 	unsigned n = m_holder.assignments.getLen();
 	unsigned bitCount = 2;
 	while( (n-1) >> bitCount ) ++bitCount;
 	ASSERT( 1u << bitCount >= n );
 	cudppSort( sortplan, m_holder.assignments.d_data(), m_shuffle.d_data(), bitCount, n );
-	
-	cudppDestroyPlan(sortplan);
 }
 
 float Clusterer::reduceErrors()
@@ -181,4 +177,26 @@ MEM::MISC::BufferCu<float3>* Clusterer::getCenters()
 MEM::MISC::BufferCu<float>* Clusterer::getMasses()
 {
 	return &m_holder.masses;
+}
+
+void Clusterer::initCudpp( bool uint )
+{
+	CUDPPConfiguration cfg;
+	cfg.datatype = uint ? CUDPP_UINT : CUDPP_FLOAT;
+	cfg.algorithm = CUDPP_SORT_RADIX;
+	cfg.options = CUDPP_OPTION_KEY_VALUE_PAIRS;
+	cfg.op = CUDPP_MIN;
+
+	CUDPPResult result = cudppPlan(&sortplan, cfg, m_planets->size(), 1, 0);
+	ASSERT( result == CUDPP_SUCCESS );
+	if (result != CUDPP_SUCCESS)
+	{
+		log_printf(CRITICAL,"Error creating CUDPPPlan: %d\n", result);
+		exit(1);
+	}
+}
+
+void Clusterer::termCudpp()
+{
+	cudppDestroyPlan( sortplan );
 }

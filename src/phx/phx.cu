@@ -303,16 +303,8 @@ void Phx::CImpl::handle_collisions()
 
 		MEM::MISC::BufferCu<unsigned> done(1);
 		
-		unsigned __debug_counter = 0;
 		do
 		{
-			log_printf(DBG, "mergin' #%u\n", __debug_counter++ );
-			if( __debug_counter >= threads )
-			{
-				PRINT_OUT_BUF( merges1, "%u" );
-				PRINT_OUT_BUF( merges2, "%u" );
-				abort();
-			}
 			done.assign(1);
 			std::swap( in_merges, out_merges );
 /*                        log_printf(DBG,"grid: %d   block: %d\n",grid.x,block.x);*/

@@ -118,3 +118,13 @@ __global__ void sumSelective_f(float *g_idata, float *g_odata, unsigned *counts,
 	reduce<float, blockSize>(g_idata, n, tid, i, s_dataf);
 	if (tid == 0) g_odata[id] = s_dataf[0];
 }
+
+__global__ void assignCenters( float3 *centers, float3 *positions, unsigned *indices, unsigned count )
+{
+	unsigned index = threadIdx.x + blockIdx.x * blockDim.x;
+	if( index >= count )
+	{
+		return;
+	}
+	centers[ index ] = positions[ indices[ index ]  ];
+}
