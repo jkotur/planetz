@@ -50,6 +50,9 @@ public:
 	virtual void on_button_up( int , int , int );
 	virtual bool on_button_down( int , int , int );
 
+	void set_matrix( const float* const m );
+	const float* const get_matrix() const;
+
 	boost::signal<void (float*)> sigCamChanged;
 private:
 	void emit_sig();

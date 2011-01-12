@@ -143,3 +143,13 @@ void CameraMgr::on_button_up( int a , int b , int c )
 bool CameraMgr::on_button_down( int a , int b , int c )
 {	return currcam->on_button_down( a , b, c ); }
 
+void CameraMgr::set_matrix( const float* const m )
+{
+	memcpy( currmat, m, 16*sizeof(float) );
+}
+
+const float* const CameraMgr::get_matrix() const
+{
+	return currmat;
+}
+

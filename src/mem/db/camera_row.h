@@ -2,7 +2,6 @@
 #define _DB_CAMERA_ROW_H_
 
 #include "row.h"
-#include "util/vector.h"
 
 namespace MEM
 {
@@ -23,24 +22,9 @@ namespace MEM
 			virtual void setCell( unsigned idx, const std::string &val );
 
 			/**
-			 * @brief Położenie kamery.
+			 * @brief Macierz przekształceń kamery.
 			 */
-			Vector3 coords;
-
-			/**
-			 * @brief Kierunek patrzenia kamery.
-			 */
-			Vector3 lookat;
-
-			/**
-			 * @brief Wektor góry kamery.
-			 */
-			Vector3 up;
-
-		private:
-			static const std::string save_string;
-			static const std::string load_string;
-			static const std::string creation_string;
+			float matrix[16];
 	};
 }
 

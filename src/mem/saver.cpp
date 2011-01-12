@@ -50,16 +50,14 @@ void Saver::save( const MISC::SaverParams *source, const std::string &path )
 	}
 	db.save( table );
 
-//        if( source->cam_info )
-//        {
-//                Table<CameraRow> cTable;
-//                CameraRow *c = new CameraRow;
-//                c->coords = source->cam_info->get_pos();
-//                c->lookat = source->cam_info->get_lookat();
-//                c->up = source->cam_info->get_up();
-//                cTable.add( c );
-//                db.save( cTable );
-//        }
+        if( source->cam_info )
+        {
+                Table<CameraRow> cTable;
+                CameraRow *c = new CameraRow;
+		memcpy( c->matrix, source->cam_info->get_matrix(), sizeof(float) * 16 );
+                cTable.add( c );
+                db.save( cTable );
+        }
 }
 
 namespace
@@ -102,7 +100,7 @@ void Saver::load( MISC::SaverParams *dest, const std::string &path )
 	if( cTable.size() && dest->cam_info )
 	{
 		CameraRow *r = *cTable.begin();
-		dest->cam_info->set_perspective( r->coords, r->lookat, r->up );
+		dest->cam_info->set_matrix( r->matrix );
 	}
 
 }

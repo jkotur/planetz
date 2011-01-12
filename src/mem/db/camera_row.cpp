@@ -1,11 +1,15 @@
 #include "camera_row.h"
 #include "rowutils.h"
+#include <sstream>
+
+std::string param( unsigned i )
+{
+	std::stringstream ss;
+	ss << "x" << i;
+	return ss.str();
+}
 
 using namespace MEM;
-
-const std::string CameraRow::save_string = "INSERT INTO camera(xcoord, ycoord, zcoord, xlook, ylook, zlook, xup, yup, zup) VALUES(%f, %f, %f, %f, %f, %f, %f, %f, %f);";
-const std::string CameraRow::load_string = "SELECT xcoord, ycoord, zcoord, xlook, ylook, zlook, xup, yup, zup FROM camera;";
-const std::string CameraRow::creation_string = "DROP TABLE IF EXISTS camera; CREATE TABLE camera(xcoord REAL, ycoord REAL, zcoord REAL, xlook REAL, ylook REAL, zlook REAL, xup REAL, yup REAL, zup REAL);";
 
 CameraRow::CameraRow()
 {
@@ -17,41 +21,67 @@ CameraRow::~CameraRow()
 
 std::string CameraRow::getSaveString() const
 {
-	TODO("make it more safely, too");
-	char *buf = new char[ save_string.size() + 666 ];
-	sprintf(buf, save_string.c_str(), coords.x, coords.y, coords.z, lookat.x, lookat.y, lookat.z, up.x, up.y, up.z);
-	std::string retval( buf );
-	delete[] buf;
-	return retval;
+	std::stringstream ss1, ss2;
+	for( unsigned i = 0; i < 16; ++i )
+	{
+		if( i )
+		{
+			ss1 << ", ";
+			ss2 << ", ";
+		}
+		ss1 << param(i);
+		ss2 << matrix[i];
+	}
+	std::stringstream retval;
+	retval 
+		<< "INSERT INTO camera("
+		<< ss1.str()
+		<< ") VALUES("
+		<< ss2.str()
+		<< ");";
+	return retval.str();
 }
 
 std::string CameraRow::getLoadString() const
 {
-	return load_string;
+	std::stringstream ss;
+	ss << "SELECT ";
+	for( unsigned i = 0; i < 16; ++i )
+	{
+		if( i )
+		{
+			ss << ", ";
+		}
+		ss << param(i);
+	}
+	ss << " FROM camera;";
+	return ss.str();
 }
 
 std::string CameraRow::getCreationString() const
 {
-	return creation_string;
+	std::stringstream ss;
+	ss << "DROP TABLE IF EXISTS camera; CREATE TABLE camera(";
+	for( unsigned i = 0; i < 16; ++i )
+	{
+		if( i )
+		{
+			ss << ", ";
+		}
+		ss << param(i) << " REAL";
+	}
+	ss << ");";
+	return ss.str();
 }
 
 uint8_t CameraRow::size() const
 {
-	return 9;
+	return 16;
 }
 
 void CameraRow::setCell( unsigned idx, const std::string &val )
 {
-	ROW_SWITCH_BEGIN( idx, val )
-		ROW_CASE( 0, coords.x )
-		ROW_CASE( 1, coords.y )
-		ROW_CASE( 2, coords.z )
-		ROW_CASE( 3, lookat.x )
-		ROW_CASE( 4, lookat.y )
-		ROW_CASE( 5, lookat.z )
-		ROW_CASE( 6, up.x )
-		ROW_CASE( 7, up.y )
-		ROW_CASE( 8, up.z )
-	ROW_SWITCH_END()
+	std::stringstream ss( val );
+	ss >> matrix[ idx ];
 }
 
