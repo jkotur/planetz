@@ -10,7 +10,7 @@ PlanetzPicker::PlanetzPicker( const MEM::MISC::GfxPlanetFactory * factory , int 
 	, vs(GL_VERTEX_SHADER  ,DATA("shaders/picker.vert"))
 	, gs(GL_GEOMETRY_SHADER,DATA("shaders/picker.geom"))
 	, fs(GL_FRAGMENT_SHADER,DATA("shaders/picker.frag"))
-	, max(-1)
+	, max(0u)
 {
 	vs.checkShaderLog();
 	gs.checkShaderLog();
@@ -122,7 +122,7 @@ void PlanetzPicker::render( int x , int y )
 {
 	resizeNames();
 
-	max = -1;
+	max = 0u;
 
 	glAlphaFunc( GL_GREATER, 0.1 );
 	glEnable( GL_ALPHA_TEST );
@@ -200,7 +200,7 @@ void PlanetzPicker::render( int x , int y )
 
 int PlanetzPicker::getId()
 {
-	if( max == -1u ) {
+	if( max == 0u ) {
 		max = 0;
 		float d = 1.0f;
 		for( int i=0 ; i<w*h ; i++ )
