@@ -2,9 +2,9 @@
 #extension GL_EXT_geometry_shader4 : enable
 
 in float radiuses[];
-in float names[];
+in uint names[];
 
-out float name;
+flat out uint name;
 
 mat3 faceme( vec3 pos );
 

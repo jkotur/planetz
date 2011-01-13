@@ -83,14 +83,16 @@ private:
 
 	GLint sphereTexId;
 
-	float* buffNames;
+	GLint outloc;
+
+	uint32_t* buffNames;
 	float* buffDepth;
 
 	GLint radiusId , namesId;
 
-	MEM::MISC::BufferGl<float> names;
+	MEM::MISC::BufferGl<uint32_t> names;
 
-	int max;
+	uint32_t max;
 };
 
 }

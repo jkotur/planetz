@@ -1,10 +1,10 @@
 #version 130 
 
 in float radius;
-in float   name;
+in uint name;
 
 out float radiuses;
-out float names;
+out uint names;
 
 void main()
 {
