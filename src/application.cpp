@@ -22,13 +22,13 @@ Application::Application( Window& win , Config& cfg )
 	, window( win )
 	, config( cfg )
 	, phx( data_mgr.getPhxMem() )
+	, picker( data_mgr.getGfxMem(), 5, 5 , win.getW() , win.getH() )
 	, camera( CAM_START_VECS )
 	, plz( data_mgr.getGfxMem() )
 	, trace( *data_mgr.getGfxMem() , cfg )
 	, bkg( 0.8 , win.getW() , win.getH() )
 	, phcleaner( data_mgr.getPhxMem() )
-	, picker( data_mgr.getGfxMem(), 3, 3 , win.getW() , win.getH() )
-	, pprnt( data_mgr.getPhxMem(), &picker )
+	, pprnt( data_mgr.getPhxMem() )
 {
 }
 
@@ -72,7 +72,7 @@ bool Application::init()
 	ui.sigVideoResize.
 		connect( 1 , bind(&GFX::Gfx::reshape_window,&gfx,_1,_2) );
 	ui.sigVideoResize.
-		connect( 2 , bind(&GFX::PlanetzPicker::resize,&picker,_1,_2) );
+		connect( 2 , bind(&UI::PlanetzPicker::resize,&picker,_1,_2) );
 
 	ui.add_listener( &camera , 1 );
 
@@ -87,7 +87,7 @@ bool Application::init()
 		connect(1,bind(&GFX::Background::on_button_down,&bkg,_1,_2,_3));
 
 	ui.sigMouseButtonDown.
-		connect( bind(&GFX::PlanetzPicker::on_button_down,&picker,_1,_2,_3) );
+		connect( bind(&UI::PlanetzPicker::on_button_down,&picker,_1,_2,_3) );
 
 	camera.sigCamChanged.
 		connect( 2 , bind(&GFX::DeferRender::on_camera_angle_changed,&plz,_1) );
@@ -123,6 +123,7 @@ bool Application::init()
 	pl->on_load.connect( bind(&Application::pause_anim,this) );
 	pl->on_load.connect( bind(&GFX::PlanetsTracer::clear,&trace) );
 	pl->on_load.connect( bind(&UI::CameraMgr::clear,&camera) );
+	pl->on_load.connect( bind(&PlanetzLayout::hide_show_window,pl) );
 	pl->on_config_changed.connect(bind(&GFX::Gfx::update_configuration,&gfx,_1));
 	//pl->on_planet_add.connect( bind(&Planetz::add,&planetz,_1) );
 	//pl->on_planet_delete.connect( bind(&Planetz::erase,&planetz,_1) );
@@ -195,11 +196,14 @@ Application::~Application()
 
 void Application::set_picked_planet( int id )
 {
-	if( id < 0 )
+	if( id < 0 ) {
 		camera.request(UI::CameraMgr::ZOOMIN);
+		pl->hide_show_window();
+	}
 	else {
 		pp = data_mgr.getPhxMem()->getPlanet( id );
 		camera.request(UI::CameraMgr::ZOOMIN,&pp);
+		pl->show_show_window( pp );
 	}
 }
 

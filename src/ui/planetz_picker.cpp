@@ -2,6 +2,7 @@
 
 #include "constants.h"
 
+using namespace UI;
 using namespace GFX;
 
 PlanetzPicker::PlanetzPicker( const MEM::MISC::GfxPlanetFactory * factory , int w , int h , int winw , int winh )
@@ -199,7 +200,7 @@ void PlanetzPicker::render( int x , int y )
 
 int PlanetzPicker::getId()
 {
-	if( max == -1 ) {
+	if( max == -1u ) {
 		max = 0;
 		float d = 1.0f;
 		for( int i=0 ; i<w*h ; i++ )

@@ -12,6 +12,8 @@ void main()
 {
 	name = names[0];
 
+	if( -gl_PositionIn[0].z < radiuses[0] ) return;
+
 	mat3 nrot = faceme( gl_PositionIn[0].xyz );
 
 	vec4 u = vec4( nrot * vec3(0,radiuses[0],0) , 0 );

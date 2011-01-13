@@ -21,6 +21,7 @@
 #include "constants.h"
 
 #include "ui/ui.h"
+#include "ui/planetz_picker.h"
 #include "ui/camera_manager.h"
 
 #include "mem/data_flow_mgr.h"
@@ -31,7 +32,6 @@
 #include "mem/misc/holder_cleaner.h"
 
 #ifndef _RELEASE
-#include "gfx/planetz_picker.h"
 #include "debug/planet_printer.h"
 #endif
 
@@ -100,6 +100,7 @@ protected:
 	PHX::Phx phx;
 	GFX::Gfx gfx;
 
+	UI::PlanetzPicker picker;
 	UI::CameraMgr camera;
 	UI::UI ui;
 	PlanetzLayout*pl;
@@ -113,7 +114,6 @@ protected:
 	MEM::MISC::PlanetHolderCleaner phcleaner;
 
 #ifndef _RELEASE
-	GFX::PlanetzPicker picker;
 	PlanetPrinter pprnt;
 #endif
 };

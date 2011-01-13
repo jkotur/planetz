@@ -19,6 +19,8 @@ void main()
 	radius = radiuses[0];
 	color  = colors[0];
 
+	if( -pos.z < radius ) return;
+
 	nrot = faceme( pos );
 
 	vec4 u = vec4( nrot * vec3(0,radius,0) , 0 );

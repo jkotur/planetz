@@ -5,7 +5,7 @@
 
 #include "phx/phx_test.h"
 #include "gfx/shader_test.h"
-#include "gfx/planetz_picker_test.h"
+#include "ui/planetz_picker_test.h"
 #include "util/config_test.h"
 #include "mem/misc/buffer_test.h"
 #include "mem/misc/holder_test.h"

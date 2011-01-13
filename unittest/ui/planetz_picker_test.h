@@ -2,7 +2,7 @@
 
 #define __PLANETZ_PICKER_TEST_H__
 
-#include "gfx/planetz_picker.h"
+#include "ui/planetz_picker.h"
 #include "mem/misc/holder.h"
 
 #include <cppunit/ui/text/TestRunner.h>
@@ -26,7 +26,7 @@ class PzPTest : public CppUnit::TestFixture
 
 		MEM::MISC::PlanetHolder holder;
 		MEM::MISC::GfxPlanetFactory gpf;
-		GFX::PlanetzPicker picker;
+		UI::PlanetzPicker picker;
 };
 
 #endif /* __PLANETZ_PICKER_TEST_H__ */

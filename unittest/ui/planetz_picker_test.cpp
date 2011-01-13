@@ -2,7 +2,7 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "gfx/planetz_picker.h"
+#include "ui/planetz_picker.h"
 
 #include "mem/misc/gfx_planet_factory.h"
 

@@ -141,7 +141,7 @@ public:
 	 * podany powinień być w sekundach
 	 */
 	Caller call( const Function& function /**< funkcja która ma być wywołana */
-		 , double interval /**< interwał po jakim ma być wywołana */
+		 , double interval /**< interwał po jakim ma być wywołana w sekundach */
 		 , bool repeat = false /**< czy wywoływanie ma być powtarzane*/ );
 	/**
 	 * Funkcja dodaję żądanie wywołania funkcji. Czas którym operuje

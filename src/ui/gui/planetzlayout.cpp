@@ -12,6 +12,8 @@
 #include "util/vector.h"
 #include "util/timer/timer.h"
 
+#include "cuda/math.h"
+
 #include "constants.h"
 
 #define BUFSIZE 128
@@ -160,37 +162,44 @@ void PlanetzLayout::setOptions( const Config& cfg )
 	update_show_window();
 }*/
 
+void PlanetzLayout::show_show_window( const MEM::MISC::PhxPlanet& pp )
+{
+	GETWIN("ShowWin")->setVisible(true);
+	sel_planet = pp;
+	update_show_window();
+	if( tc_show.good() ) tc_show.die();
+	tc_show = timer.call(boost::bind(&PlanetzLayout::update_show_window,this) , 1.0 , true );
+}
+
+void PlanetzLayout::hide_show_window()
+{
+	GETWIN("ShowWin")->setVisible(false);
+	tc_show.die();
+}
+
 void PlanetzLayout::update_show_window()
 {
-	return;
-	/*if( ! sel_planet ) {
-		WindowManager::getSingleton().getWindow("ShowWin")->setVisible(false);
-		return;
-	}
-
-	WindowManager::getSingleton().getWindow("ShowWin")->setVisible(true);
-
 	char buff[BUFSIZE];
 
-	::Vector3 pos = sel_planet->get_phx()->get_pos();
+	float3 pos = sel_planet.getPosition();
 	snprintf(buff,BUFSIZE,"(%4.2f,%4.2f,%4.2f)",pos.x,pos.y,pos.z);
 	WindowManager::getSingleton().getWindow("lbShowPos")->setText(buff);
 
-	snprintf(buff,BUFSIZE,"%4.2f",sel_planet->get_phx()->get_radius() );
+	snprintf(buff,BUFSIZE,"%4.2f",sel_planet.getRadius() );
 	WindowManager::getSingleton().getWindow("lbShowRadius")->setText(buff);
 
-	::Vector3 vel = sel_planet->get_phx()->get_velocity();
+	float3 vel = sel_planet.getVelocity();
 	snprintf(buff,BUFSIZE,"(%4.2f,%4.2f,%4.2f)",vel.x,vel.y,vel.z);
 	WindowManager::getSingleton().getWindow("lbShowSpeedVector")->setText(buff);
 
-	snprintf(buff,BUFSIZE,"%4.2f",vel.length());
+	snprintf(buff,BUFSIZE,"%4.2f",length(vel));
 	WindowManager::getSingleton().getWindow("lbShowSpeedScalar")->setText(buff);
 
-	snprintf(buff,BUFSIZE,"%4.2f",sel_planet->get_phx()->get_mass() );
+	snprintf(buff,BUFSIZE,"%4.2f",sel_planet.getMass() );
 	WindowManager::getSingleton().getWindow("lbShowMass")->setText(buff);
 
-	snprintf(buff,BUFSIZE,"Aktualna planeta (%d)",sel_planet->get_id());
-	GETWIN("ShowWin")->setText(buff);*/
+	snprintf(buff,BUFSIZE,"Aktualna planeta (%d)",sel_planet.getId());
+	GETWIN("ShowWin")->setText(buff);
 }
 
 void PlanetzLayout::update_fps( int fps )

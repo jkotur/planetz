@@ -16,10 +16,11 @@ add_subdirectory( phx )
 add_subdirectory( mem )
 add_subdirectory( util )
 add_subdirectory( gfx )
+add_subdirectory( ui )
 
 add_executable( tests test_main )
 
-target_link_libraries( tests phx_test util_test memmisc_test gfx_test
+target_link_libraries( tests phx_test util_test memmisc_test gfx_test ui_test
 	${CUDA_LIBRARIES}
 	${OPENGL_LIBRARY}
 	${SDL_LIBRARY}

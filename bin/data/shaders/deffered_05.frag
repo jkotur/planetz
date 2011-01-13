@@ -39,6 +39,5 @@ void main()
 	vec3 atm = gdat3.rgb * clamp( i + .4 , 0.0 , 1.0 ) / dist;
 
 	gl_FragColor.rgb = (atm * 10 ) * gdat3.a * lightColor;
-	gl_FragColor.a   = 1;
 }
 

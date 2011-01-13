@@ -8,6 +8,9 @@
 #include <string>
 
 #include "util/config.h"
+#include "util/timer/timer.h"
+
+#include "mem/misc/phx_planet_factory.h"
 
 #include "layout.h"
 
@@ -30,7 +33,8 @@ public:
 	PlanetzLayout( Config& cfg );
 	virtual ~PlanetzLayout();
 	
-	//void add_selected_planet( Planet*p );
+	void show_show_window( const MEM::MISC::PhxPlanet& pp );
+	void hide_show_window();
 
 	//SigSetPlanet on_planet_delete;
 	//SigSetPlanet on_planet_add;
@@ -82,10 +86,11 @@ private:
 	bool set_mass_val( const CEGUI::EventArgs& e );
 	bool set_radius_val( const CEGUI::EventArgs& e );
 
-
 	void update_show_window();
 
-	//Planet*sel_planet;
+	MEM::MISC::PhxPlanet sel_planet;
+
+	Timer::Caller tc_show;
 
 	static const boost::regex save_file;
 	static const boost::regex file_cont;

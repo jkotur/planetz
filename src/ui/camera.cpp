@@ -191,6 +191,7 @@ void CamZoomIn::signal()
 	glGetFloatv( GL_MODELVIEW_MATRIX , matrix );
 	glPopMatrix();
 
-	if( len >= 2*pp.getRadius() ) matrix[14] += ds * len * 0.05;
+	float rad = pp.getRadius();
+	if( len >= 2*rad ) matrix[14] += ds * (len-2*rad+.1) * 0.05;
 }
 

@@ -216,7 +216,7 @@
 <!--                okno pokazywania danych planety-->
 		<Window Type="QuadraticLook/FrameWindow" Name="ShowWin">
 			<Property Name="UnifiedPosition" Value="{{0.6,0},{0.1,0}}" />
-			<Property Name="UnifiedSize" Value="{{0,270},{0,205}}" />
+			<Property Name="UnifiedSize" Value="{{0,340},{0,205}}" />
 			<Property Name="Text" Value="Aktualna Planeta" />
 			<Property Name="CloseButtonEnabled" Value="False" />
 			<Property Name="FrameEnabled" Value="False" />
@@ -231,7 +231,7 @@
 
 			<Window Type="QuadraticLook/StaticText" Name="lbShowPos">
 				<Property Name="UnifiedPosition" Value="{{0.5,-40},{0.0,25}}" />
-				<Property Name="UnifiedSize" Value="{{0.0,140},{0,30}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,210},{0,30}}" />
 				<Property Name="Text" Value="" />
 			</Window>
 
@@ -249,7 +249,7 @@
 
 			<Window Type="QuadraticLook/StaticText" Name="lbShowSpeedScalar">
 				<Property Name="UnifiedPosition" Value="{{0.5,-40},{0,70}}" />
-				<Property Name="UnifiedSize" Value="{{0.0,140},{0,30}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,210},{0,30}}" />
 				<Property Name="Text" Value="" />
 			</Window>
 
@@ -261,7 +261,7 @@
 
 			<Window Type="QuadraticLook/StaticText" Name="lbShowSpeedVector">
 				<Property Name="UnifiedPosition" Value="{{0.5,-40},{0,85}}" />
-				<Property Name="UnifiedSize" Value="{{0.0,140},{0,30}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,210},{0,30}}" />
 				<Property Name="Text" Value="" />
 			</Window>
 
@@ -273,7 +273,7 @@
 
 			<Window Type="QuadraticLook/StaticText" Name="lbShowMass">
 				<Property Name="UnifiedPosition" Value="{{0.5,-40},{0,115}}" />
-				<Property Name="UnifiedSize" Value="{{0.0,140},{0,30}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,210},{0,30}}" />
 				<Property Name="Text" Value="" />
 			</Window>
 
@@ -285,7 +285,7 @@
 
 			<Window Type="QuadraticLook/StaticText" Name="lbShowRadius">
 				<Property Name="UnifiedPosition" Value="{{0.5,-40},{0,145}}" />
-				<Property Name="UnifiedSize" Value="{{0.0,140},{0,30}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,210},{0,30}}" />
 				<Property Name="Text" Value="Promień:" />
 			</Window>
 
@@ -293,6 +293,7 @@
 				<Property Name="UnifiedPosition" Value="{{0.5,-40},{0,175}}" />
 				<Property Name="UnifiedSize" Value="{{0,80},{0,20}}" />
 				<Property Name="Text" Value="Usuń Planetę" />
+				<Property Name="Visible" Value="false" />
 			</Window>
 
 		</Window>

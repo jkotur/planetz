@@ -9,21 +9,15 @@ namespace MISC
 }
 }
 
-namespace GFX
-{
-	class PlanetzPicker;
-}
-
 class PlanetPrinter
 {
 	public:
-		PlanetPrinter( MEM::MISC::PhxPlanetFactory *f, GFX::PlanetzPicker *pp );
+		PlanetPrinter( MEM::MISC::PhxPlanetFactory *f );
 		
 		void print( int id );
 	private:
 
 		MEM::MISC::PhxPlanetFactory *factory;
-		GFX::PlanetzPicker *picker;
 };
 
 #endif // _DEBUG_PLANET_PRINTER_H_

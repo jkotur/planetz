@@ -579,6 +579,7 @@ void DeferRender::draw() const
 
 //        glBindFramebuffer( GL_FRAMEBUFFER , fboId[2] );
 	glDrawBuffer( GL_COLOR_ATTACHMENT0 );
+	glClearColor(0,0,0,0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	if( flags & LIGHTING )
@@ -657,6 +658,7 @@ void DeferRender::draw() const
 	glBindFramebuffer( GL_FRAMEBUFFER , fboId[0] );
 	glDrawBuffers( 3 , bufferlist );
 
+	glClearColor(0,0,0,0);
 	glClear( GL_COLOR_BUFFER_BIT );
 
 	glDrawArrays( GL_POINTS , 0 , factory->size() );
@@ -711,6 +713,28 @@ void DeferRender::draw() const
 	glDisableVertexAttribArray( atmLightId );
 
 	glDisableClientState( GL_VERTEX_ARRAY );
+
+//        glBlendFunc( GL_ONE_MINUS_DST_ALPHA  ,  GL_DST_ALPHA );
+//        glEnable(GL_TEXTURE_2D);
+//        glBindTexture( GL_TEXTURE_2D , screenTex );
+
+//        glMatrixMode(GL_PROJECTION);
+//        glPushMatrix();
+//        glLoadIdentity();
+//        glMatrixMode(GL_MODELVIEW);
+//        glPushMatrix();
+//        glLoadIdentity();
+//        glBegin( GL_QUADS );
+//          glTexCoord2f( 1 , 1 ); glVertex2f(  1 ,  1 );
+//          glTexCoord2f( 0 , 1 ); glVertex2f( -1 ,  1 );
+//          glTexCoord2f( 0 , 0 ); glVertex2f( -1 , -1 );
+//          glTexCoord2f( 1 , 0 ); glVertex2f(  1 , -1 );
+//        glEnd();
+//        glPopMatrix();
+//        glMatrixMode(GL_PROJECTION);
+//        glPopMatrix();
+
+//        glBindTexture( GL_TEXTURE_2D , 0 );
 
 	glDisable( GL_ALPHA_TEST );
 	glDisable( GL_BLEND );

@@ -150,7 +150,7 @@ private:
 	//
 	void generate_glow_planes( MEM::MISC::BufferGl<float>& buf , int num , int size );
 
-//        MEM::MISC::BufferGl<float> planes;
+//        MEM::MISC::BufferGl<float> plane;
 
 	static const int glow_size = 128;
 

@@ -9,7 +9,7 @@
 #include "gfx/shader.h"
 #include "ui/input_listener.h"
 
-namespace GFX
+namespace UI
 {
 /** 
  * @brief Klasa odpowiedzialna za sprawdzanie która planeta jest w okolicy myszki.
@@ -17,7 +17,7 @@ namespace GFX
  * Działa ona poprzez renderowanie planet w dodatkowym buforze, i sprawdznie która
  * planeta, w okolicy myszki, znajduje się najbliżej kamery.
  */
-class PlanetzPicker : public UI::InputListener {
+class PlanetzPicker : public InputListener {
 public:
 	/** 
 	 * @brief Tworzy klasę i przygotowuje ją do działania.
@@ -58,8 +58,23 @@ public:
 	 */
 	void resize( int w , int h );
 
+	/** 
+	 * @brief Wywoływane w reakcji na wciśnięcie klawisza myszy.
+	 * Sprawdza która planeta znajduje się pod myszą, i wywołuje
+	 * sygnał sigPlanetPicked z jej aktualnym id w buforze.
+	 * 
+	 * @param b kod przycisku myszy
+	 * @param x miejsce przyciśnięcia w osi OX
+	 * @param y miejsce przyciśnięcia w osi OY
+	 * 
+	 * @return zawsze false
+	 */
 	virtual bool on_button_down( int , int , int );
 
+	/** 
+	 * @brief Sygnał informujący o wybraniu planety. Kiedy wybrana
+	 * jest pusta przestrzeń, wywoływany z -1 jako id.
+	 */
 	boost::signal<void (int)> sigPlanetPicked;
 private:
 	void resizeNames();
@@ -71,8 +86,8 @@ private:
 	int w , h;
 	int winw , winh;
 
-	Shader vs , gs , fs;
-	Program pr;
+	GFX::Shader vs , gs , fs;
+	GFX::Program pr;
 
 	GLuint fboId;
 
@@ -94,8 +109,7 @@ private:
 
 	uint32_t max;
 };
-
-}
+} // UI
 
 #endif /* __PLANETZ_PICKER_H__ */
 

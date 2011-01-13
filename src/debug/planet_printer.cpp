@@ -1,12 +1,10 @@
 #include <sstream>
 #include <cmath>
 #include "planet_printer.h"
-#include "gfx/planetz_picker.h"
 #include "mem/misc/phx_planet_factory.h"
 
-PlanetPrinter::PlanetPrinter( MEM::MISC::PhxPlanetFactory *f, GFX::PlanetzPicker *pp )
+PlanetPrinter::PlanetPrinter( MEM::MISC::PhxPlanetFactory *f )
 	: factory( f )
-	, picker( pp )
 {}
 
 void PlanetPrinter::print( int id )
