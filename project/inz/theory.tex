@@ -1,0 +1,27 @@
+\subsection{Deferred rendering}\label{sub:deferred rendering}
+\paragraph{}
+
+Silnik graficzny został napisany przy użyciu popularnej ostatnio techniki deferred rendering. Popularna jest dopiero od niedawana, ponieważ wymaga stosunkowo nowych i silnych kart graficznych. W nagrodę natomiast, pozwala ona na dużą kontrolę nad procesem renderowania, oraz pozwala na tworzenie ciekawych efektów graficznych stosunkowo łatwo. Bardzo dobrze zachowuje się również przy licznych obiektach oraz dużych przestrzeniach. W przypadku układów planetarnych mamy do czynienia z takim właśnie wariantem. Wybór tej techniki pozwolił dodatkowo na optymalizację dzięki której geometria w programie została ograniczona do niezbędnego minimum. Powoduje to oczywiście dodatkowe koszty, jednak są one o wiele mniejsze niż w przypadku standardowego podejścia forward renderingu.
+
+\paragraph{}
+
+Deferred rendering polega na dwu przejściowym generowaniu finalnego obrazu. W pierwszym przejściu, przeliczana jest geometria, a wynik tych obliczeń wpisywany jest do specjalnego bufora ekranu, nazywanego g-buforem. W g-buforze zapisywane są informacje o pozycji, normalnej, kolorze danego piksela ekranu. W zależności od danego silnika bufor ten może zawierać różne dane. W drugim przejściu, na podstawie tego bufora liczone są wszystkie efekty graficzne, takie jak oświetlenie, cienie, dla każdego piksela oddzielnie. Takie podejście pozwala na bardzo wiele, oraz jest stosunkowo wydajne, posiada jednak wady. Poniżej przedstawione są wady jak i zalety deferred renderingu.
+
+\paragraph{Zalety}
+
+\begin{description}
+\item{Skalowalność} - ponieważ wszystkie obliczenia liczone są dla piksela, silnik ten doskonale skaluje się ze względu na dodawanie geometrii do sceny
+\item{Duża kontrola} - dzięki jawnemu tworzeniu buforów ekranu, można stworzyć wiele niestandardowych efektów graficznych
+\end{description}
+
+\paragraph{Wady}
+
+\begin{description}
+\item{Wielkość buforów} - bufory ekranu zajmują bardzo dużo miejsca, przy rozdzielczości full hd może być to nawet 50MB, co dla starych kart graficznych było wielkościami ogromnymi
+\item{Przezroczystość} - ponieważ obliczenia są robione tylko raz dla każdego bufora, niemożliwe jest zrobienie przezroczystości w ten sposób
+\item{Dużo obliczeń} - niezależnie od sceny obliczenia są proporcjonalne do wielkości ekranu i robione dla piksela. Dla starych kart graficznych jest to o wiele za ciężkie rozwiązanie
+\item{Wymagane MTR} - ponieważ buforów jest wiele, wymagana od karty jest technologia MTR, czyli multiple target render, dzięki której można wygenerować za jednym zamachem wszystkie bufory. Na starych kartach graficznych potrzebne było tyle przejść ile jest buforów, co powoduje wielokrotne obliczenia geometrii
+\end{description}
+
+\subsection{Układy planetarne}\label{sub:uklady planetarne}
+

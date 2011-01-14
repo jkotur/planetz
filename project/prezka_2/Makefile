@@ -1,4 +1,4 @@
-FILE=inż_1
+FILE=inż_2
 all: pdf
 
 clean:

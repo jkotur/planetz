@@ -1,12 +1,12 @@
 \subsection{Silnik graficzny}\label{sub:silnik graficzny}
 \paragraph{}
 
-Silnik graficzny został napisany przy użyciu techniki deferred rendering. Pozwala ona na dużą kontrolę nad procesem renderowania, oraz bardzo dobrze zachowuje się przy licznych obiektach oraz dużych przestrzeniach. W przypadku planet mamy do czynienia z takim właśnie wariantem. Dodatkowo pozwoliło to na optymalizację dzięki której geometria w programie została ograniczona do niezbędnego minimum. Powoduje to oczywiście dodatkowe koszty, jednak są one o wiele mniejsze niż w przypadku standardowego podejścia forward renderingu.
+Silnik graficzny został napisany przy użyciu popularnej ostatnio techniki deferred rendering. Popularna jest dopiero od niedawana, ponieważ wymaga stosunkowo nowych i silnych kart graficznych. W nagrodę natomiast, pozwala ona na dużą kontrolę nad procesem renderowania, oraz pozwala na tworzenie ciekawych efektów graficznych stosunkowo łatwo. Bardzo dobrze zachowuje się również przy licznych obiektach oraz dużych przestrzeniach. W przypadku układów planetarnych mamy do czynienia z takim właśnie wariantem. Wybór tej techniki pozwolił dodatkowo na optymalizację dzięki której geometria w programie została ograniczona do niezbędnego minimum. Powoduje to oczywiście dodatkowe koszty, jednak są one o wiele mniejsze niż w przypadku standardowego podejścia forward renderingu.
 
 \subsubsection{Deferred rendering}\label{ssub:deferred rendering}
 \paragraph{}
 
-Deferred rendering jest ostatnio bardzo popularną techniką, używaną w wielu współczesnych grach komputerowych. Polega on na dwu przejściowym generowaniu finalnego obrazu. W pierwszym przejściu, przeliczana jest geometria, a wynik tych obliczeń wpisywany jest do specjalnego bufora ekranu. W buforze tym, znajduje się informacja o pozycji, normalnej, kolorze obiektu w danym pikselu ekranu. Mimo swoich licznych zalet, posiada on również i wady. Poniżej przedstawione są zarówno zalety, jak i wady takiego podejścia. W zależności od danego silnika bufor ten może zawierać różne dane. W drugim przejściu, na podstawie tego bufora liczone są wszystkie niezbędne efekty, takie jak oświetlenie, cienie, ambient occlusion, oraz wszelkie inne efekty graficzne. Takie podejście pozwala na bardzo wiele, oraz jest stosunkowo wydajne, posiada jednak wady. Poniżej przedstawione są wady jak i zalety deferred renderingu.
+Deferred rendering polega na dwu przejściowym generowaniu finalnego obrazu. W pierwszym przejściu, przeliczana jest geometria, a wynik tych obliczeń wpisywany jest do specjalnego bufora ekranu, nazywanego g-buforem. W g-buforze zapisywane są informacje o pozycji, normalnej, kolorze danego piksela ekranu. W zależności od danego silnika bufor ten może zawierać różne dane. W drugim przejściu, na podstawie tego bufora liczone są wszystkie efekty graficzne, takie jak oświetlenie, cienie, dla każdego piksela oddzielnie. Takie podejście pozwala na bardzo wiele, oraz jest stosunkowo wydajne, posiada jednak wady. Poniżej przedstawione są wady jak i zalety deferred renderingu.
 
 \paragraph{Zalety}
 
@@ -23,6 +23,16 @@ Deferred rendering jest ostatnio bardzo popularną techniką, używaną w wielu 
 \item{Dużo obliczeń} - niezależnie od sceny obliczenia są proporcjonalne do wielkości ekranu i robione dla piksela. Dla starych kart graficznych jest to o wiele za ciężkie rozwiązanie
 \item{Wymagane MTR} - ponieważ buforów jest wiele, wymagana od karty jest technologia MTR, czyli multiple target render, dzięki której można wygenerować za jednym zamachem wszystkie bufory. Na starych kartach graficznych potrzebne było tyle przejść ile jest buforów, co powoduje wielokrotne obliczenia geometrii
 \end{description}
+
+\subsubsection{Konstrukcja silnika}\label{ssub:konstrukcja silnika}
+\paragraph{}
+
+Silnik jest silnikiem wielo-przejściowym. Dla wyświetlenia planet wraz z oświetleniem i teksturami, potrzebne są dwa przejścia. Jedno do wygenerowania g-bufora, drugie do wygenerowania końcowego obrazu. Ponieważ w tym podejściu niemożliwe jest uzyskani przezroczystości, aby wyświetlić półprzezroczyste atmosfery konieczne jest wyświetlenie ich oddzielnie. Są one tak samo jak planety wyświetlanie dwoma przejściami przy użyciu deferred renderingu. Cały silnik posiada więc cztery przejścia, po dwa dla obrazów planet i atmosfer. Następnie wyniki tych przejść są nakładane na siebie z uwzględnieniem przezroczystości.
+
+\subsubsection{Dane pośrednie}\label{ssub:dane pośrednie}
+\paragraph{}
+
+Silnik graficzny potrzebuje dużego bufora pośrednich danych. Buforem tym z uwagi na wygodę używania jest dwuwymiarowa tekstura zmiennoprzecinkowa. 
 
 \subsubsection{Generowanie geometrii}\label{ssub:generowanie geometrii}
 \paragraph{}

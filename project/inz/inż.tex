@@ -1,0 +1,92 @@
+\documentclass[a4paper,titlepage,10pt]{report}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+\usepackage{polski}
+
+\usepackage{enumerate}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[pdftex]{graphicx}
+\usepackage{tikz}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage{anysize}
+
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+
+\usepackage{subfig}
+
+\usepackage{listings}
+
+\lstset{numbers=left, stepnumber=1}
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
+
+\linespread{1.3}
+
+%\title{\huge Symulacja układu planetarnego na GPU\\ przy użyciu CUDA i OpenGL\\\small Dokumentacja końcowa}
+%\author{Daniel Kłobuszewski\and Jakub Kotur}
+%\date{Promotor: Krzysztof Kaczmarski\\\vspace{24pt}\today}
+
+\newcommand{\signature}[2]{
+\begin{minipage}[]{#2}
+\centering
+\vspace{1.5em}
+\rule{\linewidth}{0.5pt}
+\vspace{0.5em}
+#1
+\end{minipage}
+}
+
+\begin{document}
+	\input{titlepage.tex}
+	\newpage
+
+	\tableofcontents
+	\newpage
+
+	\chapter{Wstęp}\label{chap:wstęp}
+	\section{Streszczenie}\label{sec:streszczenie}
+	\input{intro.tex}
+	\newpage
+	\section{Podstawy teoretyczne}\label{sec:podstawy teoretyczne}
+	\input{theory.tex}
+
+	\chapter{Projekt}\label{chap:projekt}
+	\section{Przypadki użycia}\label{sec:przypadki użycia}
+	\input{use-case.tex}
+	\section{Architektura}\label{sec:architektura}
+	\input{arch.tex}
+
+	\chapter{Instrukcja}\label{chap:instrukcja}
+	\section{Instrukcja instalacji}\label{sec:instrukcja użytkownika}
+	\input{install.tex}
+	\section{Instrukcja użytkownika}\label{sec:instrukcja użytkownika}
+	\input{inst.tex}
+
+	\chapter{Opis działania}\label{chap:opis dzialania}
+	\section{Silnik graficzny}\label{sec:silnik graficzny}
+	\input{desc_gfx.tex}
+	\section{Silnik fizyczny}\label{sec:silnik fizyczny}
+	\input{desc_phx.tex}
+
+	\chapter{Opis zmian}\label{chap:opis zmian}
+	\section{Architektura}\label{sec:architektura-zmiany}
+	\input{diff_arch.tex}
+	\section{Algorytmy}\label{sec:algorytmy}
+	\input{diff_algo.tex}
+
+	\chapter{Raport końcowy}\label{chap:raport końcowy}
+	\section{Dokumentacja}\label{sec:dokumentacja}
+	\input{doxy.tex}
+	\section{Raport z testów}\label{sec:raport z testów}
+	\input{tests.tex}
+	\section{Podział pracy}\label{sec:podzial}
+	\input{distr.tex}
+
+	\newpage
+	\input{declaration.tex}
+	\newpage
+
+\end{document}
+

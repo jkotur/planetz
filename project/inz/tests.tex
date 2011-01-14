@@ -1,0 +1,39 @@
+\subsection{Silnik graficzny}\label{sub:silnik graficzny}
+\paragraph{}
+
+Głównym wymaganiem względem silnika graficznego była wydajność. Miał on wydajnie wyświetlić scenę składającą się z kilkunastu tysięcy planet. Nie wszystkie planety oczywiście musiały być widoczne w pełnej okazałości, niektóre mogły znajdować się daleko od kamery, bądź nawet za kamerą. Aby osiągnąć ten cel, wszystkie obliczenia musiały odbywać się na karcie graficznej, ponieważ koszt transferu danych pomiędzy CPU, a GPU jest zbyt wysoki.
+
+\paragraph{}
+
+Aktualnie udało się uzyskać bardzo wydajny silnik, którego główną wadą jest to, że służy on tylko do wyświetlania kul. Jednak swoje zadanie wykonuje bardzo dobrze. Wśród zalet można wymienić:
+
+\begin{itemize}
+\item Bardzo dobra skalowalność ze względu na ilość planet.
+\item Dobra reakcja na planety które są daleko od widza.
+\item Możliwość wyświetlenia stosunkowo wielu gwiazd (źródeł światła).
+\end{itemize}
+
+\paragraph{}
+
+Przy próbach z nawet bardzo dużą ilością planet, rzędu 64 tysięcy, dawał dobre wyniki. Oznacza to że renderowanie przebiegało płynnie w czasie rzeczywistym z 50 klatkami/sekundę, tak że pozostawiało nawet trochę czasu na obliczenia fizyki. Dla przypadku bliżej wymagań projektowych, czyli dla układu posiadającego 15 tysięcy planet, silnikowi udaje się osiągnąć 120 klatek/sekundę, co jest w zupełności wystarczającym wynikiem. Testy były prowadzone na układzie będącym kostką z planet o wymiarach odpowiednio 40 i 25 planet w każdym wymiarze. W każdej kostce było kilkadziesiąt gwiazd. Kamera była ustawiona tak, by objąć widokiem wszystkie planety. W ten sposób sprawdzona została zarówno reakcja silnika na planety znajdujące się blisko obserwatora, na te które znajdowały się daleko, oraz na liczne gwiazdy znajdujące się w układzie. Jest to układ który dobrze przybliża średni przypadek.
+
+\paragraph{}
+
+Należy dodać że wszystkie testy zostały wykonane na karcie graficzne NVIDIA 9800GTX+, która była co prawda najsilniejszą kartą swoich czasów, jednak od lat jej młodości wiele na runku kart graficznych się zmieniło. Aktualnie procesory graficzne posiadają nawet do pięciu razy więcej procesorów strumieniowych.
+
+\paragraph{}
+
+Reasumując, silnik graficzny spełnił nasze oczekiwania pod względem wydajności w zupełności. Również efekty wizualne są zadowalające.
+
+
+\subsection{Silnik fizyczny}\label{sub:silnik fizyczny}
+\subsubsection{Wydajność}
+Jednym z założeń aplikacji było osiągnięcie dużej wydajności. Podczas testów na sprzęcie:
+\begin{itemize}
+\item{Procesor Intel Core i7 930 2.8GHz}
+\item{Karta graficzna nVidia GeForce GTX 275, 896MB, 240 rdzeni CUDA}
+\end{itemize}
+obliczenia w czasie rzeczywistym (minimum 20fps) odbywały się z udziałem 16 tysięcy planet. Wydajność znacząco spadała przy dużej ilości występujących kolizji - liczba fps spadała nawet dwukrotnie.
+
+\subsubsection{Stabilność}
+Przy większości układów aplikacja mogła działać przez kilkanaście godzin bez przerwy. Niestety, niektóre układy powodowały powstawanie błędnych danych w postaci wartości NaN w pozycjach planet.

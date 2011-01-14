@@ -1,0 +1,49 @@
+
+\subsection{Konstrukcja silnika}\label{sub:konstrukcja silnika}
+\paragraph{}
+
+Silnik jest silnikiem wielo-przejściowym. Dla wyświetlenia planet wraz z oświetleniem i teksturami, potrzebne są dwa przejścia. Jedno do wygenerowania g-bufora, drugie do wygenerowania końcowego obrazu. Ponieważ w tym podejściu niemożliwe jest uzyskani przezroczystości, aby wyświetlić półprzezroczyste atmosfery konieczne jest wyświetlenie ich oddzielnie. Są one tak samo jak planety wyświetlanie dwoma przejściami przy użyciu deferred renderingu. Cały silnik posiada więc cztery przejścia, po dwa dla obrazów planet i atmosfer. Następnie wyniki tych przejść są nakładane na siebie z uwzględnieniem przezroczystości.
+
+\subsection{Dane pośrednie}\label{sub:dane pośrednie}
+\paragraph{}
+
+Silnik graficzny potrzebuje dużego bufora pośrednich danych. Buforem tym z uwagi na wygodę używania jest dwuwymiarowa tekstura zmiennoprzecinkowa. 
+
+\subsection{Generowanie geometrii}\label{sub:generowanie geometrii}
+\paragraph{}
+
+Dzięki zastosowaniu deferred renderingu, oraz tego, że renderowanymi obiektami są jedynie kule, można ominąć standardowy proces generowania geometrii. Kula która daje zadowalający efekt i jest wyświetlana przy pomocy zestawu wierzchołków, musiała by ich mieć około tysiąca. Samo przetwarzanie takiej geometrii jest kosztowne, dodatkowo doszły do tego ograniczenia karty graficznej i geometry shaderów, które trzeba by obchodzić, narażając się na dodatkowe koszty.
+
+\paragraph{}
+
+Wiedząc że jedyne obiekty które chcemy wyświetlić są kulami, wiemy że obiekt taki z każdej strony wygląda tak samo. Jesteśmy również w stanie łatwo policzyć składową z kuli, mając jedynie koordynaty w osiach OX i OY na tej kuli. Dzięki tym spostrzeżeniom, można stworzyć mapę głębokości (koordynat na osi OZ) kuli. Dzięki takiej mapie, w pierwszym przebiegu, wyświetlane są jedynie płaskie kwadraty, które dzięki mapie głębokości, są w stanie do bufora ekranu przekazać poprawną informację o pozycji piksela w przestrzeni. Dodatkowo ta sama mapa stanowi mapę normalnych dla oświetlenia. Dzięki takiemu podejściu, każda planeta generuje jedynie cztery wierzchołki, a reszta geometrii jest odczytywana z tekstury.
+
+\paragraph{}
+
+Niestety tak pięknie by to wyglądało, gdyby zastosowany był rzut ortogonalny. W symulacjach jednak konieczne do zastosowania jest rzut projekcyjny. W takim przypadku planeta widoczna na krawędzi kamery, różni się od planety widocznej na wprost. W skrajnym przypadku, gdy widoczne jest 360°, możemy widzieć planetę zupełnie od tyłu. Dlatego konieczne są dodatkowe obliczenia, uwzględniające położenie planety względem kamery.
+
+\subsection{Obliczanie oświetlenia}\label{sub:obliczanie oświetlenia}
+\paragraph{}
+
+Obliczanie oświetlenia na podstawie buforów ekranów nie stanowi problemu. W programie zastosowane jest model oświetlenia Phonga, natomiast obliczenia prowadzone są dla każdego piksela oddzielnie. Dodatkowo w celach optymalizacyjnych, nie jest liczone światło odbite (specular), ponieważ planety mają powierzchnię chropowatą, więc i tak oświetlenie to by miało znikomy wpływ na efekt końcowy, natomiast jest dość kosztowne obliczeniowo.
+
+\paragraph{}
+
+W celu optymalizacji, dodatkowo do każdej gwiazdy (źródła światła) przypisany jest jej zakres świecenia. Dzięki temu oświetlenie z gwiazd, które nie oświetlają planet odległych od siebie, nie jest obliczane. W przypadku gwiazd nie jest to tak znaczna optymalizacja jak w przypadku bardzo słabych świateł, jak na przykład lampki choinkowe, jednak sprawdza się przy kilku odległych od siebie galaktykach.
+
+\subsection{Nakładanie tekstur}\label{sub:nakladanie tekstur}
+\paragraph{}
+
+Skomplikowaniu ze względu na użycie deferred renderingu uległo niestety nakładanie tekstur na planety. Tekstura, tak samo jak wspomniana wcześniej mapa normalnych, jest nakładana na kulę w zależności od koordynat na osiach OX i OY. Jednak w odróżnieniu od mapy normalnych, tekstura zależy od obrotu kamery względem planety, i z każdej strony wygląda inaczej. Pojawiły się więc dwa problemy. Obracanie koordynat tekstury, tak aby widz miał wrażenie że planeta faktycznie się obraca, oraz mapowanie koordynat kwadratu reprezentującego planetę, na koordynaty tekstury planety.
+
+\paragraph{}
+
+Pierwszy problem został rozwiązany poprzez przekazywanie obrotu kamery do silnika graficznego, poprzez przekazanie macierzy obrotu kamery. Następnie uzyskane koordynaty kuli, są przemnażane przez tą macierz. W ten sposób otrzymywany jest bezwzględna pozycja kuli, na którą patrzy aktualnie kamera.
+
+\paragraph{}
+
+Drugim problemem jest mapowanie tekstury na kulę, tak aby z koordynat kuli 3D, uzyskać koordynaty na teksturze 2D. W standardowym podejściu, stosuje się siatki tekstury, natomiast każdy trójkąt jest interpolowany na płaszczyźnie. W naszym podejściu nie ma trójkątów, trzeba więc było uzyskać ciągły sposób mapowania, bez żadnych siatek. Z pomocą przyszła kartografia, która zna liczne sposoby mapowania płaszczyzny na kulę i z powrotem. Najlepsze okazały się metody mapowania o stałej powierzchni. Oznacza to że parametrem który nie ulega zniekształceniu ze względu na położenie na kuli, jest powierzchnia. Dzięki temu po mapowaniu tekstury na kulę, zniekształcenia są najmniejsze. Najtańszą obliczeniowo z tych metod okazała się metoda sinusoidalna, która wymaga policzenia jedynie jednego sinusa.
+
+\subsection{Atmosfery}\label{sub:atmosfery}
+\paragraph{}
+
