@@ -184,10 +184,10 @@ void PlanetzPicker::render( int x , int y )
 	glReadPixels(winw/2-w/2,winh/2-h/2,w,h,GL_RED_INTEGER    ,GL_UNSIGNED_INT,buffNames);
 	glReadPixels(winw/2-w/2,winh/2-h/2,w,h,GL_DEPTH_COMPONENT,GL_FLOAT,buffDepth);
 
-	fprintf(stderr,"%d:%d  %d:%d  ",winw/2-w/2,winh/2-h/2,w,h);
-	for( int i=0 ; i<w*h ; i++ )
-		fprintf(stderr,"%d ",buffNames[i]);
-	fprintf(stderr,"\n");
+//        fprintf(stderr,"%d:%d  %d:%d  ",winw/2-w/2,winh/2-h/2,w,h);
+//        for( int i=0 ; i<w*h ; i++ )
+//                fprintf(stderr,"%d ",buffNames[i]);
+//        fprintf(stderr,"\n");
 	glBindTexture( GL_TEXTURE_2D , 0 );
 
 	glBindFramebuffer( GL_FRAMEBUFFER , 0 );
@@ -212,8 +212,8 @@ int PlanetzPicker::getId()
 			if( buffDepth[i]<d )
 				max = buffNames[i];
 	}
-	ASSERT( max < factory->size() );
-	return max < factory->size() ? max-1 : -1;
+	ASSERT( max <= factory->size() );
+	return max <= factory->size() ? max-1 : -1;
 }
 
 void PlanetzPicker::resizeNames()
