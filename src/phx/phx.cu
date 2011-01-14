@@ -219,8 +219,6 @@ void Phx::CImpl::run_nbodies_for_clusters()
 	dim3 block( min( threads, MIN_THREADS ) );
 	dim3 grid( 1 );
 
-	MEM::MISC::BufferCu<float3> *centers = clusterer.getCenters();
-
 	outside_cluster_interaction<<<grid, block>>>(
 		clusterer.getCenters()->d_data(),
 		clusterer.getMasses()->d_data(),
