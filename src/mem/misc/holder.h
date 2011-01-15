@@ -4,7 +4,6 @@
 #include "buffer.h"
 #include "buffer_cpu.h"
 #include "buffer_cu.hpp"
-#include "util/event.h"
 #include <map>
 
 namespace MEM

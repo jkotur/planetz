@@ -157,6 +157,7 @@ void CamZoomIn::learn( void * data )
 UI::Camera::Matrix CamZoomIn::work()
 {
 	if( invalid ) return NULL;
+	if( !pp.isValid() ) return NULL;
 	signal();
 	return matrix;
 }
@@ -164,6 +165,7 @@ UI::Camera::Matrix CamZoomIn::work()
 UI::Camera::Matrix CamZoomIn::die ()
 {
 	if( invalid ) return matrix;
+	if( !pp.isValid() ) return matrix;
 	return NULL;
 }
 

@@ -179,6 +179,11 @@ void PlanetzLayout::hide_show_window()
 
 void PlanetzLayout::update_show_window()
 {
+	if( !sel_planet.isValid() )
+	{
+		hide_show_window();
+		return;
+	}
 	char buff[BUFSIZE];
 
 	float3 pos = sel_planet.getPosition();
