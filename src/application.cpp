@@ -188,6 +188,7 @@ void Application::main_loop()
 
 Application::~Application()
 {
+	pp = MEM::MISC::PhxPlanet();
 	log_printf(INFO,"Program is shutting down. It was running %lf seconds\n",timer.get());
 	log_printf(DBG,"kthxbye\n");
 	log_del(f_log);
@@ -197,6 +198,7 @@ Application::~Application()
 void Application::set_picked_planet( int id )
 {
 	if( id < 0 ) {
+		pp = MEM::MISC::PhxPlanet();
 		camera.request(UI::CameraMgr::ZOOMIN);
 		pl->hide_show_window();
 	}

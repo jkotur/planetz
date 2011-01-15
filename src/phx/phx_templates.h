@@ -92,10 +92,10 @@ class ConstChecker
 	public:
 		ConstChecker() : buf(NULL), data(NULL) {}
 		virtual ~ConstChecker(){if(data)delete[]data;}
-		void setBuf(BUF<T> *b)
+		void setBuf(BUF<T> *b, unsigned _size )
 		{
 			buf = b;
-			size = b->getLen();
+			size = _size;
 			if( data )
 			{
 				delete []data;
@@ -103,7 +103,7 @@ class ConstChecker
 			data = new T[ size ];
 			BufferAdapter<T, BUF> ad( *buf );
 			ASSERT( ad.hostData() );
-			memcpy( data, ad.hostData(), b->getSize() );
+			memcpy( data, ad.hostData(), sizeof(T) * size );
 			Validator<T> v;
 			for( unsigned i = 0; i < size; ++i )
 			{
@@ -117,7 +117,7 @@ class ConstChecker
 			T *actual_data = new T[ size ];
 			ASSERT( actual_data != NULL );
 			BufferAdapter<T, BUF> ad( *buf );
-			memcpy( actual_data, ad.hostData(), buf->getSize() );
+			memcpy( actual_data, ad.hostData(), sizeof(T) * size );
 			Validator<T> v;
 			for( unsigned i = 0; i < size; ++i )
 			{

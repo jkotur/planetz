@@ -46,7 +46,6 @@ void PlanetHolderCleaner::createFilter()
 		threads );
 }
 
-/// @todo szybsza redukcja? kernel w pętli
 bool PlanetHolderCleaner::filteringNeeded()
 {
 	unsigned threads = fact->size();
@@ -65,12 +64,3 @@ void PlanetHolderCleaner::filterHolder()
 {
 	fact->filter( &filter );
 }
-
-/*void subscribeForIdChange( EventDelegate1<unsigned> callback, unsigned id )
-{
-}
-
-void unsubscribeForIdChange( EventDelegate1<unsigned> callback )
-{
-}
-*/

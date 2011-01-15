@@ -9,8 +9,10 @@ namespace MEM
 {
 namespace MISC
 {
-	/// @brief Klasa określająca planetę z punktu widzenia fizyki.
-	/// Pozwala odczytywać z CPU fizyczne własności planety. 
+	/**
+	 * @brief Klasa określająca planetę z punktu widzenia fizyki.
+	 * Pozwala odczytywać z CPU fizyczne własności planety.
+	 */
 	class PhxPlanet
 	{
 	public:
@@ -18,10 +20,13 @@ namespace MISC
 
 		/// @brief Tworzy obiekt planety o zadanym id.
 		/// Konstruktor powinien być używany jedynie przez PhxPlanetFactory.
-		PhxPlanet( unsigned id , const PlanetHolder* h );
+		PhxPlanet( unsigned id , PlanetHolder* h );
+		PhxPlanet( const PhxPlanet& );
 		virtual ~PhxPlanet();
 
-		int getId() const { return id; }
+		PhxPlanet& operator=( const PhxPlanet& rhs );
+
+		int getId() const;
 		
 		/// @brief Pozycja planety.
 		float3  getPosition() const;
@@ -35,9 +40,16 @@ namespace MISC
 		/// @brief Prędkość planety.
 		float3	getVelocity() const;
 
+		/**
+		 * @brief Sprawdza, czy obiekt zawiera poprawne dane.
+		 */
+		bool isValid() const;
+
 	private:
-		int id;
-		const PlanetHolder* holder;
+		void initFromOther( const PhxPlanet& );
+		PlanetLogin login;
+		PlanetHolder* holder;
+		bool exists;
 	};
 
 	/// @brief Klasa będąca enkapsulacją PlanetHoldera dla obiektów fizyki.
@@ -78,7 +90,7 @@ namespace MISC
 
 	private:
 
-		PlanetHolder* const holder;
+		PlanetHolder* holder;
 	};
 
 }

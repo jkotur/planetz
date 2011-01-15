@@ -87,9 +87,9 @@ void Phx::CImpl::compute(unsigned n)
 	map_buffers();
 	for(unsigned i = 0; i < n; ++i)
 	{
-		vel_checker.setBuf( &planets->getVelocities() );
-		mass_checker.setBuf( &planets->getMasses() );
-		pos_checker.setBuf( &planets->getPositions() );
+		vel_checker.setBuf( &planets->getVelocities(), planet_count );
+		mass_checker.setBuf( &planets->getMasses(), planet_count );
+		pos_checker.setBuf( &planets->getPositions(), planet_count );
 		run_clusters();
 		pos_checker.checkBuf();
 		mass_checker.checkBuf();

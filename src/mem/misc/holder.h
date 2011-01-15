@@ -4,11 +4,14 @@
 #include "buffer.h"
 #include "buffer_cpu.h"
 #include "buffer_cu.hpp"
+#include "util/event.h"
+#include <map>
 
 namespace MEM
 {
 namespace MISC
 {
+	typedef unsigned int PlanetLogin;
 	/**
 	 * @brief Szablon klasy agregującej bufory z informacjami o planetach.
 	 */
@@ -46,7 +49,11 @@ namespace MISC
 			 * usunięte.
 			 */
 			void filter( BufferCu<unsigned> *mask );
-			
+
+			PlanetLogin createLogin( unsigned id );
+			void releaseLogin( PlanetLogin pl );
+			int actualID( PlanetLogin pl );
+
 			//
 			//   * GFX
 			//
@@ -110,6 +117,10 @@ namespace MISC
 			 * @brief Fizyczny, zaalokowany rozmiar buforów.
 			 */
 			size_t m_realsize;
+
+			typedef std::map<PlanetLogin, int> IdMap;
+
+			IdMap m_planetIds;
 	};
 
 	/**
@@ -183,6 +194,7 @@ namespace MISC
 	template<template<class T>class CBUF, template<class S>class GBUF>
 	PlanetHolderBase<CBUF, GBUF>::~PlanetHolderBase()
 	{
+		ASSERT_MSG( m_planetIds.empty(), "There are still planets in use!" );
 		log_printf(INFO, "deleted planetholder\n");
 	}
 
@@ -213,6 +225,8 @@ namespace MISC
 		return m_size;
 	}
 
+	typedef std::map<const unsigned, int> IdxChangeSet;
+
 	/**
 	 * @brief Wzorzec klasy pomocniczej, służacej do filtrowania PlanetHolderBase'a.
 	 */
@@ -231,11 +245,15 @@ namespace MISC
 			 * @brief Filtruje zadanego holdera.
 			 *
 			 * @param mask Maska filtrowania.
+			 *
+			 * @param changes Zbiór śledzonych indeksów.
+			 *
+			 * @returns Nowy rozmiar.
 			 */
-			void operator()( BufferCu<unsigned> *mask );
+			unsigned operator()( BufferCu<unsigned> *mask, IdxChangeSet *changes );
 	};
 
-	void __filter( PlanetHolder *what, BufferCu<unsigned> *how );
+	unsigned __filter( PlanetHolder *what, BufferCu<unsigned> *how, IdxChangeSet *changes );
 
 	/**
 	 * @brief Specjalizacja, używana przez PlanetHolder'a.
@@ -257,10 +275,14 @@ namespace MISC
 			 * @brief Filtruje zadanego holdera.
 			 *
 			 * @param mask Maska filtrowania.
+			 *
+			 * @param changes Zbiór śledzonych indeksów.
+			 *
+			 * @returns Nowy rozmiar.
 			 */
-			void operator()( BufferCu<unsigned> *mask )
+			unsigned operator()( BufferCu<unsigned> *mask, IdxChangeSet *changes )
 			{
-				__filter( owner, mask );
+				return __filter( owner, mask, changes );
 			}
 		private:
 			PlanetHolder *owner;
@@ -270,8 +292,58 @@ namespace MISC
 	void PlanetHolderBase<CBUF, GBUF>::filter( BufferCu<unsigned> *mask )
 	{
 		PlanetHolderFilterFunctor<CBUF, GBUF> filt( this );
-		filt( mask );
-		m_size = count.retrieve();
+		IdxChangeSet changes;
+		
+		for( IdMap::iterator it = m_planetIds.begin(); it != m_planetIds.end(); ++it )
+		{
+			if( it->second >= 0 )
+			{
+				const unsigned id = it->second;
+				changes.insert( std::make_pair( id, -1 ) );
+			}
+		}
+		m_size = filt( mask, &changes );
+		IdxChangeSet::iterator ch_it = changes.begin();
+		for( IdMap::iterator it = m_planetIds.begin(); it != m_planetIds.end(); ++it )
+		{
+			if( ch_it == changes.end() ) return;
+			if( (int)ch_it->first == it->second )
+			{
+				it->second = ch_it->second;
+			}
+		}
+	}
+
+	template<template<class T>class CBUF, template<class S>class GBUF>
+	PlanetLogin
+	PlanetHolderBase<CBUF, GBUF>::createLogin( unsigned id )
+	{
+		ASSERT( id < m_size );
+		if( m_planetIds.empty() )
+		{
+			m_planetIds[0] = id;
+			return 0;
+		}
+		PlanetLogin login = m_planetIds.rbegin()->first + 1;
+		while( m_planetIds.find( login ) != m_planetIds.end() ) ++login;
+		m_planetIds[ login ] = id;
+		return login;
+	}
+
+	template<template<class T>class CBUF, template<class S>class GBUF>
+	void PlanetHolderBase<CBUF, GBUF>::releaseLogin( PlanetLogin login )
+	{
+		IdMap::iterator it = m_planetIds.find( login );
+		ASSERT( it != m_planetIds.end() );
+		m_planetIds.erase( it );	
+	}
+
+	template<template<class T>class CBUF, template<class S>class GBUF>
+	int PlanetHolderBase<CBUF, GBUF>::actualID( PlanetLogin login )
+	{
+		IdMap::iterator it = m_planetIds.find( login );
+		ASSERT( it != m_planetIds.end() );
+		return it->second;
 	}
 }
 }
