@@ -101,9 +101,9 @@ void cube_gen(int dist, unsigned edge)
 				bool star = (0 == rand() % (edge * edge));
 				if( star ) mass *= 1e4;
 				g.add( point( dist * (x - half_edge), dist * (y - half_edge), dist * (z - half_edge), mass, pow(mass, 0.3),
-					1.f * edge * rand() / RAND_MAX,
-					1.f * edge * rand() / RAND_MAX,
-					1.f * edge * rand() / RAND_MAX,
+					1.1f * edge * rand() / RAND_MAX,
+					1.1f * edge * rand() / RAND_MAX,
+					1.1f * edge * rand() / RAND_MAX,
 					star ? 3 : ( x + y + z ) % 3
 					) );
 			}
@@ -111,7 +111,7 @@ void cube_gen(int dist, unsigned edge)
 	}
 	for( int i = 0; i < 0; ++i )
 	{
-		g.add( point( dist * i, dist * i, dist * i, 10, 2, 0,0,0,0 ) );
+		g.add( point( dist * i, dist * i, dist * i, 10, 2, 0,0,0,i%100?i%3:3 ) );
 	}
 	g.print();
 }
@@ -121,16 +121,43 @@ void spiral_gen()
 	graph g;
 	for( unsigned i = 0; i < 1337; ++i )
 	{
+		bool star = (0 == i % 100);
+		unsigned j = 10 * i;
+		unsigned mass = rand() % 40 + 1;
+		if( star ) mass *= 1e3;
 		g.add( point(
-			i * sin( 1 + i * .04),
-			i * sin( 1 + i * .06),
-			i * sin( 1 + i * .1),
-			1 + i,
-			1 + sqrt( i ),
+			j * sin( 1 + i * .04),
+			j * sin( 1 + i * .06),
+			j * sin( 1 + i * .1),
+			mass,
+			pow( mass, 0.2 ),
 			.01f * rand() / RAND_MAX,
 			.01f * rand() / RAND_MAX,
 			.01f * rand() / RAND_MAX,
-			i%100? i % 3 : 3) );
+			star ? 3 : i % 3) );
+	}
+	g.print();
+}
+#define PI 3.14159265
+#define RAND_VEL ((20./mass) * rand() / RAND_MAX)
+void disk_gen( unsigned count, float r )
+{
+	const float concentration = 0.6;
+	graph g;
+	for( unsigned i = 0; i < count; ++i )
+	{
+		float act_r = r * pow( 1. * rand() / RAND_MAX, concentration );
+		float act_angle = 2 * PI * rand() / RAND_MAX;
+		unsigned mass = rand() % (1 << 5) + 1;
+		bool star = (0 == rand() % (unsigned)pow(count, 0.7));
+		if( star ) mass *= 1e4;
+		float x = act_r * sin( act_angle );
+		float y = act_r * cos( act_angle );
+		float vx = r * y/(17 * (r-act_r + r/2)) + RAND_VEL;
+		float vy = r * (-x)/(17 * (r-act_r + r/2)) + RAND_VEL;
+		float vz = RAND_VEL;
+		g.add( point( x, y, 0, mass, pow(mass, 0.3),
+			vx, vy, vz, star ? 3 : rand() % 3 ) );	
 	}
 	g.print();
 }
@@ -145,8 +172,9 @@ int main()
 	g.print();
 	g.iterate( 4 );*/
 
-	cube_gen(100, 15);
+	//cube_gen(100, 30);
 	//spiral_gen();
+	disk_gen( 20000, 1000 );
 	
 	return 0;
 }
