@@ -518,36 +518,36 @@
 \begin{frame}[fragile]
 	\frametitle{Algorytm detekcji kolizji}
 
-	\begin{verbatim}
-foreach planet p in parallel
+	\begin{semiverbatim}
+foreach planet p in \alert<+>{parallel}
    id = p.index + 1
    while id < count[ p.cluster ]
       if( kolizja( p, planet[ shuffle[ id ] ] ) )
-         k[ shuffle[ p.id ] ] = shuffle[ id ]
+         \alert<+>{k[ shuffle[ p.id ] ] = shuffle[ id ]}
          return;
       ++id
-   k[ shuffle[ p.id ] ] = shuffle[ p.id ]
-	\end{verbatim}
+   \alert<+>{k[ shuffle[ p.id ] ] = shuffle[ p.id ]}
+	\end{semiverbatim}
 \end{frame}
 
 \begin{frame}[fragile]
 	\frametitle{Algorytm obsługi kolizji}
-	\begin{verbatim}
+	\begin{semiverbatim}
 done = false
-k_in = k
+\alert<+>{k_in = k}
 while !done
    done = true
    foreach planet p in parallel   
-      if( k_in[ p.id ] == p.id )
+      \alert<+>{if( k_in[ p.id ] == p.id )}
          k_out[ p.id ] = p.id
          return
-      if( k_in[ k_in[ p.id ] ] != k_in[ p.id ] )
+      \alert<+>{if( k_in[ k_in[ p.id ] ] != k_in[ p.id ] )}
          k_out[ p.id ] = k_in[ p.id ]
          done = false
       merge( p, planet[ k_in[ p.id ] ] )
-      k_out[ p.id ] = p.id
-   k_in <=> k_out
-   \end{verbatim}
+      \alert<+>{k_out[ p.id ] = p.id}
+   \alert<+>{k_in <=> k_out}
+   \end{semiverbatim}
 \end{frame}
 
 \frame
