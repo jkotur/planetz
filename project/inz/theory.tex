@@ -23,5 +23,31 @@ Deferred rendering polega na dwu przejściowym generowaniu finalnego obrazu. W p
 \item{Wymagane MTR} - ponieważ buforów jest wiele, wymagana od karty jest technologia MTR, czyli multiple target render, dzięki której można wygenerować za jednym zamachem wszystkie bufory. Na starych kartach graficznych potrzebne było tyle przejść ile jest buforów, co powoduje wielokrotne obliczenia geometrii
 \end{description}
 
-\subsection{Układy planetarne}\label{sub:uklady planetarne}
+\subsection{Układy planetarne i klasteryzacja}\label{sub:uklady planetarne}
 
+\paragraph{}
+Zadanie silnika fizycznego w najprostszym ujęciu nie jest zbyt skomplikowane. Musi on na bieżąco obliczać położenia planet, podczas gdy oddziałują na nie pozostałe planety. Zasadniczo złożoność takich obliczeń jest rzędu \ensuremath{O(n^2)}. Siła oddziaływania planet między sobą jest opisana znanym z liceum wzorem:
+
+		$$ \overrightarrow{F_{ij}} = G\frac{m_i m_j}{r^2}\overrightarrow{e_{ij}}  $$
+
+gdzie: 
+
+$ \overrightarrow{F_{ij}} $ - wektor siły działającej na ciało $i$ w wyniku oddziaływania z ciałem $j$. 
+
+$ G $ - stała grawitacji. 
+ 
+$ m_i $ - masa ciała $i$. 
+
+$ r $ - odległość ciał $i$ oraz $j$. 
+
+$ e_{ij} $ - wektor jednostkowy, skierowany od ciała $i$ do ciała $j$. 
+
+\paragraph{}
+
+Jak widać z powyższego wzoru, siła maleje wprost proporcjonalnie do $ \frac {1}{r^2} $. W praktyce oznacza to, że dla pojedyńczych, odległych od siebie planet, siła oddziaływania jest pomijalnie niska. W związku z tym można podzielić przestrzeń na klastry. Wewnątrz każdego klastra liczone są wszystkie oddziaływania. Ponadto, liczone są także sumaryczne oddziaływania klastrów między sobą, a prędkość wypadkowa z tych oddziaływań jest dodawana do prędkości każdej z planet w klastrze.
+
+\paragraph{}
+Pozwala to na zmniejszenie ilości obliczeń. Złożoność teoretyczna dla modelu, w którym każdy z $k$ klastrów posiada $n/k$ elementów, wynosi $O(\frac{n^2}{k} + k^3 + nk)$. W efekcie, jeżeli przyjmiemy liczbę klastrów równą $\sqrt{n}$, złożoność wyniesie $O(n\sqrt{n})$. W praktyce okazuje się, że nie jest to zawsze najlepszy dobór wartości k. Wynika to m.in. z faktu, iż podział na klastry zwykle nie jest równomierny. Należy także pamiętać o narzucie obliczeniowym związanym z wyliczaniem samych klastrów, który został w powyższym rozumowaniu pominięty.
+
+\paragraph{}
+Do podziału przestrzeni planet na klastry używany jest algorytm k-means. Jest to algorytm heurystyczny, przez co trudno jest szacować jego złożoność. W ogólnym przypadku problem klasteryzacji jest problemem NP-trudnym. Wynik oraz czas działania algorytmu k-means zależą znacząco od wyboru punktów początkowych. W naszym przypadku idealnymi punktami początkowymi są środki $k$ najcięższych planet, gdyż skupiają one wokół siebie inne, lżejsze ciała. Pozwala to na zadowalająco szybkie znajdywanie poprawnych klastrów tym algorytmem.
