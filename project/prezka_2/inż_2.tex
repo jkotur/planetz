@@ -398,6 +398,149 @@
 
 %\section{Picking}\label{sec:picking}
 
+\section{Reprezentacja klastrów}
+
+\frame
+{
+	\frametitle{Reprezentacja klastrów}
+	\begin{figure}
+	\centering
+		\includegraphics[height=5cm]{img/clusters.pdf}
+	\end{figure}
+	\setcounter{subfigure}{0}
+}
+
+\frame
+{
+	\frametitle{shuffle i count}
+	\begin{figure}
+		\centering
+		Count: \\
+		\begin{tabular}{|c|c|c|}
+		\hline
+		0 & 1 & 2 \\
+		\hline
+		2 & 5 & 7 \\
+		\hline
+		\end{tabular} \\
+		\pause
+		\vspace{1cm}
+		Shuffle: \\
+		\begin{tabular}{|c|c||c|c|c||c|c|}
+		\hline
+		0 & 1 & 2 & 3 & 4 & 5 & 6 \\
+		\hline
+		1 & 3 & 2 & 4 & 5 & 0 & 6 \\
+		\hline
+		\end{tabular} \\
+	\end{figure}
+}
+
+\frame
+{
+	\frametitle{Usuwanie planet}
+	\begin{figure}
+		\centering
+		\includegraphics[height=5cm]{img/clusters.pdf}
+	\end{figure}
+	\setcounter{subfigure}{0}
+}
+
+\frame
+{
+	\frametitle{Usuwanie planet}
+	\begin{figure}
+		\centering
+		\includegraphics[height=5cm]{img/clusters2.pdf}
+	\end{figure}
+	\setcounter{subfigure}{0}
+}
+
+\frame
+{
+	\frametitle{Usuwanie planet}
+	Rodzaje:
+	\begin{itemize}
+	\item Usuniecie logiczne
+	\item Usunięcie fizyczne
+	\end{itemize}
+}
+
+\frame
+{
+	\frametitle{Usunięcie logiczne}
+	\begin{itemize}
+		\item dla grafiki:
+		\begin{itemize}
+			\item{Obiekty zerowych rozmiarów są niewidoczne}
+			\item{promień = 0}
+		\end{itemize}
+		\item dla fizyki:
+		\begin{itemize}
+			\item{Obiekty o zerowej masie nie wpływają na inne}
+		\end{itemize}
+		\hspace{0.6cm}
+		$$ \overrightarrow{F_1} = G\frac{m_1 m_2}{r^2}\overrightarrow{e_{12}}  $$
+		$$ \overrightarrow{a_1}m_1 = G\frac{m_1 m_2}{r^2}\overrightarrow{e_{12}}  $$
+		$$ \overrightarrow{a_1} = G\frac{m_2}{r^2}\overrightarrow{e_{12}}  $$
+	\end{itemize}
+}
+
+\frame
+{
+	\frametitle{Usunięcie fizyczne}
+	\begin{itemize}
+	\item{cudppCompact}
+	\item{cudppScan + Compacter}
+	\end{itemize}
+}
+
+\section{Kolizje}
+
+\frame
+{
+	\frametitle{Podział akcji}
+	\begin{itemize}
+		\item Detekcja kolizji
+		\item Obsługa kolizji
+	\end{itemize}
+}
+
+\begin{frame}[fragile]
+	\frametitle{Algorytm detekcji kolizji}
+
+	\begin{verbatim}
+foreach planet p in parallel
+   id = p.index + 1
+   while id < count[ p.cluster ]
+      if( kolizja( p, planet[ shuffle[ id ] ] ) )
+         k[ shuffle[ p.id ] ] = shuffle[ id ]
+         return;
+      ++id
+   k[ shuffle[ p.id ] ] = shuffle[ p.id ]
+	\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Algorytm obsługi kolizji}
+	\begin{verbatim}
+done = false
+k_in = k
+while !done
+   done = true
+   foreach planet p in parallel   
+      if( k_in[ p.id ] == p.id )
+         k_out[ p.id ] = p.id
+         return
+      if( k_in[ k_in[ p.id ] ] != k_in[ p.id ] )
+         k_out[ p.id ] = k_in[ p.id ]
+         done = false
+      merge( p, planet[ k_in[ p.id ] ] )
+      k_out[ p.id ] = p.id
+   k_in <=> k_out
+   \end{verbatim}
+\end{frame}
+
 \frame
 {
 	\frametitle{Koniec}
@@ -408,4 +551,5 @@
 }
 
 \end{document}
+
 
