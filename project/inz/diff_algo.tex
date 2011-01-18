@@ -13,15 +13,19 @@ Powiązana zmiana z wyżej wymienioną dotyczy dynamicznego generowania geometri
 
 Użycie deferred renderingu poniosło za sobą pewne zmiany w strukturze programu. Niepotrzebne okazały się wszelkie struktury odpowiedzialne za generowanie, oraz przetrzymywanie geometrii. Konieczne natomiast stało się generowanie map normalnych, oraz map atmosfery. Jednak to zadanie silnik graficzny realizuje sam, dlatego w efekcie zarządzanie pamięcią się uprościło, na rzecz skomplikowania silnika graficznego.
 
-\subsubsection{Struktura programu}\label{ssub:struktura programu}
+\subsubsection{Atmosfery}\label{ssub:atmosfery}
 \paragraph{}
 
-Podejście deferred renderingu spowodowało również to, że silnik graficzny musi mieć wszystko pod swoją kontrolą. Nie można już założyć że każdy efekt graficzny komunikuje się niezależnie z openglem. Spowodowane jest to niestandardowym podejściem do wyświetlania planet. Dlatego usunięte z struktury programu zostały oddzielne klasy realizujące każdy efekt graficzny, na rzecz jednej klasy wyświetlającej całość planet.
+Pierwotnie atmosfery miały być półprzezroczystymi kulami otaczającymi planety. Ponieważ jednak zrezygnowaliśmy z forward renderingu, konieczna była zmiana i sposobu renderowania atmosfer. W wyniku naszych prac, atmosfery są wyświetlane w oddzielnym przejściu deferred renderingu, bardzo analogicznie do wyświetlania planet.
 
-\subsubsection{Wybór}\label{ssub:klikanie}
+\subsubsection{Komety}\label{ssub:komety}
 \paragraph{}
 
-Niestandardowy silnik graficzny spowodował również, że niemożliwe było użycie bezpośrednio opengla do sprawdzania która planeta została kliknięta myszką. Konieczne było napisanie swojego rozwiązania. Bazuje ono mocno na podejściu które można znaleźć w openglu, jednak jest napisane ręcznie.
+Pierwotne założenie pracy inżynierskiej było takie, że wśród planet znajdą się również komety. Zostały one usunięte z projektu z dwóch powodów. Pierwszym jest zmiana sposobu wyświetlania planet. Pierwotnie komety miały być wyświetlane jako chmura cząstek lecących za planetą. Zmiana podejścia do wyświetlania planet sprawiła że komety też powinny być wyświetlane inaczej. Kolejnym pomysłem było rysowanie półprzezroczystych ogonów za planetami. Ponieważ jednak deferred rendering bardzo źle radzi sobie z przezroczystościami, trzeba by robić duże zmiany w silniku graficznym aby móc wyświetlić komety. Drugim powodem jest kierunek ogona komety. Okazało się że ogon komety nie ciągnie się, jak nam się wcześniej wydawało, za planetą, natomiast jest powodowany wiatrem słonecznym. W szczególności kometa oddalająca się od gwiazdy, może mieć ogon w tym samym kierunku w którym leci. Zastanawialiśmy się czy nie oszukać i nie generować ogonów komet za kometami, tak jak się popularnie sądzie. Jednak naszym głównym celem było realistyczne oddanie układów planetarnych, dlatego takie oszustwo wydało nam się zbyt duże i zbyt mylące.
+
+\paragraph{}
+
+W efekcie poprawne generowanie ogonów komet spowodowałoby bardzo znaczne obliczenia. Należały by bardzo skomplikować silnik graficzny, co nie odbyło by się bez dodatkowego spowolnienia go, oraz tak naprawdę podwoić obliczenia w silniku fizycznym. Ponieważ już teraz program działa na granicy czasu rzeczywistego dla dużych układów, zdecydowaliśmy się na wykluczenie efektu komet z finalnej wersji projektu. W zamian dodaliśmy moduł który śledzi ruch planet, pozwalając obserwować ich trajektorię.
 
 \subsection{Silnik fizyczny}\label{sub:silnik fizyczny}
 \subsubsection{Kolizje}

@@ -79,7 +79,7 @@
 -----------+--------+--------+--------+----------
  texture 1 | pos.x  | pos.y  | pos.z  | alpha
  texture 2 | norm.x | norm.y | norm.z | acol.r
- texture 3 | col.x  | col.y  | col.b  | acol.g   
+ texture 3 | col.r  | col.g  | col.b  | acol.g   
  texture 4 | ke     | ka     | kd     | acol.b
 	\end{verbatim}
 \end{frame}
@@ -217,8 +217,8 @@
 	\frametitle{Pozycje}
 
 	\begin{description}
-	\item[$pozycja$] -- pozycja płaszczyzny w danym pikselu
-	\item[$normalna$] -- normalna płaszczyzny w danym pikselu
+	\item[$pozycja$] -- pozycja powierzchni w danym pikselu
+	\item[$normalna$] -- normalna powierzchni w danym pikselu
 	\item[$promien$] -- promień planety
 	\item[$pozycja\_planety$] -- środek planety
 	\end{description}
@@ -338,6 +338,7 @@
 		u &=& \lambda cos(\phi) \\
 		v &=& \phi
 		\end{eqnarray*}
+	\pause
 	\item Współrzędne:
 		\begin{eqnarray*}
 		\lambda &=& \arctan(\frac{z}{x}) \\
@@ -381,6 +382,19 @@
 	}
 	\end{eqnarray*}
 }
+
+\frame
+{
+	\frametitle{Tekstury}
+	\begin{figure}
+	\centering
+		\includegraphics[height=7cm]{img/per4.png}
+	\label{fig:per4}
+	\end{figure}
+}
+
+%\subsection{Atmosfery}\label{sub:atmosfery}
+%\frame{ \frametitle{Silnik graficzny} \tableofcontents[currentsubsection] }
 
 %\section{Picking}\label{sec:picking}
 

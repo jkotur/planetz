@@ -37,7 +37,7 @@ void main()
 
 	float dist = length(lightDir);
 //        dist = dist * dist / 10;
-	dist /= 50; // magic constans
+	dist /= 100; // magic constans
 	dist /= ke;
         lightDir = normalize(lightDir);
 

@@ -142,7 +142,7 @@ void PlanetzPicker::render( int x , int y )
 	glPushMatrix ();
 	glLoadIdentity ();
 	gluPickMatrix( x , viewport[3]-y , winw , winh , viewport);
-	gluPerspective(75.0, (float)winw/(float)winh, 1, 10000);
+	gluPerspective(75.0, (float)winw/(float)winh, 1, VIEW_LENGHT );
 
 	glMatrixMode(GL_MODELVIEW);
 	

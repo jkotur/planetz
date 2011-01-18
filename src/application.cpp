@@ -13,7 +13,7 @@
 
 using boost::bind;
 
-#define CAM_START_VECS Vector3(10,10,10),Vector3(0,0,0),Vector3(0,1,0)
+#define CAM_START_VECS Vector3(0,0,4),Vector3(0,0,0),Vector3(0,1,0)
 
 Application::Application( Window& win , Config& cfg )
 	: fps(0)

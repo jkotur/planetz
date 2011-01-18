@@ -22,6 +22,8 @@
 #define CAM_ROT_SPEED 1.15
 #define BASE_CAM_SPEED 0.15
 
+#define VIEW_LENGHT 1000000
+
 #define PI 3.1415
 #define PI2 6.283
 
