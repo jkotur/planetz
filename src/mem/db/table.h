@@ -117,9 +117,7 @@ namespace MEM
 			ss << (*i)->getSaveString() << std::endl;
 		}
 		ss << transaction_end;
-		log_printf(DBG, "gettin save string done: %s\n", ss.str().c_str());
-		fflush(stdout);
-		fflush(stderr);
+		//log_printf(DBG, "gettin save string done: %s\n", ss.str().c_str());
 		return ss.str();
 	}
 

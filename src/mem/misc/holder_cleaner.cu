@@ -29,6 +29,13 @@ void PlanetHolderCleaner::work()
 	}
 }
 
+void PlanetHolderCleaner::forceFilter()
+{
+	createFilter();
+	filterHolder();
+	needChecking = false;
+}
+
 void PlanetHolderCleaner::notifyCheckNeeded()
 {
 	needChecking = true;

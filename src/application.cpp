@@ -118,7 +118,8 @@ bool Application::init()
 	pl->on_sim_speed_changed.connect( bind(&Application::set_phx_speed,this,_1) );
 	pl->on_pause_click.connect( bind(&Application::pause_toggle,this) );
 	pl->on_reset_click.connect( bind(&Application::reset,this) );
-	pl->on_save.connect( bind(&MEM::DataFlowMgr::save,&data_mgr,_1) );
+	pl->on_save.connect( 1, bind(&MEM::DataFlowMgr::save,&data_mgr,_1) );
+	pl->on_save.connect( 0, bind(&MEM::MISC::PlanetHolderCleaner::forceFilter,&phcleaner) );
 	pl->on_load.connect( bind(&MEM::DataFlowMgr::load,&data_mgr,_1) );
 	pl->on_load.connect( bind(&Application::pause_anim,this) );
 	pl->on_load.connect( bind(&GFX::PlanetsTracer::clear,&trace) );

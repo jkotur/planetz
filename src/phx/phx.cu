@@ -268,6 +268,8 @@ void Phx::CImpl::handle_collisions()
 	MEM::MISC::BufferCu<unsigned> merge_needed(1);
 	unsigned *in_merges = merges1.d_data();
 	unsigned *out_merges = merges2.d_data();
+	ConstChecker<float3, MEM::MISC::BufferCu> vel_checker;
+	vel_checker.setBuf( &planets->getVelocities(), planets->size() );
 
 	do
 	{
@@ -288,6 +290,8 @@ void Phx::CImpl::handle_collisions()
 
 		if( merge_needed.retrieve() == 0 )
 		{
+			ConstChecker<float3, MEM::MISC::BufferCu> vel_checker;
+			vel_checker.setBuf( &planets->getVelocities(), planets->size() );
 			if( !merge_performed )
 				return;
 
@@ -298,6 +302,23 @@ void Phx::CImpl::handle_collisions()
 			return;
 		}
 		merge_performed = true;
+#if 0
+		//////// DEBUG
+		merges2.bind();
+		unsigned *h_merges = merges2.h_data();
+		for( unsigned i = 0; i < threads; ++i )
+		{
+			unsigned tmp = i;
+			while( tmp != h_merges[tmp] )
+			{
+				log_printf( INFO, "%u -> %u%c", tmp, h_merges[tmp], h_merges[tmp]==h_merges[h_merges[tmp]]?'\n':' ' );
+				tmp = h_merges[tmp];
+			}
+		}
+		merges2.unbind();
+		abort();
+		//////// END DEBUG
+#endif
 
 		MEM::MISC::BufferCu<unsigned> done(1);
 		
