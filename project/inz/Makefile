@@ -3,7 +3,7 @@ NAME=inż
 all: pdf
 
 clean:
-	rm $(NAME).aux $(NAME).log $(NAME).toc $(NAME).out
+	rm $(NAME).aux $(NAME).log $(NAME).toc $(NAME).out $(NAME).bbl $(NAME).blg
 
 pdf:
 	pdflatex $(NAME).tex
@@ -17,3 +17,6 @@ bib:
 
 run: pdf
 	evince $(NAME).pdf
+
+bibrun: bib run
+
