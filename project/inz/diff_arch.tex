@@ -2,12 +2,12 @@
 
 Podczas prac nad programem zmianom uległy podstawowe założenia silnika graficznego, co miało znaczący wpływ na architekturę programu. Niektóre moduły wypadły zupełnie, niektóre zostały zmienione, a jeszcze inne dodane. Poniżej znajduje się nowy diagram modułów, oraz opis tych które są nowe, bądź uległy zmianie.
 
-%\begin{figure}
-%\centering
-%        \includegraphics[width=0.5\textwidth]{img/proj_rend.jpg}
-%\caption{Rzut perspektywiczny sześcianów}
-%\label{fig:proj}
-%\end{figure}
+\begin{figure}[ht!]
+\centering
+	\includegraphics[width=\textwidth]{img/cpu_classes_revisited.pdf}
+\caption{Aktualny diagram klas}
+\label{fig:cpudiarev}
+\end{figure}
 
 \begin{description}
 \item[\texttt{Window}] klasa powstała aby zarządzać oknem aplikacji.
@@ -23,11 +23,4 @@ Podczas prac nad programem zmianom uległy podstawowe założenia silnika grafic
 \item[\texttt{UI::CameraMgr}] zastąpiła dawną klasę \texttt{GFX::Camera}. Dzięki niej możliwa jest zmiana kamer i zarządzanie nimi.
 \item[\texttt{UI::Camera}] jest bazową klasą dla wszystkich rodzajów kamer.
 \end{description}
-\paragraph{}
 
-Podejście deferred renderingu spowodowało również to, że silnik graficzny musi mieć wszystko pod swoją kontrolą. Nie można już założyć że każdy efekt graficzny komunikuje się niezależnie z openglem. Spowodowane jest to niestandardowym podejściem do wyświetlania planet. Dlatego usunięte z struktury programu zostały oddzielne klasy realizujące każdy efekt graficzny, na rzecz jednej klasy wyświetlającej całość planet.
-
-\subsubsection{Wybór}\label{ssub:klikanie}
-\paragraph{}
-
-Niestandardowy silnik graficzny spowodował również, że niemożliwe było użycie bezpośrednio opengla do sprawdzania która planeta została kliknięta myszką. Konieczne było napisanie swojego rozwiązania. Bazuje ono mocno na podejściu które można znaleźć w openglu, jednak jest napisane ręcznie.
