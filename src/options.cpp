@@ -17,7 +17,7 @@ Options::Options()
 	, desc("Opcje")
 {
 	desc.add_options()
-		("help", "produce help message")
+		("help,h", "produce help message")
 		("resolution,r", po::value< vector<int> >()->multitoken(),
 		 "window resolution")
 		("fullscreen,f", po::value<bool>(),
