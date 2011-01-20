@@ -1,15 +1,26 @@
 NAME=inż
+TITLE=strona_tytułowa
+INTRO=streszczenie
 
 all: pdf
 
 clean:
-	rm $(NAME).aux $(NAME).log $(NAME).toc $(NAME).out $(NAME).bbl $(NAME).blg
+	for x in $(NAME) $(TITLE) $(INTRO) ;\
+	do \
+		rm $$x.aux $$x.log $$x.toc $$x.out $$x.bbl $$x.blg 2> /dev/null ;\
+	done 
+
 
 pdf:
 	pdflatex $(NAME).tex
 
-bib:
-	pdflatex $(NAME).tex
+title:
+	pdflatex $(TITLE).tex
+
+intro:
+	pdflatex $(INTRO).tex
+
+bib: pdf
 	bibtex $(NAME).aux
 	pdflatex $(NAME).tex
 	pdflatex $(NAME).tex
