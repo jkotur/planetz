@@ -2,11 +2,9 @@
 \subsubsection{Geometria}\label{ssub:geometria}
 \paragraph{}
 
-Największą zmianą dla silnika graficznego była zmiana podejścia renderowania planet. W pierwotnych założeniach użyty miał zostać standardowy forward rendering, który wymaga siatek zarówno dla geometrii, jak i do tekstur. Po testach, okazało się że z powodów ograniczeń technicznych zastosowanie forward renderingu w takiej formie w jakiej chcieliśmy jest niemożliwe. Przeszkodą były ograniczenia karty graficznej, która pozwala na generowanie zaledwie około 100 wierzchołków przy pomocy geometry shaderów. Dla realistycznego wyglądu kuli potrzebne było natomiast przy zbliżeniach około 1000. Wszelkie podejścia wyświetlenia tak dużej geometrii prosto z karty graficznej, były skazane na niepowodzenie. Dlatego zdecydowaliśmy się na użycie techniki nazywanej deferred renderingiem. Ma ona te zalety że skaluje się bardzo dobrze dla wielu obiektów, oraz można było przy jej pomocy uzyskać realistyczne kule bez dużej ilości geometrii w programie. Wadami takiego rozwiązania są dość duże koszty, związane ze sporymi buforami ekranu, oraz obliczeniami per-piksel. Dodatkowo na starszych kartach bez MTR (Multiple Render Targets), są dodatkowe nakłady związane z wymuszonym robieniem kilku przejść. W efekcie silnik graficzny, aby działać wydajnie potrzebuje dość nowych kart graficznych, co i tak było wymuszone przez użycie CUDA w silniku fizycznym.
-
+Największą zmianą dla silnika graficznego była zmiana podejścia renderowania planet. W pierwotnych założeniach użyty miał zostać standardowy forward rendering, który wymaga siatek zarówno dla geometrii, jak i do tekstur. Po testach, okazało się że z powodów ograniczeń technicznych zastosowanie forward renderingu w takiej formie w jakiej chcieliśmy jest niemożliwe. Przeszkodą były ograniczenia karty graficznej, która pozwala na generowanie zaledwie około 100 wierzchołków przy pomocy geometry shaderów. Dla realistycznego wyglądu kuli potrzebne było natomiast przy zbliżeniach około 1000. Wszelkie podejścia wyświetlenia tak dużej geometrii prosto z karty graficznej, były skazane na niepowodzenie. Dlatego użycie techniki deferred renderingu.
 \paragraph{}
-
-Powiązana zmiana z wyżej wymienioną dotyczy dynamicznego generowania geometrii. W pierwotnych założeniach siatki planet miały być generowane na różnym poziomie dokładności, następnie wyświetlana miała być właściwa dla danej planety. W podejściu deferred renderingu nie jest to konieczne, ponieważ obliczenia są robione dla każdego piksela. Oznacza to, że jeśli planeta widoczna jest jako kilka pikseli, obliczenia dla niej będą wykonywane tylko dla tych kilku pikseli. Deferred rendering w tym przypadku skaluje się idealnie, i nie ma potrzeby poprawiania go.
+Powiązana zmiana dotyczy dynamicznego generowania geometrii. W pierwotnych założeniach siatki planet miały być generowane na różnym poziomie dokładności, następnie wyświetlana miała być właściwa dla danej planety. W podejściu deferred renderingu nie jest to konieczne, ponieważ obliczenia są robione dla każdego piksela. Oznacza to, że jeśli planeta widoczna jest jako kilka pikseli, obliczenia dla niej będą wykonywane tylko dla tych kilku pikseli. Deferred rendering w tym przypadku skaluje się idealnie, i nie ma potrzeby poprawiania go.
 
 \subsubsection{Pamięć}\label{ssub:pamiec}
 \paragraph{}
@@ -16,7 +14,7 @@ Użycie deferred renderingu poniosło za sobą pewne zmiany w strukturze program
 \subsubsection{Atmosfery}\label{ssub:atmosfery}
 \paragraph{}
 
-Pierwotnie atmosfery miały być półprzezroczystymi kulami otaczającymi planety. Ponieważ jednak zrezygnowaliśmy z forward renderingu, konieczna była zmiana i sposobu renderowania atmosfer. W wyniku naszych prac, atmosfery są wyświetlane w oddzielnym przejściu deferred renderingu, bardzo analogicznie do wyświetlania planet.
+Pierwotnie atmosfery miały być półprzezroczystymi kulami otaczającymi planety. Ponieważ jednak zrezygnowaliśmy z forward renderingu, konieczna była zmiana i sposobu renderowania atmosfer. W wyniku naszych prac, atmosfery są wyświetlane w oddzielnym przejściu deferred renderingu, bardzo analogicznie do wyświetlania planet. Dokładny opis aktualnego algorytmu wyświetlającego atmosfery znajduje się w rozdziale \hyperref[sub:atmosfery]{\ref{sub:atmosfery}}.
 
 \subsubsection{Komety}\label{ssub:komety}
 \paragraph{}
