@@ -1,0 +1,11 @@
+\subsubsection{Jakub Kotur}\label{ssub:jakub kotur}
+
+Projekt ten był podzielony na dwa podstawowe moduły. Jednym był silnik graficzny, drugim silnik fizyczny. Oba moduły były dobrze izolowane od siebie, a wymieniały się jedynie buforami, których specyfikacja została ustalona na początku projektu wspólnie i nie zmieniła się aż do końca projektu. Oprócz tych dwóch największych części były też liczne dodatkowe moduły programu. Poniżej są wymienione wraz z opisem moduły za które byłem odpowiedzialny.
+
+\begin{description}
+\item[Silnik graficzny] jest największym modułem odpowiedzialnym za wyświetlanie planet wraz z atmosferami na ekran. Posiada on dość skąpy interfejs, pozwalający z grubsza na inizjalizację i wyświetlanie.
+\item[Interfejs użytkownika] odpowiedzialny jest za komunikację z użytkownikiem. Zaliczyć do tego można interfejs graficzny, przy użyciu biblioteki CEGUI, oraz obsługę peryferii, takich jak myszka i klawiaturę, przy użyciu biblioteki SDL.
+\item[Wybór planet], czyli moduł odpowiedzialny za zwracanie id planety którą wybrał użytkownik myszką. Z powodu niekonwencjonalnego silnika graficznego został napisany od zera jedynie przy użyciu OpenGLa.
+\item[Konfiguracja] programu utworzona została przy użyciu \texttt{boost::program\_options}. Składa się na to moduł odpowiedzialny za czytanie pliku, oraz parametrów konsoli i zamiana go na mapę opcji, oraz propagacja tej mapy po programie.
+\end{description}
+
