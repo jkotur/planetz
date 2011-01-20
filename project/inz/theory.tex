@@ -1,11 +1,11 @@
 \subsection{Deferred rendering}\label{sub:deferred rendering}
 \paragraph{}
 
-Silnik graficzny został napisany przy użyciu popularnej ostatnio techniki deferred rendering~\cite{gpugems:deferred}~\cite{calver:deferred}. Popularna jest dopiero od niedawana, ponieważ wymaga stosunkowo nowych i silnych kart graficznych. W nagrodę natomiast, pozwala ona na dużą kontrolę nad procesem renderowania, oraz pozwala na tworzenie ciekawych efektów graficznych stosunkowo łatwo. Bardzo dobrze zachowuje się również przy licznych obiektach oraz dużych przestrzeniach. W przypadku układów planetarnych mamy do czynienia z takim właśnie wariantem. Wybór tej techniki pozwolił dodatkowo na optymalizację dzięki której geometria w programie została ograniczona do niezbędnego minimum. Powoduje to oczywiście dodatkowe koszty, jednak są one o wiele mniejsze niż w przypadku standardowego podejścia forward renderingu.
+Silnik graficzny został napisany przy użyciu popularnej ostatnio techniki deferred rendering~\cite{gpugems:deferred}~\cite{calver:deferred}. Jest ona popularna dopiero od niedawana, ponieważ wymaga stosunkowo nowych i silnych kart graficznych. Pozwala ona jednak na dużą kontrolę nad procesem renderowania oraz umożliwia tworzenie ciekawych efektów graficznych w stosunkowo łatwy sposób. Bardzo dobrze sprawdza się również przy dużej ilości obiektów oraz otwartych przestrzeniach. Nadaje się zatem idealnie do wyświetlania układów planetarnych. Wybór tej techniki pozwolił także na optymalizację, dzięki której geometria w programie została ograniczona do niezbędnego minimum. Spowodowało to pewne dodatkowe koszty, jednak były one o wiele niższe niż w przypadku standardowego podejścia, czyli forward renderingu.
 
 \paragraph{}
 
-Deferred rendering polega na dwu przejściowym generowaniu finalnego obrazu. W pierwszym przejściu, przeliczana jest geometria, a wynik tych obliczeń wpisywany jest do specjalnego bufora ekranu, nazywanego g-buforem. W g-buforze zapisywane są informacje o pozycji, normalnej, kolorze danego piksela ekranu. W zależności od danego silnika bufor ten może zawierać różne dane. W drugim przejściu, na podstawie tego bufora liczone są wszystkie efekty graficzne, takie jak oświetlenie, cienie, dla każdego piksela oddzielnie. Takie podejście pozwala na bardzo wiele, oraz jest stosunkowo wydajne, posiada jednak wady. Poniżej przedstawione są wady jak i zalety deferred renderingu.
+Deferred rendering polega na dwuprzejściowym generowaniu finalnego obrazu. W pierwszym przejściu, przeliczana jest geometria, a wynik tych obliczeń wpisywany jest do specjalnego bufora ekranu, nazywanego g-buforem. W g-buforze zapisywane są informacje o pozycji, normalnej oraz kolorze danego piksela ekranu. W zależności od danego silnika bufor ten może zawierać różne dane. W drugim przejściu, na podstawie tego bufora liczone są wszystkie efekty graficzne, takie jak oświetlenie, cienie, dla każdego piksela oddzielnie. Takie podejście pozwala na bardzo wiele, oraz jest stosunkowo wydajne, posiada jednak wady. Poniżej przedstawione są wady jak i zalety deferred renderingu.
 
 \paragraph{Zalety}
 
@@ -20,13 +20,13 @@ Deferred rendering polega na dwu przejściowym generowaniu finalnego obrazu. W p
 \item{Wielkość buforów} - bufory ekranu zajmują bardzo dużo miejsca, przy rozdzielczości full hd może być to nawet 50MB, co dla starych kart graficznych było wielkościami ogromnymi
 \item{Przezroczystość} - ponieważ obliczenia są robione tylko raz dla każdego bufora, niemożliwe jest zrobienie przezroczystości w ten sposób
 \item{Dużo obliczeń} - niezależnie od sceny obliczenia są proporcjonalne do wielkości ekranu i robione dla piksela. Dla starych kart graficznych jest to o wiele za ciężkie rozwiązanie
-\item{Wymagane MRT} - ponieważ buforów jest wiele, wymagana od karty jest technologia MRT, czyli multiple render target, dzięki której można wygenerować za jednym zamachem wszystkie bufory. Na starych kartach graficznych potrzebne było tyle przejść ile jest buforów, co powoduje wielokrotne obliczenia geometrii
+\item{Wymagane MRT} - ponieważ buforów jest wiele, wymagana od karty jest technologia MRT, czyli multiple render target, dzięki której można wygenerować jednocześnie wszystkie bufory. Na starych kartach graficznych potrzebne było tyle przejść ile jest buforów, co powoduje wielokrotne obliczenia geometrii
 \end{description}
 
 \subsection{Układy planetarne i klasteryzacja}\label{sub:uklady planetarne}
 
 \paragraph{}
-Zadanie silnika fizycznego w najprostszym ujęciu nie jest zbyt skomplikowane. Musi on na bieżąco obliczać położenia planet, podczas gdy oddziałują na nie pozostałe planety. Zasadniczo złożoność takich obliczeń jest rzędu \ensuremath{O(n^2)}. Siła oddziaływania planet między sobą jest opisana znanym z liceum wzorem:
+Zadanie silnika fizycznego w najprostszym ujęciu nie jest zbyt skomplikowane. Musi on na bieżąco obliczać położenia planet, podczas gdy oddziałują na nie pozostałe planety. Zasadniczo złożoność takich obliczeń jest rzędu \ensuremath{O(n^2)} w każdej klatce fizyki. Siła oddziaływania planet między sobą jest opisana znanym z liceum wzorem:
 
 		$$ \overrightarrow{F_{ij}} = G\frac{m_i m_j}{r^2}\overrightarrow{e_{ij}}  $$
 
@@ -44,10 +44,25 @@ $ e_{ij} $ - wektor jednostkowy, skierowany od ciała $i$ do ciała $j$.
 
 \paragraph{}
 
-Jak widać z powyższego wzoru, siła maleje wprost proporcjonalnie do $ \frac {1}{r^2} $. W praktyce oznacza to, że dla pojedyńczych, odległych od siebie planet, siła oddziaływania jest pomijalnie niska. W związku z tym można podzielić przestrzeń na klastry. Wewnątrz każdego klastra liczone są wszystkie oddziaływania. Ponadto, liczone są także sumaryczne oddziaływania klastrów między sobą, a prędkość wypadkowa z tych oddziaływań jest dodawana do prędkości każdej z planet w klastrze.
+Jak widać z powyższego wzoru, siła maleje wprost proporcjonalnie do $ \frac {1}{r^2} $. W praktyce oznacza to, że dla pojedynczych, odległych od siebie planet, siła oddziaływania jest pomijalnie niska. W związku z tym można podzielić przestrzeń na klastry. Wewnątrz każdego klastra liczone są wszystkie oddziaływania. Ponadto, liczone są także sumaryczne oddziaływania klastrów między sobą, a prędkość wypadkowa z tych oddziaływań jest dodawana do prędkości każdej z planet w klastrze.
 
 \paragraph{}
-Pozwala to na zmniejszenie ilości obliczeń. Złożoność teoretyczna dla modelu, w którym każdy z $k$ klastrów posiada $n/k$ elementów, wynosi $O(\frac{n^2}{k} + k^3 + nk)$. W efekcie, jeżeli przyjmiemy liczbę klastrów równą $\sqrt{n}$, złożoność wyniesie $O(n\sqrt{n})$. W praktyce okazuje się, że nie jest to zawsze najlepszy dobór wartości k. Wynika to m.in. z faktu, iż podział na klastry zwykle nie jest równomierny. Należy także pamiętać o narzucie obliczeniowym związanym z wyliczaniem samych klastrów, który został w powyższym rozumowaniu pominięty.
+Rozważmy złożoność obliczeniową jednej klatki fizyki przy podziale przestrzeni na klastry. Zakładamy, że $n$ planet podzielono na $k$ klastrów, przy czym każdy klaster zawiera $\frac{n}{k}$ planet. Ilość oddziaływań wewnątrz wszystkich klastrów wynosi:
+$$ k\left(\frac{n}{k}\right)^2 = \frac{n^2}{k}$$
 
 \paragraph{}
-Do podziału przestrzeni planet na klastry używany jest algorytm k-means. Jest to algorytm heurystyczny, przez co trudno jest szacować jego złożoność. W ogólnym przypadku problem klasteryzacji jest problemem NP-trudnym. Wynik oraz czas działania algorytmu k-means zależą znacząco od wyboru punktów początkowych. W naszym przypadku idealnymi punktami początkowymi są środki $k$ najcięższych planet, gdyż skupiają one wokół siebie inne, lżejsze ciała. Pozwala to na zadowalająco szybkie znajdywanie poprawnych klastrów tym algorytmem.
+Należy także obliczyć oddziaływania pomiędzy całymi klastrami planet. Wyliczenie środków oraz sumarycznych mas klastrów wymaga
+$$ k\frac{n}{k} = n $$
+
+\paragraph{}
+obliczeń. Oddziaływań klastrów między sobą jest natomiast
+$$ k^2 $$
+
+\paragraph{}
+Po zsumowaniu otrzymujemy faktyczną złożoność algorytmu:
+$$ O( \frac{n^2}{k} + n + k^2 ) = O( \frac{n^2}{k} + k^2 ) $$
+
+W efekcie, jeżeli przyjmiemy liczbę klastrów równą $\sqrt[3]{n^2}$, złożoność wyniesie $O(n\sqrt[3]{n})$. W praktyce okazuje się, że jest to zbyt duża wartość. Wynika to m.in. z faktu, iż podział na klastry zwykle nie jest równomierny. Należy także pamiętać o narzucie obliczeniowym związanym z wyliczaniem samych klastrów, który został w powyższym rozumowaniu pominięty.
+
+\paragraph{}
+Do podziału przestrzeni planet na klastry używany jest algorytm k-means\cite{kmeans}. Jest to algorytm heurystyczny, przez co trudno jest szacować jego złożoność. W ogólnym przypadku problem klasteryzacji jest problemem NP-trudnym. Wynik oraz czas działania algorytmu k-means zależą znacząco od wyboru punktów początkowych. W naszym przypadku idealnymi punktami początkowymi są środki $k$ najcięższych planet, gdyż skupiają one wokół siebie inne, lżejsze ciała. Pozwala to na zadowalająco szybkie znajdowanie poprawnych klastrów przy użyciu tego algorytmu.

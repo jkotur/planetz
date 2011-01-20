@@ -1,5 +1,14 @@
 \paragraph{}
-Poniższy dokument stanowi podsumowanie projektu, pisanego w ramach przedmiotu Projekt Zespołowy, na wydziale Matematyki i Nauk Informacyjnych Politechniki Warszawskiej w semestrze zimowym 2010/2011.
+Poniższy dokument, będący pracą inżynierską, stanowi podsumowanie projektu, pisanego w ramach przedmiotu Projekt Zespołowy, na wydziale Matematyki i Nauk Informacyjnych Politechniki Warszawskiej w semestrze zimowym 2010/2011.
 
 \paragraph{}
-Opisujemy w nim zasady działania głównych modułów, różnice w stosunku do specyfikacji oraz wnioski z testów akceptacyjnych. Znajduje się tutaj także krótka instrukcja obsługi programu, która pozwoli zapoznać się z nim każdej osobie, która wcześniej nie miała z naszą aplikacją styczności.
+Opisujemy w nim założenia i wymagania projektowe, zasady działania głównych modułów, różnice w stosunku do specyfikacji oraz wnioski z testów akceptacyjnych. Do dokumentu dołączona jest także krótka instrukcja obsługi programu, która pozwoli zapoznać się z nim każdemu, kto wcześniej nie miał z naszą aplikacją styczności.
+
+\paragraph{}
+Celem projektu było stworzenie atrakcyjnej wizualnie aplikacji, która pozwala na symulację dużych układów planetarnych w czasie rzeczywistym. Początkowe założenie mówiło o równoczesnym przeliczaniu minimum 10 tysięcy planet przy zachowaniu płynności animacji. Cel ten udało się zrealizować. Na obecnie dostępnym sprzęcie można z powodzeniem symulować także większe układy.
+
+\paragraph{}
+Osiągnięcie takiej wydajności było możliwe dzięki przeniesieniu praktycznie wszystkich obliczeń fizycznych na kartę graficzną. Użyliśmy w tym celu technologii nVidia CUDA\cite{cuda}. Pozwala ona na pisanie kodu zbliżonego do języka C, który następnie jest wykonywany równolegle na karcie graficznej. Dodatkowo korzystamy także z algorytmu k-means do dzielenia przestrzeni na klastry, w obrębie których liczone są dokładne oddziaływania. Do wyświetlania napisany został wyspecjalizowany silnik graficzny, korzystający z techniki deffered renderingu. Pozwala on nie tylko wydajnie renderować duże ilości planet, ale także oświetlać je światłem bliskich gwiazd i prezentować atmosfery na planetach.
+
+\paragraph{}
+Aplikacja pozwala na swobodne poruszanie się kamerą po wszechświecie lub - jeżeli wolimy - podążanie za wybraną przez nas gwiazdą/planetą. W przypadku zderzenia dwóch planet, powstaje jedna większa, zgodnie z zasadą zachowania pędu. Z poziomu interfejsu użytkownika możliwe jest manipulowanie symulacją - dodawanie i usuwanie planet, zapisywanie i wczytywanie układów do pliku, zmiany prędkości kamery oraz przebiegu symulacji. Możliwa jest także manipulacja ustawieniami wyświetlania. Dodatkowo można włączyć "śledzenie" planet - pozostawiają one wówczas za sobą ślad, co pozwala obejrzeć ich trajektorie. Symulację można w dowolnym momencie zatrzymać - na przykład by obejrzeć "zamrożony" układ z innej perspektywy.

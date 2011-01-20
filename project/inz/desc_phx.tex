@@ -1,8 +1,15 @@
+\subsection{Oddziaływania}
+
+\paragraph{}
+Podstawą silnika fizycznego jest wykonywane równolegle obliczenie oddziaływań planet na siebie, odpowiednia modyfikacja prędkości, a następnie masy każdej z planet. Zrównoleglenie obliczeń jest w tym przypadku trywialne - każda planeta oblicza siły działające na nią samą, iterując kolejno po pozostałych planetach.
+
 \subsection{Klastertyzacja}
 
-\paragraph{} Do klasteryzacji używany jest alorytm k-means. Klastry definiowane są przez dwie tablice - \ensuremath{shuffle} oraz \ensuremath{count}. Do klastra o numerze k należą te planety, których indeksy znajdują się w tablicy \ensuremath{shuffle} pod indeksami z przedziału \ensuremath{< count[k-1], count[k] )}. Przyjmujemy, że \ensuremath{count[-1] = 0}.
+\paragraph{} Do klasteryzacji używany jest alorytm k-means, a właściwie zrównoleglona jego wersja. Klastry definiowane są przez dwie tablice - \ensuremath{shuffle} oraz \ensuremath{count}. Do klastra o numerze k należą te planety, których indeksy znajdują się w tablicy \ensuremath{shuffle} pod indeksami z przedziału \ensuremath{< count[k-1], count[k] )}. Przyjmujemy, że \ensuremath{count[-1] = 0}.
 
 \paragraph{} Taka reprezentacja pozwala na łatwe korzystanie z planet z danego klastra w module fizycznym i jest transparentna dla modułu graficznego.
+
+\paragraph{} Równoległa wersja algorytmu k-means różni się nieco od wersji sekwencyjnej. Jako punkty startowe - początkowe środki klastrów przyjmujemy położenia k najmasywniejszych obiektów - dzięki temu już na początku jesteśmy dość blisko rozwiązania. Powodem tego jest fakt, że w wyniku oddziaływań fizycznych, lżejsze obiekty będą skupiać się wokół cięższych. W każdej iteracji algorytmu najpierw znajdujemy każdej planecie środek klastra (równolegle dla każdej planety). Powstaje nam w ten sposób tablica przypisań. Następnie inicjujemy - równolegle, rzecz jasna - tablicę $shuffle$ kolejnymi liczbami całkowitymi ($shuffle[i]=i$). Korzystając z biblioteki cudpp sortujemy obie tablice - kluczami do posortowania są przypisania kolejnych klastrów, natomiast wartościami - kolejne pola tablicy $shuffle$. W ten sposób dostajemy takie przemapowanie, jakie chcieliśmy. Pozostaje do obliczenia tablica $count$ - aby ją otrzymać, równolegle dla każdego elementu posortowanej tablicy przypisań, sprawdzamy, czy jego przypisanie różni się z przypisaniem sąsiednim. Jeżeli tak, oznacza to, że aktualny wątek jest ostatnim dla swojego klastra, wpisuje on więc swój indeks w tablicy $count$ pod indeksem równym numerowi klastra, do którego przynależy. Następnie pozostaje jedynie obliczyć nowe środki oraz błąd klasteryzacji (średnią odległość od środka klastra). Obie te operacje obliczane są równolegle - standardowym algorytmem redukcji\cite{reduction}. Iteracje powtarzamy, aż stosunek zmiany błędu do samego błędu stanie się wystarczająco mały.
 
 \subsection{Kolizje} w teorii rozwiązywane są prosto - jeżeli dwa obiekty zachodzą na siebie, należy je skleić. Algorytm sekwencyjny do tego celu sprawdzałby kolejne pary planet, usuwając te kolidujące ze sobą. Jeżeli jednak chcemy zrealizować obsługę kolizji równolegle, rozwiązanie naiwne okazuje się nie być prawidłowe. Gdyby każda planeta w osobnym wątku CUDA sprawdzała kolizje ze wszystkimi planetami po kolei, mogłoby dojść do konfliktów.
 
