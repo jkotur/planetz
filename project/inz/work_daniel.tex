@@ -1,0 +1,10 @@
+\subsubsection{Daniel Kłobuszewski}\label{ssub:daniel klobuszewski}
+
+Projekt ten był podzielony na dwa podstawowe moduły. Jednym był silnik graficzny, drugim silnik fizyczny. Oba moduły były dobrze izolowane od siebie, a wymieniały się jedynie buforami, których specyfikacja została ustalona na początku projektu wspólnie i nie zmieniła się aż do końca projektu. Oprócz tych dwóch największych części były też liczne dodatkowe moduły programu. Poniżej są wymienione wraz z opisem moduły za które byłem odpowiedzialny.
+
+\begin{description}
+\item[Silnik fizyczny] jest podstawowym modułem, odpowiadającym za kształt symulacji. Jest odpowiedzialny za ciągłe uaktualnianie pozycji planet, klasteryzację oraz obsługę kolizji.
+\item[Baza danych], czyli obsługa zapisu i odczytu plików zawierających zestawy planet, wraz z położeniem i kierunkiem widzenia kamery.
+\item[Integracja cudpp] - jako, że cudpp dla Linuxa nie buduje się w postaci biblioteki współdzielonej, zintegrowałem jego źródła, aby budowały się razem z naszym projektem.
+\item[Narzędzia debugowe], w tym assercje dla kodu na kartę graficzną.
+\end{description}
