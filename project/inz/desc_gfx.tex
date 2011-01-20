@@ -109,7 +109,7 @@ Gdzie $k_x$ są współczynnikami danymi w materiale, natomiast $I_x$ są natę�
 
 $$ I = k_e I_e + k_a I_a + k_d I_d = k_e I_e + k_a I_a + I_i k_d( N \cdot L ) $$
 
-Wpływ na taką decyzję miały dwa czynniki. Pierwszym było to, że praktycznie wszystkie materiały, których używaliśmy, wyglądały najlepiej z minimalnym wpływem światła odbitego, lub w ogóle bez niego. W rzeczywistości planety rzadko kiedy mają gładkie powierzchnie odbijające promienie światła jak szkło lub metal. Jednak decydujący wpływ na usunięcie tego oświetlenia miało dodanie atmosfer. Okazało się, że po dodaniu koloru atmosfery, potrzebne jest 17 pozycji w buforze geometrii. Dodanie kolejnej tekstury wynikowej znacząco spowolniło by wyświetlanie, więc kosztem i tak nie bardzo używanego $k_s$ wszedł jeden z kolorów atmosfery. Zabieg ten przyśpieszył trochę silnik graficzny, ponieważ światło odbite jest najbardziej kosztowne w obliczeniach.
+Wpływ na taką decyzję miały dwa czynniki. Pierwszym było to, że praktycznie wszystkie materiały, których używaliśmy, wyglądały najlepiej z minimalnym wpływem światła odbitego lub w ogóle bez niego. W rzeczywistości planety rzadko kiedy mają gładkie powierzchnie odbijające promienie światła jak szkło lub metal. Jednak decydujący wpływ na usunięcie tego oświetlenia miało dodanie atmosfer. Okazało się, że po dodaniu koloru atmosfery, potrzebne jest 17 pozycji w buforze geometrii. Dodanie kolejnej tekstury wynikowej znacząco spowolniło by wyświetlanie, więc kosztem i tak nie bardzo używanego $k_s$ wszedł jeden z kolorów atmosfery. Zabieg ten przyśpieszył trochę silnik graficzny, ponieważ światło odbite jest najbardziej kosztowne w obliczeniach.
 
 \paragraph{}
 
