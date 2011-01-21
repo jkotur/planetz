@@ -218,7 +218,7 @@ bool PlanetzLayout::del_planet( const CEGUI::EventArgs& e )
 {
 	log_printf(DBG,"[GUI] Removin planet!\n");
 	//on_planet_delete(sel_planet);
-	WindowManager::getSingleton().getWindow("stFps")->setVisible(false);
+//        WindowManager::getSingleton().getWindow("stFps")->setVisible(false); // wtf?
 	//sel_planet = NULL;
 	return true;
 }

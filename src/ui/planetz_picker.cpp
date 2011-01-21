@@ -125,10 +125,6 @@ void PlanetzPicker::render( int x , int y )
 
 	max = 0u;
 
-	glAlphaFunc( GL_GREATER, 0.1 );
-	glEnable( GL_ALPHA_TEST );
-	glEnable( GL_DEPTH_TEST );
-
 //        glViewport( x-w/2 , y-h/2 , w , h );
 //        glViewport( 0,0 , w , h );
 
@@ -136,7 +132,8 @@ void PlanetzPicker::render( int x , int y )
 
 	glGetIntegerv (GL_VIEWPORT, viewport);
 
-	glShadeModel(GL_FLAT);
+//        glShadeModel(GL_FLAT);
+	glEnable( GL_DEPTH_TEST );
 
 	glMatrixMode (GL_PROJECTION);
 	glPushMatrix ();
@@ -146,9 +143,9 @@ void PlanetzPicker::render( int x , int y )
 
 	glMatrixMode(GL_MODELVIEW);
 	
-	glClampColor(GL_CLAMP_VERTEX_COLOR, GL_FALSE);
-	glClampColor(GL_CLAMP_READ_COLOR,GL_FALSE);
-	glClampColor(GL_CLAMP_FRAGMENT_COLOR, GL_FALSE);
+//        glClampColor(GL_CLAMP_VERTEX_COLOR, GL_FALSE);
+//        glClampColor(GL_CLAMP_READ_COLOR,GL_FALSE);
+//        glClampColor(GL_CLAMP_FRAGMENT_COLOR, GL_FALSE);
 
 	glEnableClientState( GL_VERTEX_ARRAY );
 	glEnableVertexAttribArray( radiusId );
