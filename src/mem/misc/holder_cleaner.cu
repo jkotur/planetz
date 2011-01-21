@@ -3,10 +3,11 @@
 
 using namespace MEM::MISC;
 
-PlanetHolderCleaner::PlanetHolderCleaner( PhxPlanetFactory *f )
+PlanetHolderCleaner::PlanetHolderCleaner( PhxPlanetFactory *f, FilteringPolicy p )
 	: fact( f )
 	, planetsInUse( 1 )
 	, needChecking( false )
+	, filteringPolicy( p )
 {
 }
 
@@ -41,6 +42,11 @@ void PlanetHolderCleaner::notifyCheckNeeded()
 	needChecking = true;
 }
 
+void PlanetHolderCleaner::setFilteringPolicy( FilteringPolicy p )
+{
+	filteringPolicy = p;
+}
+
 void PlanetHolderCleaner::createFilter()
 {
 	unsigned threads = fact->size();
@@ -55,8 +61,10 @@ void PlanetHolderCleaner::createFilter()
 
 bool PlanetHolderCleaner::filteringNeeded()
 {
+	if( Always == filteringPolicy ) return true;
+	if( Never == filteringPolicy ) return false;
 	unsigned threads = fact->size();
-	// block.x i argument template'a muszą się zgadzać - przydałby się jakiś switch - najlepiej ładnie opakować redukcję
+	//TODO block.x i argument template'a muszą się zgadzać - przydałby się jakiś switch - najlepiej ładnie opakować redukcję
 	dim3 block( 512 );//min( 512, threads ) );
 	dim3 grid( 1 );
 	reduceFull<unsigned, 512><<<grid, block>>>(
@@ -64,10 +72,14 @@ bool PlanetHolderCleaner::filteringNeeded()
 		planetsInUse.d_data(),
 		threads );
 	//log_printf( INFO, "%u of %u planets in use.\n", planetsInUse.retrieve(), threads );
-	return planetsInUse.retrieve() < 0.8 * threads - 20; // magic numbers!
+	if( Frequently == filteringPolicy )
+		return planetsInUse.retrieve() + 20 < threads;
+	ASSERT( Rarely == filteringPolicy );
+	return planetsInUse.retrieve() + 20 < 0.8 * threads; // magic numbers!
 }
 
 void PlanetHolderCleaner::filterHolder()
 {
 	fact->filter( &filter );
 }
+

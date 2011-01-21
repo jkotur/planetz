@@ -104,6 +104,16 @@ bool PhxPlanet::isValid() const
 	return true;
 }
 
+void PhxPlanet::remove()
+{
+	ASSERT( exists );
+	int id = holder->actualID( login );
+	if( id < 0 ) return;
+	holder->mass.setAt( id, .0f );
+	holder->radius.map( BUF_H )[ id ] = .0f; // FIXME; to ssie! kopiuje cały bufor, żeby zmienić jedną wartość :< zresztą z getRadius jest analogiczna buła
+	holder->radius.unmap();
+}
+
 PhxPlanetFactory::PhxPlanetFactory( PlanetHolder* holder )
 	: holder(holder)
 {
