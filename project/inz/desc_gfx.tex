@@ -96,11 +96,11 @@ Dodatkowo do mapy normalnych należy dodać informację o przezroczystości dane
 \begin{figure}
 \centering
 	\includegraphics[width=0.5\textwidth]{img/phong.png}
-\caption{Model oświetlenia Phonga}
+\caption{Model oświetlenia Phonga~\cite{wiki:phong}}
 \label{fig:phong}
 \end{figure}
 
-Do obliczania oświetlenia wykorzystany w programie został model Phonga~\cite{wiki:phong}. Polega on na złożeniu czterech rodzajów świateł: emisji (emissive), otoczenia (ambient), rozproszonego (diffuse) i odbitego (specular). Jak pokazano na rysunku \hyperref[fig:phong]{\ref*{fig:phong}}, do obliczenia oświetlenia w danym punkcie konieczne są: pozycja kamery, pozycja powierzchni, normalna powierzchni. Pozostałe potrzebne wektory można obliczyć na podstawie tych trzech danych. Dla jednego źródła światła model oświetlenie można zapisać jako:
+Do obliczania oświetlenia wykorzystany w programie został model Phonga~\cite{foley:phong}. Polega on na złożeniu czterech rodzajów świateł: emisji (emissive), otoczenia (ambient), rozproszonego (diffuse) i odbitego (specular). Jak pokazano na rysunku \hyperref[fig:phong]{\ref*{fig:phong}}, do obliczenia oświetlenia w danym punkcie konieczne są: pozycja kamery, pozycja powierzchni, normalna powierzchni. Pozostałe potrzebne wektory można obliczyć na podstawie tych trzech danych. Dla jednego źródła światła model oświetlenie można zapisać jako:
 
 
 $$ I = k_e I_e + k_a I_a + k_d I_d + k_s I_s = k_e I_e + k_a I_a + I_i( k_d( N \cdot L ) + k_s ( R \cdot V )^n ) $$
