@@ -55,11 +55,6 @@ namespace MISC
 		 */
 		bool isValid() const;
 
-		/**
-		 * @brief Usuwa planetę z wszechświata.
-		 */
-		void remove();
-
 	private:
 		void initFromOther( const PhxPlanet& );
 		PlanetLogin login;

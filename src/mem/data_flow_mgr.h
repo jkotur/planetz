@@ -6,6 +6,7 @@
 #include <string>
 
 #include "ui/camera_manager.h"
+#include "mem/misc/planet_params.h"
 
 namespace MEM
 {
@@ -69,10 +70,26 @@ namespace MEM
 			/**
 			 * @brief Rejestruje obiekt kamery.
 			 *
-			 * @details Po rejestracji, kamera jest automatycznie zapisywana i
+			 * @note Po rejestracji, kamera jest automatycznie zapisywana i
 			 * wczytywana wraz z symulacją.
 			 */
 			void registerCam( UI::CameraMgr *cam );
+
+			/**
+			 * @brief Tworzy nową planetę.
+			 *
+			 * @param params Parametry tworzonej planety.
+			 *
+			 * @returns id nowej planety.
+			 */
+			unsigned createPlanet( MISC::PlanetParams params );
+
+			/**
+			 * @brief Usuwa planetę.
+			 *
+			 * @param id Indeks planety do usunięcia. 
+			 */
+			void removePlanet( unsigned id );
 
 		private:
 			class Impl;
