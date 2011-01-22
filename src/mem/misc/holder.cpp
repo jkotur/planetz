@@ -41,10 +41,12 @@ unsigned __filter( PlanetHolder *what, BufferCu<unsigned> *how, IdxChangeSet *ch
 	c.add( what->atm_color.map(BUF_CU), sizeof(float3) );
 	c.add( what->pos.map(BUF_CU), sizeof(float3) );
 	c.add( what->velocity.d_data(), sizeof(float3) );
+	//c.add( what->color.map(BUF_CU), sizeof(float4) );
 	
 	unsigned newSize = c.compact( changes );
 	cudaMemcpy( what->count.map(BUF_CU), &newSize, sizeof(unsigned), cudaMemcpyHostToDevice );
 
+	//what->color.unmap();
 	what->count.unmap();
 	what->model.unmap();
 	what->texId.unmap();

@@ -3,6 +3,8 @@
 
 using namespace MEM::MISC;
 
+const unsigned MAX_32BIT_MULTIPLIER = 3;
+
 Compacter::Compacter( BufferCu<unsigned> *_mask )
 	: size( _mask->getLen() )
 	, mask( _mask )
@@ -18,6 +20,7 @@ Compacter::~Compacter()
 void Compacter::add( void *d_data, unsigned elem_size )
 {
 	ASSERT( elem_size % sizeof(unsigned) == 0 );
+	ASSERT( elem_size / sizeof(unsigned) <= MAX_32BIT_MULTIPLIER );
 	map[ elem_size / sizeof(unsigned) ].push_back( d_data );
 }
 
@@ -34,7 +37,7 @@ void Compacter::createScanHandle()
 	cfg.options = CUDPP_OPTION_FORWARD  | CUDPP_OPTION_EXCLUSIVE;
 	cfg.op = CUDPP_ADD;
 	
-	CUDPPResult result = cudppPlan( &scanHandle, cfg, 3 * size, 1, 0 );
+	CUDPPResult result = cudppPlan( &scanHandle, cfg, MAX_32BIT_MULTIPLIER * size, 1, 0 );
 	ASSERT( result == CUDPP_SUCCESS );
 }
 

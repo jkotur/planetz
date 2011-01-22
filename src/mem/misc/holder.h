@@ -60,7 +60,7 @@ namespace MISC
 			GBUF<int>    model;
 
 			/** @brief Bufor z informacją kolorze planety */
-			GBUF<float4> color;
+			//GBUF<float4> color; // TO BE IMPLEMENTED
 
 			/** @brief Bufor z informacją o reakcji na światło */
 			GBUF<float3> light;
@@ -178,6 +178,7 @@ namespace MISC
 	template<template<class T>class CBUF, template<class S>class GBUF>
 	PlanetHolderBase<CBUF, GBUF>::PlanetHolderBase( unsigned num )
 		: model(0)
+		//, color(0)
 		, light(0)
 		, pos(0)
 		, radius(0)
@@ -204,6 +205,7 @@ namespace MISC
 		{
 			TODO("keep previous data...");
 			model    .resize(num);
+			//color    .resize(num);
 			light    .resize(num);
 			texId    .resize(num);
 			atm_color.resize(num);
