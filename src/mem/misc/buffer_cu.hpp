@@ -135,9 +135,10 @@ namespace MISC
 	void BufferCu<T>::resize( size_t num , const T*data )
 	{
 		ASSERT( !h_cuPtr );
+		bool save = NULL == data && this->size > 0;
 		T* tmpPtr = const_cast<T*>( data );
 
-		if( tmpPtr )
+		if( !save )
 		{
 			device_ptr_free( d_cuPtr );
 		}
@@ -146,8 +147,9 @@ namespace MISC
 			std::swap( d_cuPtr, tmpPtr );
 		}
 		device_ptr_alloc( num );
-		device_ptr_assign( tmpPtr, NULL != data );
-		if( !data )
+		if( save || data != NULL )
+			device_ptr_assign( tmpPtr, NULL != data );
+		if( save )
 		{
 			device_ptr_free( tmpPtr );
 		}

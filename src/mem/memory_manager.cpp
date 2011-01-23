@@ -201,7 +201,7 @@ unsigned MemMgr::createPlanet( MISC::PlanetParams params )
 	holder.pos.setAt( id, params.pos );
 	holder.velocity.setAt( id, params.vel );
 	holder.radius.setAt( id, params.radius );
-	holder.model.setAt( id, params.model );
+	holder.model.setAt( id, 2 * params.model );
 	return id;
 }
 

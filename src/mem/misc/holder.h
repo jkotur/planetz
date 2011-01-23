@@ -5,7 +5,6 @@
 #include "buffer_gl.h"
 #include "buffer_cpu.h"
 #include "buffer_cu.hpp"
-#include "phx/phx_templates.h"
 #include <map>
 
 namespace MEM
