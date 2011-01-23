@@ -177,27 +177,26 @@ namespace MISC
 
 			cudaGLRegisterBufferObject( glId );
 			CUT_CHECK_ERROR("Registering buffer while resizing BufferGl");
+		} else if( NULL == data && this->realsize > 0 ) {
+			BufferGl newbuf( new_size );
+
+			glBindBuffer( GL_COPY_READ_BUFFER , glId );
+			glBindBuffer( GL_COPY_WRITE_BUFFER, newbuf.glId );
+			glCopyBufferSubData( GL_COPY_READ_BUFFER , GL_COPY_WRITE_BUFFER
+					   , 0 , 0 , this->realsize );
+			glBindBuffer( GL_COPY_READ_BUFFER , 0 );
+			glBindBuffer( GL_COPY_WRITE_BUFFER, 0 );
+
+			GLuint tmp = glId;
+			glId = newbuf.glId;
+			newbuf.glId = tmp;
 		} else {
-			BufferCu<T> tmp;
-			bool save = NULL == data && this->realsize > 0;
-			if( save )
-			{ //FIXME: @qba - da się to zrobić lepiej/bardziej openglowo?
-				tmp.resize( this->realsize );
-				cudaMemcpy( tmp.d_data(), map( BUF_CU ), tmp.getSize(), cudaMemcpyDeviceToDevice );
-				unmap();
-			}
 			cudaGLUnregisterBufferObject( glId );
 			CUT_CHECK_ERROR("Unregistering buffer while resizing old BufferGl");
 
 			gl_resize( new_size , data );
 
 			cudaGLRegisterBufferObject( glId );
-			CUT_CHECK_ERROR("Registering buffer while resizing old BufferGl");
-			if( save )
-			{
-				cudaMemcpy( map( BUF_CU ), tmp.d_data(), tmp.getSize(), cudaMemcpyDeviceToDevice );
-				unmap();
-			}
 		}
 
 		this->length = num;
