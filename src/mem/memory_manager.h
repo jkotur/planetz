@@ -10,6 +10,7 @@
 #include "misc/textures_manager.h"
 #include "misc/gfx_planet_factory.h"
 #include "misc/phx_planet_factory.h"
+#include "misc/planet_params.h"
 
 /**
  * @brief Przestrzeń nazw dla obiektów odpowiedzialnych za zarządzanie pamięcią.
@@ -31,6 +32,23 @@ namespace MEM {
 
 		MISC::CpuPlanetHolder *getPlanets();
 		void setPlanets( MISC::CpuPlanetHolder * );
+
+		/**
+		 * @brief Tworzy nową planetę.
+		 *
+		 * @param params Parametry tworzonej planety.
+		 *
+		 * @returns id nowej planety.
+		 */
+		unsigned createPlanet( MISC::PlanetParams params );
+
+		/**
+		 * @brief Usuwa planetę.
+		 *
+		 * @param id Indeks planety do usunięcia. 
+		 */
+		void removePlanet( unsigned id );
+
 	private:
 		GLuint matTexId;
 		GLuint texTexId;

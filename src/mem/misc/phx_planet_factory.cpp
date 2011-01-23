@@ -4,6 +4,12 @@
 
 using namespace MEM::MISC;
 
+#define PHX_PLANET_GET_IMPL( buf, default_val )	\
+	ASSERT( exists );			\
+	int id = holder->actualID( login );	\
+	if( id < 0 ) return default_val;	\
+	return buf.getAt( id );
+
 PhxPlanet::PhxPlanet()
 	: exists( false )
 {
@@ -36,40 +42,24 @@ int PhxPlanet::getId() const
 	return holder->actualID( login );
 }
 
-float3   PhxPlanet::getPosition() const
+float3 PhxPlanet::getPosition() const
 {
-	ASSERT( exists );
-	int id = holder->actualID( login );
-	if( id < 0 ) return make_float3(0);
-	float3 result = holder->pos.map( BUF_H )[ id ];
-	holder->pos.unmap();
-	return result;
+	PHX_PLANET_GET_IMPL( holder->pos, make_float3(0) );
 }
 
 float PhxPlanet::getRadius() const
 {
-	ASSERT( exists );
-	int id = holder->actualID( login );
-	if( id < 0 ) return 0.0f;
-	float result = holder->radius.map( BUF_H )[ id ];
-	holder->radius.unmap();
-	return result;
+	PHX_PLANET_GET_IMPL( holder->radius, .0f );
 }
 
 float PhxPlanet::getMass() const
 {
-	ASSERT( exists );
-	int id = holder->actualID( login );
-	if( id < 0 ) return 0.0f;
-	return holder->mass.getAt( id );
+	PHX_PLANET_GET_IMPL( holder->mass, .0f );
 }
 
 float3 PhxPlanet::getVelocity() const
 {
-	ASSERT( exists );
-	int id = holder->actualID( login );
-	if( id < 0 ) return make_float3(0);
-	return holder->velocity.getAt( id );
+	PHX_PLANET_GET_IMPL( holder->velocity, make_float3(0) );
 }
 
 void PhxPlanet::initFromOther( const PhxPlanet& other )

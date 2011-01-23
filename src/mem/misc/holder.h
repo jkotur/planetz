@@ -2,8 +2,10 @@
 #define HOLDER_H
 
 #include "buffer.h"
+#include "buffer_gl.h"
 #include "buffer_cpu.h"
 #include "buffer_cu.hpp"
+#include "phx/phx_templates.h"
 #include <map>
 
 namespace MEM
@@ -203,7 +205,7 @@ namespace MISC
 	{
 		if( num > m_realsize ) // ew. można zmniejszać kiedy num << m_realsize
 		{
-			TODO("keep previous data...");
+			ConstChecker<float, CBUF> mass_checker;
 			model    .resize(num);
 			//color    .resize(num);
 			light    .resize(num);
@@ -212,7 +214,9 @@ namespace MISC
 			atm_data .resize(num);
 			pos      .resize(num);
 			radius   .resize(num);
+			mass_checker.setBuf( &mass, m_size );
 			mass     .resize(num);
+			mass_checker.checkBuf();
 			velocity .resize(num);
 			m_realsize = num;
 		}

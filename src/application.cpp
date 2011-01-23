@@ -126,8 +126,8 @@ bool Application::init()
 	pl->on_load.connect( bind(&UI::CameraMgr::clear,&camera) );
 	pl->on_load.connect( bind(&PlanetzLayout::hide_show_window,pl) );
 	pl->on_config_changed.connect(bind(&GFX::Gfx::update_configuration,&gfx,_1));
-	//pl->on_planet_add.connect( bind(&Planetz::add,&planetz,_1) );
-	//pl->on_planet_delete.connect( bind(&Planetz::erase,&planetz,_1) );
+	pl->on_planet_add.connect( bind(&MEM::DataFlowMgr::createPlanet,&data_mgr,_1) );
+	pl->on_planet_delete.connect( bind(&MEM::DataFlowMgr::removePlanet,&data_mgr,_1) );
 	//planetz.on_planet_select.connect( bind(&PlanetzLayout::add_selected_planet,pl,_1) );
 #endif
 

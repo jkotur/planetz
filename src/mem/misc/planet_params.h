@@ -12,6 +12,14 @@ struct PlanetParams
 	float mass;
 	float radius;
 	int model;
+	PlanetParams();
+	PlanetParams( float3 _pos, float3 _vel, float _mass, float _radius, int _model )
+		: pos( _pos )
+		, vel( _vel )
+		, mass( _mass )
+		, radius( _radius )
+		, model( _model )
+	{}
 };
 }
 }

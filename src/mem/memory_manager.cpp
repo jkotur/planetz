@@ -192,3 +192,23 @@ MISC::PhxPlanetFactory* MemMgr::getPhxMem()
 	return &ppf;
 }
 
+unsigned MemMgr::createPlanet( MISC::PlanetParams params )
+{
+	unsigned id = holder.size();
+	holder.resize( id + 1 );
+
+	holder.mass.setAt( id, params.mass );
+	holder.pos.setAt( id, params.pos );
+	holder.velocity.setAt( id, params.vel );
+	holder.radius.setAt( id, params.radius );
+	holder.model.setAt( id, params.model );
+	return id;
+}
+
+void MemMgr::removePlanet( unsigned id )
+{
+	ASSERT( id < holder.size() );
+	holder.mass.setAt( id, .0f );
+	holder.radius.setAt( id, .0f );
+}
+

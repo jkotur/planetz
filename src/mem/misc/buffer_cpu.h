@@ -31,9 +31,14 @@ namespace MISC
 			}
 		}
 
-		virtual void assign( T val )
+		virtual void setAt( unsigned i, const T& val )
 		{
-			std::vector<T>::assign( &val, (&val) + 1 );
+			std::vector<T>::at( i ) = val;
+		} 
+		
+		virtual T getAt( unsigned i ) const
+		{
+			return std::vector<T>::at( i );
 		}
 
 		virtual size_t getSize() const
@@ -44,6 +49,11 @@ namespace MISC
 		virtual uint getLen() const
 		{
 			return std::vector<T>::size();
+		}
+
+		virtual void assign( T val )
+		{
+			return BufferBase<T>::assign( val ); // to resolve ambiguity
 		}
 	};
 } // namespace MEM::MISC

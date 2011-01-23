@@ -23,23 +23,48 @@ void BufTest::resizeTest()
 
 	int* data2 = buf.map( BUF_H );
 	for( unsigned i=0 ; i<buf.getLen() ; i++ )
-		CPPUNIT_ASSERT_EQUAL( data[i] , (int)i );
+		CPPUNIT_ASSERT_EQUAL( data2[i] , (int)i );
 	buf.unmap();
 
 	buf.resize( 20 , data );
 
 	data2 = buf.map( BUF_H );
 	for( unsigned i=0 ; i<buf.getLen() ; i++ )
-		CPPUNIT_ASSERT_EQUAL( data[i] , (int)i );
+		CPPUNIT_ASSERT_EQUAL( data2[i] , (int)i );
 	buf.unmap();
 
 	buf.resize( 5 , data );
 
 	data2 = buf.map( BUF_H );
 	for( unsigned i=0 ; i<buf.getLen() ; i++ )
-		CPPUNIT_ASSERT_EQUAL( data[i] , (int)i );
+		CPPUNIT_ASSERT_EQUAL( data2[i] , (int)i );
 	buf.unmap();
 
+}
+
+void BufTest::resizePreserveTest()
+{
+	buf.resize( 20 );
+
+	int* data2 = buf.map( BUF_H );
+	for( unsigned i=0 ; i<10; i++ )
+		CPPUNIT_ASSERT_EQUAL( data2[i] , data[i] );
+	buf.unmap();
+
+	bufCu.resize( 10, data );
+	bufCu.bind();
+	data2 = bufCu.h_data();
+	for( unsigned i=0 ; i<10; i++ )
+		CPPUNIT_ASSERT_EQUAL( data2[i] , data[i] );
+	bufCu.unbind();
+
+	bufCu.resize( 20 );
+
+	bufCu.bind();
+	data2 = bufCu.h_data();
+	for( unsigned i=0 ; i<10; i++ )
+		CPPUNIT_ASSERT_EQUAL( data2[i] , data[i] );
+	bufCu.unbind();
 }
 
 void BufTest::dataTest()

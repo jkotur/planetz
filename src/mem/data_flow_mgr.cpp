@@ -26,6 +26,8 @@ class DataFlowMgr::Impl
 		MISC::PhxPlanetFactory *getPhxMem();
 
 		void registerCam( UI::CameraMgr *_cam );
+		unsigned createPlanet( MISC::PlanetParams params );
+		void removePlanet( unsigned id );
 
 	private:
 		void updateBuffers( MISC::CpuPlanetHolder*p, MISC::Materials*m );
@@ -128,6 +130,47 @@ void DataFlowMgr::Impl::registerCam( UI::CameraMgr *_cam )
 	cam = _cam;
 }
 
+unsigned DataFlowMgr::Impl::createPlanet( MISC::PlanetParams params )
+{
+	unsigned id = memmgr.createPlanet( params );
+	unsigned mid = params.model;
+	MISC::GfxPlanetFactory *f = getGfxMem();
+	if( materials )
+	{
+		const_cast<MISC::BufferGl<float3>& >( f->getLight() )
+			.setAt( id, make_float3(
+					(*materials)[mid].ke ,
+					(*materials)[mid].ka ,
+					(*materials)[mid].kd ) );
+		const_cast<MISC::BufferGl<int>& >( f->getTexIds() )
+			.setAt( id, (*materials)[mid].texture );
+		const_cast<MISC::BufferGl<float3>& >( f->getAtmColor() )
+			.setAt( id, make_float3(
+					(*materials)[mid].ar,
+					(*materials)[mid].ag,
+					(*materials)[mid].ab ) );
+		const_cast<MISC::BufferGl<float2>& >( f->getAtmData() )
+			.setAt( id, make_float2(
+					(*materials)[mid].ad,
+					(*materials)[mid].al ) );
+	}
+	else
+	{
+		const_cast<MISC::BufferGl<float3>& >( f->getLight() )
+			.setAt( id, make_float3(0) );
+		const_cast<MISC::BufferGl<int>& >( f->getTexIds() )
+			.setAt( id, 0 );
+		const_cast<MISC::BufferGl<float2>& >( f->getAtmData() )
+			.setAt( id, make_float2(0) );
+	}
+	return id;
+}
+
+void DataFlowMgr::Impl::removePlanet( unsigned id )
+{
+	memmgr.removePlanet( id );
+}
+
 DataFlowMgr::DataFlowMgr()
 	: impl( new DataFlowMgr::Impl() )
 {
@@ -181,4 +224,14 @@ GLuint DataFlowMgr::loadTextures()
 void DataFlowMgr::registerCam( UI::CameraMgr *cam )
 {
 	impl->registerCam( cam );
+}
+
+unsigned DataFlowMgr::createPlanet( MISC::PlanetParams params )
+{
+	return impl->createPlanet( params );
+}
+
+void DataFlowMgr::removePlanet( unsigned id )
+{
+	impl->removePlanet( id );
 }

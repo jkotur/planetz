@@ -217,9 +217,8 @@ void PlanetzLayout::update_fps( int fps )
 bool PlanetzLayout::del_planet( const CEGUI::EventArgs& e )
 {
 	log_printf(DBG,"[GUI] Removin planet!\n");
-	//on_planet_delete(sel_planet);
-//        WindowManager::getSingleton().getWindow("stFps")->setVisible(false); // wtf?
-	//sel_planet = NULL;
+	on_planet_delete(sel_planet.getId());
+	hide_show_window();
 	return true;
 }
 
@@ -259,9 +258,12 @@ bool PlanetzLayout::add_planet( const CEGUI::EventArgs& e )
 			,vel.x,vel.y,vel.z
 			,mass,radius );
 
-	//GFX::Planet*gp = new GFX::Planet( );
-	//Phx::Planet*pp = new Phx::Planet( pos , vel , mass , radius );
-	//on_planet_add( new Planet(gp,pp) );
+	MEM::MISC::PlanetParams params(
+		make_float3( pos.x, pos.y, pos.z ),
+		make_float3( vel.x, vel.y, vel.z ),
+		mass, radius, 1 );
+	TODO( "Wybieranie modelu" );
+	on_planet_add( params );
 
 	return true;
 }

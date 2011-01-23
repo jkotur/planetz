@@ -11,10 +11,12 @@
 #include "util/timer/timer.h"
 
 #include "mem/misc/phx_planet_factory.h"
+#include "mem/misc/planet_params.h"
 
 #include "layout.h"
 
-//typedef boost::signal<void (Planet*p)> SigSetPlanet;
+typedef boost::signal<void (MEM::MISC::PlanetParams)> SigSetPlanet;
+typedef boost::signal<void (unsigned)> SigSetUnsigned;
 typedef boost::signal<void (std::string)> SigSetString;
 typedef boost::signal<void (double)> SigSetDouble;
 typedef boost::signal<void ()> SigVoid;
@@ -36,8 +38,8 @@ public:
 	void show_show_window( const MEM::MISC::PhxPlanet& pp );
 	void hide_show_window();
 
-	//SigSetPlanet on_planet_delete;
-	//SigSetPlanet on_planet_add;
+	SigSetPlanet on_planet_add;
+	SigSetUnsigned on_planet_delete;
 	/** @brief Sygnał emitowany gdy zmienia się prędkość symulacji */
 	SigSetDouble on_sim_speed_changed;
 	/** @brief Sygnał emitowany gdy zmienia się prędkość kamery */

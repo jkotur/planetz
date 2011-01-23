@@ -1,7 +1,13 @@
 #ifndef _BUFFER_CU_HPP_
 #define _BUFFER_CU_HPP_
+
 #include "buffer.h"
+
+#include <cuda_runtime_api.h>
+#include "cuda/err.h"
 #include <debug/routines.h>
+
+#include <algorithm>
 
 #define PRINT_OUT_BUF( buf, format ) \
 	{ \
@@ -43,20 +49,6 @@ namespace MISC
 		virtual void resize( size_t num , const T*data = NULL );
 
 		/**
-		 * @brief Wpisuje wartość do bufora. Działa tylko dla buforów jednoelementowych.
-		 *
-		 * @param val Wartość do wpisania.
-		 */
-		virtual void assign( T val );
-
-		/**
-		 * @brief Pobiera wartość z bufora. Działa tylko dla buforów jednoelementowych.
-		 *
-		 * @returns Pobrana wartość.
-		 */
-		virtual T retrieve();
-
-		/**
 		 * @brief Dane dostępne z CPU. Wymaga wcześniejszego wywołania metody bind().
 		 */
 		T* h_data();
@@ -66,23 +58,8 @@ namespace MISC
 		 */
 		T* d_data();
 
-		/**
-		 * @brief Pobiera wartość spod konkretnego indeksu.
-		 *
-		 * @param i Indeks.
-		 *
-		 * @returns Wartość skopiowana z GPU.
-		 */
-		T getAt(unsigned i) const;
-
-		/**
-		 * @brief Ustawia wartość pod zadanym indeksem.
-		 *
-		 * @param i Indeks.
-		 *
-		 * @param val Wartość do skopiowania na GPU.
-		 */
-		void setAt( unsigned i, const T& val );
+		virtual T getAt(unsigned i) const;
+		virtual void setAt( unsigned i, const T& val );
 
 		/**
 		 * @brief Udostępnia dane z karty graficznej na CPU. 
@@ -112,7 +89,7 @@ namespace MISC
 		/**
 		 * @brief Zwalnia pamięc na GPU.
 		 */
-		void device_ptr_free();
+		void device_ptr_free(T*& d_ptr);
 
 		/**
 		 * @brief Alokuje pamięć na GPU.
@@ -123,8 +100,10 @@ namespace MISC
 		 * @brief Przypisuje dane z CPU do zaalokowanej pamięci na GPU.
 		 *
 		 * @param data Dane do skopiowania. Wywołanie z NULL nie wykona żadnej akcji.
+		 *
+		 * @param from_host true, jeżeli dane są z CPU, false, jeżeli z GPU.
 		 */
-		void device_ptr_assign(const T* data);
+		void device_ptr_assign( const T* data, bool from_host );
 	};
 
 	//
@@ -148,7 +127,7 @@ namespace MISC
 	template<typename T>
 	BufferCu<T>::~BufferCu()
 	{
-		device_ptr_free();
+		device_ptr_free(d_cuPtr);
 		ASSERT_MSG(!h_cuPtr, "BufferCu bound on destruction!");
 	}
 	
@@ -156,24 +135,22 @@ namespace MISC
 	void BufferCu<T>::resize( size_t num , const T*data )
 	{
 		ASSERT( !h_cuPtr );
+		T* tmpPtr = const_cast<T*>( data );
 
-		device_ptr_free();
-		device_ptr_alloc(num);
-		device_ptr_assign(data);
-	}
-
-	template<typename T>
-	void BufferCu<T>::assign( T val )
-	{
-		ASSERT_MSG( 1 == BufferBase<T>::getLen(), "assign() works for one field buffers only!" );
-		setAt(0, val);
-	}
-
-	template<typename T>
-	T BufferCu<T>::retrieve()
-	{
-		ASSERT_MSG( 1 == BufferBase<T>::getLen(), "retrieve() works for one field buffers only!" );
-		return getAt(0);
+		if( tmpPtr )
+		{
+			device_ptr_free( d_cuPtr );
+		}
+		else
+		{
+			std::swap( d_cuPtr, tmpPtr );
+		}
+		device_ptr_alloc( num );
+		device_ptr_assign( tmpPtr, NULL != data );
+		if( !data )
+		{
+			device_ptr_free( tmpPtr );
+		}
 	}
 
 	template<typename T>
@@ -226,13 +203,13 @@ namespace MISC
 	}
 
 	template<typename T>
-	void BufferCu<T>::device_ptr_free()
+	void BufferCu<T>::device_ptr_free(T*& d_ptr)
 	{
-		if( d_cuPtr )
+		if( d_ptr )
 		{
-			cudaFree( d_cuPtr );
+			cudaFree( d_ptr );
 			DBGPUT( CUT_CHECK_ERROR( "free" ) );
-			d_cuPtr = NULL;
+			d_ptr = NULL;
 		}
 	}
 
@@ -250,7 +227,7 @@ namespace MISC
 	}
 
 	template<typename T>
-	void BufferCu<T>::device_ptr_assign(const T* data)
+	void BufferCu<T>::device_ptr_assign(const T* data, bool from_host )
 	{
 		if( !this->size )
 		{
@@ -259,7 +236,8 @@ namespace MISC
 		ASSERT( d_cuPtr );
 		if( data )
 		{
-			cudaMemcpy(d_cuPtr, data, this->size, cudaMemcpyHostToDevice );
+			cudaMemcpy(d_cuPtr, data, this->size, 
+				from_host ? cudaMemcpyHostToDevice : cudaMemcpyDeviceToDevice );
 			DBGPUT( CUT_CHECK_ERROR( "memcpy" ) );
 		}
 	}

@@ -6,7 +6,7 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "mem/misc/buffer.h"
+#include "mem/misc/buffer_gl.h"
 
 using namespace MEM::MISC;
 
@@ -19,6 +19,7 @@ class BufTest : public CppUnit::TestFixture
 		void tearDown();
 
 		void resizeTest();
+		void resizePreserveTest();
 		void dataTest();
 		void hreadwriteTest();
 		void cudaTest();
@@ -26,9 +27,11 @@ class BufTest : public CppUnit::TestFixture
 	private:
 		int data[20];
 		BufferGl<int> buf;
+		BufferCu<int> bufCu;
 
 		CPPUNIT_TEST_SUITE( BufTest );
 			CPPUNIT_TEST( resizeTest );
+			CPPUNIT_TEST( resizePreserveTest );
 			CPPUNIT_TEST( dataTest   );
 			CPPUNIT_TEST( hreadwriteTest );
 			CPPUNIT_TEST( cudaTest   );
