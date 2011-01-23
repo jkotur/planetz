@@ -24,7 +24,7 @@ void PhxTest::tearDown()
 	delete pos;
 	*/
 }
-
+/*
 namespace
 {
 float dist2( float3 l, float3 r )
@@ -35,7 +35,7 @@ float dist2( float3 l, float3 r )
 	return dx * dx + dy * dy + dz * dz;
 }
 }
-
+*/
 void PhxTest::testKMeans()
 {
 	// TODO: przetestować to przy pełnej implementacji k-means

@@ -28,7 +28,9 @@ Application::Application( Window& win , Config& cfg )
 	, trace( *data_mgr.getGfxMem() , cfg )
 	, bkg( 0.8 , win.getW() , win.getH() )
 	, phcleaner( data_mgr.getPhxMem() )
+#ifndef _RELEASE
 	, pprnt( data_mgr.getPhxMem() )
+#endif
 {
 }
 

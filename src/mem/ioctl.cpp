@@ -6,6 +6,7 @@
 #include "constants.h"
 
 #include "debug/routines.h"
+#include "util/logger.h"
 
 using namespace MEM;
 

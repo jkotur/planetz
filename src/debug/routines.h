@@ -18,7 +18,7 @@
 
 #else
 #define ASSERT(x)
-#define ASSERT_MSG(x, y)
+#define ASSERT_MSG(x, y, ...)
 #define NOENTRY()
 #define TODO(x)
 #define DBGPUT(x)

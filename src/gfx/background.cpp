@@ -5,6 +5,7 @@
 #include "../constants.h"
 
 #include "gfx.h"
+#include "util/logger.h"
 
 using namespace GFX;
 

@@ -6,6 +6,7 @@
 #include <cstdlib>
 
 #include "debug/routines.h"
+#include "util/logger.h"
 
 using namespace GFX;
 

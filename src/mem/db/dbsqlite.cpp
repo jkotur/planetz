@@ -2,6 +2,7 @@
 #include <debug/routines.h>
 #include "dbsqlite.h"
 #include "row.h"
+#include "util/logger.h"
 
 using namespace MEM;
 

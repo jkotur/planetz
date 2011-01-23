@@ -1,6 +1,7 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 
+#include <cstdlib>
 #include "debug/routines.h"
 
 namespace MEM
