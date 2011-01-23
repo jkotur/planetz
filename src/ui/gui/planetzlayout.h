@@ -13,9 +13,11 @@
 #include "mem/misc/phx_planet_factory.h"
 #include "mem/misc/planet_params.h"
 
+#include "mem/misc/planet_params.h"
+
 #include "layout.h"
 
-typedef boost::signal<void (MEM::MISC::PlanetParams)> SigSetPlanet;
+typedef boost::signal<void (const MEM::MISC::PlanetParams&)> SigSetPlanet;
 typedef boost::signal<void (unsigned)> SigSetUnsigned;
 typedef boost::signal<void (std::string)> SigSetString;
 typedef boost::signal<void (double)> SigSetDouble;
@@ -35,11 +37,16 @@ public:
 	PlanetzLayout( Config& cfg );
 	virtual ~PlanetzLayout();
 	
-	void show_show_window( const MEM::MISC::PhxPlanet& pp );
+	void show_show_window( const MEM::MISC::PhxPlanet& pp ); 
 	void hide_show_window();
+
+	bool update_add_win( const MEM::MISC::PlanetParams& pp );
+
+	void change_planet( const MEM::MISC::PlanetParams& pp );
 
 	SigSetPlanet on_planet_add;
 	SigSetUnsigned on_planet_delete;
+
 	/** @brief Sygnał emitowany gdy zmienia się prędkość symulacji */
 	SigSetDouble on_sim_speed_changed;
 	/** @brief Sygnał emitowany gdy zmienia się prędkość kamery */
@@ -54,6 +61,10 @@ public:
 	SigSetString on_load;
 	/** @brief Sygnał emitowany gdy zmienia się konfiguracja programu */
 	boost::signal<void ( const Config&)> on_config_changed;
+	/** @brief Sygnał emitowany gdy planeta ma się zmienić */
+	SigSetPlanet on_planet_change;
+	/** @brief Sygnał emitowany gdy planeta zmieniła swoje parametry */
+	SigSetPlanet on_planet_changed;
 
 	/** 
 	 * @brief Funkcja ustawiająca nową ilość wyświetlonych klatek.
@@ -66,9 +77,12 @@ private:
 
 	void updateOptions( Config& cfg );
 	void setOptions( const Config& cfg );
+	MEM::MISC::PlanetParams get_pp_from_add_win();
 
 	bool clear_win( const CEGUI::EventArgs& e );
 	bool add_planet( const CEGUI::EventArgs& e );
+	bool change_planet( const CEGUI::EventArgs& e );
+	bool changed_planet( const CEGUI::EventArgs& e );
 	bool del_planet( const CEGUI::EventArgs& e );
 	bool show_load_win( const CEGUI::EventArgs& e );
 	bool show_save_win( const CEGUI::EventArgs& e );

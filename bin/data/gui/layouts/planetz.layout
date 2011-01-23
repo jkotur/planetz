@@ -83,7 +83,7 @@
 <!--                okno dodawania planety-->
 		<Window Type="QuadraticLook/FrameWindow" Name="AddWin">
 			<Property Name="UnifiedPosition"    Value="{{0.1,0},{0.1,0}}" />
-			<Property Name="UnifiedSize"        Value="{{0,270},{0,180}}" />
+			<Property Name="UnifiedSize"        Value="{{0,310},{0,180}}" />
 			<Property Name="Text"               Value="Nowa planeta" />
 			<Property Name="CloseButtonEnabled" Value="Fasle" />
 			<Property Name="Alpha"              Value="1.0" />
@@ -91,15 +91,21 @@
 			<Property Name="Visible"            Value="True" />
 
 			<Window Type="QuadraticLook/Button" Name="btnAdd" >
-				<Property Name="UnifiedPosition" Value="{{0.5,-95},{0,150}}" />
+				<Property Name="UnifiedPosition" Value="{{0.5,-150},{0,150}}" />
 				<Property Name="UnifiedSize" Value="{{0,90},{0,20}}" />
 				<Property Name="Text" Value="Dodaj Planetę" />
 			</Window>
 
 			<Window Type="QuadraticLook/Button" Name="btnClear" >
-				<Property Name="UnifiedPosition" Value="{{0.5,5},{0,150}}" />
+				<Property Name="UnifiedPosition" Value="{{0.5,-45},{0,150}}" />
 				<Property Name="UnifiedSize" Value="{{0,90},{0,20}}" />
 				<Property Name="Text" Value="Wyczyść" />
+			</Window>
+
+			<Window Type="QuadraticLook/Button" Name="btnChange" >
+				<Property Name="UnifiedPosition" Value="{{0.5,60},{0,150}}" />
+				<Property Name="UnifiedSize" Value="{{0,90},{0,20}}" />
+				<Property Name="Text" Value="Zmień" />
 			</Window>
 
 			<Window Type="QuadraticLook/StaticText" Name="stPos">
@@ -111,8 +117,8 @@
 			<Window Type="QuadraticLook/Spinner" Name="spPosX" >
 				<Property Name="UnifiedPosition" Value="{{0.5,-50},{0,30}}" />
 				<Property Name="UnifiedSize" Value="{{0.0,50},{0,20}}" />
-				<Property Name="MaximumValue" Value="1000" />
-				<Property Name="MinimumValue" Value="-1000" />
+<!--                                <Property Name="MaximumValue" Value="100000" />-->
+<!--                                <Property Name="MinimumValue" Value="-1000000" />-->
 				<Property Name="StepSize" Value="0.02" />
 				<Property Name="TextInputMode" Value="Integer" />
 <!--                                <Property Name="TextInputMode" Value="FloatingPoint" />-->
@@ -121,8 +127,8 @@
 			<Window Type="QuadraticLook/Spinner" Name="spPosY" >
 				<Property Name="UnifiedPosition" Value="{{0.5,10},{0,30}}" />
 				<Property Name="UnifiedSize" Value="{{0.0,50},{0,20}}" />
-				<Property Name="MaximumValue" Value="1000" />
-				<Property Name="MinimumValue" Value="-1000" />
+<!--                                <Property Name="MaximumValue" Value="1000" />-->
+<!--                                <Property Name="MinimumValue" Value="-1000" />-->
 				<Property Name="StepSize" Value="0.02" />
 				<Property Name="TextInputMode" Value="Integer" />
 <!--                                <Property Name="TextInputMode" Value="FloatingPoint" />-->
@@ -131,8 +137,8 @@
 			<Window Type="QuadraticLook/Spinner" Name="spPosZ" >
 				<Property Name="UnifiedPosition" Value="{{0.5,70},{0,30}}" />
 				<Property Name="UnifiedSize" Value="{{0.0,50},{0,20}}" />
-				<Property Name="MaximumValue" Value="1000" />
-				<Property Name="MinimumValue" Value="-1000" />
+<!--                                <Property Name="MaximumValue" Value="1000" />-->
+<!--                                <Property Name="MinimumValue" Value="-1000" />-->
 				<Property Name="StepSize" Value="0.02" />
 				<Property Name="TextInputMode" Value="Integer" />
 <!--                                <Property Name="TextInputMode" Value="FloatingPoint" />-->
@@ -147,8 +153,8 @@
 			<Window Type="QuadraticLook/Spinner" Name="spSpeedX" >
 				<Property Name="UnifiedPosition" Value="{{0.5,-50},{0,60}}" />
 				<Property Name="UnifiedSize" Value="{{0.0,50},{0,20}}" />
-				<Property Name="MaximumValue" Value="1000" />
-				<Property Name="MinimumValue" Value="-1000" />
+<!--                                <Property Name="MaximumValue" Value="1000" />-->
+<!--                                <Property Name="MinimumValue" Value="-1000" />-->
 				<Property Name="StepSize" Value="0.02" />
 				<Property Name="TextInputMode" Value="Integer" />
 <!--                                <Property Name="TextInputMode" Value="FloatingPoint" />-->
@@ -157,8 +163,8 @@
 			<Window Type="QuadraticLook/Spinner" Name="spSpeedY" >
 				<Property Name="UnifiedPosition" Value="{{0.5,10},{0,60}}" />
 				<Property Name="UnifiedSize" Value="{{0.0,50},{0,20}}" />
-				<Property Name="MaximumValue" Value="1000" />
-				<Property Name="MinimumValue" Value="-1000" />
+<!--                                <Property Name="MaximumValue" Value="1000" />-->
+<!--                                <Property Name="MinimumValue" Value="-1000" />-->
 				<Property Name="StepSize" Value="0.02" />
 				<Property Name="TextInputMode" Value="Integer" />
 <!--                                <Property Name="TextInputMode" Value="FloatingPoint" />-->
@@ -167,8 +173,8 @@
 			<Window Type="QuadraticLook/Spinner" Name="spSpeedZ" >
 				<Property Name="UnifiedPosition" Value="{{0.5,70},{0,60}}" />
 				<Property Name="UnifiedSize" Value="{{0.0,50},{0,20}}" />
-				<Property Name="MaximumValue" Value="1000" />
-				<Property Name="MinimumValue" Value="-1000" />
+<!--                                <Property Name="MaximumValue" Value="1000" />-->
+<!--                                <Property Name="MinimumValue" Value="-1000" />-->
 				<Property Name="StepSize" Value="0.02" />
 				<Property Name="TextInputMode" Value="Integer" />
 <!--                                <Property Name="TextInputMode" Value="FloatingPoint" />-->

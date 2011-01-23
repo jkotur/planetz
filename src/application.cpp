@@ -76,7 +76,8 @@ bool Application::init()
 	ui.sigVideoResize.
 		connect( 2 , bind(&UI::PlanetzPicker::resize,&picker,_1,_2) );
 
-	ui.add_listener( &camera , 1 );
+	ui.add_listener( &setter , 1 );
+	ui.add_listener( &camera , 2 );
 
 	ui.sigKeyDown.
 		connect( bind(&GFX::Background::on_key_down,&bkg,_1) );
@@ -111,7 +112,8 @@ bool Application::init()
 		log_printf(CRITICAL,"CEGUI exception: %s\n",e.getMessage().c_str());
 		return false;
 	}
-	ui.gui.set_layout(pl);
+	ui.set_layout(pl);
+
 
 //        pl->on_cam_speed_changed.connect(
 //                        bind(	&UI::CameraMgr::update,&camera
@@ -126,11 +128,17 @@ bool Application::init()
 	pl->on_load.connect( bind(&Application::pause_anim,this) );
 	pl->on_load.connect( bind(&GFX::PlanetsTracer::clear,&trace) );
 	pl->on_load.connect( bind(&UI::CameraMgr::clear,&camera) );
+	pl->on_load.connect( bind(&UI::PlanetzSetter::clear,&setter) );
 	pl->on_load.connect( bind(&PlanetzLayout::hide_show_window,pl) );
 	pl->on_config_changed.connect(bind(&GFX::Gfx::update_configuration,&gfx,_1));
+	pl->on_planet_changed.connect( bind(&UI::PlanetzSetter::update,&setter,_1) );
+	pl->on_planet_change.connect( bind(&UI::PlanetzSetter::change,&setter,_1) );
 	pl->on_planet_add.connect( bind(&MEM::DataFlowMgr::createPlanet,&data_mgr,_1) );
+	pl->on_planet_add.connect( bind(&UI::PlanetzSetter::clear,&setter) );
 	pl->on_planet_delete.connect( bind(&MEM::DataFlowMgr::removePlanet,&data_mgr,_1) );
 	//planetz.on_planet_select.connect( bind(&PlanetzLayout::add_selected_planet,pl,_1) );
+
+	setter.on_planet_changed.connect( bind(&PlanetzLayout::update_add_win,pl,_1) );
 #endif
 
 //        data_mgr.load(DATA("saves/qsave.sav"));
@@ -139,6 +147,7 @@ bool Application::init()
 	gfx.add( &camera , 1 );
 	gfx.add( &plz    , 2 );
 	gfx.add( &trace  , 3 );
+	gfx.add( &setter , 4 );
 #ifndef _NOGUI
 	gfx.add( &ui     , 9 );
 #endif

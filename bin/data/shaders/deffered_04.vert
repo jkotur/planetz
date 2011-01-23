@@ -11,6 +11,6 @@ void main()
 {
 	colors = atmColor;
 	radiuses = atmData.y * radius;
-	gl_Position = gl_ModelViewMatrix * gl_Vertex + vec4(0,0,-.1*radiuses,0);
+	gl_Position = gl_ModelViewMatrix * gl_Vertex;// + vec4(0,0,-.1*radiuses,0);
 }
 

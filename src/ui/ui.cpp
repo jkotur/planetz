@@ -46,6 +46,12 @@ bool UI::UI::init()
 	return true;
 }
 
+
+void UI::UI::set_layout( Layout*layout )
+{
+	gui.set_layout( layout );
+}
+
 void UI::UI::draw() const 
 {
 	gui.render();

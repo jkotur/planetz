@@ -1,6 +1,8 @@
 #ifndef __MEM_MISC_PLANET_PARAMS_H__
 #define __MEM_MISC_PLANET_PARAMS_H__
 
+#include "cuda/math.h"
+
 namespace MEM
 {
 namespace MISC

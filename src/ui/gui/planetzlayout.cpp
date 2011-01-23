@@ -66,6 +66,8 @@ PlanetzLayout::PlanetzLayout( Config& cfg )
 		->subscribeEvent(PushButton::EventClicked
 				,Event::Subscriber(&PlanetzLayout::add_planet,this));
 
+	SETEVENT("btnChange",PushButton::EventClicked,&PlanetzLayout::change_planet);
+
 	WindowManager::getSingleton().getWindow("btnPause")
 		->subscribeEvent(PushButton::EventClicked
 				,Event::Subscriber(&PlanetzLayout::pause,this));
@@ -119,6 +121,10 @@ PlanetzLayout::PlanetzLayout( Config& cfg )
 	WindowManager::getSingleton().getWindow("slRadius")
 		->subscribeEvent(Scrollbar::EventScrollPositionChanged
 				,Event::Subscriber(&PlanetzLayout::set_radius_val,this));
+
+	SETEVENT("spPosX",Spinner::EventValueChanged,&PlanetzLayout::changed_planet);
+	SETEVENT("slMass"  ,Scrollbar::EventScrollPositionChanged,&PlanetzLayout::changed_planet);
+	SETEVENT("slRadius",Scrollbar::EventScrollPositionChanged,&PlanetzLayout::changed_planet);
 
 	SETEVENT("btnQSave",PushButton::EventClicked,&PlanetzLayout::qsave);
 	SETEVENT("btnQLoad",PushButton::EventClicked,&PlanetzLayout::qload);
@@ -227,44 +233,70 @@ bool PlanetzLayout::add_planet( const CEGUI::EventArgs& e )
 	//        Listbox*lb = static_cast<Listbox*>(WindowManager::getSingleton().getWindow("lbox1"));
 	//        lb->addItem( new ListboxTextItem("Item") );
 	//        return true;
-	::Vector3 pos;
-	pos.x=static_cast<Spinner*>(WindowManager::getSingleton().getWindow("spPosX"))
-		->getCurrentValue();
-	pos.y=static_cast<Spinner*>(WindowManager::getSingleton().getWindow("spPosY"))
-		->getCurrentValue();
-	pos.z=static_cast<Spinner*>(WindowManager::getSingleton().getWindow("spPosZ"))
-		->getCurrentValue();
-
-	::Vector3 vel;
-	vel.x=static_cast<Spinner*>(WindowManager::getSingleton().getWindow("spSpeedX"))
-		->getCurrentValue();
-	vel.y=static_cast<Spinner*>(WindowManager::getSingleton().getWindow("spSpeedY"))
-		->getCurrentValue();
-	vel.z=static_cast<Spinner*>(WindowManager::getSingleton().getWindow("spSpeedZ"))
-		->getCurrentValue();
-
-	double mass;
-	mass=static_cast<Scrollbar*>(WindowManager::getSingleton().getWindow("slMass"))
-		->getScrollPosition();
-	mass = mass_pow(mass);
-
-	double radius;
-	radius=static_cast<Scrollbar*>(WindowManager::getSingleton().getWindow("slRadius"))
-		->getScrollPosition();
-	radius++; // minimalny promien to 1
+	
+	MEM::MISC::PlanetParams pp = get_pp_from_add_win();
 
 	log_printf(DBG,"[GUI] Adding planet at (%f,%f,%f) with speed (%f,%f,%f), mass %f and radius %f\n"
-			,pos.x,pos.y,pos.z
-			,vel.x,vel.y,vel.z
-			,mass,radius );
-
-	MEM::MISC::PlanetParams params(
-		make_float3( pos.x, pos.y, pos.z ),
-		make_float3( vel.x, vel.y, vel.z ),
-		mass, radius, 1 );
+			,pp.pos.x,pp.pos.y,pp.pos.z
+			,pp.vel.x,pp.vel.y,pp.vel.z
+			,pp.mass,pp.radius );
 	TODO( "Wybieranie modelu" );
-	on_planet_add( params );
+	on_planet_add( pp );
 
+	return true;
+}
+
+MEM::MISC::PlanetParams PlanetzLayout::get_pp_from_add_win()
+{
+	MEM::MISC::PlanetParams pp;
+	pp.pos.x=static_cast<Spinner*>(WindowManager::getSingleton().getWindow("spPosX"))
+		->getCurrentValue();
+	pp.pos.y=static_cast<Spinner*>(WindowManager::getSingleton().getWindow("spPosY"))
+		->getCurrentValue();
+	pp.pos.z=static_cast<Spinner*>(WindowManager::getSingleton().getWindow("spPosZ"))
+		->getCurrentValue();
+
+	pp.vel.x=static_cast<Spinner*>(WindowManager::getSingleton().getWindow("spSpeedX"))
+		->getCurrentValue();
+	pp.vel.y=static_cast<Spinner*>(WindowManager::getSingleton().getWindow("spSpeedY"))
+		->getCurrentValue();
+	pp.vel.z=static_cast<Spinner*>(WindowManager::getSingleton().getWindow("spSpeedZ"))
+		->getCurrentValue();
+
+	pp.mass=static_cast<Scrollbar*>(WindowManager::getSingleton().getWindow("slMass"))
+		->getScrollPosition();
+	pp.mass = mass_pow(pp.mass);
+
+	pp.radius=static_cast<Scrollbar*>(WindowManager::getSingleton().getWindow("slRadius"))
+		->getScrollPosition();
+	pp.radius++; // minimalny promien to 1
+
+	pp.model = 1;
+
+	return pp;
+}
+
+bool PlanetzLayout::change_planet( const CEGUI::EventArgs& e )
+{
+	on_planet_change( get_pp_from_add_win() );
+	return true;
+}
+
+bool PlanetzLayout::changed_planet( const CEGUI::EventArgs& e )
+{
+	on_planet_changed( get_pp_from_add_win() );
+	return true;
+}
+
+bool PlanetzLayout::update_add_win( const MEM::MISC::PlanetParams& pp )
+{
+	GETWINCAST(Spinner*,"spPosX")->setCurrentValue(pp.pos.x);
+	GETWINCAST(Spinner*,"spPosY")->setCurrentValue(pp.pos.y);
+	GETWINCAST(Spinner*,"spPosZ")->setCurrentValue(pp.pos.z);
+	GETWINCAST(Spinner*,"spSpeedX")->setCurrentValue(pp.vel.x);
+	GETWINCAST(Spinner*,"spSpeedY")->setCurrentValue(pp.vel.y);
+	GETWINCAST(Spinner*,"spSpeedZ")->setCurrentValue(pp.vel.z);
+	GETWINCAST(Scrollbar*,"slRadius")->setScrollPosition( pp.radius  - 1 );
 	return true;
 }
 

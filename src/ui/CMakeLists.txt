@@ -3,6 +3,6 @@ add_subdirectory( input )
 
 include_directories( ${PROJECT_SOURCE_DIR}/src )
 
-add_library( ui camera camera_manager ui planetz_picker )
+add_library( ui camera camera_manager ui planetz_picker planetz_setter )
 
 target_link_libraries( ui gui input ${CEGUI_LIBRARIES} )

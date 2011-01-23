@@ -14,6 +14,8 @@
 
 #include "./gui/gui.h"
 #include "./camera.h"
+#include "./planetz_setter.h"
+#include "./gui/layout.h"
 
 #include "ui/input_listener.h"
 
@@ -50,6 +52,13 @@ public:
 	 * @brief Wyświetla GUI na ekran
 	 */
 	virtual void draw() const;
+
+	/** 
+	 * @brief Ustawia layout gui
+	 * 
+	 * @param layout
+	 */
+	void set_layout( Layout*layout );
 
 	/** 
 	 * @brief Informuję ui że jedna klatka została wyświetlona
@@ -91,8 +100,8 @@ public:
 	/** @brief Sygnał emitowany gdy zmienia się wielkość ekranu */
 	boost::signal<void (int,int)> sigVideoResize;
 
-	Gui gui;
 private:
+	Gui gui;
 	CLocationDriver*joy;
 };
 

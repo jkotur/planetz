@@ -29,8 +29,8 @@ public:
 	void on_key_up( int );
 
 	void set_layout( Layout*l );
+	Layout*get_layout();
 
-	// FIXME: public?
 	CEGUI::OpenGLRenderer*renderer;
 private:
 	bool add_item( const CEGUI::EventArgs& e );

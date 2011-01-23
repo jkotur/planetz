@@ -27,12 +27,17 @@ void Gui::set_layout( Layout*_l )
 	layout  = _l;
 }
 
+Layout*Gui::get_layout()
+{
+	return layout;
+}
+
 bool Gui::init()
 {
 	 try {
 		init_throw();
 	 } catch(CEGUI::InvalidRequestException e) {
-		log_printf(CRITICAL,"CEGUI exception: %s\n",e.getMessage().c_str());
+		log_printf(CRITICAL,"CEGUI invalid request exception: %s\n",e.getMessage().c_str());
 		return false;
 	 } catch(CEGUI::Exception& e) {
 		log_printf(CRITICAL,"CEGUI exception: %s\n",e.getMessage().c_str());

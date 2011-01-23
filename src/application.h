@@ -21,6 +21,7 @@
 #include "constants.h"
 
 #include "ui/ui.h"
+#include "ui/planetz_setter.h"
 #include "ui/planetz_picker.h"
 #include "ui/camera_manager.h"
 
@@ -100,6 +101,7 @@ protected:
 	PHX::Phx phx;
 	GFX::Gfx gfx;
 
+	UI::PlanetzSetter setter;
 	UI::PlanetzPicker picker;
 	UI::CameraMgr camera;
 	UI::UI ui;
