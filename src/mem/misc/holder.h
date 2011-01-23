@@ -205,7 +205,6 @@ namespace MISC
 	{
 		if( num > m_realsize ) // ew. można zmniejszać kiedy num << m_realsize
 		{
-			ConstChecker<float, CBUF> mass_checker;
 			model    .resize(num);
 			//color    .resize(num);
 			light    .resize(num);
@@ -214,9 +213,7 @@ namespace MISC
 			atm_data .resize(num);
 			pos      .resize(num);
 			radius   .resize(num);
-			mass_checker.setBuf( &mass, m_size );
 			mass     .resize(num);
-			mass_checker.checkBuf();
 			velocity .resize(num);
 			m_realsize = num;
 		}
