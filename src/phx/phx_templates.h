@@ -2,6 +2,8 @@
 #define _PHX_TEMPLATES_H_
 #include "mem/misc/buffer.h"
 #include "mem/misc/buffer_cu.hpp"
+#include <string.h> // for memcmp
+#include <math.h> // for isnan
 
 inline bool operator==(const float3& l, const float3& r)
 {
@@ -45,9 +47,25 @@ template<class T, template<class S> class BUF>
 class BufferAdapter
 {
 	public:
-		BufferAdapter( BUF<T>& );
+		BufferAdapter( BUF<T>& ){NOENTRY();}
 
-		T* hostData();
+		T* hostData(){NOENTRY();return NULL;}
+};
+
+template<class T>
+class BufferAdapter<T, MEM::MISC::BufferCpu >
+{
+	public:
+		BufferAdapter( MEM::MISC::BufferCpu<T>& b ):buf(b)
+		{
+		}
+		
+		T* hostData()
+		{
+			return &(buf[0]);
+		}
+	private:
+		MEM::MISC::BufferCpu<T> &buf;
 };
 
 template<class T>
@@ -61,6 +79,10 @@ class BufferAdapter<T, MEM::MISC::BufferGl >
 		T* hostData()
 		{
 			return buf.map( MEM::MISC::BUF_H );
+		}
+		~BufferAdapter()
+		{
+			buf.unmap();
 		}
 	private:
 		MEM::MISC::BufferGl<T> &buf;
@@ -96,6 +118,7 @@ class ConstChecker
 		{
 			buf = b;
 			size = _size;
+			if( !size ) return;
 			if( data )
 			{
 				delete []data;
@@ -114,6 +137,7 @@ class ConstChecker
 
 		void checkBuf()
 		{
+			if( !size ) return;
 			T *actual_data = new T[ size ];
 			ASSERT( actual_data != NULL );
 			BufferAdapter<T, BUF> ad( *buf );
