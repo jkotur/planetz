@@ -96,6 +96,7 @@ void DeferRender::prepare()
 	ifplanesId     = glGetUniformLocation( prLighting.id() , "planes"    );
 	modelLId       = glGetAttribLocation ( prLighting.id() , "model"     );
 	lightId        = glGetAttribLocation ( prLighting.id() , "light"     );
+	radiusLId      = glGetAttribLocation ( prLighting.id() , "radius"    );
                                                                              
 	gbuffId[4]     = glGetUniformLocation( prLightsBase.id() , "gbuff1"  );
 	gbuffId[5]     = glGetUniformLocation( prLightsBase.id() , "gbuff2"  );
@@ -103,7 +104,7 @@ void DeferRender::prepare()
 	gbuffId[7]     = glGetUniformLocation( prLightsBase.id() , "gbuff4"  );
                                                                              
 	atmId          = glGetUniformLocation( prAtmosphere.id() , "texture" );
-	atmRadiusId    = glGetAttribLocation ( prAtmosphere.id() , "radius"  );
+	atmAtmRadiusId = glGetAttribLocation ( prAtmosphere.id() , "radius"  );
 	atmAtmDataId   = glGetAttribLocation ( prAtmosphere.id() , "atmData" );
 	atmAtmColorId  = glGetAttribLocation ( prAtmosphere.id() , "atmColor");
                                                                              
@@ -113,6 +114,7 @@ void DeferRender::prepare()
 	atmMaterialsId = glGetUniformLocation( prPostAtm.id() , "materials"  );
 	atmModelId     = glGetAttribLocation ( prPostAtm.id() , "model"      );
 	atmLightId     = glGetAttribLocation ( prPostAtm.id() , "light"      );
+	atmRadiusId    = glGetAttribLocation ( prPostAtm.id() , "radius"     );
 
 	prPlanet.use();
 	glUniform1i( materialsTexId , 0 );
@@ -558,8 +560,9 @@ void DeferRender::draw() const
 	glActiveTexture(GL_TEXTURE2); glBindTexture( GL_TEXTURE_2D, gbuffTex[2] );
 	glActiveTexture(GL_TEXTURE3); glBindTexture( GL_TEXTURE_2D, gbuffTex[3] );
 
-	glEnableVertexAttribArray( modelLId );
 	glEnableVertexAttribArray( lightId );
+	glEnableVertexAttribArray( modelLId );
+	glEnableVertexAttribArray( radiusLId );
 
 	prLighting.use();
 
@@ -572,6 +575,10 @@ void DeferRender::draw() const
 	factory->getModels().bind();
 	glVertexAttribIPointer( modelLId  , 1, GL_INT , 0, NULL );
 	factory->getModels().unbind();
+
+	factory->getRadiuses().bind();
+	glVertexAttribPointer( radiusLId , 1, GL_FLOAT, GL_FALSE, 0, NULL );
+	factory->getRadiuses().unbind();
 
 	factory->getLight().bind();
 	glVertexAttribPointer( lightId , 3 , GL_FLOAT , GL_FALSE , 0 , NULL );
@@ -587,6 +594,7 @@ void DeferRender::draw() const
 
 	glDisableVertexAttribArray( lightId );
 	glDisableVertexAttribArray( modelLId  );
+	glDisableVertexAttribArray( radiusLId );
 
 	prLightsBase.use();
 	glBegin(GL_POINTS);
@@ -630,7 +638,7 @@ void DeferRender::draw() const
 //        glDisable( GL_DEPTH_TEST );
 //        glBlendFunc( GL_SRC_ALPHA , GL_ONE_MINUS_SRC_ALPHA );
 
-	glEnableVertexAttribArray( atmRadiusId );
+	glEnableVertexAttribArray( atmAtmRadiusId );
 	glEnableVertexAttribArray( atmAtmDataId );
 	glEnableVertexAttribArray( atmAtmColorId );
 
@@ -639,7 +647,7 @@ void DeferRender::draw() const
 	factory->getPositions().unbind();
 
 	factory->getRadiuses().bind();
-	glVertexAttribPointer( atmRadiusId , 1, GL_FLOAT, GL_FALSE, 0, NULL );
+	glVertexAttribPointer( atmAtmRadiusId , 1, GL_FLOAT, GL_FALSE, 0, NULL );
 	factory->getRadiuses().unbind();
 
 	factory->getAtmData().bind();
@@ -671,7 +679,7 @@ void DeferRender::draw() const
 
 	glDisableVertexAttribArray( atmAtmColorId );
 	glDisableVertexAttribArray( atmAtmDataId );
-	glDisableVertexAttribArray( atmRadiusId );
+	glDisableVertexAttribArray( atmAtmRadiusId );
 
 	glDisable( GL_DEPTH_TEST );
 	glEnable( GL_BLEND );
@@ -684,6 +692,7 @@ void DeferRender::draw() const
 
 	glEnableVertexAttribArray( atmModelId );
 	glEnableVertexAttribArray( atmLightId );
+	glEnableVertexAttribArray( atmRadiusId );
 
 	prPostAtm.use();
 
@@ -694,6 +703,10 @@ void DeferRender::draw() const
 	factory->getModels().bind();
 	glVertexAttribIPointer( atmModelId  , 1, GL_INT , 0, NULL );
 	factory->getModels().unbind();
+
+	factory->getRadiuses().bind();
+	glVertexAttribPointer( atmRadiusId , 1, GL_FLOAT, GL_FALSE, 0, NULL );
+	factory->getRadiuses().unbind();
 
 	factory->getLight().bind();
 	glVertexAttribPointer( atmLightId , 3 , GL_FLOAT , GL_FALSE , 0 , NULL );
@@ -711,6 +724,7 @@ void DeferRender::draw() const
 
 	glDisableVertexAttribArray( atmModelId );
 	glDisableVertexAttribArray( atmLightId );
+	glDisableVertexAttribArray( atmRadiusId );
 
 	glDisableClientState( GL_VERTEX_ARRAY );
 

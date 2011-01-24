@@ -75,6 +75,7 @@ private:
 	// Vertex data
 	//
 	GLint radiusId;
+	GLint radiusLId;
 
 	GLint modelId ;
 	GLint texIdId ;
@@ -136,7 +137,7 @@ private:
 	GLuint generate_atmosphere_texture( int w , int h );
 
 	GLint atmId;
-	GLint atmRadiusId;
+	GLint atmRadiusId, atmAtmRadiusId;
 	GLint atmDataId  , atmAtmDataId ;
 	GLint atmColorId , atmAtmColorId;
 	GLuint atmTex;

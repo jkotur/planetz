@@ -196,7 +196,7 @@ namespace MISC
 	PlanetHolderBase<CBUF, GBUF>::~PlanetHolderBase()
 	{
 		ASSERT_MSG( m_planetIds.empty(), "There are still planets in use!" );
-		log_printf(INFO, "deleted planetholder\n");
+		log_printf(DBG, "deleted planetholder\n");
 	}
 
 	template<template<class T>class CBUF, template<class S>class GBUF>

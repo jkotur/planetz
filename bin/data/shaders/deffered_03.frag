@@ -13,7 +13,7 @@ uniform sampler2D gbuff2;
 uniform sampler2D gbuff3;
 uniform sampler2D gbuff4;
 
-uniform int planes = 0;
+uniform int planes;
 
 varying in float ke;
 varying in vec3 lightPos;
@@ -24,7 +24,7 @@ void main()
 	vec4 gdat1 = texture2D( gbuff1 , gl_TexCoord[0].st );
 
 	gl_FragColor.a = gdat1.a;
-        if( planes && gdat1.a <= .0 ) gl_FragColor.rgba = vec4(.1,.1,.1,.2);
+        if( bool(planes) && gdat1.a <= .0 ) gl_FragColor.rgba = vec4(.1,.1,.1,.2);
 	if(           gdat1.a <= .0 ) return;
 
 	vec4 gdat2 = texture2D( gbuff2 , gl_TexCoord[0].st );
@@ -36,8 +36,8 @@ void main()
 	vec3 lightDir = lightPos - gdat1.xyz; // lightpos - pos
 
 	float dist = length(lightDir);
-//        dist = dist * dist / 10;
-	dist /= 100; // magic constans
+//        dist = dist * dist / 50000.0;
+	dist /= 50; // magic constans
 	dist /= ke;
         lightDir = normalize(lightDir);
 

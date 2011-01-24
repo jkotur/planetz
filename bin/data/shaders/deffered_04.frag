@@ -25,7 +25,7 @@ void main()
 	norm.xyz *= radius;
 
 	gl_FragData[1].rgb  = pos + norm.xyz;
-	gl_FragData[1].a    = 1;
+	gl_FragData[1].a    = 1.0;
 	gl_FragData[2].rgba = vec4( color , norm.a );
 
 	gl_FragDepth = gl_FragCoord.z+.0001;

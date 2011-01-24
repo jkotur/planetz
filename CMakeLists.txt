@@ -27,10 +27,12 @@ find_package( CEGUIOPENGL )
 find_package( Sqlite3 )
 
 if( UNIX )
-	#	set( CMAKE_C_FLAGS "-O3 -g -Wall -pedantic")
-	#	set( CMAKE_CXX_FLAGS "-O3 -g -Wall -pedantic")
-	set( CMAKE_C_FLAGS "-O3 -g -Wall -rdynamic")
-	set( CMAKE_CXX_FLAGS "-O3 -g -Wall -rdynamic")
+	set( CMAKE_C_FLAGS   "-O2")
+	set( CMAKE_CXX_FLAGS "-O2")
+	set( CMAKE_C_FLAGS_DEBUG   "-g -rdynamic -Wall -D_DEBUG" )
+	set( CMAKE_CXX_FLAGS_DEBUG "-g -rdynamic -Wall -D_DEBUG" )
+	set( CMAKE_C_FLAGS_RELEASE   "-D_RELEASE" )
+	set( CMAKE_CXX_FLAGS_RELEASE "-D_RELEASE" )
 endif( UNIX )
 
 # is this needed?

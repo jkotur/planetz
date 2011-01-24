@@ -12,6 +12,7 @@ uniform sampler1D materials;
 
 in float em[];
 in int models[];
+in float radiuses[];
 
 out float ke;
 out vec3 lightColor;
@@ -24,6 +25,8 @@ void main(void)
 {
 	// TODO: move color to vertex buffer just like emissive
 	//if( em[0] <= 0.0 ) return;
+
+	if( radiuses[0] < 0.0001 ) return;
 
 	vec4 mat = texelFetch(materials,models[0],0);
 	if( mat.a <= 0.0 ) return;

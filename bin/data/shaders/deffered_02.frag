@@ -13,7 +13,7 @@ uniform sampler2D gbuff2;
 uniform sampler2D gbuff3;
 uniform sampler2D gbuff4;
 
-uniform float brightness = 0;
+uniform float brightness;
 
 void main()
 {	
