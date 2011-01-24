@@ -99,9 +99,10 @@ void IOCtl::Impl::loadTextures( MISC::Textures* dest , const std::string & path 
 
 	foreach( TexturesRow* t, table )
 	{
-		SDL_Surface* surface = IMG_Load( t->path.c_str() );
+		std::string absolute_path = DATA( "textures/" ) + t->path;
+		SDL_Surface* surface = IMG_Load( absolute_path.c_str() );
 		if( !surface ) {
-			log_printf(_ERROR,"SDL could not load image '%s': %s\n",t->path.c_str() , SDL_GetError() );
+			log_printf(_ERROR,"SDL could not load image '%s': %s\n",absolute_path.c_str() , SDL_GetError() );
 			continue;
 		}
 
