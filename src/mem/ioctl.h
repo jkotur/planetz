@@ -21,7 +21,7 @@ public:
 	void save( const MISC::SaverParams *source, const std::string& path );
 	void load( MISC::SaverParams *dest, const std::string& path );
 	void loadMaterials( MISC::Materials* dest , const std::string & path );
-	void loadTextures( MISC::Textures* dest , const std::list<std::string>& names );
+	void loadTextures( MISC::Textures* dest , const std::string & path );
 
 private:
 	class Impl;

@@ -94,13 +94,7 @@ GLuint DataFlowMgr::Impl::loadTextures()
 	TODO("Read texture files from file");
 
 	MISC::Textures tex;
-	std::list<std::string> names;
-	names.push_back( DATA("textures/small_earth_clouds.jpg") );
-	names.push_back( DATA("textures/small_jupiter.jpg") );
-	names.push_back( DATA("textures/small_saturn.jpg") );
-	names.push_back( DATA("textures/small_sun.jpg") );
-	names.push_back( DATA("textures/small_mars.jpg") );
-	ioctl.loadTextures(&tex,names);
+	ioctl.loadTextures(&tex,DATA("textures/index.db"));
 	GLuint res = memmgr.loadTextures( tex );
 	for( MISC::Textures::iterator i = tex.begin() ; i != tex.end() ; ++i )
 		SDL_FreeSurface( *i );
@@ -111,7 +105,7 @@ GLuint DataFlowMgr::Impl::loadMaterials()
 {
 	if( materials ) delete materials;
 	materials = new MISC::Materials();
-	ioctl.loadMaterials( materials , "should be here?" );
+	ioctl.loadMaterials( materials , DATA("materials.db") );
 	return memmgr.loadMaterials(*materials );
 }
 

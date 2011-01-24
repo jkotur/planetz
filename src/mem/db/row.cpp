@@ -44,6 +44,6 @@ std::string Row::getCreationString() const
 		<< getTableName()
 		<< "("
 		<< getCellDefs()
-		<< ")";
+		<< ");";
 	return ss.str();
 }
