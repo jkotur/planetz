@@ -1,11 +1,13 @@
 #ifndef HOLDER_H
 #define HOLDER_H
 
+#include <cmath>
+#include <map>
+
 #include "buffer.h"
 #include "buffer_gl.h"
 #include "buffer_cpu.h"
 #include "buffer_cu.hpp"
-#include <map>
 
 namespace MEM
 {
@@ -32,7 +34,7 @@ namespace MISC
 			 *
 			 * @param num Nowa ilość planet.
 			 */
-			void resize(const size_t num);
+			void resize(size_t num);
 
 			/**
 			 * @brief Pobiera rozmiar bufora.
@@ -121,6 +123,8 @@ namespace MISC
 			typedef std::map<PlanetLogin, int> IdMap;
 
 			IdMap m_planetIds;
+
+			static const unsigned BLOCK_NUM = 1111;
 	};
 
 	/**
@@ -200,21 +204,22 @@ namespace MISC
 	}
 
 	template<template<class T>class CBUF, template<class S>class GBUF>
-	void PlanetHolderBase<CBUF, GBUF>::resize(const size_t num)
+	void PlanetHolderBase<CBUF, GBUF>::resize(size_t num)
 	{
 		if( num > m_realsize ) // ew. można zmniejszać kiedy num << m_realsize
 		{
-			model    .resize(num);
-			//color    .resize(num);
-			light    .resize(num);
-			texId    .resize(num);
-			atm_color.resize(num);
-			atm_data .resize(num);
-			pos      .resize(num);
-			radius   .resize(num);
-			mass     .resize(num);
-			velocity .resize(num);
-			m_realsize = num;
+			m_realsize = (unsigned)(std::ceil((double)num/(double)BLOCK_NUM)*BLOCK_NUM);
+
+			model    .resize(m_realsize);
+			//color    .resize(m_realsize);
+			light    .resize(m_realsize);
+			texId    .resize(m_realsize);
+			atm_color.resize(m_realsize);
+			atm_data .resize(m_realsize);
+			pos      .resize(m_realsize);
+			radius   .resize(m_realsize);
+			mass     .resize(m_realsize);
+			velocity .resize(m_realsize);
 		}
 		count.assign( num );
 		m_size = num;

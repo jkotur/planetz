@@ -106,7 +106,7 @@ void cube_gen(int dist, unsigned edge)
 					4.f * edge * rand() / RAND_MAX,
 					4.f * edge * rand() / RAND_MAX,
 					4.f * edge * rand() / RAND_MAX,
-					sun ? mass>(1<<4) ? 5 : 4 : ( x + y + z ) % 4
+					sun ? mass>(1<<4) ? 2 : 1 : (( x + y + z ) % 20 + 4)
 					) );
 			}
 		}
@@ -159,7 +159,7 @@ void disk_gen( unsigned count, float r )
 		float vy = r * (-x)/(17 * (r-act_r + r/2)) + RAND_VEL;
 		float vz = RAND_VEL;
 		g.add( point( x, y, 0, mass, pow(mass, 0.3),
-			vx, vy, vz, star ? 5 : rand() % 4 ) );	
+			vx, vy, vz, star ? 1 : rand() % 20 + 4 ) );
 	}
 	g.print();
 }
@@ -174,9 +174,10 @@ int main()
 	g.print();
 	g.iterate( 4 );*/
 
-//        cube_gen(2500, 20);
+//        cube_gen(50, 20);
+//        cube_gen(1500, 20);
 	//spiral_gen();
-	disk_gen( 20000, 1000 );
+	disk_gen( 11110, 5000 );
 	
 	return 0;
 }

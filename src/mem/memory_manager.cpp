@@ -43,7 +43,7 @@ GLuint MemMgr::loadTextures( const MISC::Textures& ctex )
 	for( MISC::Textures::const_iterator i = ctex.begin() ; i != ctex.end() ; ++i , z++ )
 	{
 		ASSERT_MSG( TEX_W == (*i)->w && TEX_H == (*i)->h ,
-				"Texture must be %dx%d" , TEX_W , TEX_H );
+				"Texture must be %dx%d. Got %dx%d" , TEX_W , TEX_H, (*i)->w , (*i)->h );
 
 		GLenum format = (**i).format->Amask ? GL_RGBA : GL_RGB ;
 

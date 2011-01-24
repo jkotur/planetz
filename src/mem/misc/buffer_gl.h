@@ -83,19 +83,16 @@ namespace MISC
 		 */
 		GLuint getId() const;
 	protected:
-		T* fucking_no_const_cast_workaround( enum BUFFER_STATE state ) const;
+		T* map_half_const( enum BUFFER_STATE state ) const;
 
 		void gl_resize( const size_t new_size , const T*data );
 
 		GLuint glId; // opengl buffer id
-		T*     cuPtr;// cuda gpu data pointer
-		T*     hPtr; // host mapped opengl gpu data pointer
 
-		enum BUFFER_STATE  state;
+		mutable T* cuPtr;// cuda gpu data pointer
+		mutable T* hPtr; // host mapped opengl gpu data pointer
 
-		// nasty const hacks
-		T**   phPtr;
-		enum BUFFER_STATE* const pstate;
+		mutable enum BUFFER_STATE  state;
 	};
 	
 	//
@@ -103,15 +100,13 @@ namespace MISC
 	//
 	template<typename T>
 	BufferGl<T>::BufferGl( )
-		: glId(0) , cuPtr(NULL) , hPtr(NULL) , state(BUF_GL) ,
-		  phPtr(&hPtr) , pstate(&state)
+		: glId(0) , cuPtr(NULL) , hPtr(NULL) , state(BUF_GL)
 	{
 	}
 
 	template<typename T>
 	BufferGl<T>::BufferGl( const size_t num , const T*data )
-		: glId(0) , cuPtr(NULL) , hPtr(NULL) , state(BUF_GL) ,
-		  phPtr(&hPtr) , pstate(&state)
+		: glId(0) , cuPtr(NULL) , hPtr(NULL) , state(BUF_GL)
 	{
 		resize( num , data );
 	}
@@ -200,7 +195,7 @@ namespace MISC
 		}
 
 		this->length = num;
-		this->size =this-> realsize = new_size;
+		this->size = this->realsize = new_size;
 	}
 
 	template<typename T>
@@ -226,15 +221,15 @@ namespace MISC
 	}
 
 	template<typename T>
-	T* BufferGl<T>::fucking_no_const_cast_workaround( enum BUFFER_STATE new_state ) const
+	T* BufferGl<T>::map_half_const( enum BUFFER_STATE new_state ) const
 	{
 		ASSERT_MSG( this->size > 0 , "Cannot map empty buffer:<" );
 
-		if( state == new_state ) return *pstate==BUF_CU?cuPtr:(state==BUF_H?hPtr:NULL);
+		if( state == new_state ) return state==BUF_CU?cuPtr:(state==BUF_H?hPtr:NULL);
 
 		unmap();
 
-		*pstate = new_state;
+		state = new_state;
 
 		if( state == BUF_GL ) return NULL;
 		if( state == BUF_CU ) {
@@ -244,7 +239,7 @@ namespace MISC
 		}
 		if( state == BUF_H  ) {
 			glBindBuffer( GL_ARRAY_BUFFER , glId );
-			*phPtr = (T*)glMapBuffer( GL_ARRAY_BUFFER , GL_READ_WRITE );
+			hPtr = (T*)glMapBuffer( GL_ARRAY_BUFFER , GL_READ_WRITE );
 			glBindBuffer( GL_ARRAY_BUFFER , 0 );
 			return hPtr;
 		}
@@ -255,17 +250,13 @@ namespace MISC
 	template<typename T>
 	const T* BufferGl<T>::map( enum BUFFER_STATE new_state ) const
 	{
-		return fucking_no_const_cast_workaround( new_state );
+		return map_half_const( new_state );
 	}
 
 	template<typename T> 
 	T* BufferGl<T>::map( enum BUFFER_STATE new_state ) 
 	{
-		/* fucking const_cast seg faults while casting invalid pointers.
-		 * unfortunetely all gpu pointers are invalid for cpu!!
-		 */
-//                return const_cast<T*>(map(new_state)); 
-		return fucking_no_const_cast_workaround( new_state );
+		return map_half_const( new_state );
 	}
 
 	template<typename T>
@@ -284,7 +275,7 @@ namespace MISC
 			glBindBuffer( GL_ARRAY_BUFFER , 0 );
 		}
 
-		*pstate = BUF_GL;
+		state = BUF_GL;
 	}
 
 
