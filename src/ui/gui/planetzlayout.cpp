@@ -147,6 +147,8 @@ void PlanetzLayout::updateOptions( Config& cfg )
 	cfg.set("trace.enable",GETWINCAST(Checkbox*,"cbTrace")->isSelected());
 	cfg.set("trace.frequency",(double)GETWINCAST(Spinner*,"spTraceFreq")->getCurrentValue());
 	cfg.set("trace.length",(unsigned)GETWINCAST(Spinner*,"spTraceLenght")->getCurrentValue());
+
+	cfg.set("phx.clusters",GETWINCAST(Checkbox*,"cbClusters")->isSelected());
 }
 
 void PlanetzLayout::setOptions( const Config& cfg )

@@ -84,6 +84,8 @@ protected:
 
 	void reset();
 
+	void set_phx_clustering( const Config &cfg );
+
 	MEM::MISC::PhxPlanet pp;
 
 	unsigned fps;

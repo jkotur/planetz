@@ -18,4 +18,13 @@
 		NOENTRY();\
 	}
 
+#define ROW_VALUES_INIT \
+	std::stringstream ss
+
+#define ROW_VALUES_ADD(x) \
+	ss << (x) << ", "
+
+#define ROW_VALUES_RESULT \
+	ss.str().substr( 0, ss.str().size() - 2 )
+
 #endif // _DB_ROWUTILS_H_

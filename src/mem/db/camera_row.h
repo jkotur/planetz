@@ -14,10 +14,6 @@ namespace MEM
 			CameraRow();
 			virtual ~CameraRow();
 
-			virtual std::string getSaveString() const;
-			virtual std::string getLoadString() const;
-			virtual std::string getCreationString() const;
-
 			virtual uint8_t size() const;
 			virtual void setCell( unsigned idx, const std::string &val );
 
@@ -25,6 +21,12 @@ namespace MEM
 			 * @brief Macierz przekształceń kamery.
 			 */
 			float matrix[16];
+
+		protected:
+			virtual std::string getTableName() const;
+			virtual std::string getCellNames() const;
+			virtual std::string getCellDefs() const;
+			virtual std::string getCellValues() const;
 	};
 }
 

@@ -20,19 +20,19 @@ namespace MEM
 			 *
 			 * @returns Kod SQL.
 			 */
-			virtual std::string getSaveString() const = 0;
+			virtual std::string getSaveString() const;
 
 			/**
 			 * @brief Zwraca kod SQL wczytujący wiersz z bazy.
 			 *
 			 * @returns Kod SQL.
 			 */
-			virtual std::string getLoadString() const = 0;
+			virtual std::string getLoadString() const;
 
 			/**
 			 * @brief Zwraca kod SQL tworzący tabelę - i usuwający poprzednią, jeżeli istniała.
 			 */
-			virtual std::string getCreationString() const = 0;
+			virtual std::string getCreationString() const;
 
 			/**
 			 * @brief Rozmiar wiersza.
@@ -49,6 +49,35 @@ namespace MEM
 			 * @param val Wartość do zapisu, w formie tekstowej.
 			 */
 			virtual void setCell( unsigned idx, const std::string& val ) = 0;
+
+		protected:
+			/**
+			 * @brief Zwraca alfanumeryczny ciąg znaków, będący nazwą tabeli.
+			 *
+			 * @returns Nazwa tabeli.
+			 */
+			virtual std::string getTableName() const = 0;
+
+			/**
+			 * @brief Zwraca nazwy kolumn w tabeli, oddzielone przecinkami.
+			 *
+			 * @returns Nazwy kolumn.
+			 */
+			virtual std::string getCellNames() const = 0;
+
+			/**
+			 * @brief Zwraca nazwy kolumn, wraz z ich typami w bazie.
+			 *
+			 * @returns Definicje kolumn.
+			 */
+			virtual std::string getCellDefs() const = 0;
+
+			/**
+			 * @brief Zwraca wartości wszystkich komórek wiersza.
+			 *
+			 * @returns Wartości oddzielone przecinkami.
+			 */
+			virtual std::string getCellValues() const = 0;
 	};
 }
 

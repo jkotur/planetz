@@ -22,6 +22,7 @@ typedef boost::signal<void (unsigned)> SigSetUnsigned;
 typedef boost::signal<void (std::string)> SigSetString;
 typedef boost::signal<void (double)> SigSetDouble;
 typedef boost::signal<void ()> SigVoid;
+typedef boost::signal<void (bool)> SigSetBool;
 
 /** 
  * @brief Klasa odpowiedzialna za stworzenie konkretnego GUI i 
@@ -44,9 +45,10 @@ public:
 
 	void change_planet( const MEM::MISC::PlanetParams& pp );
 
+	/** @brief Sygnał emitowany, gdy jest dodawana planeta */
 	SigSetPlanet on_planet_add;
+	/** @brief Sygnał emitowany, gdy jest usuwana planeta */
 	SigSetUnsigned on_planet_delete;
-
 	/** @brief Sygnał emitowany gdy zmienia się prędkość symulacji */
 	SigSetDouble on_sim_speed_changed;
 	/** @brief Sygnał emitowany gdy zmienia się prędkość kamery */

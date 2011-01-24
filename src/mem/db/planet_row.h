@@ -14,15 +14,10 @@ namespace MEM
 			PlanetRow();
 			virtual ~PlanetRow();
 
-			virtual std::string getSaveString() const;
-			virtual std::string getLoadString() const;
-			virtual std::string getCreationString() const;
-
 			virtual uint8_t size() const;
 			virtual void setCell( unsigned idx, const std::string &val );
 
 		public:
-			
 			/**
 			 * @brief Położenie x planety.
 			 */
@@ -35,7 +30,6 @@ namespace MEM
 			 * @brief Położenie z planety.
 			 */
 			float zcoord;
-
 			/**
 			 * @brief Promień planety
 			 */
@@ -61,10 +55,11 @@ namespace MEM
 			 */
 			int model_id;
 
-		private:
-			static const std::string save_string;
-			static const std::string load_string;
-			static const std::string creation_string;
+		protected:
+			virtual std::string getTableName() const;
+			virtual std::string getCellNames() const;
+			virtual std::string getCellDefs() const;
+			virtual std::string getCellValues() const;
 	};
 }
 
