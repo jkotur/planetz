@@ -32,6 +32,8 @@ void PlanetHolderCleaner::work()
 
 void PlanetHolderCleaner::forceFilter()
 {
+	if( 0 == fact->size() )
+		return;
 	createFilter();
 	filterHolder();
 	needChecking = false;
