@@ -141,7 +141,8 @@ void spiral_gen()
 	g.print();
 }
 #define PI 3.14159265
-#define RAND_VEL ((20./mass) * rand() / RAND_MAX)
+#define RAND_VEL (20 * rand() / RAND_MAX)
+#define MASS_FACTOR (1./pow(mass,.1)) 
 void disk_gen( unsigned count, float r )
 {
 	const float concentration = 0.6;
@@ -150,14 +151,14 @@ void disk_gen( unsigned count, float r )
 	{
 		float act_r = r * pow( 1. * rand() / RAND_MAX, concentration );
 		float act_angle = 2 * PI * rand() / RAND_MAX;
-		unsigned mass = rand() % (1 << 5) + 1;
+		float mass = rand() % (1 << 5) + 1;
 		bool star = (0 == rand() % (unsigned)pow(count, 0.7));
 		if( star ) mass *= 1e4;
 		float x = act_r * sin( act_angle );
 		float y = act_r * cos( act_angle );
-		float vx = r * y/(17 * (r-act_r + r/2)) + RAND_VEL;
-		float vy = r * (-x)/(17 * (r-act_r + r/2)) + RAND_VEL;
-		float vz = RAND_VEL;
+		float vx = (r * y/(17 * (r-act_r + r/2)) + RAND_VEL)*MASS_FACTOR;
+		float vy = (r * (-x)/(17 * (r-act_r + r/2)) + RAND_VEL)*MASS_FACTOR;
+		float vz = RAND_VEL*MASS_FACTOR;
 		g.add( point( x, y, 0, mass, pow(mass, 0.3),
 			vx, vy, vz, star ? 1 : rand() % 20 + 4 ) );
 	}
@@ -177,7 +178,7 @@ int main()
 //        cube_gen(200, 20);
 //        cube_gen(1500, 20);
 	//spiral_gen();
-	disk_gen( 15000 , 7500 );
+	disk_gen( 2000 , 1500 );
 	
 	return 0;
 }

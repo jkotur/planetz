@@ -145,7 +145,7 @@ void PlanetzLayout::updateOptions( Config& cfg )
 	cfg.set("deffered.brightness",GETWINCAST(Spinner*,"spBright")->getCurrentValue());
 
 	cfg.set("trace.enable",GETWINCAST(Checkbox*,"cbTrace")->isSelected());
-	cfg.set("trace.visable",GETWINCAST(Checkbox*,"cbTraceVis")->isSelected());
+	cfg.set("trace.visible",GETWINCAST(Checkbox*,"cbTraceVis")->isSelected());
 	cfg.set("trace.frequency",(double)GETWINCAST(Spinner*,"spTraceFreq")->getCurrentValue());
 	cfg.set("trace.length",(unsigned)GETWINCAST(Spinner*,"spTraceLenght")->getCurrentValue());
 
@@ -161,7 +161,7 @@ void PlanetzLayout::setOptions( const Config& cfg )
 	GETWINCAST(Spinner*,"spBright")->setCurrentValue(cfg.get<float>("deffered.brightness"));
 
 	GETWINCAST(Checkbox*,"cbTrace")->setSelected(cfg.get<bool>("trace.enable"));
-	GETWINCAST(Checkbox*,"cbTraceVis")->setSelected(cfg.get<bool>("trace.visable"));
+	GETWINCAST(Checkbox*,"cbTraceVis")->setSelected(cfg.get<bool>("trace.visible"));
 	GETWINCAST(Spinner*,"spTraceLenght")->setCurrentValue(cfg.get<unsigned>("trace.length"));
 	GETWINCAST(Spinner*,"spTraceFreq")->setCurrentValue(cfg.get<double>("trace.frequency"));
 }

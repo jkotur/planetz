@@ -37,7 +37,7 @@ void GFX::PlanetsTracer::update_configuration( const Config& cfg )
 {
 	unsigned newnumber = cfg.get<unsigned>( "trace.length"    );
 	double newdt       = cfg.get<double>  ( "trace.frequency" );
-	drawable           = cfg.get<bool>    ( "trace.visable"   );
+	drawable           = cfg.get<bool>    ( "trace.visible"   );
 	bool newtracing    = cfg.get<bool>    ( "trace.enable"    );
 
 	if( newnumber != number ) {

@@ -34,7 +34,7 @@ Options::Options()
 		 "jasność światła otoczenia")
 		("trace.enable", po::value<bool>(),
 		 "włączenie lub wyłączenie śladu")
-		("trace.visable", po::value<bool>(),
+		("trace.visible", po::value<bool>(),
 		 "kontroluje wyświetlanie śladu")
 		("trace.frequency", po::value<double>(),
 		 "częstotliwość stawiania śladu (w sekundach)")
@@ -99,7 +99,7 @@ const Config& Options::getCfg()
 	vmtocfg<float>       ( cfg , vm , "deffered.brightness"   );
 
 	vmtocfg<bool>        ( cfg , vm , "trace.enable"    );
-	vmtocfg<bool>        ( cfg , vm , "trace.visable"   );
+	vmtocfg<bool>        ( cfg , vm , "trace.visible"   );
 	vmtocfg<double>      ( cfg , vm , "trace.frequency" );
 	vmtocfg<unsigned>    ( cfg , vm , "trace.length"    );
 
