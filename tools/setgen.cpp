@@ -106,7 +106,7 @@ void cube_gen(int dist, unsigned edge)
 					4.f * edge * rand() / RAND_MAX,
 					4.f * edge * rand() / RAND_MAX,
 					4.f * edge * rand() / RAND_MAX,
-					sun ? mass>(1<<4) ? 2 : 1 : (( x + y + z ) % 20 + 4)
+					sun ? mass>(1<<4) ? 0 : 1 : (( x + y + z ) % 20 + 4)
 					) );
 			}
 		}
@@ -174,10 +174,10 @@ int main()
 	g.print();
 	g.iterate( 4 );*/
 
-//        cube_gen(50, 20);
+//        cube_gen(200, 20);
 //        cube_gen(1500, 20);
 	//spiral_gen();
-	disk_gen( 11110, 5000 );
+	disk_gen( 15000 , 7500 );
 	
 	return 0;
 }

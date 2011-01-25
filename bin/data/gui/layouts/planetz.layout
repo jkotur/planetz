@@ -195,7 +195,7 @@
 			<Window Type="QuadraticLook/HorizontalScrollbar" Name="slMass" >
 				<Property Name="UnifiedPosition" Value="{{0.5,-50},{0,90}}" />
 				<Property Name="UnifiedSize" Value="{{0.0,170},{0,20}}" />
-				<Property Name="DocumentSize" Value="16.0" />
+				<Property Name="DocumentSize" Value="32.0" />
 				<Property Name="StepSize" Value="0.1" />
 			</Window>
 
@@ -214,7 +214,7 @@
 			<Window Type="QuadraticLook/HorizontalScrollbar" Name="slRadius" >
 				<Property Name="UnifiedPosition" Value="{{0.5,-50},{0,120}}" />
 				<Property Name="UnifiedSize" Value="{{0.0,170},{0,20}}" />
-				<Property Name="DocumentSize" Value="99.0" />
+				<Property Name="DocumentSize" Value="16383.0" />
 				<Property Name="StepSize" Value="10.0" />
 			</Window>
 		</Window>
@@ -393,6 +393,7 @@
 						<Property Name="UnifiedPosition" Value="{{0.0,20},{0.0,10}}" />
 						<Property Name="UnifiedSize" Value="{{1.0,0},{0.0,25}}" />
 						<Property Name="Text" Value="Klastrowanie" />
+						<Property Name="Selected" Value="True" />
 					</Window>
 
 				</Window>
@@ -404,8 +405,14 @@
 
 					<Window Type="QuadraticLook/Checkbox" Name="cbTrace" >
 						<Property Name="UnifiedPosition" Value="{{0.0,20},{0.0,10}}" />
-						<Property Name="UnifiedSize" Value="{{1.0,0},{0.0,25}}" />
-						<Property Name="Text" Value="Śledzenie" />
+						<Property Name="UnifiedSize" Value="{{0.0,90},{0.0,25}}" />
+						<Property Name="Text" Value="Aktywne" />
+					</Window>
+
+					<Window Type="QuadraticLook/Checkbox" Name="cbTraceVis" >
+						<Property Name="UnifiedPosition" Value="{{0.0,130},{0.0,10}}" />
+						<Property Name="UnifiedSize" Value="{{0.0,110},{0.0,25}}" />
+						<Property Name="Text" Value="Wyświetlane" />
 					</Window>
 
 					<Window Type="QuadraticLook/StaticText" Name="stTraceLenght">
@@ -416,8 +423,8 @@
 
 					<Window Type="QuadraticLook/Spinner" Name="spTraceLenght" >
 						<Property Name="UnifiedPosition" Value="{{0.0,120},{0,35}}" />
-						<Property Name="UnifiedSize" Value="{{0.0,60},{0,25}}" />
-						<Property Name="MaximumValue" Value="10000" />
+						<Property Name="UnifiedSize" Value="{{0.0,90},{0,25}}" />
+						<Property Name="MaximumValue" Value="2000" />
 						<Property Name="MinimumValue" Value="0" />
 						<Property Name="StepSize" Value="0.01" />
 						<Property Name="TextInputMode" Value="Integer" />
@@ -431,7 +438,7 @@
 
 					<Window Type="QuadraticLook/Spinner" Name="spTraceFreq" >
 						<Property Name="UnifiedPosition" Value="{{0.0,120},{0,60}}" />
-						<Property Name="UnifiedSize" Value="{{0.0,60},{0,25}}" />
+						<Property Name="UnifiedSize" Value="{{0.0,90},{0,25}}" />
 						<Property Name="MaximumValue" Value="10" />
 						<Property Name="MinimumValue" Value="0.001" />
 						<Property Name="StepSize" Value="0.001" />

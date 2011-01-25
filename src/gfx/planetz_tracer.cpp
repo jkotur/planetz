@@ -37,32 +37,46 @@ void GFX::PlanetsTracer::update_configuration( const Config& cfg )
 {
 	unsigned newnumber = cfg.get<unsigned>( "trace.length"    );
 	double newdt       = cfg.get<double>  ( "trace.frequency" );
-	drawable           = cfg.get<bool>    ( "trace.enable"    );
+	drawable           = cfg.get<bool>    ( "trace.visable"   );
+	bool newtracing    = cfg.get<bool>    ( "trace.enable"    );
 
-	if( newdt != dt ) {
+	if( newnumber != number ) {
+		number = newnumber;
+		clear();
+	}
+
+	if( !tracing && newtracing ) {
+		positions = new MEM::MISC::BufferGl<float3>();
+		clear();
+		dt = newdt;
+		if( !tc.running() ) start();
+	} else if( tracing && !newtracing ) {
+		delete positions;
+		if( tc.running() ) stop();
+	}
+	tracing = newtracing;
+
+	if( newdt != dt && tracing ) {
 		dt = newdt;
 		if( tc.running() ) {
 			stop();
 			start();
 		}
 	}
-
-	if( newnumber != number ) {
-		number = newnumber;
-		clear();
-	}
 }
 
 void GFX::PlanetsTracer::update()
 {
+	if( !tracing ) return;
+
 	if( oldest >= number ) oldest = 0;
 
-	positions.resize(number * gpf.size());
+	positions->resize( number * gpf.size() , false );
 
 	unsigned buffbytelen = gpf.size()*3*sizeof(float);
 
 	glBindBuffer( GL_COPY_READ_BUFFER , gpf.getPositions().getId() );
-	glBindBuffer( GL_COPY_WRITE_BUFFER, positions.getId() );
+	glBindBuffer( GL_COPY_WRITE_BUFFER, positions->getId() );
 
 	glCopyBufferSubData( GL_COPY_READ_BUFFER , GL_COPY_WRITE_BUFFER
 	                   , 0 , buffbytelen*oldest
@@ -72,12 +86,12 @@ void GFX::PlanetsTracer::update()
 	glBindBuffer( GL_COPY_WRITE_BUFFER, 0 );
 
 	++oldest;
-	begin += gpf.size();
+	if( begin < positions->getLen() ) begin += gpf.size();
 }
 
 void GFX::PlanetsTracer::draw() const
 {
-	if( !drawable ) return;
+	if( !drawable || !tracing ) return;
 
 	glEnableClientState( GL_VERTEX_ARRAY );
 
@@ -88,11 +102,11 @@ void GFX::PlanetsTracer::draw() const
 	glColor3f( 1 , 1 , 1 );
 	glPointSize( 1.0f );
 
-	positions.bind();
+	positions->bind();
 	glVertexPointer( 3 , GL_FLOAT , 0 , NULL );
-	positions.unbind();
+	positions->unbind();
 	
-	glDrawArrays( GL_POINTS , 0 , std::min( positions.getLen() , begin ) );
+	glDrawArrays( GL_POINTS , 0 , std::min( positions->getLen() , begin ) );
 
 //        glDepthFunc( GL_LESS );
 

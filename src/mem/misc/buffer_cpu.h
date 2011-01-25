@@ -22,7 +22,14 @@ namespace MISC
 			resize( num );
 		}
 
-		virtual void resize( size_t num, const T*data = NULL )
+		/** 
+		 * @brief zmienia wielkość bufora
+		 * 
+		 * @param num nowa ilość elementów bufora
+		 * @param preserve_data nieużywana w tej wersji bufora. Dane zawsze są zachowywane
+		 * @param data nowe dane do skopiowania
+		 */
+		virtual void resize( size_t num , bool preserve_data = true , const T*data = NULL )
 		{
 			std::vector<T>::resize( num );
 			if( data )

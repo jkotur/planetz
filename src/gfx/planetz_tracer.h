@@ -27,6 +27,7 @@ class PlanetsTracer : public Drawable {
 		PlanetsTracer( const MEM::MISC::GfxPlanetFactory& gpf
 				, unsigned num = 10 , double freq = 1.0 )
 			: gpf(gpf) , number(num) , oldest(0) , begin(0) , dt(freq)
+			, tracing(false) , drawable(false)
 		{
 		}
 
@@ -39,6 +40,7 @@ class PlanetsTracer : public Drawable {
 		PlanetsTracer( const MEM::MISC::GfxPlanetFactory& gpf
 		             , const Config& cfg )
 			: gpf(gpf) , oldest(0) , begin(0)
+			, tracing(false) , drawable(false)
 		{
 			update_configuration( cfg );
 		}
@@ -71,13 +73,14 @@ class PlanetsTracer : public Drawable {
 
 		Timer::Caller tc;
 
-		MEM::MISC::BufferGl<float3> positions;
+		MEM::MISC::BufferGl<float3>*positions;
 		unsigned number;
 		unsigned oldest;
 		unsigned begin;
 
 		double dt;
 
+		bool tracing;
 		bool drawable;
 };
 

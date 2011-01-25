@@ -40,7 +40,7 @@ namespace MISC
 		BufferGl( const size_t num , const T*data = NULL );
 		virtual ~BufferGl( );
 
-		virtual void resize( const size_t num , const T*data = NULL );
+		virtual void resize( const size_t num , bool preserve_data = true , const T*data = NULL );
 
 		/** 
 		 * @brief mapuje bufor. Możliwe mapowania to OpenGL, CUDA lub HOST
@@ -108,7 +108,7 @@ namespace MISC
 	BufferGl<T>::BufferGl( const size_t num , const T*data )
 		: glId(0) , cuPtr(NULL) , hPtr(NULL) , state(BUF_GL)
 	{
-		resize( num , data );
+		resize( num , false , data );
 	}
 
 	template<typename T>
@@ -152,7 +152,7 @@ namespace MISC
 	}
 
 	template<typename T>
-	void BufferGl<T>::resize( const size_t num , const T*data )
+	void BufferGl<T>::resize( const size_t num , bool preserve_data , const T*data )
 	{
 		// FIXME: assert if unmapped or unmap?
 		ASSERT_MSG( state == BUF_GL , "Buffer not in gl mode\n" );
@@ -172,8 +172,8 @@ namespace MISC
 
 			cudaGLRegisterBufferObject( glId );
 			CUT_CHECK_ERROR("Registering buffer while resizing BufferGl");
-		} else if( NULL == data && this->realsize > 0 ) {
-			BufferGl newbuf( new_size );
+		} else if( preserve_data && NULL == data && this->realsize > 0 ) {
+			BufferGl newbuf( num );
 
 			glBindBuffer( GL_COPY_READ_BUFFER , glId );
 			glBindBuffer( GL_COPY_WRITE_BUFFER, newbuf.glId );
@@ -192,6 +192,7 @@ namespace MISC
 			gl_resize( new_size , data );
 
 			cudaGLRegisterBufferObject( glId );
+			CUT_CHECK_ERROR("Registering buffer while resizing old BufferGl");
 		}
 
 		this->length = num;

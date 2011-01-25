@@ -23,12 +23,19 @@ namespace MISC
 		virtual ~BufferBase() {}
 
 		/** 
-		 * @brief Funkcja zmieniająca wielkość bufora.
+		 * @brief zmienia wielkość bufora
+		 *
+		 * W przypadku zachowania danych, tworzy nowy bufor
+		 * i kopiuje do niego dane ze starego
+		 *
+		 * W przypadku podania nowych danych, kopiuje dane
+		 * z CPU na GPU niezależnie od flagi preserve_data
 		 * 
-		 * @param num nowa ilość elementów bufora.
-		 * @param data dodatkowo można podać dane które mają być skopiowane do bufora
+		 * @param num nowa ilość elementów
+		 * @param preserve_data czy dane mają zostać zachowane
+		 * @param data wskaźnik na dane CPU które mają się pojawić w buforze
 		 */
-		virtual void resize( size_t num , const T*data = NULL ) = 0;
+		virtual void resize( size_t num , bool preserve_data = true , const T*data = NULL ) = 0;
 
 		/**
 		 * @brief Pobiera wartość spod konkretnego indeksu.

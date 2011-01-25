@@ -46,7 +46,7 @@ namespace MISC
 		 *
 		 * @param data Opcjonalnie - dane do skopiowania.
 		 */
-		virtual void resize( size_t num , const T*data = NULL );
+		virtual void resize( size_t num , bool preserve_data = true , const T*data = NULL );
 
 		/**
 		 * @brief Dane dostępne z CPU. Wymaga wcześniejszego wywołania metody bind().
@@ -121,7 +121,7 @@ namespace MISC
 		: d_cuPtr( NULL )
 		, h_cuPtr( NULL )
 	{
-		resize( num, data );
+		resize( num , false , data );
 	}
 
 	template<typename T>
@@ -132,10 +132,10 @@ namespace MISC
 	}
 	
 	template<typename T>
-	void BufferCu<T>::resize( size_t num , const T*data )
+	void BufferCu<T>::resize( size_t num , bool preserve_data , const T*data )
 	{
 		ASSERT( !h_cuPtr );
-		bool save = NULL == data && this->size > 0;
+		bool save = preserve_data && NULL == data && this->size > 0;
 		T* tmpPtr = const_cast<T*>( data );
 
 		if( !save )
