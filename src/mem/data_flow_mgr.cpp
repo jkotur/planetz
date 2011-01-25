@@ -1,3 +1,4 @@
+#include <boost/filesystem.hpp>
 #include "util/logger.h"
 #include "data_flow_mgr.h"
 #include "constants.h"
@@ -59,10 +60,18 @@ void DataFlowMgr::Impl::save( const std::string &path )
 
 void DataFlowMgr::Impl::load( const std::string &path )
 {
+	if( !boost::filesystem::is_regular_file( path ) ) {
+		log_printf(_WARNING,"File %s does not exist\n",path.c_str());
+		return;
+	}
 	MISC::SaverParams p( cam );
 	ioctl.load( &p, path );
 	log_printf(DBG, "got %u planets\n", p.planet_info->size() );
 	updateBuffers( p.planet_info , materials );
+	if( p.planet_info->size() <= 0 ) {
+		log_printf(_WARNING,"Empty save file: %s\n",path.c_str());
+		return;
+	}
 	memmgr.setPlanets( p.planet_info );
 }
 
