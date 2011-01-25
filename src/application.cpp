@@ -131,7 +131,7 @@ bool Application::init()
 	pl->on_load.connect( bind(&UI::PlanetzSetter::clear,&setter) );
 	pl->on_load.connect( bind(&PlanetzLayout::hide_show_window,pl) );
 	pl->on_config_changed.connect(bind(&GFX::Gfx::update_configuration,&gfx,_1));
-	pl->on_config_changed.connect(bind(&Application::set_phx_clustering,this,_1));
+	pl->on_config_changed.connect(bind(&Application::update_configuration,this,_1));
 	pl->on_planet_changed.connect( bind(&UI::PlanetzSetter::update,&setter,_1) );
 	pl->on_planet_change.connect( bind(&UI::PlanetzSetter::change,&setter,_1) );
 	pl->on_planet_add.connect( bind(&MEM::DataFlowMgr::createPlanet,&data_mgr,_1) );
@@ -264,7 +264,13 @@ void Application::test()
 }
 #endif
 
-void Application::set_phx_clustering( const Config &cfg )
+void Application::update_configuration( const Config &cfg )
 {
 	phx.enableClusters( cfg.get<bool>( "phx.clusters" ) );
+
+	MEM::MISC::PlanetHolderCleaner::FilteringPolicy policy;
+	policy = cfg.get<bool>( "trace.enable" ) ?
+		MEM::MISC::PlanetHolderCleaner::Always :
+		MEM::MISC::PlanetHolderCleaner::Rarely;
+	phcleaner.setFilteringPolicy( policy );
 }

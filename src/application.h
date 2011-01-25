@@ -84,7 +84,7 @@ protected:
 
 	void reset();
 
-	void set_phx_clustering( const Config &cfg );
+	void update_configuration( const Config &cfg );
 
 	MEM::MISC::PhxPlanet pp;
 
