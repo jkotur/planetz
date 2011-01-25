@@ -49,6 +49,8 @@ namespace MEM {
 		 */
 		void removePlanet( unsigned id );
 
+		void dropPlanets();
+
 	private:
 		GLuint matTexId;
 		GLuint texTexId;

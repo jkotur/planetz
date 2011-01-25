@@ -29,6 +29,7 @@ class DataFlowMgr::Impl
 		void registerCam( UI::CameraMgr *_cam );
 		unsigned createPlanet( MISC::PlanetParams params );
 		void removePlanet( unsigned id );
+		void dropPlanets();
 
 	private:
 		void updateBuffers( MISC::CpuPlanetHolder*p, MISC::Materials*m );
@@ -106,7 +107,7 @@ GLuint DataFlowMgr::Impl::loadTextures()
 	ioctl.loadTextures(&tex,DATA("textures/index.db"));
 	GLuint res = memmgr.loadTextures( tex );
 	for( MISC::Textures::iterator i = tex.begin() ; i != tex.end() ; ++i )
-		SDL_FreeSurface( *i );
+		SDL_FreeSurface( i->second );
 	return res;
 }
 
@@ -167,6 +168,11 @@ unsigned DataFlowMgr::Impl::createPlanet( MISC::PlanetParams params )
 			.setAt( id, make_float2(0) );
 	}
 	return id;
+}
+
+void DataFlowMgr::Impl::dropPlanets()
+{
+	memmgr.dropPlanets();
 }
 
 void DataFlowMgr::Impl::removePlanet( unsigned id )
@@ -237,4 +243,9 @@ unsigned DataFlowMgr::createPlanet( MISC::PlanetParams params )
 void DataFlowMgr::removePlanet( unsigned id )
 {
 	impl->removePlanet( id );
+}
+
+void DataFlowMgr::dropPlanets()
+{
+	impl->dropPlanets();
 }

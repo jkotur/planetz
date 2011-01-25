@@ -106,7 +106,7 @@ void IOCtl::Impl::loadTextures( MISC::Textures* dest , const std::string & path 
 			continue;
 		}
 
-		dest->push_back(surface);
+		(*dest)[ t->id ] = surface;
 	}
 }
 

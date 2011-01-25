@@ -3,14 +3,14 @@
 #define __TEXTURES_MANAGER_H__
 
 #include <string>
-#include <list>
+#include <map>
 #include <SDL/SDL_image.h>
 
 namespace MEM
 {
 namespace MISC
 {
-	typedef std::list<SDL_Surface*> Textures;
+	typedef std::map<unsigned, SDL_Surface*> Textures;
 } // MISC
 } // MEM
 

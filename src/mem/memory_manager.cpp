@@ -42,12 +42,12 @@ GLuint MemMgr::loadTextures( const MISC::Textures& ctex )
 	int z = 0;
 	for( MISC::Textures::const_iterator i = ctex.begin() ; i != ctex.end() ; ++i , z++ )
 	{
-		ASSERT_MSG( TEX_W == (*i)->w && TEX_H == (*i)->h ,
-				"Texture must be %dx%d. Got %dx%d" , TEX_W , TEX_H, (*i)->w , (*i)->h );
+		ASSERT_MSG( TEX_W == (*i).second->w && TEX_H == (*i).second->h ,
+				"Texture must be %dx%d. Got %dx%d" , TEX_W , TEX_H, (*i).second->w , (*i).second->h );
 
-		GLenum format = (**i).format->Amask ? GL_RGBA : GL_RGB ;
+		GLenum format = (*i).second->format->Amask ? GL_RGBA : GL_RGB ;
 
-		glTexSubImage3D(GL_TEXTURE_2D_ARRAY,0,0,0,z,TEX_W,TEX_H,1,format,GL_UNSIGNED_BYTE,(**i).pixels);
+		glTexSubImage3D(GL_TEXTURE_2D_ARRAY,0,0,0,z,TEX_W,TEX_H,1,format,GL_UNSIGNED_BYTE,(*i).second->pixels);
 	}
 
 	glBindTexture( GL_TEXTURE_2D_ARRAY , 0 );
@@ -212,3 +212,7 @@ void MemMgr::removePlanet( unsigned id )
 	holder.radius.setAt( id, .0f );
 }
 
+void MemMgr::dropPlanets()
+{
+	holder.resize( 0 );
+}

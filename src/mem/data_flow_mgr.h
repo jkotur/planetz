@@ -91,6 +91,11 @@ namespace MEM
 			 */
 			void removePlanet( unsigned id );
 
+			/**
+			 * @brief Usuwa wszystkie planety.
+			 */
+			void dropPlanets();
+
 		private:
 			class Impl;
 			Impl *impl;
