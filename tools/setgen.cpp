@@ -140,10 +140,13 @@ void spiral_gen()
 	}
 	g.print();
 }
+
 #define PI 3.14159265
 #define RAND_VEL (20 * rand() / RAND_MAX)
-#define MASS_FACTOR (1./pow(mass,.1)) 
-void disk_gen( unsigned count, float r )
+#define MASS_FACTOR (.01/pow(mass,.01)) 
+#undef MASS_FACTOR
+#define MASS_FACTOR (mass/1e6)
+void disk_gen( unsigned count, float r , float CX = 0.0f , float CY = 0.0f , float DX = 0.0f , float DY = 0.0f , float DZ = 0.0f )
 {
 	const float concentration = 0.6;
 	graph g;
@@ -154,15 +157,26 @@ void disk_gen( unsigned count, float r )
 		float mass = rand() % (1 << 5) + 1;
 		bool star = (0 == rand() % (unsigned)pow(count, 0.7));
 		if( star ) mass *= 1e4;
-		float x = act_r * sin( act_angle );
-		float y = act_r * cos( act_angle );
-		float vx = (r * y/(17 * (r-act_r + r/2)) + RAND_VEL)*MASS_FACTOR;
-		float vy = (r * (-x)/(17 * (r-act_r + r/2)) + RAND_VEL)*MASS_FACTOR;
-		float vz = RAND_VEL*MASS_FACTOR;
+		float x = act_r * sin( act_angle ) + CX;
+		float y = act_r * cos( act_angle ) + CY;
+		float vx = (r * y/(17 * (r-act_r + r/2)) + RAND_VEL)*MASS_FACTOR + DX;
+		float vy = (r * (-x)/(17 * (r-act_r + r/2)) + RAND_VEL)*MASS_FACTOR + DY;
+		float vz = RAND_VEL*MASS_FACTOR + DZ;
 		g.add( point( x, y, 0, mass, pow(mass, 0.3),
 			vx, vy, vz, star ? 1 : rand() % 20 + 4 ) );
 	}
 	g.print();
+}
+
+void multi_disk_gen( unsigned Count , float R , unsigned count , float r )
+{
+	float dk = 2.0f * PI / Count;
+	float k  = 0.0f;
+	float V  = -R/1000.0f;
+	for( int C = 0 ; C<Count ; C++ , k+=dk )
+	{
+		disk_gen( count , r , R*sin(k) , R*cos(k) , V*cos(k) , V*sin(k) , 0.0f );
+	}
 }
 
 int main()
@@ -178,7 +192,8 @@ int main()
 //        cube_gen(200, 20);
 //        cube_gen(1500, 20);
 	//spiral_gen();
-	disk_gen( 2000 , 1500 );
+//        disk_gen( 2000 , 3000 );
+	multi_disk_gen( 8 , 5000 , 500 , 1500 );
 	
 	return 0;
 }
