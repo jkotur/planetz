@@ -26,6 +26,8 @@ find_package( CEGUIOPENGL )
 
 find_package( Sqlite3 )
 
+set( CMAKE_BUILD_TYPE release )
+
 if( UNIX )
 	set( CMAKE_C_FLAGS   "-O2")
 	set( CMAKE_CXX_FLAGS "-O2")

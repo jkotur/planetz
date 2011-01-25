@@ -12,7 +12,9 @@
 
 int main (int argc, char const* argv[])
 {
+#ifndef _RELEASE
 	log_add(LOG_STREAM(stderr),LOG_PRINTER(std::vfprintf));
+#endif
 
 #ifdef _RELEASE
 	log_set_lev( INFO );
