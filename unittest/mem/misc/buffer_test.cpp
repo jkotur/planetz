@@ -10,7 +10,7 @@ BufTest::BufTest()
 
 void BufTest::setUp()
 {
-	buf.resize( 10 , data );
+	buf.resize( 10 , false , data );
 }
 
 void BufTest::tearDown()
@@ -19,21 +19,21 @@ void BufTest::tearDown()
 
 void BufTest::resizeTest()
 {
-	buf.resize( 5 , data );
+	buf.resize( 5 , false , data );
 
 	int* data2 = buf.map( BUF_H );
 	for( unsigned i=0 ; i<buf.getLen() ; i++ )
 		CPPUNIT_ASSERT_EQUAL( data2[i] , (int)i );
 	buf.unmap();
 
-	buf.resize( 20 , data );
+	buf.resize( 20 , false , data );
 
 	data2 = buf.map( BUF_H );
 	for( unsigned i=0 ; i<buf.getLen() ; i++ )
 		CPPUNIT_ASSERT_EQUAL( data2[i] , (int)i );
 	buf.unmap();
 
-	buf.resize( 5 , data );
+	buf.resize( 5 , false , data );
 
 	data2 = buf.map( BUF_H );
 	for( unsigned i=0 ; i<buf.getLen() ; i++ )
@@ -51,7 +51,7 @@ void BufTest::resizePreserveTest()
 		CPPUNIT_ASSERT_EQUAL( data2[i] , data[i] );
 	buf.unmap();
 
-	bufCu.resize( 10, data );
+	bufCu.resize( 10, false , data );
 	bufCu.bind();
 	data2 = bufCu.h_data();
 	for( unsigned i=0 ; i<10; i++ )
