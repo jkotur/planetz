@@ -275,7 +275,7 @@ MEM::MISC::PlanetParams PlanetzLayout::get_pp_from_add_win()
 		->getScrollPosition();
 	pp.radius++; // minimalny promien to 1
 
-	pp.model = 1;
+	pp.model = GETWINCAST(Spinner*,"spModel")->getCurrentValue();
 
 	return pp;
 }

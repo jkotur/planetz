@@ -147,7 +147,7 @@ void UI::PlanetzSetter::change( const MEM::MISC::PlanetParams& pp )
 
 	GLfloat  p [16];
 	glGetFloatv(GL_PROJECTION_MATRIX,p);
-	Vector3 v(0,0,-2*radius);
+	Vector3 v(0,0,-5*radius);
 	v = mul4f(v,p);
 	Z = v.z;
 }

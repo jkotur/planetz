@@ -83,7 +83,7 @@
 <!--                okno dodawania planety-->
 		<Window Type="QuadraticLook/FrameWindow" Name="AddWin">
 			<Property Name="UnifiedPosition"    Value="{{0.1,0},{0.1,0}}" />
-			<Property Name="UnifiedSize"        Value="{{0,310},{0,180}}" />
+			<Property Name="UnifiedSize"        Value="{{0,310},{0,210}}" />
 			<Property Name="Text"               Value="Nowa planeta" />
 			<Property Name="CloseButtonEnabled" Value="Fasle" />
 			<Property Name="Alpha"              Value="1.0" />
@@ -91,21 +91,36 @@
 			<Property Name="Visible"            Value="True" />
 
 			<Window Type="QuadraticLook/Button" Name="btnAdd" >
-				<Property Name="UnifiedPosition" Value="{{0.5,-150},{0,150}}" />
+				<Property Name="UnifiedPosition" Value="{{0.5,-150},{0,180}}" />
 				<Property Name="UnifiedSize" Value="{{0,90},{0,20}}" />
 				<Property Name="Text" Value="Dodaj Planetę" />
 			</Window>
 
 			<Window Type="QuadraticLook/Button" Name="btnClear" >
-				<Property Name="UnifiedPosition" Value="{{0.5,-45},{0,150}}" />
+				<Property Name="UnifiedPosition" Value="{{0.5,-45},{0,180}}" />
 				<Property Name="UnifiedSize" Value="{{0,90},{0,20}}" />
 				<Property Name="Text" Value="Wyczyść" />
 			</Window>
 
 			<Window Type="QuadraticLook/Button" Name="btnChange" >
-				<Property Name="UnifiedPosition" Value="{{0.5,60},{0,150}}" />
+				<Property Name="UnifiedPosition" Value="{{0.5,60},{0,180}}" />
 				<Property Name="UnifiedSize" Value="{{0,90},{0,20}}" />
 				<Property Name="Text" Value="Zmień" />
+			</Window>
+
+			<Window Type="QuadraticLook/StaticText" Name="stModel">
+				<Property Name="UnifiedPosition" Value="{{0.5,-120},{0.0,145}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,90},{0,30}}" />
+				<Property Name="Text" Value="Model:" />
+			</Window>
+
+			<Window Type="QuadraticLook/Spinner" Name="spModel" >
+				<Property Name="UnifiedPosition" Value="{{0.5,-50},{0,150}}" />
+				<Property Name="UnifiedSize" Value="{{0.0,50},{0,20}}" />
+				<Property Name="StepSize" Value="1" />
+				<Property Name="MaximumValue" Value="23" />
+				<Property Name="MinimumValue" Value="0" />
+				<Property Name="TextInputMode" Value="Integer" />
 			</Window>
 
 			<Window Type="QuadraticLook/StaticText" Name="stPos">

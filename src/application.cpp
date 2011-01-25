@@ -154,6 +154,7 @@ bool Application::init()
 	gfx.add( &ui     , 9 );
 #endif
 
+	update_configuration( config );
 	gfx.update_configuration( config );
 
 	camera.init();
@@ -187,13 +188,13 @@ void Application::main_loop()
 			phx.compute(phx_frames);
 			//log_printf(INFO,"phx.compute(%u) running time: %.2fms\n", phx_frames, t.get_ms());
 		}
+		phcleaner.work();
 //                pt.refresh();
 		gfx.render();
 
 		(running && (running &= ui.event_handle() ));
 
 		do_fps();
-		phcleaner.work();
 	}
 	while( running );
 
@@ -249,13 +250,17 @@ void Application::pause_anim()
 	trace.stop();
 }
 
-void Application::reset() // Planetz*pl , Camera*c )
+void Application::reset()
 {
-	//planetz.clear();
+	pl->hide_show_window();
+
 	camera.set_perspective(CAM_START_VECS);
+	camera.clear();
+
 	anim_pause = true;
 	trace.stop();
-	//planetz.select(-1); // clear selection
+
+	data_mgr.dropPlanets();
 }
 
 #ifndef _RELEASE
