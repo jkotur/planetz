@@ -235,6 +235,29 @@ __global__ void PHX::detect_collisions( float3 *positions, float *radiuses, unsi
 	merges[ mapped_index ] = mapped_index; // brak kolizji
 }
 
+__global__ void PHX::detect_collisions_no_clusters( float3 *positions, float *radiuses, unsigned count, unsigned *merges, unsigned *merge_needed )
+{
+	unsigned index = threadIdx.x + blockDim.x * blockIdx.x;
+	if( index >= count )
+	{
+		return;
+	}
+	float3 my_pos = positions[ index ];
+	float my_radius = radiuses[ index ];
+	
+	for( unsigned i = index + 1; i < count; ++i )
+	{
+		if( collision_detected( my_pos, my_radius, positions[i], radiuses[i] ) )
+		{
+			merges[ index ] = i;
+			*merge_needed = 1;
+			return;
+		}
+	}
+	merges[ index ] = index; // brak kolizji
+}
+
+
 __device__ void internal_merge( float3 *positions, float3 *velocities, float *masses, float *radiuses, unsigned idx1, unsigned idx2 )
 {
 	// wynik sklejenia ląduje w idx1, więc być może trzeba je zamienić

@@ -55,6 +55,7 @@ class Phx::CImpl
 
 		void update_positions();
 		void handle_collisions();
+		bool collision_detected(unsigned *d_mergeData);
 
 		MEM::MISC::PhxPlanetFactory *planets;
 		Clusterer clusterer;
@@ -262,33 +263,55 @@ void Phx::CImpl::update_positions()
 	CUT_CHECK_ERROR( "kernel launch" );
 }
 
-void Phx::CImpl::handle_collisions()
+bool Phx::CImpl::collision_detected(unsigned *d_mergeData)
 {
-	bool merge_performed = false;
 	MEM::MISC::BufferCu<unsigned> merge_needed(1);
-	unsigned *in_merges = merges1.d_data();
-	unsigned *out_merges = merges2.d_data();
-	ConstChecker<float3, MEM::MISC::BufferCu> vel_checker;
-	vel_checker.setBuf( &planets->getVelocities(), planets->size() );
+	merge_needed.assign(0);
 
-	do
-	{
-		merge_needed.assign(0);
-		unsigned threads = planets->size();
-		dim3 block( min( MIN_THREADS, threads ) );
-		dim3 grid( 1 + ( threads - 1 ) / block.x );
+	unsigned threads = planets->size();
+	dim3 block( min( MIN_THREADS, threads ) );
+	dim3 grid( 1 + ( threads - 1 ) / block.x );
 		
+	if( clusters_on )
+	{
 		detect_collisions<<<grid, block>>>(
 			planets->getPositions().map(MEM::MISC::BUF_CU),
 			planets->getRadiuses().map(MEM::MISC::BUF_CU),
 			clusterer.getCounts()->d_data(),
 			clusterer.getShuffle()->d_data(),
 			clusterer.getCount() - 1,
-			out_merges,
+			d_mergeData,
 			merge_needed.d_data() );
-		CUT_CHECK_ERROR("kernel launch");
+	}
+	else
+	{
+		detect_collisions_no_clusters<<<grid, block>>>(
+			planets->getPositions().map(MEM::MISC::BUF_CU),
+			planets->getRadiuses().map(MEM::MISC::BUF_CU),
+			threads,
+			d_mergeData,
+			merge_needed.d_data() );
+			
+	}
+	CUT_CHECK_ERROR("kernel launch");
 
-		if( merge_needed.retrieve() == 0 )
+	return 1 == merge_needed.retrieve();
+}
+
+void Phx::CImpl::handle_collisions()
+{
+	bool merge_performed = false;
+	unsigned *in_merges = merges1.d_data();
+	unsigned *out_merges = merges2.d_data();
+	ConstChecker<float3, MEM::MISC::BufferCu> vel_checker;
+	vel_checker.setBuf( &planets->getVelocities(), planets->size() );
+	unsigned threads = planets->size();
+	dim3 block( min( MIN_THREADS, threads ) );
+	dim3 grid( 1 + ( threads - 1 ) / block.x );
+		
+	do
+	{
+		if( !collision_detected(out_merges) )
 		{
 			ConstChecker<float3, MEM::MISC::BufferCu> vel_checker;
 			vel_checker.setBuf( &planets->getVelocities(), planets->size() );
@@ -301,7 +324,6 @@ void Phx::CImpl::handle_collisions()
 				log_printf( _WARNING, "Merge performed, but cleaner not set!\n" );
 			return;
 		}
-		merge_performed = true;
 #if 0
 		//////// DEBUG
 		merges2.bind();
@@ -339,6 +361,7 @@ void Phx::CImpl::handle_collisions()
 			CUT_CHECK_ERROR("kernel launch");
 		}
 		while( !done.retrieve() );
+		merge_performed = true;
 	}
 	while(true);
 }

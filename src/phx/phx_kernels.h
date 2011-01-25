@@ -36,6 +36,13 @@ namespace PHX
 	/// @details Dla każdej planety, znajduje pierwszą, która z nią koliduje. Jej id jest zapisane w tablicy merges. Jeżeli planeta o id i nie koliduje z żadną inną, merges[i] = i.
 	__global__ void detect_collisions( float3 *positions, float *radiuses, unsigned *count, unsigned *shuffle, unsigned last_cluster, unsigned *merges, unsigned *merge_needed );
 
+	/**
+	 * @brief Sprawdza, które planety kolidują ze sobą, nie uwzględniając przy tym danych z klasteryzacji.
+	 *
+	 * @details Uproszczona wersja detect_collisions().
+	 */
+	__global__ void detect_collisions_no_clusters( float3 *positions, float *radiuses, unsigned count, unsigned *merges, unsigned *merge_needed );
+
 	/// @brief Skleja planety wg tablicy in_merges. Jeżeli nie sklei wszystkiego, *done jest ustawiane na 0, a w out_merges są dane do kolejnego wywołania.
 	__global__ void merge_collisions( unsigned *in_merges, unsigned *out_merges, float3 *positions, float3 *velocities, float *masses, float *radiuses, unsigned *count, unsigned *done );
 
