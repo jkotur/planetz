@@ -470,6 +470,7 @@ bool PlanetzLayout::qsave( const CEGUI::EventArgs& e )
 
 bool PlanetzLayout::reset_anim( const CEGUI::EventArgs& e )
 {
+	GETWIN("btnPause")->setText("Start");
 	on_reset_click();
 	return true;
 }

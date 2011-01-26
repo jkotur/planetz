@@ -259,6 +259,8 @@ void Application::reset()
 
 	anim_pause = true;
 	trace.stop();
+	trace.clear();
+	setter.clear();
 
 	data_mgr.dropPlanets();
 }
