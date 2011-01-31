@@ -45,7 +45,7 @@ void main()
 
 	vec3 fd = gdat3.rgb * clamp( i , 0.0 , 1.0 ) / dist;
 
-	vec3 atm = vec3( gdat2.a , gdat3.a , gdat4.a ) * .3 * clamp( i + .6 , 0.0 , 1.0 ) / dist;
+	vec3 atm = vec3( gdat2.a , gdat3.a , gdat4.a ) * .3 * clamp( i + .4 , 0.0 , 1.0 ) / dist;
 
 //        vec3 h = normalize(lightDir + viewDir);
 

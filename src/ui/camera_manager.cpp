@@ -35,7 +35,7 @@ void CameraMgr::clear()
 	next.clear();
 
 	currcam = cams[0];
-	float defaultspd = .2f;
+	double defaultspd = .2f;
 	currcam->born( currmat , (void*)&defaultspd );
 }
 

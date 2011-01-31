@@ -32,7 +32,7 @@ void CamFreeLook::born( Matrix state , void*data )
 void CamFreeLook::learn( void * data )
 {
 	if( !data ) return;
-	move_speed = *(float*)data;
+	move_speed = *(double*)data;
 }
 
 UI::Camera::Matrix CamFreeLook::work()
